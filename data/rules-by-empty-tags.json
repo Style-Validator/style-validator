@@ -1,0 +1,22 @@
+{
+	"error-styles": {
+		"padding": "over-0"
+	},
+	"warning-styles": {
+
+	},
+	"parent-error-styles": {
+
+	},
+	"parent-warning-styles": {
+
+	},
+	"pseudo-elements-error-styles": {
+		"content": "default"
+	},
+	"pseudo-elements-warning-styles": {
+
+	},
+	"reference-url": "",
+	"message": ""
+}

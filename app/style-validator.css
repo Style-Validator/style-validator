@@ -1,0 +1,133 @@
+@charset "utf-8";
+
+/*************************************************************************************
+ Basic
+ *************************************************************************************/
+
+html {
+	border-color: transparent;
+	border-style: solid;
+	border-top-width: 0;
+	border-right-width: 0;
+	border-bottom-width: 0;
+	border-left-width: 0;
+}
+
+
+/*************************************************************************************
+ デフォルトスタイルを取得用のiframe
+ *************************************************************************************/
+
+#stylev-dummy-iframe {
+	visibility: hidden !important;
+	position: fixed !important;
+	top: 100% !important;
+	right: 100% !important;
+	z-index: -1 !important;
+	pointer-events: none !important;
+}
+
+/*************************************************************************************
+ JavaScriptで付加させるClass
+ *************************************************************************************/
+
+/* Warning */
+
+[data-stylevclass*="stylev-target-warning"] {
+	outline-width: 5px;
+	outline-style: solid;
+	outline-color: #F6BE00;
+}
+[data-stylevclass*="stylev-animation"] [data-stylevclass*="stylev-target-warning"] {
+	-webkit-animation: warning 1s infinite alternate;
+	-moz-animation: warning 1s infinite alternate;
+	animation: warning 1s infinite alternate;
+}
+
+@-webkit-keyframes warning {
+	from { outline-color: transparent; }
+	to { outline-color: #F6BE00; }
+}
+@-moz-keyframes warning {
+	from { outline-color: transparent; }
+	to { outline-color: #F6BE00; }
+}
+@keyframes warning {
+	from { outline-color: transparent; }
+	to { outline-color: #F6BE00; }
+}
+
+[data-stylevclass*="stylev-target-error"] {
+	outline-width: 5px;
+	outline-style: solid;
+	outline-color: #EE363B;
+}
+[data-stylevclass*="stylev-animation"] [data-stylevclass*="stylev-target-error"] {
+	-webkit-animation: error 1s infinite alternate;
+	-moz-animation: error 1s infinite alternate;
+	animation: error 1s infinite alternate;
+}
+
+/* Error */
+
+@-webkit-keyframes error {
+	from { outline-color: #ee6c71; }
+	to { outline-color: transparent; }
+}
+
+@-moz-keyframes error {
+	from { outline-color: #ee6c71; }
+	to { outline-color: transparent; }
+}
+
+@keyframes error {
+	from { outline-color: #ee6c71; }
+	to { outline-color: transparent; }
+}
+
+/* Error and Warning */
+
+[data-stylevclass*="stylev-target-error"][data-stylevclass*="stylev-target-warning"] {
+	outline-width: 5px;
+	outline-style: solid;
+	outline-color: #EE363B;
+}
+[data-stylevclass*="stylev-animation"] [data-stylevclass*="stylev-target-error"][data-stylevclass*="stylev-target-warning"] {
+	-webkit-animation: errorAndWarning 1s infinite alternate;
+	-moz-animation: errorAndWarning 1s infinite alternate;
+	animation: errorAndWarning 1s infinite alternate;
+}
+
+@-webkit-keyframes errorAndWarning {
+	from { outline-color: #EE363B; }
+	to { outline-color: transparent; }
+}
+
+@-moz-keyframes errorAndWarning {
+	from { outline-color: #EE363B; }
+	to { outline-color: transparent; }
+}
+
+@keyframes errorAndWarning {
+	from { outline-color: #EE363B; }
+	to { outline-color: transparent; }
+}
+
+[data-stylevclass*="stylev-target-selected"] {
+	outline-style: dashed;
+	-webkit-animation: selected 1.5s infinite;
+	-moz-animation: selected 1.5s infinite;
+	animation: selected 1.5s infinite;
+}
+@-webkit-keyframes selected {
+	0% { outline-style: dashed; }
+	50% { outline-style: dotted; }
+}
+@-moz-keyframes selected {
+	0% { outline-style: dashed; }
+	50% { outline-style: dotted; }
+}
+@keyframes selected {
+	0% { outline-style: dashed; }
+	50% { outline-style: dotted; }
+}

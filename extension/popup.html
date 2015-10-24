@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="./popup.css" />
+</head>
+<body>
+<div class="wrapper">
+	<header>
+		<button id="validate-trigger">Validate</button>
+		<h1><img src="./style-validator.logo.svg" width="50" height="50" /> Style Validator</h1>
+	</header>
+	<main>
+		<div>
+			<section>
+				<h2>Mutation Observer</h2>
+				<ul>
+					<li><label><input type="checkbox" name="enabledMutationObserver" class="popup-form-parts" id="enabledMutationObserver" checked="checked" /> Enable Mutation Observer</label></li>
+				</ul>
+			</section>
+			<section>
+				<h2>Execution</h2>
+				<ul>
+					<li><label><input type="checkbox" name="autoExecution" class="popup-form-parts" id="enableAutoExecution" /> Enable Auto Execution</label></li>
+				</ul>
+			</section>
+			<section style="display: none;">
+				<h2>Animation</h2>
+				<ul>
+					<li><label><input type="checkbox" name="animation" class="popup-form-parts" id="enableAnimation" /> Enable Animation</label></li>
+				</ul>
+			</section>
+			<section style="display: none;">
+				<h2>Define Scope by Selector</h2>
+				<ul>
+					<li>
+						<label><input type="radio" name="defineScope" class="popup-form-parts" id="targetSelector" /> Define Target Selectors (Separate with ",").</label>
+						<input type="text" name="defineScopeText" class="popup-form-parts" id="targetSelectorText" placeholder=".class, #id, [any-selector='ok']" />
+					</li>
+					<li>
+						<label><input type="radio" name="defineScope" class="popup-form-parts" id="notTargetSelector" /> Define NOT Target Selectors (Separate with ",").</label>
+						<input type="text" name="defineScopeText" class="popup-form-parts" id="notTargetSelectorText" placeholder=".class, #id, [any-selector='ok']" disabled="disabled" />
+					</li>
+				</ul>
+			</section>
+		</div>
+	</main>
+</div>
+<script src="./popup.js"></script>
+<script>
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-53227157-4']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = 'https://ssl.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</body>
+</html>

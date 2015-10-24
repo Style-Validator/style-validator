@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="./options.css" />
+</head>
+<body>
+<div class="wrapper">
+	<header>
+		<h1><img src="./style-validator.logo.svg" width="50" height="50" /> Style Validator</h1>
+	</header>
+	<main>
+		<div>
+			<section>
+				<h2>Mutation Observer</h2>
+				<ul>
+					<li><label><input type="checkbox" name="enabledMutationObserver" class="popup-form-parts" id="enabledMutationObserver" checked="checked" /> Enable Mutation Observer</label></li>
+				</ul>
+			</section>
+			<section>
+				<h2>Execution</h2>
+				<ul>
+					<li><label><input type="checkbox" name="autoExecution" class="popup-form-parts" id="enableAutoExecution" /> Enable Auto Execution</label></li>
+				</ul>
+			</section>
+			<section>
+				<h2>Animation</h2>
+				<ul>
+					<li><label><input type="checkbox" name="animation" class="popup-form-parts" id="enableAnimation" /> Enable Animation</label></li>
+				</ul>
+			</section>
+			<section style="display: none;">
+				<h2>Define Scope by Selector</h2>
+				<ul>
+					<li>
+						<label><input type="radio" name="defineScope" class="popup-form-parts" id="targetSelector" /> Define Target Selectors (Separate with ",").</label>
+						<input type="text" name="defineScopeText" class="popup-form-parts" id="targetSelectorText" placeholder=".class, #id, [any-selector='ok']" />
+					</li>
+					<li>
+						<label><input type="radio" name="defineScope" class="popup-form-parts" id="notTargetSelector" /> Define NOT Target Selectors (Separate with ",").</label>
+						<input type="text" name="defineScopeText" class="popup-form-parts" id="notTargetSelectorText" placeholder=".class, #id, [any-selector='ok']" disabled="disabled" />
+					</li>
+				</ul>
+			</section>
+			<section style="display: none;">
+				<h2>URL Filter</h2>
+				<ul>
+					<li><input type="text" name="defineUrlFilter" class="popup-form-parts" id="urlFilter" placeholder="www.example.com, test.domain.com" /></li>
+				</ul>
+			</section>
+			<section style="display: none;">
+				<h2>Debug Mode</h2>
+				<ul>
+					<li><label><input type="checkbox" name="debugMode" class="popup-form-parts" id="debugMode" /> Enable Debug Mode</label></li>
+				</ul>
+			</section>
+		</div>
+	</main>
+</div>
+<script src="./options.js"></script>
+</body>
+</html>

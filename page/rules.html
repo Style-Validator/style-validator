@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html style="vertical-align: bottom;">
+<head>
+	<!-- ***** base ***** -->
+	<base>
+
+	<!-- ***** data ***** -->
+	<title>Validation Rules | Style Validator</title>
+
+	<!-- ***** robots ***** -->
+	<meta name="robots" content="noindex,nofollow" />
+
+	<!-- ***** favicon ***** -->
+	<link rel="icon" type="image/x-icon" href="../favicon.ico?v=1">
+	<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?v=1">
+
+	<!-- ***** styles***** -->
+	<link href="prism.css" rel="stylesheet" />
+	<link href="rules.css" rel="stylesheet" />
+	<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">
+	<style>
+		html {
+			font-family: 'Nunito', sans-serif;
+		}
+	</style>
+
+	<!-- ***** scripts***** -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-53227157-3', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</head>
+<body>
+<div class="wrapper">
+	<header class="header">
+		<h1 class="header-heading"><img src="/Style-Validator/img/style-validator.logo.svg" width="40" height="40" />Validation Rules - View and Edit</h1>
+		<nav>
+			<button id="add-button">Add Rule</button>
+			<button id="save-button">Save</button>
+		</nav>
+	</header>
+	<main class="main">
+		<ul id="json-view" class="styles-list-wrapper col"></ul>
+	</main>
+</div>
+
+<template id="template-property">
+	<li>
+		<input type="text" class="css-property" list="all-css-properties" />: <input type="text" class="css-property-value" list="value" />;
+	</li>
+</template>
+<template id="template-rule">
+	<li>
+		<section class="styles-input" data-id="title"><input type="text" /></section>
+		<ul class="styles-list" data-id="base-styles"></ul>
+		<ul class="styles-list" data-id="error-styles"></ul>
+		<ul class="styles-list" data-id="warning-styles"></ul>
+		<ul class="styles-list" data-id="parent-error-styles"></ul>
+		<ul class="styles-list" data-id="parent-warning-styles"></ul>
+		<ul class="styles-list" data-id="pseudo-before-error-styles"></ul>
+		<ul class="styles-list" data-id="pseudo-before-warning-styles"></ul>
+		<ul class="styles-list" data-id="pseudo-after-error-styles"></ul>
+		<ul class="styles-list" data-id="pseudo-after-warning-styles"></ul>
+		<section class="styles-input" data-id="message"><input type="text" /></section>
+		<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="/Style-Validator/img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>
+	</li>
+</template>
+<datalist id="all-css-properties"></datalist>
+<datalist id="value"></datalist>
+<script src="prism.js" data-manual></script>
+<script src="specificity.js"></script>
+<script src="rules.js"></script>
+</body>
+</html>

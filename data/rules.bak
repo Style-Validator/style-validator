@@ -1,0 +1,458 @@
+[
+	{
+		"base-styles": {
+			"display": "inline"
+		},
+		"warning-styles": {
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default",
+			"margin-top": "non-0",
+			"margin-bottom": "non-0",
+			"padding-top": "over-0",
+			"padding-bottom": "over-0",
+			"float": "non-default",
+			"text-align": "non-inherit"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "block"
+		},
+		"warning-styles": {
+			"vertical-align": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"block",
+				"inline-block",
+				"list-item",
+				"table-cell"
+			]
+		}
+	},
+	{
+		"base-styles": {
+			"display": "inline-block"
+		},
+		"warning-styles": {
+			"float": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"inline",
+				"block",
+				"inline-block",
+				"list-item",
+				"table-cell"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "list-item"
+		},
+		"warning-styles": {
+			"vertical-align": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"block",
+				"inline-block"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "inline-table"
+		},
+		"error-styles": {
+			"padding": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"vertical-align": "non-default",
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"none",
+				"block",
+				"inline-block",
+				"list-item",
+				"table-cell"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table"
+		},
+		"error-styles": {},
+		"warning-styles": {
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"block",
+				"inline-block",
+				"list-item",
+				"table-cell"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table",
+			"border-collapse": "collapse"
+		},
+		"error-styles": {
+			"padding": "over-0"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-cell"
+		},
+		"error-styles": {
+			"margin": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table",
+				"table-row",
+				"table-row-group",
+				"table-header-group",
+				"table-footer-group"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-row"
+		},
+		"error-styles": {
+			"margin": "over-0",
+			"padding": "over-0",
+			"border-width": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"box-shadow": "non-default",
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table",
+				"table-row-group",
+				"table-header-group",
+				"table-footer-group"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-row-group"
+		},
+		"error-styles": {
+			"margin": "over-0",
+			"padding": "over-0",
+			"border-width": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"box-shadow": "non-default",
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-header-group"
+		},
+		"error-styles": {
+			"margin": "over-0",
+			"padding": "over-0",
+			"border-width": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"box-shadow": "non-default",
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-footer-group"
+		},
+		"error-styles": {
+			"margin": "over-0",
+			"padding": "over-0",
+			"border-width": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"box-shadow": "non-default",
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-column"
+		},
+		"error-styles": {
+			"margin": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"padding": "over-0",
+			"box-shadow": "non-default",
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table-column-group",
+				"table"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-column-group"
+		},
+		"error-styles": {
+			"margin": "over-0",
+			"position": "non-default"
+		},
+		"warning-styles": {
+			"padding": "over-0",
+			"box-shadow": "non-default",
+			"min-width": "non-default",
+			"min-height": "non-default",
+			"max-width": "non-default",
+			"max-height": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "table-caption"
+		},
+		"error-styles": {
+			"position": "non-default"
+		},
+		"parent-error-styles": {
+			"display": [
+				"__except__",
+				"none",
+				"table"
+			]
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "flex"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "inline-flex"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "grid"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "ruby"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "ruby-base"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "ruby-text"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "ruby-base-container"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "ruby-text-container"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "run-in"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "inherit"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "initial"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "contents"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"display": "unset"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"base-styles": {
+			"float": "non-default"
+		},
+		"pseudo-after-elements-error-styles": {
+			"content": "default",
+			"clear": "default"
+		},
+		"reference-url": "",
+		"message": ""
+	},
+	{
+		"warning-styles": {
+			"z-index": "under-0"
+		},
+		"reference-url": "",
+		"message": ""
+	}
+]

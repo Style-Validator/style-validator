@@ -1,0 +1,82 @@
+{
+
+	"manifest_version": 2,
+	"name": "Style Validator - to reduce lazy patch",
+	"version": "0.2.0",
+
+	"description": "Style Validator is a new html/css validator that detect styling problem for each html elements in conjunction with Chrome DevTools.",
+	"icons": {
+
+		"16": "./extension/style-validator.logo_16x16.png",
+		"48": "./extension/style-validator.logo_200x200.png",
+		"128": "./extension/style-validator.logo_200x200.png"
+	},
+
+	"browser_action": {
+		"default_icon": {
+			"19": "./extension/style-validator.logo_200x200.png",
+			"38": "./extension/style-validator.logo_200x200.png"
+		},
+		"default_title": "Style Validator"
+	},
+
+	"author": "Igari Takeharu",
+
+	"background": {
+		"page": "./extension/background.html",
+		"persistent": false
+	},
+
+	"content_scripts": [
+		{
+			"run_at": "document_idle",
+			"matches": [
+				"https://*/*",
+				"http://*/*"
+			],
+			"css": ["./app/style-validator.css"],
+			"js": ["./extension/google-analytics.js", "./app/style-validator.js"]
+		}
+	],
+
+	"devtools_page": "./extension/devtools.html",
+
+	"options_page": "./extension/options.html",
+
+	"commands": {
+		"toggle-validation": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+I",
+				"mac": "Command+Shift+I"
+			},
+			"description": "Toggle Validation"
+		}
+	},
+
+	"homepage_url": "http://igari.github.io/Style-Validator/",
+
+	"offline_enabled": true,
+
+	"short_name": "Style Validator",
+
+	"web_accessible_resources": [
+		"data/rules.json",
+		"data/rules-by-empty-tags.json",
+		"data/tags-all.json",
+		"data/tags-empty.json",
+		"data/tags-resizable-inline-element.json",
+		"data/tags-table-children.json",
+		"data/displayPropChangeableProperties.json",
+		"app/style-validator-for-console.css"
+	],
+
+	"permissions": [
+		"activeTab",
+		"webNavigation",
+		"tabs",
+		"https://*/*",
+		"http://*/*",
+		"storage",
+		"management"
+	]
+}
