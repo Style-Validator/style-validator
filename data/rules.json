@@ -348,7 +348,7 @@
 		"base-styles": {
 			"float": "!default"
 		},
-		"pseudo-after-elements-error-styles": {
+		"pseudo-after-error-styles": {
 			"clear": "default"
 		},
 		"reference-url": "http://www.leihauoli.com"
