@@ -261,7 +261,7 @@ button {
 .dummy-wrapper {
 	position: fixed;
 	top: 0;
-	/* visibility: hidden; */
+	visibility: hidden;
 	pointer-events: none;
 }
 

@@ -99,6 +99,7 @@ STYLEV.RULES_EDITOR = {
 		for(var i = 0, len = that.stylesLists.length; i < len; i++) {
 			var stylesList = that.stylesLists[i];
 			stylesList.addEventListener('click', that.insertProperty, false);
+			stylesList.addEventListener('focus', that.insertProperty, false);
 		}
 	},
 	addRule: function() {
@@ -684,10 +685,12 @@ STYLEV.RULES_EDITOR = {
 
 						for(var j = 0, styleListsLength = styleLists.length; j < styleListsLength; j++) {
 							var styleList = styleLists[j];
+							styleList.tabIndex = 1;
 							that.setPropertyFromRuleData(styleList, rule, styleList.dataset.id);
 						}
 						for(var k = 0, styleInputsLength = styleInputs.length; k < styleInputsLength; k++) {
 							var styleInput = styleInputs[k];
+							styleInput.querySelector('input').tabIndex = 1;
 							that.setPropertyFromRuleData(styleInput, rule, styleInput.dataset.id);
 						}
 
@@ -735,8 +738,14 @@ STYLEV.RULES_EDITOR = {
 
 		} else {
 
-			target.style.setProperty('display', 'none');
-
+			if(target.className === 'styles-list') {
+				target.tabIndex = -1;
+				target.style.setProperty('display', 'none', '');
+			}
+			if(target.className === 'styles-input') {
+				target.querySelector('input').tabIndex = -1;
+				target.style.setProperty('display', 'none', '');
+			}
 		}
 	},
 
@@ -789,6 +798,7 @@ STYLEV.RULES_EDITOR = {
 						var property = styleListItem.querySelector('.css-property');
 						var propertyValue = styleListItem.querySelector('.css-property-value');
 
+						//TODO: 検証が通っていないものも入れるようにしているが、後々ベストな振る舞いについて考える
 //						if (
 //							property.dataset.isvalid === 'true' &&
 //							propertyValue.dataset.isvalid === 'true'
