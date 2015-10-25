@@ -583,13 +583,13 @@ STYLEV.VALIDATOR = {
 			(ngStyleRulesPropVal === 'over-0' && parseInt(targetElemNgStyleVal, 10) > 0) ||
 
 			//デフォルト値以外
-			(ngStyleRulesPropVal === 'non-default' && targetElemNgStyleVal !== targetElemNgStyleDefaultVal) ||
+			(ngStyleRulesPropVal === '!default' && targetElemNgStyleVal !== targetElemNgStyleDefaultVal) ||
 
 			//継承スタイル以外（line-height）
-			(ngStyleRulesPropVal === 'non-inherit' && ngStyleRulesProp === 'line-height' && that.controlFloat(parseFloat(targetElemNgStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNgStyleVal), 1)) ||
+			(ngStyleRulesPropVal === '!inherit' && ngStyleRulesProp === 'line-height' && that.controlFloat(parseFloat(targetElemNgStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNgStyleVal), 1)) ||
 
 			//継承スタイル以外（通常：line-height以外）
-			(ngStyleRulesPropVal === 'non-inherit' && ngStyleRulesProp !== 'line-height' && targetElemNgStyleVal !== targetElemParentNgStyleVal) ||
+			(ngStyleRulesPropVal === '!inherit' && ngStyleRulesProp !== 'line-height' && targetElemNgStyleVal !== targetElemParentNgStyleVal) ||
 
 			//親要素のエラースタイルに適合したら
 			(!reverseFlag && isParentStructureCheck && regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' ')) ||

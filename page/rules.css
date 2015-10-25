@@ -73,13 +73,24 @@ body {
 }
 .header-heading {
 	flex-grow: 1;
+	display: flex;
+	align-items: center;
 }
 .header-heading > img {
-	margin-top: -3px;
-	margin-right: 20px;
+	margin-top: -0.5%;
+	margin-right: 10px;
+	align-items: stretch;
+	flex-shrink: 0;
+	height: 100%;
+	width: auto;
+	flex-basis: 60px;
 }
 .header > nav {
 	display: flex;
+	flex-basis: 200px;
+	/* flex-shrink: 0; */
+	/* flex-grow: 1; */
+	justify-content: flex-end;
 }
 .header > nav > * + * {
 	border-left: 1px solid white;
@@ -127,6 +138,7 @@ body {
 	width: 100%;
 }
 .styles-list {
+	cursor: pointer;
 }
 .styles-list > li {
 	position: relative;
@@ -163,7 +175,11 @@ body {
 .styles-list > li input[type="text"] {
 	width: 25px;
 	border: 0;
+	padding: 0;
 	background-color: transparent;
+}
+.styles-list > li input[type="text"].css-property-value {
+	max-width: 188px;
 }
 .styles-list > li input[type="text"].css-property.valid {
 	color: #CA0000;
@@ -211,12 +227,6 @@ body {
 	border: 0;
 	padding: 2% 4%;
 }
-.styles-input a {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	/* flex-shrink: 0; */
-}
 .description {
 	border-bottom: 1px solid #999;
 	margin-bottom: 20px;
@@ -246,15 +256,17 @@ button {
 	border: 0;
 	font-size: 14px;
 	padding: 5% 8%;
-	white-space: nowrap;
+	cursor: pointer;
 }
 .dummy-wrapper {
 	position: fixed;
-	visibility: hidden;
+	top: 0;
+	/* visibility: hidden; */
 	pointer-events: none;
 }
 
 [data-id="title"] {
+	position: relative;
 	margin-top: -4%;
 	margin-right: -4%;
 	margin-left: -4%;
@@ -279,7 +291,6 @@ button {
 [data-id*="error"]:before,
 [data-id*="warning"]:before {
 	white-space: pre-wrap;
-	/*text-transform: capitalize;*/
 	display: block;
 	float: none;
 	color: white;
@@ -302,4 +313,33 @@ button {
 [data-id*="warning"]:before {
 	content: '== ' attr(data-id) ' ==\A And if the following styles defined, alert as WARNING';
 	background-color: #F7BF00;
+}
+[data-id="reference-url"],
+[data-id="reference-url"] input[type="text"] {
+	background-color: #EFEFEF;
+}
+
+.styles-input a {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	/* flex-shrink: 0; */
+	flex-basis: 60px;
+	align-items: center;
+}
+[data-id="title"] a {
+	display: none;
+	font-size: 12px;
+	/* padding-right: 5px; */
+	/* padding-left: 5px; */
+	/*position: absolute;*/
+	/*top: 10px;*/
+	/*right: 10px;*/
+	/*font-size: 12px;*/
+}
+.styles-list-wrapper > li:hover [data-id="title"] a {
+	display: flex;
+}
+.edit-mode .styles-list {
+	display: block !important;
 }

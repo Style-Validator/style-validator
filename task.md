@@ -25,3 +25,4 @@
 - negative marginやpositionなしで、子が親をはみ出している
 - position: fixed;が入れ子　Chromeでダメだったらしい
 - inline要素の高さや幅は、CSSがpx指定されていても、autoになる
+- ルールをつくったらテストできる機能をつける

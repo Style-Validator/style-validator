@@ -46,18 +46,18 @@
 		</nav>
 	</header>
 	<main class="main">
-		<ul id="json-view" class="styles-list-wrapper col"></ul>
+		<ul id="rules-list" class="styles-list-wrapper col"></ul>
 	</main>
 </div>
 
 <template id="template-property">
 	<li>
-		<input type="text" class="css-property" list="all-css-properties" />: <input type="text" class="css-property-value" list="value" />;
+		<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="value" /> ;
 	</li>
 </template>
 <template id="template-rule">
 	<li>
-		<section class="styles-input" data-id="title"><input type="text" /></section>
+		<section class="styles-input" data-id="title"><input type="text" /><a href="javascript: void(0);" class="remove-button">Remove</a><a href="javascript: void(0);" class="edit-button">Edit</a></section>
 		<ul class="styles-list" data-id="base-styles"></ul>
 		<ul class="styles-list" data-id="error-styles"></ul>
 		<ul class="styles-list" data-id="warning-styles"></ul>
@@ -72,7 +72,16 @@
 	</li>
 </template>
 <datalist id="all-css-properties"></datalist>
-<datalist id="value"></datalist>
+<datalist id="value">
+	<option value="default">default</option>
+	<option value="!default">!default</option>
+	<option value="!0">!0</option>
+	<option value="over-0">over-0</option>
+	<option value="under-0">under-0</option>
+	<option value="initial">initial</option>
+	<option value="inherit">inherit</option>
+	<option value="unset">unset</option>
+</datalist>
 <script src="prism.js" data-manual></script>
 <script src="specificity.js"></script>
 <script src="rules.js"></script>

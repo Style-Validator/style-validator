@@ -35,7 +35,7 @@
 				"http://*/*"
 			],
 			"css": ["./app/style-validator.css"],
-			"js": ["./extension/google-analytics.js", "./app/style-validator.js"]
+			"js": ["./extension/google-analytics.js", "./page/specificity.js", "./app/style-validator.js"]
 		}
 	],
 

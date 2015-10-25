@@ -15,7 +15,7 @@ STYLEV.RULES_EDITOR = {
 		that.showCurrentJSON()
 			.then(function() {
 
-				that.setParametersAfterLoadJSON();
+				that.setParametersAfterAdding();
 				that.bindEvents();
 				that.setStyleDataOfWidthHeight();
 			});
@@ -23,11 +23,10 @@ STYLEV.RULES_EDITOR = {
 	setParameters: function() {
 		var that = STYLEV.RULES_EDITOR;
 
-		//TODO:sertParametersが二回呼びだされているので、設計し直す
-//		that.generateButton = document.querySelector('#generate-button');
+		that.addButton = document.querySelector('#add-button');
 		that.saveButton = document.querySelector('#save-button');
 		that.datalistOfProperties = document.querySelector('#all-css-properties');
-		that.jsonView = document.querySelector('#json-view');
+		that.rulesList = document.querySelector('#rules-list');
 		that.templateProperty = document.querySelector('#template-property').content;
 		that.templateRule = document.querySelector('#template-rule').content;
 		that.dummyElementWrapper = document.createElement('div');
@@ -39,26 +38,80 @@ STYLEV.RULES_EDITOR = {
 		that.dummyElement4testStyle.id = 'dummy-element-4-test-style';
 		that.dummyElement4testStyle.className = 'dummy';
 		that.allCSSProperties = [];
-		that.INPUT_ARROW_WIDTH = 24;
-//		that.INPUT_ARROW_WIDTH = 53;
+		that.INPUT_ARROW_WIDTH = 22;
 	},
-	setParametersAfterLoadJSON: function() {
+	setParametersAfterAdding: function() {
 		var that = STYLEV.RULES_EDITOR;
 
-		//TODO:sertParametersが二回呼びだされているので、設計し直す
-		that.stylesLists = document.querySelectorAll('.styles-list');
-		that.stylesInputs = document.querySelectorAll('.styles-input');
+		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li')
+		that.stylesLists = that.rulesList.querySelectorAll('.styles-list');
+		that.stylesInputs = that.rulesList.querySelectorAll('.styles-input');
 	},
 	bindEvents: function() {
 		var that = STYLEV.RULES_EDITOR;
 
-//		that.generateButton.addEventListener('click', that.generateJSON, false);
+		that.addButton.addEventListener('click', that.addRule, false);
 		that.saveButton.addEventListener('click', that.saveJSON, false);
+
+
+		for(var i = 0, len = that.rulesListItems.length; i < len; i++) {
+			var rulesListItem = that.rulesListItems[i];
+			var editButton = rulesListItem.querySelector('.edit-button');
+			var removeButton = rulesListItem.querySelector('.remove-button');
+			editButton.addEventListener('click', (that.toggleEditMode(rulesListItem)), false);
+			removeButton.addEventListener('click', (that.removeTheRule(rulesListItem)), false);
+		}
+
+		that.bind2StylesList();
+	},
+
+	toggleEditMode: function(rulesListItem) {
+		return function() {
+			event.stopPropagation();
+			event.preventDefault();
+
+			if(rulesListItem.className.indexOf(' edit-mode') !== -1) {
+				rulesListItem.className = rulesListItem.className.replace(' edit-mode', '');
+				this.textContent = 'Edit';
+			} else {
+				rulesListItem.className += ' edit-mode';
+				this.textContent = 'Set';
+			}
+		};
+	},
+
+	removeTheRule: function(rulesListItem) {
+		return function() {
+			event.stopPropagation();
+			event.preventDefault();
+
+			if(confirm('Are you sure you want to remove the rule?')) {
+				rulesListItem.parentElement.removeChild(rulesListItem);
+			}
+		};
+	},
+
+	bind2StylesList: function(targetStyleLists) {
+		var that = STYLEV.RULES_EDITOR;
+
+		that.stylesLists = targetStyleLists ? targetStyleLists : that.stylesLists;
 
 		for(var i = 0, len = that.stylesLists.length; i < len; i++) {
 			var stylesList = that.stylesLists[i];
 			stylesList.addEventListener('click', that.insertProperty, false);
 		}
+	},
+	addRule: function() {
+		var that = STYLEV.RULES_EDITOR;
+		var clone = document.importNode(that.templateRule, true);
+
+		var styleLists = clone.querySelectorAll('.styles-list');
+		var styleInputs = clone.querySelectorAll('.styles-input');
+		that.bind2StylesList(styleLists);
+		that.rulesList.insertBefore(clone, that.rulesList.firstChild);
+		that.setParametersAfterAdding();
+
+		that.rulesList.querySelector('.styles-input').querySelector('input').focus();
 	},
 	insertDummyElements: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -169,9 +222,8 @@ STYLEV.RULES_EDITOR = {
 		var cssProperty = styleListItem.querySelector('.css-property');
 		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
 
-		that.dummyElement4detectWidth.textContent = cssProperty.value;
-
-		cssProperty.style.width = (that.dummyElement4detectWidth.offsetWidth + that.INPUT_ARROW_WIDTH) + 'px';
+		that.dummyElement4detectWidth.innerHTML = cssProperty.value;
+		cssProperty.style.setProperty('width', (that.dummyElement4detectWidth.offsetWidth * 1.05 + that.INPUT_ARROW_WIDTH) + 'px', 'important');
 		that.validateProperty(cssProperty, cssPropertyValue);
 		that.validatePropertyValue(cssProperty, cssPropertyValue);
 
@@ -193,8 +245,8 @@ STYLEV.RULES_EDITOR = {
 		var cssProperty = styleListItem.querySelector('.css-property');
 		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
 
-		that.dummyElement4detectWidth.textContent = cssPropertyValue.value;
-		cssPropertyValue.style.width = (that.dummyElement4detectWidth.offsetWidth + that.INPUT_ARROW_WIDTH) + 'px';
+		that.dummyElement4detectWidth.innerHTML = cssPropertyValue.value;
+		cssPropertyValue.style.width = (that.dummyElement4detectWidth.offsetWidth * 1.05 + that.INPUT_ARROW_WIDTH) + 'px';
 		that.validatePropertyValue(cssProperty, cssPropertyValue);
 	},
 	insertPropertyByEnter: function(event) {
@@ -431,23 +483,85 @@ STYLEV.RULES_EDITOR = {
 		return culculatedValue;
 	},
 	validatePropertyValue: function(cssProperty, cssPropertyValue) {
+
 		var that = STYLEV.RULES_EDITOR;
 		var property = cssProperty.value;
 		var propertyValue = cssPropertyValue.value;
 
-		that.dummyElement4testStyle.style[property] = propertyValue;
+		var hasTheNotOperator = propertyValue.indexOf('!') === 0;
+		propertyValue = hasTheNotOperator ? propertyValue.split('!')[1] : propertyValue;
 
-		var computedValue = that.calculateWidthHeightValue(that.dummyElement4testStyle, property, propertyValue);
-//		var computedValue = getComputedStyle(that.dummyElement4testStyle, '')[property];
+		var hasGroupOperator = propertyValue.match(/^\[(.+)\]$/);
+		propertyValue = hasGroupOperator ? hasGroupOperator[1] : propertyValue;
 
-//		console.log('computedValue: ' + computedValue);
-//		console.log('propertyValue: ' + propertyValue);
+		var hasOrOperator = propertyValue.split('|').length > 1;
 
-		var regexOkOriginalKeyWords = new RegExp(' default | non-default | !default | non-0 | !0 | over-0 | under-0 | non-inherit | !inherit');
+		//TODO: !は不要かも
+		var regexOkOriginalKeyWords = new RegExp(' default | !default | 0 | !0 | over-0 | under-0 | inherit | !inherit ');
 
-		var isValid = propertyValue === computedValue || regexOkOriginalKeyWords.test(' ' + propertyValue + ' ');
+		if(hasOrOperator) {
 
-		cssPropertyValue.dataset.isvalid = isValid ? 'true' : 'false';
+			var separatedPropertyValues = propertyValue.split('|');
+			var isValidOfGroupValue = true;
+
+			for(var i = 0, len = separatedPropertyValues.length; i < len; i++) {
+				var separatedPropertyValue = separatedPropertyValues[i];
+
+				that.dummyElement4testStyle.style.setProperty(property, separatedPropertyValue, '');
+
+				var computedValue = that.calculateWidthHeightValue(that.dummyElement4testStyle, property, separatedPropertyValue);
+				that.dummyElement4testStyle.style.setProperty(property, null, '');
+
+				var isValid = separatedPropertyValue === computedValue || regexOkOriginalKeyWords.test(' ' + separatedPropertyValue + ' ');
+
+				if(!isValid) {
+					isValidOfGroupValue = false;
+					break;
+				}
+
+			}
+
+			cssPropertyValue.dataset.isvalid = isValidOfGroupValue ? 'true' : 'false';
+
+		} else {
+
+			that.dummyElement4testStyle.style.setProperty(property, propertyValue, '');
+
+			var computedValue = that.calculateWidthHeightValue(that.dummyElement4testStyle, property, propertyValue);
+			that.dummyElement4testStyle.style.setProperty(property, null, '');
+
+//			console.log('computedValue: ' + computedValue);
+//			console.log('propertyValue: ' + propertyValue);
+
+			var isValid = propertyValue === computedValue || regexOkOriginalKeyWords.test(' ' + propertyValue + ' ');
+
+			cssPropertyValue.dataset.isvalid = isValid ? 'true' : 'false';
+
+		}
+
+
+//		var groupValue;
+//
+//		if(hasTheNotOperator) {
+//			groupValue = propertyValue.match(/^!\[([a-z|A-Z|0-9|,|!|\(|\)]+)\]$/)[1];
+//		} else {
+//			groupValue = propertyValue.match(/^[a-z|A-Z|0-9|,|!|\(|\)]+$/);
+//		}
+//
+//		if(groupValue === null) {
+//			isValidOfGroupValue = false;
+//			new Error('Syntax Error in Value (' + propertyValue + ')');
+//		} else {
+//			var separatedValues = groupValue.split('|');
+//
+//			for(var i = 0, len = separatedValues.length; i < len; i++) {
+//
+//				var separatedValue = separatedValues[i];
+//
+//
+//			}
+//		}
+
 	},
 	applyValidationResult: function(event, styleListItem) {
 
@@ -464,11 +578,11 @@ STYLEV.RULES_EDITOR = {
 		}
 
 		if(currentTarget) {
-			currentTarget.style['margin-right'] = -(that.INPUT_ARROW_WIDTH/1.45) + 'px';
+			currentTarget.style.setProperty('margin-right',(-that.INPUT_ARROW_WIDTH) + 'px', '');
 			setTimeout(that.updateValidClass, 0, currentTarget);
 		} else {
-			cssProperty.style['margin-right'] = -(that.INPUT_ARROW_WIDTH/1.45) + 'px';
-			cssPropertyValue.style['margin-right'] = -(that.INPUT_ARROW_WIDTH/1.45) + 'px';
+			cssProperty.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
+			cssPropertyValue.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
 			setTimeout(that.updateValidClass, 0, cssProperty);
 			setTimeout(that.updateValidClass, 0, cssPropertyValue);
 		}
@@ -504,7 +618,7 @@ STYLEV.RULES_EDITOR = {
 	applySameStyles: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 		var currentTarget = event.currentTarget;
-		that.dummyElement4detectWidth.textContent = currentTarget.value;
+		that.dummyElement4detectWidth.innerHTML = currentTarget.value;
 		that.dummyElement4detectWidth.style['font-size'] = getComputedStyle(currentTarget, '').getPropertyValue('font-size');
 		that.dummyElement4detectWidth.style['font-family'] = getComputedStyle(currentTarget, '').getPropertyValue('font-family');
 		currentTarget.select();
@@ -550,8 +664,7 @@ STYLEV.RULES_EDITOR = {
 	},
 	showCurrentJSON: function() {
 		var that = STYLEV.RULES_EDITOR;
-
-//		that.jsonView.addEventListener('click', that.selectJSONText, false);
+		var df = document.createDocumentFragment();
 
 		return new Promise(function(resolve, reject) {
 
@@ -578,8 +691,11 @@ STYLEV.RULES_EDITOR = {
 							that.setPropertyFromRuleData(styleInput, rule, styleInput.dataset.id);
 						}
 
-						that.jsonView.appendChild(clone);
+						df.appendChild(clone);
+
 					}
+
+					that.rulesList.appendChild(df);
 
 					resolve();
 
@@ -606,17 +722,20 @@ STYLEV.RULES_EDITOR = {
 			}
 			if(target.className === 'styles-input') {
 				var input = target.querySelector('input');
-				var anchor = target.querySelector('a');
 				input.value = ruleStyles;
-				if(anchor) {
-					anchor.href = ruleStyles;
+
+				if(id === 'reference-url') {
+					var anchor = target.querySelector('a');
+					if(anchor) {
+						anchor.href = ruleStyles;
+					}
 				}
 			}
 
 
 		} else {
 
-			target.style.setProperty('display', 'none', 'important');
+			target.style.setProperty('display', 'none');
 
 		}
 	},
@@ -639,48 +758,62 @@ STYLEV.RULES_EDITOR = {
 	},
 	generateJSON: function() {
 		var that = STYLEV.RULES_EDITOR;
+		var json = [];
 
-		var json = that.getRulesParameters();
-		that.currentJSON.unshift(json);
-		that.jsonView.textContent = JSON.stringify(that.currentJSON, null, '\t');
-		Prism.highlightAll();
+		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li')
 
-	},
-	getRulesParameters: function() {
-		var that = STYLEV.RULES_EDITOR;
-		var json = {};
+		for(var r = 0, rulesListItemsLength = that.rulesListItems.length; r < rulesListItemsLength; r++) {
 
-		for(var i = 0, len = that.stylesLists.length; i < len; i++) {
-			var styleList = that.stylesLists[i];
+			var rule = {};
 
-			var id = styleList.id;
+			var rulesListItem = that.rulesListItems[r];
+			var dataElements = rulesListItem.querySelectorAll('.styles-list, .styles-input');
 
-			var styleListItems = styleList.querySelectorAll('li');
+			for(var i = 0, len = dataElements.length; i < len; i++) {
 
-			if(!styleListItems.length) {
-				continue;
+				var dataElement = dataElements[i];
+				var id = dataElement.dataset.id;
+
+				if(dataElement.className === 'styles-list') {
+
+					var styleListItems = dataElement.querySelectorAll('li');
+
+					if(!styleListItems.length) {
+						continue;
+					}
+					rule[id] = {};
+
+					for(var j = 0, styleListItemsLength = styleListItems.length; j < styleListItemsLength; j++) {
+
+						var styleListItem = styleListItems[j];
+						var property = styleListItem.querySelector('.css-property');
+						var propertyValue = styleListItem.querySelector('.css-property-value');
+
+//						if (
+//							property.dataset.isvalid === 'true' &&
+//							propertyValue.dataset.isvalid === 'true'
+//						) {
+
+							rule[id][property.value] = propertyValue.value;
+//						}
+					}
+				}
+
+				if(dataElement.className === 'styles-input') {
+
+					var styleInput = dataElement;
+
+					var styleInputItem = styleInput.querySelector('input');
+
+					if(styleInputItem.value) {
+						rule[id] = styleInputItem.value;
+					}
+				}
+
+
 			}
 
-			json[id] = {};
-
-			for(var j = 0, styleListItemsLength = styleListItems.length; j < styleListItemsLength; j++) {
-
-				var styleListItem = styleListItems[j];
-				var property = styleListItem.querySelector('.css-property');
-				var propertyValue = styleListItem.querySelector('.css-property-value');
-
-				json[id][property.value] = propertyValue.value;
-			}
-
-		}
-		for(var k = 0, stylesInputsLength = that.stylesInputs.length; k < stylesInputsLength; k++) {
-			var styleInput = that.stylesInputs[k];
-
-			var id = styleInput.id;
-
-			var styleInputItem = styleInput.querySelector('input');
-
-			json[id] = styleInputItem.value;
+			json.push(rule);
 		}
 
 		return json;
@@ -708,19 +841,19 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 		var xhr = new XMLHttpRequest();
 		var apiURI = 'http://localhost:8001/saveJSON';
-		var mothodType = 'POST';
-		var data = that.jsonView.textContent;
+		var method = 'POST';
+		var json = that.generateJSON();
+		var data4send = JSON.stringify(json, null, '\t');
 
-		xhr.open(mothodType, apiURI, true);
-		xhr.setRequestHeader('User-Agent','XMLHTTP/1.0');
-		xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+		xhr.open(method, apiURI, true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
 		//TODO: add handling of response
 		//TODO: not server connected, alert error
 
 		if (xhr.readyState == 4) return;
 
-		xhr.send(data);
+		xhr.send(data4send);
 	}
 };
 
