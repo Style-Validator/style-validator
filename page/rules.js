@@ -489,8 +489,9 @@ STYLEV.RULES_EDITOR = {
 		var property = cssProperty.value;
 		var propertyValue = cssPropertyValue.value;
 
-		var hasTheNotOperator = propertyValue.indexOf('!') === 0;
-		propertyValue = hasTheNotOperator ? propertyValue.split('!')[1] : propertyValue;
+		//TODO: 用途を考える
+		var isReverse = propertyValue.indexOf('!') === 0;
+		propertyValue = propertyValue.replace('!', '');
 
 		var hasGroupOperator = propertyValue.match(/^\[(.+)\]$/);
 		propertyValue = hasGroupOperator ? hasGroupOperator[1] : propertyValue;

@@ -11,12 +11,17 @@
 	"parent-warning-styles": {
 
 	},
-	"pseudo-elements-error-styles": {
+	"pseudo-before-error-styles": {
 		"content": "default"
 	},
-	"pseudo-elements-warning-styles": {
+	"pseudo-before-warning-styles": {
 
 	},
-	"reference-url": "",
-	"message": ""
+	"pseudo-after-error-styles": {
+		"content": "default"
+	},
+	"pseudo-after-warning-styles": {
+
+	},
+	"reference-url": ""
 }
