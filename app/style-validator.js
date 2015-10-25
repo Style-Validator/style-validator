@@ -70,6 +70,15 @@ STYLEV.VALIDATOR = {
 		//インスタンス変数などを設定
 		that.setParameters();
 
+		//TODO: あとでまとめる
+		if(STYLEV.isBookmarklet) {
+			that.scriptTag = document.createElement('script');
+			that.scriptTag.src = that.settings.SPECIFICITY_PATH;
+
+			/* append */
+			that.head.appendChild(that.scriptTag);
+		}
+
 		//データを並列で非同期に取得し、全て終わったらそれぞれのインスタンス変数に格納
 		Promise
 			.all([
@@ -125,6 +134,7 @@ STYLEV.VALIDATOR = {
 			CONSOLE_HEADER_DEFAULT_HEIGHT: 200,
 			STYLESHEET_ID: 'stylev-stylesheet',
 			STYLESHEET_PATH: that.RESOURCE_ROOT + 'app/style-validator.css',
+			SPECIFICITY_PATH: that.RESOURCE_ROOT + 'page/specificity.js',
 			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
 			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/Style-Validator/',
 			RULES_PATH: that.RESOURCE_ROOT + 'data/rules.json',
@@ -1278,6 +1288,10 @@ STYLEV.VALIDATOR = {
 			var stylesheet = stylesheets[i];
 			var cssRules = stylesheet.cssRules;
 
+			if(cssRules === null) {
+				continue;
+			}
+
 			for(var j = 0, rulesLength = cssRules.length; j < rulesLength; j++) {
 
 				var cssRule = cssRules[j];
@@ -1319,6 +1333,7 @@ STYLEV.VALIDATOR = {
 						var importantOfWidthOfStyleAttr = styleOfStyleAttr.getPropertyPriority('width');
 						var importantOfHeightOfStyleAttr = styleOfStyleAttr.getPropertyPriority('height');
 
+						//initialize
 						if(target.dataset.stylevwidthspecificity === undefined) {
 							target.dataset.stylevwidthspecificity = specificityOfWidth;
 						}
@@ -1337,7 +1352,7 @@ STYLEV.VALIDATOR = {
 						if(widthOfCssRules && !widthOfStyleAttr) {
 							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
 								importantOfWidthOfCssRules.length >= target.dataset.stylevwidthimportant.length
-								) {
+							) {
 								target.dataset.stylevwidth = widthOfCssRules;
 								target.dataset.stylevwidthspecificity = specificityOfWidth;
 								target.dataset.stylevwidthimportant = importantOfWidthOfCssRules;
@@ -1348,7 +1363,7 @@ STYLEV.VALIDATOR = {
 
 							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
 								importantOfWidthOfCssRules.length >= target.dataset.stylevwidthimportant.length
-								) {
+							) {
 								target.dataset.stylevwidth = widthOfCssRules;
 								target.dataset.stylevwidthspecificity = specificityOfWidth;
 								target.dataset.stylevwidthimportant = importantOfWidthOfCssRules;
@@ -1359,7 +1374,7 @@ STYLEV.VALIDATOR = {
 
 							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset.stylevwidthimportant.length
-								) {
+							) {
 								target.dataset.stylevwidth = widthOfStyleAttr;
 								target.dataset.stylevwidthspecificity = specificityOfWidth;
 								target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
@@ -1369,7 +1384,7 @@ STYLEV.VALIDATOR = {
 						if(widthOfStyleAttr && importantOfWidthOfStyleAttr) {
 							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset.stylevwidthimportant.length
-								) {
+							) {
 								target.dataset.stylevwidth = widthOfStyleAttr;
 								target.dataset.stylevwidthspecificity = specificityOfWidth;
 								target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
@@ -1381,7 +1396,7 @@ STYLEV.VALIDATOR = {
 						if(heightOfCssRules && !heightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
-								) {
+							) {
 								target.dataset.stylevheight = heightOfCssRules;
 								target.dataset.stylevheightspecificity = specificityOfHeight;
 								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
@@ -1391,7 +1406,7 @@ STYLEV.VALIDATOR = {
 						if(heightOfCssRules && importantOfHeightOfCssRules && heightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
-								) {
+							) {
 								target.dataset.stylevheight = heightOfCssRules;
 								target.dataset.stylevheightspecificity = specificityOfHeight;
 								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
@@ -1402,7 +1417,7 @@ STYLEV.VALIDATOR = {
 						if(heightOfCssRules && !importantOfHeightOfCssRules && heightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
-								) {
+							) {
 								target.dataset.stylevheight = heightOfStyleAttr;
 								target.dataset.stylevheightspecificity = specificityOfHeight;
 								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
@@ -1412,7 +1427,7 @@ STYLEV.VALIDATOR = {
 						if(heightOfStyleAttr && importantOfHeightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
-								) {
+							) {
 								target.dataset.stylevheight = heightOfStyleAttr;
 								target.dataset.stylevheightspecificity = specificityOfHeight;
 								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
