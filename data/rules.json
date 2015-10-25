@@ -349,7 +349,6 @@
 			"float": "!default"
 		},
 		"pseudo-after-elements-error-styles": {
-			"content": "default",
 			"clear": "default"
 		},
 		"reference-url": "http://www.leihauoli.com"
