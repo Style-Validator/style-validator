@@ -1334,19 +1334,21 @@ STYLEV.VALIDATOR = {
 						var importantOfHeightOfStyleAttr = styleOfStyleAttr.getPropertyPriority('height');
 
 						//initialize
-						if(target.dataset.stylevwidthspecificity === undefined) {
+						if( target.dataset.stylevwidthspecificity === undefined ) {
 							target.dataset.stylevwidthspecificity = specificityOfWidth;
 						}
-						if(target.dataset.stylevheightspecificity === undefined) {
+						if( target.dataset.stylevheightspecificity === undefined ) {
 							target.dataset.stylevheightspecificity = specificityOfHeight;
 						}
-						if(target.dataset.stylevwidthimportant === undefined) {
+						if( target.dataset.stylevwidthimportant === undefined ) {
 							target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
 						}
-						if(target.dataset.stylevheightimportant === undefined) {
+						if( target.dataset.stylevheightimportant === undefined ) {
 							target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
 						}
 
+						//TODO: 同じような処理まとめる
+						//TODO: IDだけつけて、他のデータ属性は追加しないようにする
 						//TODO: もう1パターン？
 						//CSS指定がありstyle属性がない
 						if(widthOfCssRules && !widthOfStyleAttr) {
