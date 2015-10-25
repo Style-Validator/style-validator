@@ -1,7 +1,7 @@
 /*!
  Style Validator
  "Validation in the Browser". Validate computedStyle with track all events.
- https://igari.github.io/Style-Validator/
+ https://style-validator.github.io/Style-Validator/
  by Igari Takeharu
  MIT License
  */
@@ -114,7 +114,7 @@ STYLEV.VALIDATOR = {
 		that.htmlDefaultBorderBottomWidth = that.html.style.borderBottomWidth === '' ? null : that.html.style.borderBottomWidth;
 
 		//リソースルートを設定
-		that.RESOURCE_ROOT = STYLEV.chromeExtension.RESOURCE_ROOT || 'https://igari.github.io/Style-Validator/';
+		that.RESOURCE_ROOT = STYLEV.chromeExtension.RESOURCE_ROOT || 'https://style-validator.github.io/Style-Validator/';
 
 		//静的な設定値 TODO: 他にもsettingsにまとめられる値があるので後で精査
 		that.settings = {
@@ -126,7 +126,7 @@ STYLEV.VALIDATOR = {
 			STYLESHEET_ID: 'stylev-stylesheet',
 			STYLESHEET_PATH: that.RESOURCE_ROOT + 'app/style-validator.css',
 			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
-			SERVER_RESOURCE_ROOT: 'https://igari.github.io/Style-Validator/',
+			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/Style-Validator/',
 			RULES_PATH: that.RESOURCE_ROOT + 'data/rules.json',
 			RULES_BY_EMPTY_TAG_PATH: that.RESOURCE_ROOT + 'data/rules-by-empty-tags.json',
 			TAGS_ALL_PATH: that.RESOURCE_ROOT + 'data/tags-all.json',
@@ -187,14 +187,14 @@ STYLEV.VALIDATOR = {
 			}
 
 			elemData.targetElem.dataset.stylevid = 'stylev-' + i;
-			elemData.targetElemStyles = window.getComputedStyle(elemData.targetElem, '');
+			elemData.targetElemStyles = getComputedStyle(elemData.targetElem, '');
 			elemData.targetParentElem = elemData.targetElem.parentElement;
 
 			//親要素が合った場合
 			if(elemData.targetParentElem) {
 
 				//親要素のスタイル情報
-				elemData.targetElemParentStyles = window.getComputedStyle(elemData.targetParentElem, '');
+				elemData.targetElemParentStyles = getComputedStyle(elemData.targetParentElem, '');
 
 				//親要素のDisplayのプロパティ値
 				elemData.targetElemParentDisplayProp = elemData.targetElemParentStyles.getPropertyValue('display');
@@ -202,7 +202,7 @@ STYLEV.VALIDATOR = {
 			}
 
 			//デフォルトスタイル情報（既にあれば既存オブジェクトを参照）
-			elemData.targetElemDefaultStyles = elemData.targetElemDefaultStyles || window.getComputedStyle(that.iframeDocument.querySelector(elemData.targetElemTagName), '');
+			elemData.targetElemDefaultStyles = elemData.targetElemDefaultStyles || getComputedStyle(that.iframeDocument.querySelector(elemData.targetElemTagName), '');
 
 			//対象要素のDisplayプロパティのプロパティ値
 			elemData.targetElemDisplayProp = elemData.targetElemStyles.getPropertyValue('display');
@@ -445,6 +445,11 @@ STYLEV.VALIDATOR = {
 	initializeBeforeValidation: function() {
 
 		var that = this;
+
+		//auto判定のためのData格納
+		that.setStyleDataOfWidthHeight(document);
+		//TODO: insertする直前とかにやらないと意味ない
+		that.setStyleDataOfWidthHeight(that.iframeDocument);
 
 		//HTMLタグを判定する用の正規表現
 		that.regexEmptyElem = new RegExp('^( ' + that.tagsEmptyData.join(' | ') + ' )');
@@ -1262,13 +1267,11 @@ STYLEV.VALIDATOR = {
 			}, 0);
 		}
 	},
-	setStyleDataOfWidthHeight: function() {
 
+	setStyleDataOfWidthHeight: function() {
 		var that = this;
 
 		var stylesheets = document.styleSheets;
-
-		that.domData = {};
 
 		for(var i = 0, len = stylesheets.length; i < len; i++) {
 
@@ -1316,133 +1319,103 @@ STYLEV.VALIDATOR = {
 						var importantOfWidthOfStyleAttr = styleOfStyleAttr.getPropertyPriority('width');
 						var importantOfHeightOfStyleAttr = styleOfStyleAttr.getPropertyPriority('height');
 
-
-						//オブジェクトのセットアップ
-						if(that.domData[target] === undefined) {
-
-							that.domData[target] = {};
-
-							if(that.domData[target]['width'] === undefined) {
-								that.domData[target]['width'] = {};
-							}
-							if(that.domData[target]['height'] === undefined) {
-								that.domData[target]['height'] = {};
-							}
+						if(target.dataset.stylevwidthspecificity === undefined) {
+							target.dataset.stylevwidthspecificity = specificityOfWidth;
+						}
+						if(target.dataset.stylevheightspecificity === undefined) {
+							target.dataset.stylevheightspecificity = specificityOfHeight;
+						}
+						if(target.dataset.stylevwidthimportant === undefined) {
+							target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
+						}
+						if(target.dataset.stylevheightimportant === undefined) {
+							target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
 						}
 
-						if(that.domData[target]['width'].specificity === undefined) {
-							that.domData[target]['width'].specificity = specificityOfWidth;
-						}
-						if(that.domData[target]['height'].specificity === undefined) {
-							that.domData[target]['height'].specificity = specificityOfHeight;
-						}
-						if(that.domData[target]['width'].important === undefined) {
-							that.domData[target]['width'].important = importantOfWidthOfStyleAttr;
-						}
-						if(that.domData[target]['height'].important === undefined) {
-							that.domData[target]['height'].important = importantOfHeightOfStyleAttr;
-						}
-
-						//TODO: もう1パターンあってもいいかも
+						//TODO: もう1パターン？
 						//CSS指定がありstyle属性がない
 						if(widthOfCssRules && !widthOfStyleAttr) {
-							if( specificityOfWidth >= parseInt(that.domData[target]['width'].specificity, 10) &&
-								importantOfWidthOfCssRules.length >= that.domData[target]['width'].important.length
+							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
+								importantOfWidthOfCssRules.length >= target.dataset.stylevwidthimportant.length
 								) {
-								that.domData[target]['width'] = {
-									value: widthOfCssRules,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfCssRules
-								}
+								target.dataset.stylevwidth = widthOfCssRules;
+								target.dataset.stylevwidthspecificity = specificityOfWidth;
+								target.dataset.stylevwidthimportant = importantOfWidthOfCssRules;
 							}
 						}
 						//importantのCSS指定とstyle属性
 						if(widthOfCssRules && importantOfWidthOfCssRules && !importantOfWidthOfStyleAttr) {
 
-							if( specificityOfWidth >= parseInt(that.domData[target]['width'].specificity, 10) &&
-								importantOfWidthOfCssRules.length >= that.domData[target]['width'].important.length
+							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
+								importantOfWidthOfCssRules.length >= target.dataset.stylevwidthimportant.length
 								) {
-								that.domData[target]['width'] = {
-									value: widthOfCssRules,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfCssRules
-								}
+								target.dataset.stylevwidth = widthOfCssRules;
+								target.dataset.stylevwidthspecificity = specificityOfWidth;
+								target.dataset.stylevwidthimportant = importantOfWidthOfCssRules;
 							}
 						}
 						//非importantのCSS指定とstyle属性
 						if(widthOfCssRules && !importantOfWidthOfCssRules && widthOfStyleAttr) {
 
-							if( specificityOfWidth >= parseInt(that.domData[target]['width'].specificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= that.domData[target]['width'].important.length
+							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset.stylevwidthimportant.length
 								) {
-								that.domData[target]['width'] = {
-									value: widthOfStyleAttr,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfStyleAttr
-								}
+								target.dataset.stylevwidth = widthOfStyleAttr;
+								target.dataset.stylevwidthspecificity = specificityOfWidth;
+								target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
 							}
 						}
 						//style属性かつimportant
 						if(widthOfStyleAttr && importantOfWidthOfStyleAttr) {
-							if( specificityOfWidth >= parseInt(that.domData[target]['width'].specificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= that.domData[target]['width'].important.length
+							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset.stylevwidthimportant.length
 								) {
-								that.domData[target]['width'] = {
-									value: widthOfStyleAttr,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfStyleAttr
-								}
+								target.dataset.stylevwidth = widthOfStyleAttr;
+								target.dataset.stylevwidthspecificity = specificityOfWidth;
+								target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
 							}
 						}
 
 
 						//CSS指定がありstyle属性がない
 						if(heightOfCssRules && !heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(that.domData[target]['height'].specificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= that.domData[target]['height'].important.length
+							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
 								) {
-								that.domData[target]['height'] = {
-									value: heightOfCssRules,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfCssRules
-								}
+								target.dataset.stylevheight = heightOfCssRules;
+								target.dataset.stylevheightspecificity = specificityOfHeight;
+								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 						//CSS指定がありimportantとstyle属性
 						if(heightOfCssRules && importantOfHeightOfCssRules && heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(that.domData[target]['height'].specificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= that.domData[target]['height'].important.length
+							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
 								) {
-								that.domData[target]['height'] = {
-									value: heightOfCssRules,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfCssRules
-								}
+								target.dataset.stylevheight = heightOfCssRules;
+								target.dataset.stylevheightspecificity = specificityOfHeight;
+								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 
 						//CSS指定があり非importantとstyle属性
 						if(heightOfCssRules && !importantOfHeightOfCssRules && heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(that.domData[target]['height'].specificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= that.domData[target]['height'].important.length
+							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
 								) {
-								that.domData[target]['height'] = {
-									value: heightOfStyleAttr,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfStyleAttr
-								}
+								target.dataset.stylevheight = heightOfStyleAttr;
+								target.dataset.stylevheightspecificity = specificityOfHeight;
+								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 						//style属性かつimportant
 						if(heightOfStyleAttr && importantOfHeightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(that.domData[target]['height'].specificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= that.domData[target]['height'].important.length
+							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
 								) {
-								that.domData[target]['height'] = {
-									value: heightOfStyleAttr,
-									specificity: specificityOfWidth,
-									important: importantOfWidthOfStyleAttr
-								}
+								target.dataset.stylevheight = heightOfStyleAttr;
+								target.dataset.stylevheightspecificity = specificityOfHeight;
+								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 
@@ -1451,22 +1424,18 @@ STYLEV.VALIDATOR = {
 
 			}
 		}
-
 	},
 
 	calculateWidthHeightValue: function(target, property, propertyValue) {
 		var that = this;
 		var culculatedValue;
 
-		if(
-			(property === 'width' || property === 'height') &&
-				propertyValue === 'auto'
-			) {
+		if( property === 'width' || property === 'height' ) {
 
 			if(property === 'width') {
 
-				if(that.domData[target]['width'].value === 'auto') {
-					culculatedValue = that.domData[target]['width'].value;
+				if(target.dataset.stylevwidth === 'auto') {
+					culculatedValue = target.dataset.stylevwidth;
 				} else {
 					culculatedValue = getComputedStyle(target, '')[property];
 				}
@@ -1474,8 +1443,8 @@ STYLEV.VALIDATOR = {
 
 			if(property === 'height') {
 
-				if(that.domData[target]['height'].value === 'auto') {
-					culculatedValue = that.domData[target]['height'].value;
+				if(target.dataset.stylevheight === 'auto') {
+					culculatedValue = target.dataset.stylevheight;
 				} else {
 					culculatedValue = getComputedStyle(target, '')[property];
 				}
@@ -1692,7 +1661,7 @@ if(STYLEV.isChromeExtension){
 			//バリデートを実行
 			STYLEV.chromeExtension.execute();
 
-			//手動実行の場合
+		//手動実行の場合
 		} else {
 
 			//バリデート済の場合は、削除

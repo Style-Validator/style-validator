@@ -114,7 +114,7 @@ Install From the following page.
 
 Bookmark from the following page.
 
-- https://igari.github.io/Style-Validator/
+- https://style-validator.github.io/Style-Validator/
 
 
 # Function
