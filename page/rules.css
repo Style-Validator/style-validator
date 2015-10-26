@@ -73,10 +73,14 @@ body {
 }
 .header-heading {
 	flex-grow: 1;
+}
+.header-heading a {
 	display: flex;
 	align-items: center;
+	color: inherit !important;
+	text-decoration: none !important;
 }
-.header-heading > img {
+.header-heading img {
 	margin-top: -0.5%;
 	margin-right: 10px;
 	align-items: stretch;

@@ -456,11 +456,6 @@ STYLEV.VALIDATOR = {
 
 		var that = this;
 
-		//auto判定のためのData格納
-		that.setStyleDataOfWidthHeight(document);
-		//TODO: insertする直前とかにやらないと意味ない
-		that.setStyleDataOfWidthHeight(that.iframeDocument);
-
 		//HTMLタグを判定する用の正規表現
 		that.regexEmptyElem = new RegExp('^( ' + that.tagsEmptyData.join(' | ') + ' )');
 		that.regexResizableInlineElem = new RegExp('^( ' + that.tagsResizableInlineElementData.join(' | ') + ' )');
@@ -495,6 +490,11 @@ STYLEV.VALIDATOR = {
 		//デフォルトスタイル取得用iframeを挿入
 		that.insertIframe4getDefaultStyles.bind(that)();
 
+
+		//Auto判定のためにData属性を全要素に付与
+		that.setStyleDataOfWidthHeight(document);
+		that.setStyleDataOfWidthHeight(that.iframeDocument);
+
 		//全てのHTMLタグ名の判定用の正規表現
 		that.regexAllHTMLTag = new RegExp(' ' + that.tagsAllData.join(' | ') + ' ');
 
@@ -520,16 +520,22 @@ STYLEV.VALIDATOR = {
 		//NGスタイルのプロパティ値を検索するための正規表現
 		var regexNgStyleRulesPropVal;
 
-		//TODO: ここから
-//		console.log(elemData);
-//		console.log(ngStyleRules);
-//		console.log(ngStyleRulesProp);
-//		console.log(ngStyleRulesPropVal);
+		//否定表現の有無を検査
 		var isReverse = ngStyleRulesPropVal.indexOf('!') === 0;
+
+		//否定表現を取り除く
 		ngStyleRulesPropVal = ngStyleRulesPropVal.replace('!', '');
+
+		//[]括弧が存在するか検査
 		var hasGroupOperator = ngStyleRulesPropVal.match(/^\[(.+)\]$/);
+
+		//括弧がある場合は、括弧の中身を返し、ない場合は、そのまま
 		ngStyleRulesPropVal = hasGroupOperator ? hasGroupOperator[1] : ngStyleRulesPropVal;
+
+		//|OR演算子があるかの検査
 		var hasOrOperator = ngStyleRulesPropVal.split('|').length > 1;
+
+		//OR演算子がある場合は、OR演算子で区切った配列を返却し、そうでない場合はそのまま
 		ngStyleRulesPropVal = hasOrOperator ? ngStyleRulesPropVal.split('|') : ngStyleRulesPropVal;
 
 		//NGスタイルのプロパティ値が複数あった場合
@@ -838,7 +844,8 @@ STYLEV.VALIDATOR = {
 			}
 
 			//ログ表示領域分の余白を初期化
-			html.style['border-bottom-width'] = that.htmlDefaultBorderBottomWidth;
+			html.style.setProperty('border-bottom-width', that.htmlDefaultBorderBottomWidth, '');
+
 		}
 	},
 
