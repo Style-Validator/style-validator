@@ -190,7 +190,7 @@ Install From the following page.
 
 Bookmark from the following page.
 
-- https://style-validator.github.io/Style-Validator/
+- https://style-validator.github.io/
 
 
 # Function
@@ -214,4 +214,4 @@ Feedback and pull requests are also welcome!
 
 Check it out the document for developer.
 
-https://github.com/igari/Style-Validator/tree/gh-pages/data
+https://github.com/igari/tree/gh-pages/data

@@ -3,7 +3,7 @@
 #### 1. git clone
 
 ```
-git clone https://github.com/igari/Style-Validator.git
+git clone https://github.com/Style-Validator/Style-Validator.git
 ```
 
 #### 2. npm Install
@@ -60,7 +60,7 @@ http://localhost:8001/page/rules.html
     },
     "psuedo-after-warning-style": {
     },
-	"reference-url": "http://.github.io/Style-Validator/page/reference.html#hoge",
+	"reference-url": "http://.github.io/page/reference.html#hoge",
 	"message": "here is error message"
   }
 ]

@@ -1,8 +1,8 @@
 {
 
 	"manifest_version": 2,
-	"name": "Style Validator - to reduce lazy patch",
-	"version": "0.2.0",
+	"name": "Style Validator",
+	"version": "0.2.2",
 
 	"description": "Style Validator is a new html/css validator that detect styling problem for each html elements in conjunction with Chrome DevTools.",
 	"icons": {
@@ -53,7 +53,7 @@
 		}
 	},
 
-	"homepage_url": "http://style-validator.github.io/Style-Validator/",
+	"homepage_url": "http://style-validator.github.io/",
 
 	"offline_enabled": true,
 

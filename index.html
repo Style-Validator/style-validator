@@ -17,17 +17,17 @@
 	<meta name="format-detection" content="telephone=no, email=no, address=no" />
 
 	<!-- ***** data ***** -->
-	<title>Style Validator - to reduce lazy patch.</title>
+	<title>Style Validator - to reduce patch.</title>
 	<meta name="description" content="Style Validator is a new html/css validator with chrome extension or bookmarklet." />
 	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon" />
 
 	<!-- ***** ogp ***** -->
 	<meta property="og:site_name" content="Style Validator" />
-	<meta property="og:title" content="Style Validator - to reduce lazy patch." />
+	<meta property="og:title" content="Style Validator - to reduce patch." />
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://style-validator.github.io/Style-Validator/" />
+	<meta property="og:url" content="https://style-validator.github.io/" />
 	<meta property="og:description" content="Style Validator is a new html/css validator with chrome extension or bookmarklet." />
-	<meta property="og:image" content="https://style-validator.github.io/Style-Validator/img/style-validator.logo.png" />
+	<meta property="og:image" content="https://style-validator.github.io/img/style-validator.logo.png" />
 
 	<!-- ***** favicon ***** -->
 	<link rel="icon" type="image/x-icon" href="./favicon.ico?v=1">
@@ -105,7 +105,7 @@
 						<h3>JavaScript Bookmarklet</h3>
 						<ul>
 							<li>
-								<a id="bookmarklet" href="//style-validator.github.io/Style-Validator/bookmarklet/style-validator.js">
+								<a id="bookmarklet" href="//style-validator.github.io/bookmarklet/style-validator.js">
 									Style Validator<br />
 									<img src="./img/bookmarkbar.png" width="206" />
 									<ul class="browser-support">
@@ -143,7 +143,7 @@
 
 		//ブックマークレットのJSをhrefに挿入
 		$.ajax({
-			url: '/Style-Validator/bookmarklet/style-validator.js',
+			url: '/bookmarklet/style-validator.js',
 			dataType: 'text',
 			success: function(data) {
 				$('#bookmarklet').attr('href', data);

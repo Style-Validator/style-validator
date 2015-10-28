@@ -1,7 +1,7 @@
 /*!
  Style Validator
  "Validation in the Browser". Validate computedStyle with track all events.
- https://style-validator.github.io/Style-Validator/
+ https://style-validator.github.io/
  by Igari Takeharu
  MIT License
  */
@@ -123,7 +123,7 @@ STYLEV.VALIDATOR = {
 		that.htmlDefaultBorderBottomWidth = that.html.style.borderBottomWidth === '' ? null : that.html.style.borderBottomWidth;
 
 		//リソースルートを設定
-		that.RESOURCE_ROOT = STYLEV.chromeExtension.RESOURCE_ROOT || 'https://style-validator.github.io/Style-Validator/';
+		that.RESOURCE_ROOT = STYLEV.chromeExtension.RESOURCE_ROOT || 'https://style-validator.github.io/';
 
 		//静的な設定値 TODO: 他にもsettingsにまとめられる値があるので後で精査
 		that.settings = {
@@ -136,7 +136,7 @@ STYLEV.VALIDATOR = {
 			STYLESHEET_PATH: that.RESOURCE_ROOT + 'app/style-validator.css',
 			SPECIFICITY_PATH: that.RESOURCE_ROOT + 'page/specificity.js',
 			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
-			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/Style-Validator/',
+			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/',
 			RULES_PATH: that.RESOURCE_ROOT + 'data/rules.json',
 			RULES_BY_EMPTY_TAG_PATH: that.RESOURCE_ROOT + 'data/rules-by-empty-tags.json',
 			TAGS_ALL_PATH: that.RESOURCE_ROOT + 'data/tags-all.json',
