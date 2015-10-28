@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html style="vertical-align: bottom;">
+<head>
+	<!-- ***** base ***** -->
+	<base>
+
+	<!-- ***** data ***** -->
+	<title>Try Chrome Extension or Bookmarklet on this page! | Style Validator</title>
+
+	<!-- ***** robots ***** -->
+	<meta name="robots" content="noindex,nofollow" />
+
+	<!-- ***** favicon ***** -->
+	<link rel="icon" type="image/x-icon" href="../favicon.ico?v=1">
+	<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?v=1">
+
+	<!-- ***** styles***** -->
+	<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">
+	<style>
+		p {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			padding: 60px;
+			font-size: 26px;
+		}
+		h1 {
+			font-size: 30px;
+		}
+		textarea {
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			border: 0;
+			outline: 0;
+			background-color: transparent;
+			width: 90%;
+			height: 100px;
+			font-size: 18px;
+		}
+		button {
+			font-size: 20px;
+		}
+	</style>
+
+	<!-- ***** scripts***** -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-53227157-3', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</head>
+<body>
+
+<span style="width: 1000px;">span</span>
+
+<h1>Style Validator can detect invalid style</h1>
+<hr />
+
+<span style="display: table-row; margin-top: 30px;">table-row defined margin-top</span>
+<br />
+<hr />
+<h1>Style Validator can detect invalid style by JavaScript</h1>
+<div style="display: table; height: 100px; background-color: #EEE;">
+	<p style="display: table-cell; vertical-align: middle">table-cell has parent</p>
+</div>
+<br />
+<button id=button>Add the parent element to { display: block; }</button>
+<hr />
+
+<script>
+	var button = document.querySelector('#button');
+	var div = document.querySelector('div');
+	var p = document.querySelector('p');
+
+	button.addEventListener('click', function() {
+		div.style.display = 'block';
+		p.textContent = 'table-cell has no parent'
+	}, false);
+</script>
+
+</body>
+</html>

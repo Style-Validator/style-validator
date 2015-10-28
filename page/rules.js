@@ -53,6 +53,12 @@ STYLEV.RULES_EDITOR = {
 		that.addButton.addEventListener('click', that.addRule, false);
 		that.saveButton.addEventListener('click', that.saveJSON, false);
 
+		that.bind2RuleBox();
+		that.bind2StylesList();
+	},
+
+	bind2RuleBox: function() {
+		var that = STYLEV.RULES_EDITOR;
 
 		for(var i = 0, len = that.rulesListItems.length; i < len; i++) {
 			var rulesListItem = that.rulesListItems[i];
@@ -62,7 +68,6 @@ STYLEV.RULES_EDITOR = {
 			removeButton.addEventListener('click', (that.removeTheRule(rulesListItem)), false);
 		}
 
-		that.bind2StylesList();
 	},
 
 	toggleEditMode: function(rulesListItem) {
@@ -111,6 +116,7 @@ STYLEV.RULES_EDITOR = {
 		that.bind2StylesList(styleLists);
 		that.rulesList.insertBefore(clone, that.rulesList.firstChild);
 		that.setParametersAfterAdding();
+		that.bind2RuleBox();
 
 		that.rulesList.querySelector('.styles-input').querySelector('input').focus();
 	},
@@ -859,12 +865,44 @@ STYLEV.RULES_EDITOR = {
 		xhr.open(method, apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
+		xhr.onload = function () {
+			if (xhr.status === 200) {
+				that.showSuccessMsg();
+			} else {
+				that.showConfirmMsg();
+				reject(new Error(xhr.statusText));
+			}
+		};
+		xhr.onerror = function () {
+			that.showErrorMsg();
+//			reject(new Error(xhr.statusText));
+		};
 		//TODO: add handling of response
 		//TODO: not server connected, alert error
 
 		if (xhr.readyState == 4) return;
 
 		xhr.send(data4send);
+	},
+	showSuccessMsg: function() {
+		var that = STYLEV.RULES_EDITOR;
+		//re generate
+	},
+	showConfirmMsg: function() {
+		var that = STYLEV.RULES_EDITOR;
+		if(confirm('It is not connected to api. So, Do you download generated JSON file?')) {
+			that.downloadJSON();
+		} else {
+			return false;
+		}
+		return false;
+	},
+	showErrorMsg: function() {
+		alert('Please confirm and retry.')
+	},
+	downloadJSON: function() {
+		var that = STYLEV.RULES_EDITOR;
+		//TODO: write download function
 	}
 };
 

@@ -398,7 +398,7 @@ STYLEV.VALIDATOR = {
 			}
 		}
 
-		//デフォルトスタイル取得用のiframeを削除
+		//デフォルトスタイル取得用のiframeを削除 TODO: あとで戻す
 //		that.removeIframe4getDefaultStyles();
 
 
@@ -494,8 +494,8 @@ STYLEV.VALIDATOR = {
 
 
 		//Auto判定のためにData属性を全要素に付与
-		that.setStyleDataOfWidthHeight(document);
-		that.setStyleDataOfWidthHeight(that.iframeDocument);
+		that.setStyleDataBySelectors(document);
+		that.setStyleDataBySelectors(that.iframeDocument);
 
 		//全てのHTMLタグ名の判定用の正規表現
 		that.regexAllHTMLTag = new RegExp(' ' + that.tagsAllData.join(' | ') + ' ');
@@ -527,11 +527,8 @@ STYLEV.VALIDATOR = {
 		//否定表現の有無を検査
 		var isReverse = ngStyleRulesPropVal.indexOf('!') === 0;
 
-		//否定表現を取り除く
-		ngStyleRulesPropVal = ngStyleRulesPropVal.replace('!', '');
-
 		//[]括弧が存在するか検査
-		var hasGroupOperator = ngStyleRulesPropVal.match(/^\[(.+)\]$/);
+		var hasGroupOperator = ngStyleRulesPropVal.match(/^!{0,1}\[(.+)\]$/);
 
 		//括弧がある場合は、括弧の中身を返し、ない場合は、そのまま
 		ngStyleRulesPropVal = hasGroupOperator ? hasGroupOperator[1] : ngStyleRulesPropVal;
@@ -548,6 +545,7 @@ STYLEV.VALIDATOR = {
 			//両端にスペースをいれて完全単語検索をしてかつ、複数ワードで検索
 			regexNgStyleRulesPropVal = new RegExp(' ' + ngStyleRulesPropVal.join(' | ') + ' ');
 		} else {
+
 			//両端にスペースをいれて完全単語検索をしている
 			regexNgStyleRulesPropVal = new RegExp(' ' + ngStyleRulesPropVal + ' ');
 		}
@@ -582,6 +580,12 @@ STYLEV.VALIDATOR = {
 			//0以上
 			(ngStyleRulesPropVal === 'over-0' && parseInt(targetElemNgStyleVal, 10) > 0) ||
 
+			//0以下
+			(ngStyleRulesPropVal === 'under-0' && parseInt(targetElemNgStyleVal, 10) < 0) ||
+
+			//0以外
+			(ngStyleRulesPropVal === '!0' && parseInt(targetElemNgStyleVal, 10) !== 0) ||
+
 			//デフォルト値以外
 			(ngStyleRulesPropVal === '!default' && targetElemNgStyleVal !== targetElemNgStyleDefaultVal) ||
 
@@ -589,7 +593,7 @@ STYLEV.VALIDATOR = {
 			(ngStyleRulesPropVal === '!inherit' && ngStyleRulesProp === 'line-height' && that.controlFloat(parseFloat(targetElemNgStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNgStyleVal), 1)) ||
 
 			//継承スタイル以外（通常：line-height以外）
-			(ngStyleRulesPropVal === '!inherit' && ngStyleRulesProp !== 'line-height' && targetElemNgStyleVal !== targetElemParentNgStyleVal) ||
+			(ngStyleRulesPropVal === '!inherit' && targetElemNgStyleVal !== targetElemParentNgStyleVal) ||
 
 			//親要素のエラースタイルに適合したら
 			(!isReverse && isParentStructureCheck && regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' ')) ||
@@ -1289,7 +1293,7 @@ STYLEV.VALIDATOR = {
 		}
 	},
 
-	setStyleDataOfWidthHeight: function(document) {
+	setStyleDataBySelectors: function(document) {
 		var that = this;
 
 		var stylesheets = document.styleSheets;
@@ -1452,39 +1456,75 @@ STYLEV.VALIDATOR = {
 
 			}
 		}
+
+		that.setStyleDataByElements(document);
+
+	},
+
+	setStyleDataByElements: function(document) {
+
+		var elements = document.querySelectorAll('*');
+
+		for(var g = 0, elementsLength = elements.length; g < elementsLength; g++) {
+
+			var element = elements[g];
+
+			if(element.dataset.stylevwidth === undefined) {
+
+
+				var widthValue = element.style.getPropertyValue('width');
+				if(widthValue) {
+					element.dataset.stylevwidth = widthValue;
+				} else {
+					element.dataset.stylevwidth = 'auto';
+				}
+
+			}
+			if(element.dataset.stylevheight === undefined) {
+
+				var heightValue = element.style.getPropertyValue('height');
+				if(heightValue) {
+					element.dataset.stylevheight = heightValue;
+				} else {
+					element.dataset.stylevheight = 'auto';
+				}
+			}
+
+		}
 	},
 
 	getUncomputedStyle: function(target, property) {
 
 		var culculatedValue;
+		var computedPropertyValue = getComputedStyle(target, '').getPropertyValue(property);
 
 		if( property === 'width' || property === 'height' ) {
 
-
-
 			if(property === 'width') {
 
+				culculatedValue = target.dataset.stylevwidth;
+
 //				if(target.dataset.stylevwidth === 'auto') {
-					culculatedValue = target.dataset.stylevwidth;
-				console.log(target);
-				console.log(culculatedValue);
+//					culculatedValue = target.dataset.stylevwidth;
 //				} else {
-//					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
+//					culculatedValue = computedPropertyValue;
 //				}
 			}
 
 			if(property === 'height') {
 
-				if(target.dataset.stylevheight === 'auto') {
-					culculatedValue = target.dataset.stylevheight;
-				} else {
-					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
-				}
+				culculatedValue = target.dataset.stylevheight;
+
+//				if(target.dataset.stylevheight === 'auto') {
+//					culculatedValue = target.dataset.stylevheight;
+//				} else {
+//					culculatedValue = computedPropertyValue;
+//				}
 			}
 
 		} else {
 
-			culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
+			culculatedValue = computedPropertyValue;
 		}
 
 		return culculatedValue;
