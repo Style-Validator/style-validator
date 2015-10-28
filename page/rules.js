@@ -449,7 +449,7 @@ STYLEV.RULES_EDITOR = {
 			}
 		}
 	},
-	calculateWidthHeightValue: function(target, property, propertyValue) {
+	getUncomputedStyle: function(target, property, propertyValue) {
 		var that = STYLEV.RULES_EDITOR;
 		var culculatedValue;
 
@@ -463,7 +463,7 @@ STYLEV.RULES_EDITOR = {
 				if(target.dataset.stylevwidth === 'auto') {
 					culculatedValue = target.dataset.stylevwidth;
 				} else {
-					culculatedValue = getComputedStyle(target, '')[property];
+					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
 				}
 			}
 
@@ -472,13 +472,13 @@ STYLEV.RULES_EDITOR = {
 				if(target.dataset.stylevheight === 'auto') {
 					culculatedValue = target.dataset.stylevheight;
 				} else {
-					culculatedValue = getComputedStyle(target, '')[property];
+					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
 				}
 			}
 
 		} else {
 
-			culculatedValue = getComputedStyle(target, '')[property];
+			culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
 		}
 
 		return culculatedValue;
@@ -511,7 +511,7 @@ STYLEV.RULES_EDITOR = {
 
 				that.dummyElement4testStyle.style.setProperty(property, separatedPropertyValue, '');
 
-				var computedValue = that.calculateWidthHeightValue(that.dummyElement4testStyle, property, separatedPropertyValue);
+				var computedValue = that.getUncomputedStyle(that.dummyElement4testStyle, property, separatedPropertyValue);
 				that.dummyElement4testStyle.style.setProperty(property, null, '');
 
 				var isValid = separatedPropertyValue === computedValue || regexOkOriginalKeyWords.test(' ' + separatedPropertyValue + ' ');
@@ -529,7 +529,7 @@ STYLEV.RULES_EDITOR = {
 
 			that.dummyElement4testStyle.style.setProperty(property, propertyValue, '');
 
-			var computedValue = that.calculateWidthHeightValue(that.dummyElement4testStyle, property, propertyValue);
+			var computedValue = that.getUncomputedStyle(that.dummyElement4testStyle, property, propertyValue);
 			that.dummyElement4testStyle.style.setProperty(property, null, '');
 
 //			console.log('computedValue: ' + computedValue);

@@ -13,38 +13,114 @@ Style Validator is a new html/css validator that detect style problem for the ht
 
 ### Did you know that properties to the display property forcibly change?
 
-```css
-div {
-  position: absolute;
-}
-```
 ```html
-<!-- This is NOT inline element -->
-<div style="display: inline;"></div>
+<div style="position: absolute; display: inline;"></div>
 ```
 ```js
 var div = document.querySelector('div');
-getComputedStyle(div).getPropertyValue('display');//block NOT inline
+getComputedStyle(div).getPropertyValue('display');//Block
 ```
+This DIV element is block NOT inline.
 
 ### In case of the Flexbox
 
-```css
-div {
-  display: flex;
-}
-```
 ```html
-<div>
-  <!-- This is NOT inline element -->
-  <p style="display: inline;"></p>
+<div style="display: flex;">
+  <p style="display: table-cell;"></p>
 </div>
 ```
 ```js
 var p = document.querySelector('p');
-getComputedStyle(div).getPropertyValue('display');//block NOT inline
+getComputedStyle(p).getPropertyValue('display');//Block
+```
+This P element is block NOT table-cell.
+
+### No parent table-cell
+
+This is Risky Style
+```html
+<div>
+  <p style="display: table-cell;"></p>
+</div>
 ```
 
+Correct one
+```html
+<div style="display: table;">
+  <p style="display: table-cell;"></p>
+</div>
+```
+### Non effect styles
+
+This is Risky Style
+```html
+<span style="width: 300px;">this is inline element.</span>
+```
+```js
+var span = document.querySelector('span');
+getComputedStyle(span).getPropertyValue('width');
+```
+This value is auto.
+
+Correct one
+```html
+<div style="display: table;">
+  <p style="display: table-cell;"></p>
+</div>
+```
+### Pseudo element into empty element
+
+This is Risky Style
+```html
+<img src="hoge.jpg" />
+```
+```css
+img::after {
+  content: url(fuga.jpg);
+}
+```
+
+### Mistake in Media Query
+
+This is Risky Style
+```html
+<div class="parent">
+  <p class="child"></p>
+</div>
+```
+```css
+.parent { display: table; }
+.child  { display: table-cell; }
+
+@media (max-width: 640px) {
+  .parent { display: block; }
+}
+```
+
+### Mistake after JavaScript
+
+This is Risky Style
+```html
+<div class="parent">
+  <p class="child"></p>
+</div>
+```
+```css
+.parent { display: table; }
+.child  { display: table-cell; }
+```
+```js
+var parent = document.querySelector('.parent');
+var newChild = document.createelement('div');
+newChild.style.display = "inline";
+parent.appendChild(newChild);
+```
+```html
+<div class="parent">
+  <p class="child"></p>
+  <div style="display: inline;"></div>
+</div>
+```
 
 ### Invalid CSS Property cause...
 

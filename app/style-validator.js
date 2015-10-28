@@ -188,6 +188,7 @@ STYLEV.VALIDATOR = {
 			var elemData = {};
 			elemData.targetElem = that.allElem[i];
 			elemData.targetElemTagName = elemData.targetElem.tagName.toLowerCase();
+			elemData.targetElemDefault = that.iframeDocument.querySelector(elemData.targetElemTagName);
 
 			var isRegularHTMLTag = that.regexAllHTMLTag.test(' ' + elemData.targetElemTagName + ' ');
 
@@ -212,13 +213,14 @@ STYLEV.VALIDATOR = {
 			}
 
 			//デフォルトスタイル情報（既にあれば既存オブジェクトを参照）
-			elemData.targetElemDefaultStyles = elemData.targetElemDefaultStyles || getComputedStyle(that.iframeDocument.querySelector(elemData.targetElemTagName), '');
+//			elemData.targetElemDefaultStyles = elemData.targetElemDefaultStyles || getComputedStyle(elemData.targetElemDefault, '');
 
 			//対象要素のDisplayプロパティのプロパティ値
 			elemData.targetElemDisplayProp = elemData.targetElemStyles.getPropertyValue('display');
 
-			//対象要素のDisplayプロパティのデフォルトのプロパティ値
-			elemData.targetElemDefaultDisplayProp = elemData.targetElemDefaultStyles.getPropertyValue('display');
+			//対象要素のDisplayプロパティのデフォルトのプロパティ値 TODO: displayはautoが無いので、普通のgetでもいいかも？
+//			elemData.targetElemDefaultDisplayProp = elemData.targetElemDefaultStyles.getPropertyValue('display');
+			elemData.targetElemDefaultDisplayProp = that.getUncomputedStyle(elemData.targetElemDefault, 'display');
 
 			//空要素を判定
 			var isEmptyElements = that.regexEmptyElem.test(' ' + elemData.targetElemTagName + ' ');
@@ -397,7 +399,7 @@ STYLEV.VALIDATOR = {
 		}
 
 		//デフォルトスタイル取得用のiframeを削除
-		that.removeIframe4getDefaultStyles();
+//		that.removeIframe4getDefaultStyles();
 
 
 		//コンソールを表示
@@ -488,7 +490,7 @@ STYLEV.VALIDATOR = {
 		that.warningNum = 0;
 
 		//デフォルトスタイル取得用iframeを挿入
-		that.insertIframe4getDefaultStyles.bind(that)();
+		that.insertIframe4getDefaultStyles();
 
 
 		//Auto判定のためにData属性を全要素に付与
@@ -512,10 +514,12 @@ STYLEV.VALIDATOR = {
 		var ngStyleRulesPropVal = ngStyleRules[ngStyleRulesProp];
 
 		//対象要素のNGスタイルのデフォルト値
-		var targetElemNgStyleDefaultVal = elemData.targetElemDefaultStyles.getPropertyValue(ngStyleRulesProp);
+//		var targetElemNgStyleDefaultVal = elemData.targetElemDefaultStyles.getPropertyValue(ngStyleRulesProp);
+		var targetElemNgStyleDefaultVal = that.getUncomputedStyle(elemData.targetElemDefault, ngStyleRulesProp);
 
-		//対象要素のNGスタイルの値
-		var targetElemNgStyleVal = elemData.targetElemStyles.getPropertyValue(ngStyleRulesProp);
+		//対象要素のNGスタイルの現在の値
+//		var targetElemNgStyleVal = elemData.targetElemStyles.getPropertyValue(ngStyleRulesProp);
+		var targetElemNgStyleVal = that.getUncomputedStyle(elemData.targetElem, ngStyleRulesProp);
 
 		//NGスタイルのプロパティ値を検索するための正規表現
 		var regexNgStyleRulesPropVal;
@@ -1285,7 +1289,7 @@ STYLEV.VALIDATOR = {
 		}
 	},
 
-	setStyleDataOfWidthHeight: function() {
+	setStyleDataOfWidthHeight: function(document) {
 		var that = this;
 
 		var stylesheets = document.styleSheets;
@@ -1303,8 +1307,8 @@ STYLEV.VALIDATOR = {
 
 				var cssRule = cssRules[j];
 
-				//TODO: support media query
-				if(cssRule.media) {
+				//TODO: support media query and keyframes and etc....
+				if(cssRule.media || cssRule.style === undefined) {
 					continue;
 				}
 
@@ -1450,19 +1454,23 @@ STYLEV.VALIDATOR = {
 		}
 	},
 
-	calculateWidthHeightValue: function(target, property, propertyValue) {
-		var that = this;
+	getUncomputedStyle: function(target, property) {
+
 		var culculatedValue;
 
 		if( property === 'width' || property === 'height' ) {
 
+
+
 			if(property === 'width') {
 
-				if(target.dataset.stylevwidth === 'auto') {
+//				if(target.dataset.stylevwidth === 'auto') {
 					culculatedValue = target.dataset.stylevwidth;
-				} else {
-					culculatedValue = getComputedStyle(target, '')[property];
-				}
+				console.log(target);
+				console.log(culculatedValue);
+//				} else {
+//					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
+//				}
 			}
 
 			if(property === 'height') {
@@ -1470,13 +1478,13 @@ STYLEV.VALIDATOR = {
 				if(target.dataset.stylevheight === 'auto') {
 					culculatedValue = target.dataset.stylevheight;
 				} else {
-					culculatedValue = getComputedStyle(target, '')[property];
+					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
 				}
 			}
 
 		} else {
 
-			culculatedValue = getComputedStyle(target, '')[property];
+			culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
 		}
 
 		return culculatedValue;
