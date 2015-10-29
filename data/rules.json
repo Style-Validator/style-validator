@@ -16,7 +16,8 @@
 			"padding-top": "over-0",
 			"padding-bottom": "over-0",
 			"float": "!default",
-			"text-align": "!inherit"
+			"text-align": "!inherit",
+			"overflow": "!default"
 		},
 		"reference-url": "http://www.leihauoli.com"
 	},
