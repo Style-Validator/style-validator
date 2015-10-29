@@ -47,7 +47,7 @@ gulp.task('webserver', function () {
 		.pipe(
 			webserver({
 				livereload: false,
-				open: 'http://localhost:8000/'
+				open: 'http://localhost:8000/Style-Validator/page/rules.html'
 			})
 		);
 });
