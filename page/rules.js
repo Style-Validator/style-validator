@@ -290,7 +290,7 @@ STYLEV.RULES_EDITOR = {
 				break;
 			}
 		}
-		cssProperty.dataset.isvalid = isValid ? 'true' : 'false';
+		cssProperty.dataset_isvalid = isValid ? 'true' : 'false';
 
 	},
 	setStyleDataOfWidthHeight: function() {
@@ -349,103 +349,103 @@ STYLEV.RULES_EDITOR = {
 						var importantOfHeightOfStyleAttr = styleOfStyleAttr.getPropertyPriority('height');
 
 						//initialize
-						if(target.dataset.stylevwidthspecificity === undefined) {
-							target.dataset.stylevwidthspecificity = specificityOfWidth;
+						if(target.dataset_stylevwidthspecificity === undefined) {
+							target.dataset_stylevwidthspecificity = specificityOfWidth;
 						}
-						if(target.dataset.stylevheightspecificity === undefined) {
-							target.dataset.stylevheightspecificity = specificityOfHeight;
+						if(target.dataset_stylevheightspecificity === undefined) {
+							target.dataset_stylevheightspecificity = specificityOfHeight;
 						}
-						if(target.dataset.stylevwidthimportant === undefined) {
-							target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
+						if(target.dataset_stylevwidthimportant === undefined) {
+							target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
 						}
-						if(target.dataset.stylevheightimportant === undefined) {
-							target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
+						if(target.dataset_stylevheightimportant === undefined) {
+							target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
 						}
 
 						//TODO: もう1パターン？
 						//CSS指定がありstyle属性がない
 						if(widthOfCssRules && !widthOfStyleAttr) {
-							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
-								importantOfWidthOfCssRules.length >= target.dataset.stylevwidthimportant.length
+							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
+								importantOfWidthOfCssRules.length >= target.dataset_stylevwidthimportant.length
 							) {
-								target.dataset.stylevwidth = widthOfCssRules;
-								target.dataset.stylevwidthspecificity = specificityOfWidth;
-								target.dataset.stylevwidthimportant = importantOfWidthOfCssRules;
+								target.dataset_stylevwidth = widthOfCssRules;
+								target.dataset_stylevwidthspecificity = specificityOfWidth;
+								target.dataset_stylevwidthimportant = importantOfWidthOfCssRules;
 							}
 						}
 						//importantのCSS指定とstyle属性
 						if(widthOfCssRules && importantOfWidthOfCssRules && !importantOfWidthOfStyleAttr) {
 
-							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
-								importantOfWidthOfCssRules.length >= target.dataset.stylevwidthimportant.length
+							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
+								importantOfWidthOfCssRules.length >= target.dataset_stylevwidthimportant.length
 							) {
-								target.dataset.stylevwidth = widthOfCssRules;
-								target.dataset.stylevwidthspecificity = specificityOfWidth;
-								target.dataset.stylevwidthimportant = importantOfWidthOfCssRules;
+								target.dataset_stylevwidth = widthOfCssRules;
+								target.dataset_stylevwidthspecificity = specificityOfWidth;
+								target.dataset_stylevwidthimportant = importantOfWidthOfCssRules;
 							}
 						}
 						//非importantのCSS指定とstyle属性
 						if(widthOfCssRules && !importantOfWidthOfCssRules && widthOfStyleAttr) {
 
-							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset.stylevwidthimportant.length
+							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset_stylevwidthimportant.length
 							) {
-								target.dataset.stylevwidth = widthOfStyleAttr;
-								target.dataset.stylevwidthspecificity = specificityOfWidth;
-								target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
+								target.dataset_stylevwidth = widthOfStyleAttr;
+								target.dataset_stylevwidthspecificity = specificityOfWidth;
+								target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
 							}
 						}
 						//style属性かつimportant
 						if(widthOfStyleAttr && importantOfWidthOfStyleAttr) {
-							if( specificityOfWidth >= parseInt(target.dataset.stylevwidthspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset.stylevwidthimportant.length
+							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset_stylevwidthimportant.length
 							) {
-								target.dataset.stylevwidth = widthOfStyleAttr;
-								target.dataset.stylevwidthspecificity = specificityOfWidth;
-								target.dataset.stylevwidthimportant = importantOfWidthOfStyleAttr;
+								target.dataset_stylevwidth = widthOfStyleAttr;
+								target.dataset_stylevwidthspecificity = specificityOfWidth;
+								target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
 							}
 						}
 
 
 						//CSS指定がありstyle属性がない
 						if(heightOfCssRules && !heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
+							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
 							) {
-								target.dataset.stylevheight = heightOfCssRules;
-								target.dataset.stylevheightspecificity = specificityOfHeight;
-								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
+								target.dataset_stylevheight = heightOfCssRules;
+								target.dataset_stylevheightspecificity = specificityOfHeight;
+								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 						//CSS指定がありimportantとstyle属性
 						if(heightOfCssRules && importantOfHeightOfCssRules && heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
+							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
 							) {
-								target.dataset.stylevheight = heightOfCssRules;
-								target.dataset.stylevheightspecificity = specificityOfHeight;
-								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
+								target.dataset_stylevheight = heightOfCssRules;
+								target.dataset_stylevheightspecificity = specificityOfHeight;
+								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 
 						//CSS指定があり非importantとstyle属性
 						if(heightOfCssRules && !importantOfHeightOfCssRules && heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
+							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
 							) {
-								target.dataset.stylevheight = heightOfStyleAttr;
-								target.dataset.stylevheightspecificity = specificityOfHeight;
-								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
+								target.dataset_stylevheight = heightOfStyleAttr;
+								target.dataset_stylevheightspecificity = specificityOfHeight;
+								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 						//style属性かつimportant
 						if(heightOfStyleAttr && importantOfHeightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset.stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset.stylevheightimportant.length
+							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
+								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
 							) {
-								target.dataset.stylevheight = heightOfStyleAttr;
-								target.dataset.stylevheightspecificity = specificityOfHeight;
-								target.dataset.stylevheightimportant = importantOfHeightOfStyleAttr;
+								target.dataset_stylevheight = heightOfStyleAttr;
+								target.dataset_stylevheightspecificity = specificityOfHeight;
+								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
 
@@ -466,8 +466,8 @@ STYLEV.RULES_EDITOR = {
 
 			if(property === 'width') {
 
-				if(target.dataset.stylevwidth === 'auto') {
-					culculatedValue = target.dataset.stylevwidth;
+				if(target.dataset_stylevwidth === 'auto') {
+					culculatedValue = target.dataset_stylevwidth;
 				} else {
 					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
 				}
@@ -475,8 +475,8 @@ STYLEV.RULES_EDITOR = {
 
 			if(property === 'height') {
 
-				if(target.dataset.stylevheight === 'auto') {
-					culculatedValue = target.dataset.stylevheight;
+				if(target.dataset_stylevheight === 'auto') {
+					culculatedValue = target.dataset_stylevheight;
 				} else {
 					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
 				}
@@ -529,7 +529,7 @@ STYLEV.RULES_EDITOR = {
 
 			}
 
-			cssPropertyValue.dataset.isvalid = isValidOfGroupValue ? 'true' : 'false';
+			cssPropertyValue.dataset_isvalid = isValidOfGroupValue ? 'true' : 'false';
 
 		} else {
 
@@ -543,7 +543,7 @@ STYLEV.RULES_EDITOR = {
 
 			var isValid = propertyValue === computedValue || regexOkOriginalKeyWords.test(' ' + propertyValue + ' ');
 
-			cssPropertyValue.dataset.isvalid = isValid ? 'true' : 'false';
+			cssPropertyValue.dataset_isvalid = isValid ? 'true' : 'false';
 
 		}
 
@@ -599,7 +599,7 @@ STYLEV.RULES_EDITOR = {
 	updateValidClass: function(currentTarget) {
 		if(currentTarget && currentTarget.value) {
 			var hasTheClass;
-			if(currentTarget.dataset.isvalid === 'true') {
+			if(currentTarget.dataset_isvalid === 'true') {
 				currentTarget.className = currentTarget.className.replace(' invalid', '');
 				hasTheClass = currentTarget.className.indexOf(' valid') !== -1;
 				currentTarget.className += !hasTheClass ? ' valid' : '';
@@ -807,8 +807,8 @@ STYLEV.RULES_EDITOR = {
 
 						//TODO: 検証が通っていないものも入れるようにしているが、後々ベストな振る舞いについて考える
 //						if (
-//							property.dataset.isvalid === 'true' &&
-//							propertyValue.dataset.isvalid === 'true'
+//							property.dataset_isvalid === 'true' &&
+//							propertyValue.dataset_isvalid === 'true'
 //						) {
 
 							rule[id][property.value] = propertyValue.value;
