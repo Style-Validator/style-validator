@@ -60,7 +60,7 @@
 	background-size: contain;
 }
 :host > header > h1:before {
-	background: url(https://style-validator.github.io/img/style-validator.logo.black.svg) no-repeat center center;
+	background: url(https://style-validator.github.io/Style-Validator/img/style-validator.logo.black.svg) no-repeat center center;
 }
 @media (max-width: 460px) {
 
@@ -80,12 +80,12 @@
 
 :host > header > p[data-stylevclass="stylev-console-mode-devtools"] {
 	background-color: green;
-	background-image: url(https://style-validator.github.io/img/iconmonstr-link-4-icon.svg);
+	background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-4-icon.svg);
 	color: white;
 }
 :host > header > p[data-stylevclass="stylev-console-mode-no-devtools"] {
 	background-color: red;
-	background-image: url(https://style-validator.github.io/img/iconmonstr-link-5-icon.svg);
+	background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-5-icon.svg);
 	color: white;
 }
 @media (max-width: 600px) {

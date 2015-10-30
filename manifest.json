@@ -67,7 +67,8 @@
 		"data/tags-resizable-inline-element.json",
 		"data/tags-table-children.json",
 		"data/displayChangeableProperties.json",
-		"app/style-validator-for-console.css"
+		"app/style-validator-for-console.css",
+		"page/specificity.js"
 	],
 
 	"permissions": [
