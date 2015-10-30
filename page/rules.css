@@ -117,11 +117,12 @@ body {
 	/* margin-bottom: -20px; */
 }
 .styles-list-wrapper > li {
+	position: relative;
 	margin-bottom: 20px;
 	/*flex-grow: 1;*/
 	/*flex-shrink: 1;*/
 	/*flex-basis: 33.3333%;*/
-	padding: 4%;
+	padding: 12% 4% 4%;
 	background: white;
 	/*border-left: 5px solid #478440;*/
 	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
@@ -270,11 +271,10 @@ button {
 }
 
 [data-id="title"] {
-	position: relative;
-	margin-top: -4%;
-	margin-right: -4%;
-	margin-left: -4%;
-	margin-bottom: 4%;
+	position: absolute;
+	right: 0;
+	left: 0;
+	top: 0;
 	border-bottom: 1px solid #E5E5E5;
 	font-size: 20px;
 }
