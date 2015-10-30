@@ -398,8 +398,8 @@ STYLEV.VALIDATOR = {
 			}
 		}
 
-		//デフォルトスタイル取得用のiframeを削除 TODO: あとで戻す
-//		that.removeIframe4getDefaultStyles();
+		//デフォルトスタイル取得用のiframeを削除
+		that.removeIframe4getDefaultStyles();
 
 
 		//コンソールを表示

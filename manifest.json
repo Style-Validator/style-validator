@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "Style Validator",
-	"version": "0.2.3",
+	"version": "0.2.5",
 
 	"description": "Style Validator is a new html/css validator that detect styling problem for each html elements in conjunction with Chrome DevTools.",
 	"icons": {
@@ -35,7 +35,7 @@
 				"http://*/*"
 			],
 			"css": ["./app/style-validator.css"],
-			"js": ["./extension/google-analytics.js", "./page/specificity.js", "./app/style-validator.js"]
+			"js": ["./extension/google-analytics.js", "./app/specificity.js", "./app/style-validator.js"]
 		}
 	],
 
@@ -68,7 +68,7 @@
 		"data/tags-table-children.json",
 		"data/displayChangeableProperties.json",
 		"app/style-validator-for-console.css",
-		"page/specificity.js"
+		"app/specificity.js"
 	],
 
 	"permissions": [
