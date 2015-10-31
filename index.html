@@ -92,7 +92,7 @@
 						<h3>Chrome Extension (for only chrome browser)</h3>
 						<ul>
 							<li>
-								<a href="https://chrome.google.com/webstore/detail/aaeahhnjkelemfcdmkcpaggdhfaffeod/publish-accepted?hl=ja&authuser=1" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link');">
+								<a href="https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link');">
 									Style Validator 0.2.5<br />
 									<img src="./img/chromeWebStore.png" />
 									<ul class="browser-support">
@@ -144,7 +144,7 @@
 
 		//ブックマークレットのJSをhrefに挿入
 		$.ajax({
-			url: '/bookmarklet/style-validator.js',
+			url: './bookmarklet/style-validator.js',
 			dataType: 'text',
 			success: function(data) {
 				$('#bookmarklet').attr('href', data);
