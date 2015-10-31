@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "Style Validator",
-	"version": "0.2.5",
+	"version": "0.2.6",
 
 	"description": "Style Validator is a new html/css validator that detect styling problem for each html elements in conjunction with Chrome DevTools.",
 	"icons": {
