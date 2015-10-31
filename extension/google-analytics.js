@@ -1,3 +1,5 @@
+//TODO: confirm which script is active
+
 function hasAnalyticsGoogle(){
 
 	var scripts = document.getElementsByTagName('script'),
