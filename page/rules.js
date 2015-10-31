@@ -53,14 +53,17 @@ STYLEV.RULES_EDITOR = {
 
 		that.addButton.addEventListener('click', that.addRule, false);
 		that.saveButton.addEventListener('click', that.saveJSON, false);
-		that.downloadButton.addEventListener('mousedown', function() {
-			var json = that.generateJSON();
-			this.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json, null, '\t'));
-			alert('Download and replace file which named rules.json without rename the file')
-		});
+		that.downloadButton.addEventListener('mousedown', that.setParamAndFunc2DownloadButton, false);
 
 		that.bind2RuleBox();
 		that.bind2StylesList();
+	},
+	
+	setParamAndFunc2DownloadButton: function() {
+		var that = STYLEV.RULES_EDITOR;
+		var json = that.generateJSON();
+		this.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json, null, '\t'));
+		alert('Download and replace file which named rules.json without rename the file');
 	},
 
 	bind2RuleBox: function() {

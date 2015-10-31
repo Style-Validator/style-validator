@@ -25,3 +25,5 @@
 - inline要素の高さや幅は、CSSがpx指定されていても、autoになる
 - ルールをつくったらテストできる機能をつける
 - visual formatting rules http://www.w3.org/TR/CSS21/visudet.html#inline-width を理解する　置換要素と非置換要素など
+- http://stackoverflow.com/questions/12468176/what-is-a-non-replaced-inline-element
+- https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element

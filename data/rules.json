@@ -30,7 +30,7 @@
 			"vertical-align": "!default"
 		},
 		"parent-error-styles": {
-			"display": "![none|block|inline-block|list-item|table-cell]"
+			"display": "![none|block|inline-block|list-item|table-cell|flex]"
 		},
 		"reference-url": "http://www.leihauoli.com"
 	},
@@ -43,7 +43,7 @@
 			"float": "!default"
 		},
 		"parent-error-styles": {
-			"display": "![none|inline|block|inline-block|list-item|table-cell]"
+			"display": "![none|inline|block|inline-block|list-item|table-cell|flex]"
 		},
 		"reference-url": "http://www.leihauoli.com"
 	},
@@ -56,7 +56,7 @@
 			"vertical-align": "!default"
 		},
 		"parent-error-styles": {
-			"display": "![none|block|inline-block]"
+			"display": "![none|block|inline-block|flex]"
 		},
 		"reference-url": "http://www.leihauoli.com"
 	},

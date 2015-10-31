@@ -247,14 +247,14 @@ STYLEV.VALIDATOR = {
 
 			}
 
-			//デフォルトスタイル情報（既にあれば既存オブジェクトを参照）
+			//デフォルトスタイル情報（既にあれば既存オブジェクトを参照）TODO: 必要なしなので、あとで消す
 //			elemData.targetElemDefaultStyles = elemData.targetElemDefaultStyles || getComputedStyle(elemData.targetElemDefault, '');
 
 			//対象要素のDisplayプロパティのプロパティ値
 			elemData.targetElemDisplayProp = elemData.targetElemStyles.getPropertyValue('display');
 
 			//対象要素のDisplayプロパティのデフォルトのプロパティ値 TODO: displayはautoが無いので、普通のgetでもいいかも？
-//			elemData.targetElemDefaultDisplayProp = elemData.targetElemDefaultStyles.getPropertyValue('display');
+//			elemData.targetElemDefaultDisplayProp = elemData.targetElemDefaultStyles.getPropertyValue('display'); TODO: 必要なしなので、あとで消す
 			elemData.targetElemDefaultDisplayProp = that.getStyle(elemData.targetElemDefault, 'display');
 
 			//空要素を判定
@@ -313,7 +313,7 @@ STYLEV.VALIDATOR = {
 						//上書き: サイズ可変のインライン要素
 						if(baseStyleProp === 'display' && isResizableInlineElem) {
 							//性質としてインラインブロック要素とみなす
-							targetElemBasePropVal = 'inline-block';
+							targetElemBasePropVal = 'inline-block';//TODO: 一時的に消す
 						}
 
 						var hasBaseStyle = baseStylePropVal === targetElemBasePropVal;
