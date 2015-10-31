@@ -25,6 +25,7 @@ STYLEV.RULES_EDITOR = {
 
 		that.addButton = document.querySelector('#add-button');
 		that.saveButton = document.querySelector('#save-button');
+		that.downloadButton = document.querySelector('#download-button');
 		that.datalistOfProperties = document.querySelector('#all-css-properties');
 		that.rulesList = document.querySelector('#rules-list');
 		that.templateProperty = document.querySelector('#template-property').content;
@@ -52,6 +53,11 @@ STYLEV.RULES_EDITOR = {
 
 		that.addButton.addEventListener('click', that.addRule, false);
 		that.saveButton.addEventListener('click', that.saveJSON, false);
+		that.downloadButton.addEventListener('mousedown', function() {
+			var json = that.generateJSON();
+			this.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json, null, '\t'));
+			alert('Download and replace file which named rules.json without rename the file')
+		});
 
 		that.bind2RuleBox();
 		that.bind2StylesList();
@@ -865,17 +871,15 @@ STYLEV.RULES_EDITOR = {
 		xhr.open(method, apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-		xhr.onload = function () {
+		xhr.addEventListener('load', function () {
 			if (xhr.status === 200) {
 				that.showSuccessMsg();
 			} else {
-				that.showConfirmMsg();
-				reject(new Error(xhr.statusText));
+				that.showErrorMsg();
 			}
-		};
+		}, false);
 		xhr.onerror = function () {
 			that.showErrorMsg();
-//			reject(new Error(xhr.statusText));
 		};
 		//TODO: add handling of response
 		//TODO: not server connected, alert error
@@ -885,24 +889,10 @@ STYLEV.RULES_EDITOR = {
 		xhr.send(data4send);
 	},
 	showSuccessMsg: function() {
-		var that = STYLEV.RULES_EDITOR;
-		//re generate
-	},
-	showConfirmMsg: function() {
-		var that = STYLEV.RULES_EDITOR;
-		if(confirm('It is not connected to api. So, Do you download generated JSON file?')) {
-			that.downloadJSON();
-		} else {
-			return false;
-		}
-		return false;
+		alert('Saving of rules was successful! Let\'s send Pull Request!');
 	},
 	showErrorMsg: function() {
-		alert('Please confirm and retry.')
-	},
-	downloadJSON: function() {
-		var that = STYLEV.RULES_EDITOR;
-		//TODO: write download function
+		alert('It could not connect to api server. Connect to api server, or click download button.')
 	}
 };
 
