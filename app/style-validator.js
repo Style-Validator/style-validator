@@ -27,11 +27,14 @@ STYLEV.isChromeExtension = (function() {
 //ブックマークレットかの判定 ChromeでかつChrome Extensionでない場合はブックマークレット
 STYLEV.isBookmarklet = STYLEV.isChrome ? !STYLEV.isChromeExtension : true;
 
-//再読実行かどうかの判定
-STYLEV.isReExecution = STYLEV.VALIDATOR !== undefined;
+//再読込かどうかの判定
+STYLEV.isReLoaded = STYLEV.VALIDATOR !== undefined;
+
+//初期読込かどうかの判定
+STYLEV.isLoaded = !STYLEV.isReLoaded;
 
 //初期実行かどうかの判定
-STYLEV.isFisrtExecution = !STYLEV.isReExecution;
+STYLEV.isFirstExecution = true;
 
 //検証済かどうか
 STYLEV.isValidated = false;
@@ -70,14 +73,11 @@ STYLEV.VALIDATOR = {
 		//インスタンス変数などを設定
 		that.setParameters();
 
-		//TODO: あとでまとめる
-		if(STYLEV.isBookmarklet) {
-			that.scriptTag = document.createElement('script');
-			that.scriptTag.src = that.settings.SPECIFICITY_PATH;
-
-			/* append */
-			that.head.appendChild(that.scriptTag);
-		}
+		//ライブラリを挿入
+		that.insertLibraryOnBookmarklet();
+		
+		//GAに送信
+		that.send2GA();
 
 		//データを並列で非同期に取得し、全て終わったらそれぞれのインスタンス変数に格納
 		Promise
@@ -104,8 +104,42 @@ STYLEV.VALIDATOR = {
 				that.updateOptions().then(function() {
 					//検査開始
 					that.validate(callback);
+
+					STYLEV.isFirstExecution = false;
 				});
 			});
+	},
+
+	insertLibraryOnBookmarklet: function() {
+		var that = this;
+
+		if(STYLEV.isBookmarklet) {
+			that.scriptTag = document.createElement('script');
+			that.scriptTag.src = that.settings.SPECIFICITY_PATH;
+
+			/* append */
+			that.head.appendChild(that.scriptTag);
+		}
+	},
+
+	send2GA: function() {
+		var that = this;
+
+		var currentGA = that.head.querySelector('#stylev-ga');
+
+		var isCurrentGA = currentGA !== null;
+
+		if(isCurrentGA) {
+			that.head.removeChild(currentGA);
+		}
+
+		that.scriptTagGA = document.createElement('script');
+		that.scriptTagGA.src  = that.settings.GA_PATH;
+		that.scriptTagGA.async  = true;
+		that.scriptTagGA.id = 'stylev-ga';
+
+		/* append */
+		that.head.appendChild(that.scriptTagGA);
 	},
 
 	//インスタンス変数の定義
@@ -134,7 +168,8 @@ STYLEV.VALIDATOR = {
 			CONSOLE_HEADER_DEFAULT_HEIGHT: 200,
 			STYLESHEET_ID: 'stylev-stylesheet',
 			STYLESHEET_PATH: that.RESOURCE_ROOT + 'app/style-validator.css',
-			SPECIFICITY_PATH: that.RESOURCE_ROOT + 'page/specificity.js',
+			SPECIFICITY_PATH: that.RESOURCE_ROOT + 'extension/specificity.js',
+			GA_PATH: that.RESOURCE_ROOT + './extension/google-analytics.js',
 			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
 			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/',
 			RULES_PATH: that.RESOURCE_ROOT + 'data/rules.json',
@@ -466,7 +501,7 @@ STYLEV.VALIDATOR = {
 		//以下の処理の順序が重要
 
 		//再実行時かつ、監視がされていたら監視を切断
-		if(STYLEV.isReExecution && that.isObserving) {
+		if(STYLEV.isReLoaded && that.isObserving) {
 			that.ovservationManager.disconnectObserve();
 		}
 
@@ -1785,8 +1820,8 @@ if(STYLEV.isChromeExtension){
 	});
 }
 
-//ブックマークレットかつ、初期実行の場合
-if(STYLEV.isBookmarklet && STYLEV.isFisrtExecution) {
+//ブックマークレットかつ、初期読込の場合
+if(STYLEV.isBookmarklet && STYLEV.isLoaded) {
 
 	//ブックマークレット実行
 	console.info('Style Validator with Bookmarklet.');
@@ -1795,7 +1830,7 @@ if(STYLEV.isBookmarklet && STYLEV.isFisrtExecution) {
 } else
 
 //ブックマークレットで一度実行している場合は、validateのみを実行
-if(STYLEV.isBookmarklet && STYLEV.isReExecution) {
+if(STYLEV.isBookmarklet && STYLEV.isReLoaded) {
 
 	console.info('Style Validator with Bookmarklet (ReExecution)');
 	STYLEV.VALIDATOR.validate();

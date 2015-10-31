@@ -3,7 +3,7 @@
 function hasAnalyticsGoogle(){
 
 	var scripts = document.getElementsByTagName('script'),
-		ga = true, ua = false, dc = false,
+		ga = false, ua = true, dc = false,
 		i, len, s;
 
 	len = scripts.length;
@@ -15,15 +15,19 @@ function hasAnalyticsGoogle(){
 			if (
 				(ga && s.indexOf('google-analytics.com/ga.js')>-1) ||
 
-					(ua && s.indexOf('google-analytics.com/analytics.js')>-1) ||
+				(ua && s.indexOf('google-analytics.com/analytics.js')>-1) ||
 
-					(dc && s.indexOf('doubleclick.net/dc.js')>-1)
-				) {
+				(dc && s.indexOf('doubleclick.net/dc.js')>-1)
+			) {
 				return true;
 			}
 		}
 	}
 	return false;
+}
+
+function sendError(errorMessage, URL, lineNumber, columnNumber, errorObject) {
+	ga('styleValidator.send', 'event', 'js-error', 'error', 'error-content', '' + errorMessage + ' / ' + URL + ' / ' + lineNumber + ' / ' + columnNumber );
 }
 
 if(!hasAnalyticsGoogle()) {
@@ -36,10 +40,7 @@ if(!hasAnalyticsGoogle()) {
 }
 
 ga('create', 'UA-53227157-5', 'auto', {'name': 'styleValidator'});
-ga('set', 'checkProtocolTask', function(){}); // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
-ga('styleValidator.send', 'pageview', location.href);
+ga('styleValidator.send', 'event', 'button', 'click', 'executing validation', 1);
 
-window.addEventListener('error', function(errorMessage, URL, lineNumber, columnNumber, errorObject) {
-	ga('send', 'event', 'js-error', 'error', 'error-content', '' + errorMessage + ' / ' + URL + ' / ' + lineNumber + ' / ' + columnNumber );
-});
-
+window.removeEventListener('error', sendError);
+window.addEventListener('error', sendError, false);
