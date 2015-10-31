@@ -1,7 +1,4 @@
 
-
-# ロードマップ
-
 - インライン要素でサイズ指定可能な要素は、getComputedStyleのwidthの値がpxかautoかで判定する　※http://jsbin.com/julocac/1/edit?html,js,output
 - ルールが表で閲覧できるように自動生成機能をつける
 - 仕様をつくるために、全ブラウザのレンダリングテストツールをつくる
@@ -27,3 +24,4 @@
 - position: fixed;が入れ子　Chromeでダメだったらしい
 - inline要素の高さや幅は、CSSがpx指定されていても、autoになる
 - ルールをつくったらテストできる機能をつける
+- visual formatting rules http://www.w3.org/TR/CSS21/visudet.html#inline-width を理解する　置換要素と非置換要素など
