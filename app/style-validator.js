@@ -255,7 +255,7 @@ STYLEV.VALIDATOR = {
 
 			//対象要素のDisplayプロパティのデフォルトのプロパティ値 TODO: displayはautoが無いので、普通のgetでもいいかも？
 //			elemData.targetElemDefaultDisplayProp = elemData.targetElemDefaultStyles.getPropertyValue('display');
-			elemData.targetElemDefaultDisplayProp = that.getUncomputedStyle(elemData.targetElemDefault, 'display');
+			elemData.targetElemDefaultDisplayProp = that.getStyle(elemData.targetElemDefault, 'display');
 
 			//空要素を判定
 			var isEmptyElements = that.regexEmptyElem.test(' ' + elemData.targetElemTagName + ' ');
@@ -550,11 +550,11 @@ STYLEV.VALIDATOR = {
 
 		//対象要素のNGスタイルのデフォルト値
 //		var targetElemNgStyleDefaultVal = elemData.targetElemDefaultStyles.getPropertyValue(ngStyleRulesProp);
-		var targetElemNgStyleDefaultVal = that.getUncomputedStyle(elemData.targetElemDefault, ngStyleRulesProp);
+		var targetElemNgStyleDefaultVal = that.getStyle(elemData.targetElemDefault, ngStyleRulesProp);
 
 		//対象要素のNGスタイルの現在の値
 //		var targetElemNgStyleVal = elemData.targetElemStyles.getPropertyValue(ngStyleRulesProp);
-		var targetElemNgStyleVal = that.getUncomputedStyle(elemData.targetElem, ngStyleRulesProp);
+		var targetElemNgStyleVal = that.getStyle(elemData.targetElem, ngStyleRulesProp);
 
 		//NGスタイルのプロパティ値を検索するための正規表現
 		var regexNgStyleRulesPropVal;
@@ -1528,7 +1528,7 @@ STYLEV.VALIDATOR = {
 		}
 	},
 
-	getUncomputedStyle: function(target, property) {
+	getStyle: function(target, property) {
 
 		var culculatedValue;
 		var computedPropertyValue = getComputedStyle(target, '').getPropertyValue(property);
@@ -1536,25 +1536,11 @@ STYLEV.VALIDATOR = {
 		if( property === 'width' || property === 'height' ) {
 
 			if(property === 'width') {
-
 				culculatedValue = target.dataset_stylevwidth;
-
-//				if(target.dataset_stylevwidth === 'auto') {
-//					culculatedValue = target.dataset_stylevwidth;
-//				} else {
-//					culculatedValue = computedPropertyValue;
-//				}
 			}
 
 			if(property === 'height') {
-
 				culculatedValue = target.dataset_stylevheight;
-
-//				if(target.dataset_stylevheight === 'auto') {
-//					culculatedValue = target.dataset_stylevheight;
-//				} else {
-//					culculatedValue = computedPropertyValue;
-//				}
 			}
 
 		} else {
