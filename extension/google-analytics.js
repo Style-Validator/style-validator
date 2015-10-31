@@ -36,6 +36,7 @@ if(!hasAnalyticsGoogle()) {
 }
 
 ga('create', 'UA-53227157-5', 'auto', {'name': 'styleValidator'});
+ga('set', 'checkProtocolTask', function(){}); // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
 ga('styleValidator.send', 'pageview', location.href);
 
 window.addEventListener('error', function(errorMessage, URL, lineNumber, columnNumber, errorObject) {
