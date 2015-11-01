@@ -1,4 +1,4 @@
-- フォーカスでいけるようにする
+- ルール編集画面、フォーカスでいけるようにする
 - インライン要素でサイズ指定可能な要素は、getComputedStyleのwidthの値がpxかautoかで判定する　※http://jsbin.com/julocac/1/edit?html,js,output
 - ルールが表で閲覧できるように自動生成機能をつける
 - 仕様をつくるために、全ブラウザのレンダリングテストツールをつくる
@@ -27,3 +27,4 @@
 - visual formatting rules http://www.w3.org/TR/CSS21/visudet.html#inline-width を理解する　置換要素と非置換要素など
 - http://stackoverflow.com/questions/12468176/what-is-a-non-replaced-inline-element
 - https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
+- エラー判定ロジックの配列の処理ができていない
