@@ -587,7 +587,7 @@ STYLEV.VALIDATOR = {
 			var targetElemParentNgStyleVal = elemData.targetElemParentStyles.getPropertyValue(ngStyleRulesProp);
 
 			//line-heightの相対指定の場合は、親子の継承関係であってもfont-sizeによって相対的に変わるため、font-sizeの関係性を計算に入れる
-			//TODO: line-heightの計算にバグあり
+			//TODO: line-heightの計算にバグあり　今は指定を外している？
 			if(ngStyleRulesProp === 'line-height') {
 				var targetElemFontSize = parseFloat(elemData.targetElemStyles.getPropertyValue('font-size'));
 				var targetElemParentFontSize = parseFloat(elemData.targetElemParentStyles.getPropertyValue('font-size'));
@@ -598,13 +598,14 @@ STYLEV.VALIDATOR = {
 			}
 		}
 
+		//TODO: 以下の判定処理は、ズタボロ。全体的に修正する。配列の場合がダメダメ。そもそもの設計を見直す
 		//違反スタイルを検知してエラーもしくは警告をだす
 		if(
 
 			//違反スタイルが・・・
 			//
 			// 一致
-			(ngStyleRulesPropVal === targetElemNgStyleVal) ||
+			(regexNgStyleRulesPropVal.test(' ' + targetElemNgStyleVal + ' ')) ||
 
 			//0以上
 			(ngStyleRulesPropVal === 'over-0' && parseInt(targetElemNgStyleVal, 10) > 0) ||
@@ -624,10 +625,10 @@ STYLEV.VALIDATOR = {
 			//継承スタイル以外（通常：line-height以外）
 			(ngStyleRulesPropVal === '!inherit' && targetElemNgStyleVal !== targetElemParentNgStyleVal) ||
 
-			//親要素のエラースタイルに適合したら
+			//反転でない場合かつ、親要素のエラースタイルに適合したら
 			(!isReverse && isParentStructureCheck && regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' ')) ||
 
-			//親要素のエラースタイル以外に適合したら
+			//反転の場合かつ、親要素のエラースタイル以外に適合したら
 			(isReverse && isParentStructureCheck && !regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' '))
 
 		){
