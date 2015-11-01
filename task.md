@@ -1,4 +1,4 @@
-
+- フォーカスでいけるようにする
 - インライン要素でサイズ指定可能な要素は、getComputedStyleのwidthの値がpxかautoかで判定する　※http://jsbin.com/julocac/1/edit?html,js,output
 - ルールが表で閲覧できるように自動生成機能をつける
 - 仕様をつくるために、全ブラウザのレンダリングテストツールをつくる

@@ -45,6 +45,7 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li')
+		that.stylesSelects = that.rulesList.querySelectorAll('.styles-select');
 		that.stylesLists = that.rulesList.querySelectorAll('.styles-list');
 		that.stylesInputs = that.rulesList.querySelectorAll('.styles-input');
 	},
@@ -120,6 +121,7 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 		var clone = document.importNode(that.templateRule, true);
 
+		var styleSelects = clone.querySelectorAll('.styles-select');
 		var styleLists = clone.querySelectorAll('.styles-list');
 		var styleInputs = clone.querySelectorAll('.styles-input');
 		that.bind2StylesList(styleLists);
@@ -696,18 +698,24 @@ STYLEV.RULES_EDITOR = {
 						var rule = that.currentJSON[i];
 
 						var clone = document.importNode(that.templateRule, true);
+						var styleSelects = clone.querySelectorAll('.styles-select');
 						var styleLists = clone.querySelectorAll('.styles-list');
 						var styleInputs = clone.querySelectorAll('.styles-input');
 
+						for(var h = 0, styleSelectsLength = styleSelects.length; h < styleSelectsLength; h++) {
+							var styleSelect = styleSelects[h];
+							styleSelect.querySelector('select').tabIndex = 1;
+							that.addPropertyFromHTMLToJSON(styleSelect, rule, styleSelect.dataset.id);
+						}
 						for(var j = 0, styleListsLength = styleLists.length; j < styleListsLength; j++) {
 							var styleList = styleLists[j];
 							styleList.tabIndex = 1;
-							that.setPropertyFromRuleData(styleList, rule, styleList.dataset.id);
+							that.addPropertyFromHTMLToJSON(styleList, rule, styleList.dataset.id);
 						}
 						for(var k = 0, styleInputsLength = styleInputs.length; k < styleInputsLength; k++) {
 							var styleInput = styleInputs[k];
 							styleInput.querySelector('input').tabIndex = 1;
-							that.setPropertyFromRuleData(styleInput, rule, styleInput.dataset.id);
+							that.addPropertyFromHTMLToJSON(styleInput, rule, styleInput.dataset.id);
 						}
 
 						df.appendChild(clone);
@@ -722,12 +730,18 @@ STYLEV.RULES_EDITOR = {
 		});
 	},
 
-	setPropertyFromRuleData: function(target, rule, id) {
+	addPropertyFromHTMLToJSON: function(target, rule, id) {
 		var that = STYLEV.RULES_EDITOR;
 		var ruleStyles = rule[id];
 
 		if(ruleStyles) {
 
+			if(target.className === 'styles-select') {
+
+				var select = target.querySelector('select');
+				select.value = ruleStyles;
+
+			}
 			if(target.className === 'styles-list') {
 				for(var property in ruleStyles) {
 					if(ruleStyles.hasOwnProperty(property)) {
@@ -754,14 +768,7 @@ STYLEV.RULES_EDITOR = {
 
 		} else {
 
-			if(target.className === 'styles-list') {
-				target.tabIndex = -1;
-				target.style.setProperty('display', 'none', '');
-			}
-			if(target.className === 'styles-input') {
-				target.querySelector('input').tabIndex = -1;
-				target.style.setProperty('display', 'none', '');
-			}
+			target.style.setProperty('display', 'none', '');
 		}
 	},
 

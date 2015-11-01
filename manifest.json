@@ -64,7 +64,7 @@
 		"data/rules-by-empty-tags.json",
 		"data/tags-all.json",
 		"data/tags-empty.json",
-		"data/tags-resizable-inline-element.json",
+		"data/tags-replaced-element.json",
 		"data/tags-table-children.json",
 		"data/displayChangeableProperties.json",
 		"app/style-validator-for-console.css",
