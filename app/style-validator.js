@@ -270,10 +270,10 @@ STYLEV.VALIDATOR = {
 			var isInlineBlockElements = elemData.targetElemDisplayPropVal === 'inline-block';
 
 			//サイズ指定できるインライン要素を判定
-			var isReplacedElem = that.regexReplacedElem.test(' ' + elemData.targetElemTagName + ' ');
+			var isReplacedElemTag = that.regexReplacedElem.test(' ' + elemData.targetElemTagName + ' ');
 
 			//上書き: サイズ可変はインライン要素 TODO: あとで消す
-			if(isReplacedElem) {
+			if(isReplacedElemTag) {
 				//性質としてインラインブロック要素とみなす
 //				elemData.targetElemDisplayPropVal = 'inline-block';
 			}
@@ -306,6 +306,15 @@ STYLEV.VALIDATOR = {
 				//初期化
 				elemData.isDisplayPropChanged = false;
 
+				//置換要素、非置換要素のルールに適合しない場合は、そのルールを無視する
+				var isReplacedRuleOK =
+					(replaced === 'Replaced elements' && isReplacedElemTag) ||
+					(replaced === 'Non-replaced elements' && !isReplacedElemTag) ||
+					(replaced === undefined);
+				if(!isReplacedRuleOK) {
+					continue;
+				}
+
 				//全てのベーススタイルの分だけ検査
 				for(var baseStyleProp in baseStyles) {
 					if ( baseStyles.hasOwnProperty(baseStyleProp) ) {
@@ -315,7 +324,7 @@ STYLEV.VALIDATOR = {
 						var targetElemBasePropVal = getComputedStyle(elemData.targetElem, '').getPropertyValue(baseStyleProp);
 
 						//上書き: サイズ可変のインライン要素 TODO: 一時的に消す
-						if(baseStyleProp === 'display' && isReplacedElem) {
+						if(baseStyleProp === 'display' && isReplacedElemTag) {
 							//性質としてインラインブロック要素とみなす
 //							targetElemBasePropVal = 'inline-block';
 						}
@@ -331,20 +340,21 @@ STYLEV.VALIDATOR = {
 				}
 
 
-				//全てのベーススタイルに適合した場合
+				//全てのベーススタイルに適合した場合 TODO: ORもオプションで指定できるようにするか検討
 				if(hasAllBaseStyles) {
+
 
 					//エラースタイルのいずれかに適合するかを検査
 					for (var errorRulesProp in errorRules) {
 						if ( errorRules.hasOwnProperty(errorRulesProp) ) {
-							that.detectErrorAndWarn('error', errorRulesProp, errorRules, elemData, false, false, isReplacedElem, replaced);
+							that.detectErrorAndWarn('error', errorRulesProp, errorRules, elemData, false, false);
 						}
 					}
 
 					//警告スタイルのいずれかに適合するかを検査
 					for (var warningRulesProp in warningRules) {
 						if ( warningRules.hasOwnProperty(warningRulesProp) ) {
-							that.detectErrorAndWarn('warning', warningRulesProp, warningRules, elemData, false, false, isReplacedElem, replaced);
+							that.detectErrorAndWarn('warning', warningRulesProp, warningRules, elemData, false, false);
 						}
 					}
 
@@ -354,13 +364,13 @@ STYLEV.VALIDATOR = {
 						//親要素が警告スタイルのいずれかに適合するかを検査
 						for (var parentWarningRulesProp in parentWarningRules) {
 							if ( parentWarningRules.hasOwnProperty(parentWarningRulesProp) ) {
-								that.detectErrorAndWarn('warning', parentWarningRulesProp, parentWarningRules, elemData, false, true, isReplacedElem, replaced);
+								that.detectErrorAndWarn('warning', parentWarningRulesProp, parentWarningRules, elemData, false, true);
 							}
 						}
 						//親要素がエラースタイルのいずれかに適合するかを検査
 						for (var parentErrorRulesProp in parentErrorRules) {
 							if ( parentErrorRules.hasOwnProperty(parentErrorRulesProp) ) {
-								that.detectErrorAndWarn('error', parentErrorRulesProp, parentErrorRules, elemData, false, true, isReplacedElem, replaced);
+								that.detectErrorAndWarn('error', parentErrorRulesProp, parentErrorRules, elemData, false, true);
 							}
 						}
 					}
@@ -378,9 +388,9 @@ STYLEV.VALIDATOR = {
 								elemData.isDisplayPropChanged = true;
 
 //								if(isTableChildElements) {
-								that.detectErrorAndWarn('error', changeDisplayProp, that.displayChangeableProperties, elemData, false, false, isReplacedElem, replaced);
+								that.detectErrorAndWarn('error', changeDisplayProp, that.displayChangeableProperties, elemData, false, false);
 //								} else {
-//									that.detectErrorAndWarn('warning', changeDisplayProp, that.displayChangeableProperties, elemData, false, false, isReplacedElem, replaced);
+//									that.detectErrorAndWarn('warning', changeDisplayProp, that.displayChangeableProperties, elemData, false, false, isReplacedElem);
 //								}
 
 								elemData.isDisplayPropChanged = false;
@@ -395,14 +405,14 @@ STYLEV.VALIDATOR = {
 						//警告スタイル毎に検査
 						for (var emptyElemWarnProp in that.emptyElemRulesData['warning-styles']) {
 							if (that.emptyElemRulesData['warning-styles'].hasOwnProperty(emptyElemWarnProp)) {
-								that.detectErrorAndWarn('warning', emptyElemWarnProp, that.emptyElemRulesData['warning-styles'], elemData, true, false, isReplacedElem, replaced);
+								that.detectErrorAndWarn('warning', emptyElemWarnProp, that.emptyElemRulesData['warning-styles'], elemData, true, false);
 							}
 						}
 
 						//エラースタイル毎に検査
 						for (var emptyElemErrorProp in that.emptyElemRulesData['error-styles']) {
 							if (that.emptyElemRulesData['error-styles'].hasOwnProperty(emptyElemErrorProp)) {
-								that.detectErrorAndWarn('error', emptyElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, true, false, isReplacedElem, replaced);
+								that.detectErrorAndWarn('error', emptyElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, true, false);
 							}
 						}
 
@@ -531,7 +541,7 @@ STYLEV.VALIDATOR = {
 	},
 
 	//エラーや警告を検知する TODO: propertyも事前に引数として渡して良いのでは？
-	detectErrorAndWarn: function(type, ngStyleRulesProp, ngStyleRules, elemData, isEmptyElements, isParentStructureCheck, isReplacedElem, replaced) {
+	detectErrorAndWarn: function(type, ngStyleRulesProp, ngStyleRules, elemData, isEmptyElements, isParentStructureCheck) {
 
 		var that = this;
 
@@ -680,15 +690,15 @@ STYLEV.VALIDATOR = {
 //			console.log('===========================');
 
 			//非置換インライン要素の場合 エラーにしない
-			if(
-				//インライン要素
-				elemData.targetElemDisplayPropVal === 'inline' &&
-				//かつ対象要素が置換要素
-				isReplacedElem &&
-				//かつ置換要素のためのルールでない場合
-				replaced !== 'Replaced elements'
-			) {
-
+//			if(
+//				//インライン要素
+//				elemData.targetElemDisplayPropVal === 'inline' &&
+//				//かつ対象要素が置換要素 TODO: 本当か確認すｒ　他のタグもある
+//				isReplacedElemTag &&
+//				//かつ置換要素のためのルールでない場合
+//				replaced === 'Replaced elements'
+//			) {
+//
 //				if(
 //					ngStyleRulesProp === 'width' ||
 //					ngStyleRulesProp === 'height' ||
@@ -702,9 +712,9 @@ STYLEV.VALIDATOR = {
 //					ngStyleRulesProp === 'margin-left' ||
 //					ngStyleRulesProp === 'margin-bottom'
 //				) {
-					return false;
+//					return false;
 //				}
-			}
+//			}
 
 
 			//親要素を検査する場合

@@ -4,5 +4,12 @@
 	"iframe",
 	"object",
 	"embed",
-	"video"
+	"video",
+	"svg",
+	"button",
+	"math",
+	"audio",
+	"input",
+	"select",
+	"textarea"
 ]

@@ -1,6 +1,6 @@
 [
 	{
-		"title": "Inline Element (Non-replaced)",
+		"title": "Non-replaced Inline Element",
 		"base-styles": {
 			"display": "inline"
 		},
@@ -13,8 +13,6 @@
 			"max-height": "!default",
 			"margin-top": "!0",
 			"margin-bottom": "!0",
-			"padding-top": "over-0",
-			"padding-bottom": "over-0",
 			"float": "!default",
 			"text-align": "!inherit",
 			"overflow": "!default"
@@ -22,7 +20,7 @@
 		"reference-url": "http://www.leihauoli.com"
 	},
 	{
-		"title": "Inline Element (Replaced)",
+		"title": "Replaced Inline Element",
 		"base-styles": {
 			"display": "inline"
 		},
@@ -39,8 +37,7 @@
 			"display": "block"
 		},
 		"warning-styles": {
-			"vertical-align": "!default",
-			"width": "100%"
+			"vertical-align": "!default"
 		},
 		"parent-error-styles": {
 			"display": "![none|block|inline-block|list-item|table-cell|flex]"
