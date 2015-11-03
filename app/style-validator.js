@@ -368,7 +368,8 @@ STYLEV.VALIDATOR = {
 					//デフォルトがブロック要素以外の場合は、Displayのプロパティ値を変化させるようなプロパティを指定してはいけない
 					if( elemData.targetElemDefaultDisplayProp !== 'block' &&
 						elemData.targetElemDefaultDisplayProp !== 'list-item' &&
-						elemData.targetElemDefaultDisplayProp !== 'table' ) {
+						elemData.targetElemDefaultDisplayProp !== 'table' &&
+						elemData.targetElemDefaultDisplayProp !== 'none' ) {
 
 						//Displayプロパティを変化させるプロパティを指定されている場合
 						for (var changeDisplayProp in that.displayChangeableProperties) {
@@ -558,7 +559,7 @@ STYLEV.VALIDATOR = {
 		var hasGroupOperator = ngStyleRulesPropVal.match(/^!{0,1}\[(.+)\]$/);
 
 		//括弧がある場合は、括弧の中身を返し、ない場合は、そのまま
-		ngStyleRulesPropVal = hasGroupOperator ? hasGroupOperator[1] : ngStyleRulesPropVal;
+		ngStyleRulesPropVal = hasGroupOperator ? hasGroupOperator[1] : ngStyleRulesPropVal.replace('!', '');
 
 		//|OR演算子があるかの検査
 		var hasOrOperator = ngStyleRulesPropVal.split('|').length > 1;
@@ -598,40 +599,78 @@ STYLEV.VALIDATOR = {
 			}
 		}
 
+		var isNgStyle = regexNgStyleRulesPropVal.test(' ' + targetElemNgStyleVal + ' ');
+		var is0Over = (parseInt(targetElemNgStyleVal, 10) > 0);
+		var is0Under = (parseInt(targetElemNgStyleVal, 10) < 0);
+		var is0 = (parseInt(targetElemNgStyleVal, 10) === 0);
+		var isDefault = (targetElemNgStyleVal === targetElemNgStyleDefaultVal);
+		var isInheritWithLineHeight = (that.controlFloat(parseFloat(targetElemNgStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNgStyleVal), 1));
+		var isInherit = (targetElemNgStyleVal === targetElemParentNgStyleVal);
+		var isParentNgStyle = (regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' '));
+
+//		console.log('=================')
+//		console.log('elemData.targetElemTagName: ' + elemData.targetElemTagName)
+//		console.log('isReverse: ' + isReverse)
+//		console.log('ngStyleRulesProp: ' + ngStyleRulesProp)
+//		console.log('ngStyleRulesPropVal: ' + ngStyleRulesPropVal)
+//		console.log('targetElemNgStyleVal: ' + targetElemNgStyleVal)
+//		console.log('targetElemNgStyleDefaultVal: ' + targetElemNgStyleDefaultVal)
+//		console.log('regexNgStyleRulesPropVal: ' + regexNgStyleRulesPropVal)
+
 		//TODO: 以下の判定処理は、ズタボロ。全体的に修正する。配列の場合がダメダメ。そもそもの設計を見直す
+		//TODO: 0.00001とかの場合を考慮して、parseIntの10進数も考える
+		//TODO: それぞれの条件を変数にいれる
 		//違反スタイルを検知してエラーもしくは警告をだす
 		if(
 
-			//違反スタイルが・・・
+			/////////////////////////////
+			//is normal
 			//
 			// 一致
-			(regexNgStyleRulesPropVal.test(' ' + targetElemNgStyleVal + ' ')) ||
+			(!isReverse && isNgStyle) ||
 
 			//0以上
-			(ngStyleRulesPropVal === 'over-0' && parseInt(targetElemNgStyleVal, 10) > 0) ||
+			(!isReverse && ngStyleRulesPropVal === 'over-0' && is0Over) ||
 
 			//0以下
-			(ngStyleRulesPropVal === 'under-0' && parseInt(targetElemNgStyleVal, 10) < 0) ||
+			(!isReverse && ngStyleRulesPropVal === 'under-0' && is0Under) ||
+
+			//デフォルト値の場合
+			(!isReverse && ngStyleRulesPropVal === 'default' && isDefault) ||
+
+			//継承スタイルの場合（line-height）
+			(!isReverse && ngStyleRulesPropVal === 'inherit' && ngStyleRulesProp === 'line-height' && isInheritWithLineHeight) ||
+
+			//継承スタイルの場合（通常：line-height以外）
+			(!isReverse && ngStyleRulesPropVal === 'inherit' && isInherit) ||
+
+			//反転でない場合かつ、親要素がエラースタイルの場合
+			(!isReverse && isParentStructureCheck && isParentNgStyle) ||
+
+
+			/////////////////////////////
+			//is reverse
+			//
+			// 一致しない TODO: 実現できるか調査
+//			(isReverse && !isNgStyle) ||
 
 			//0以外
-			(ngStyleRulesPropVal === '!0' && parseInt(targetElemNgStyleVal, 10) !== 0) ||
+			(isReverse && ngStyleRulesPropVal === '0' && !is0) ||
 
 			//デフォルト値以外
-			(ngStyleRulesPropVal === '!default' && targetElemNgStyleVal !== targetElemNgStyleDefaultVal) ||
+			(isReverse && ngStyleRulesPropVal === 'default' && !isDefault) ||
 
 			//継承スタイル以外（line-height）
-			(ngStyleRulesPropVal === '!inherit' && ngStyleRulesProp === 'line-height' && that.controlFloat(parseFloat(targetElemNgStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNgStyleVal), 1)) ||
+			(isReverse && ngStyleRulesPropVal === 'inherit' && ngStyleRulesProp === 'line-height' && !isInheritWithLineHeight) ||
 
 			//継承スタイル以外（通常：line-height以外）
-			(ngStyleRulesPropVal === '!inherit' && targetElemNgStyleVal !== targetElemParentNgStyleVal) ||
-
-			//反転でない場合かつ、親要素のエラースタイルに適合したら
-			(!isReverse && isParentStructureCheck && regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' ')) ||
+			(isReverse && ngStyleRulesPropVal === 'inherit' && !isInherit) ||
 
 			//反転の場合かつ、親要素のエラースタイル以外に適合したら
-			(isReverse && isParentStructureCheck && !regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' '))
+			(isReverse && isParentStructureCheck && !isParentNgStyle)
 
 		){
+
 
 //			console.log('elemData.targetElemTagName: ' + elemData.targetElemTagName);
 //			console.log('ngStyleRulesProp: ' + ngStyleRulesProp);
