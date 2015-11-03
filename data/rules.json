@@ -4,6 +4,7 @@
 		"base-styles": {
 			"display": "inline"
 		},
+		"replaced": "Non-replaced elements",
 		"warning-styles": {
 			"width": "!default",
 			"height": "!default",
@@ -24,6 +25,7 @@
 		"base-styles": {
 			"display": "inline"
 		},
+		"replaced": "Replaced elements",
 		"warning-styles": {
 			"padding": "over-0",
 			"text-align": "!inherit",
