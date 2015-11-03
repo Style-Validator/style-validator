@@ -667,11 +667,11 @@ STYLEV.RULES_EDITOR = {
 				) {
 					continue;
 				}
-				that.allCSSProperties.push(that.camelToHyphen(property));
+				that.allCSSProperties.push(that.camel2Hyphen(property));
 			}
 		}
 	},
-	camelToHyphen: function(string) {
+	camel2Hyphen: function(string) {
 		// for Unicode transforms, replace [A-Z] with \p{Lu} if available
 		return string
 			.replace(/^[A-Z]/g, function(letter) {
@@ -801,13 +801,24 @@ STYLEV.RULES_EDITOR = {
 			var rule = {};
 
 			var rulesListItem = that.rulesListItems[r];
-			var dataElements = rulesListItem.querySelectorAll('.styles-list, .styles-input');
+			var dataElements = rulesListItem.querySelectorAll('.styles-list, .styles-input, .styles-select');
 
 			for(var i = 0, len = dataElements.length; i < len; i++) {
 
 				var dataElement = dataElements[i];
 				var id = dataElement.dataset.id;
 
+				if(dataElement.className === 'styles-select') {
+
+					var styleSelect = dataElement;
+
+					var styleSelectItem = styleSelect.querySelector('select');
+
+					if(styleSelectItem.value) {
+						rule[id] = styleSelectItem.value;
+					}
+				}
+				
 				if(dataElement.className === 'styles-list') {
 
 					var styleListItems = dataElement.querySelectorAll('li');

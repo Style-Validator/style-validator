@@ -372,5 +372,16 @@
 			"z-index": "under-0"
 		},
 		"reference-url": "http://www.leihauoli.com"
+	},
+	{
+		"title": "Empty Elements",
+		"empty": "Empty elements",
+		"pseudo-before-error-styles": {
+			"content": "!default"
+		},
+		"pseudo-after-error-styles": {
+			"content": "!default"
+		},
+		"reference-url": "http://www.leihauoli.com"
 	}
 ]

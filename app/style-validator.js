@@ -207,6 +207,41 @@ STYLEV.VALIDATOR = {
 		});
 	},
 
+	updateOptions: function() {
+
+		return new Promise(function(resolve, reject) {
+
+			//設定の更新
+			if(STYLEV.isChromeExtension) {
+
+				chrome.storage.sync.get('options', function(message) {
+
+					if(message.options !== undefined) {
+						//オプション設定
+						STYLEV.options = {
+
+							ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
+							ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
+							ENABLE_ANIMATION: message.options.enableAnimation,
+							TARGET_SELECTOR: message.options.targetSelector,
+							TARGET_SELECTOR_TEXT: message.options.targetSelectorText ? message.options.targetSelectorText.split(',') : '',
+							NOT_TARGET_SELECTOR: message.options.notTargetSelector,
+							NOT_TARGET_SELECTOR_TEXT: message.options.notTargetSelectorText ? message.options.notTargetSelectorText.split(',') : ''
+						};
+					}
+
+					resolve();
+
+				});
+
+			} else {
+
+				resolve();
+			}
+		});
+
+	},
+
 	//全要素に対して、バリデートを行う
 	validate: function(callback) {
 
@@ -272,14 +307,10 @@ STYLEV.VALIDATOR = {
 			//サイズ指定できるインライン要素を判定
 			var isReplacedElemTag = that.regexReplacedElem.test(' ' + elemData.targetElemTagName + ' ');
 
-			//上書き: サイズ可変はインライン要素 TODO: あとで消す
-			if(isReplacedElemTag) {
-				//性質としてインラインブロック要素とみなす
-//				elemData.targetElemDisplayPropVal = 'inline-block';
-			}
+			//HTML以外であれば、親が存在するので親要素のチェック
+			var hasParent = elemData.targetElemTagName !== 'html';
 
 			if(isEmptyElements) {
-
 				//TODO: 擬似要素をインスタンス変数に格納し、擬似要素エラー
 			}
 
@@ -323,12 +354,6 @@ STYLEV.VALIDATOR = {
 
 						var targetElemBasePropVal = getComputedStyle(elemData.targetElem, '').getPropertyValue(baseStyleProp);
 
-						//上書き: サイズ可変のインライン要素 TODO: 一時的に消す
-						if(baseStyleProp === 'display' && isReplacedElemTag) {
-							//性質としてインラインブロック要素とみなす
-//							targetElemBasePropVal = 'inline-block';
-						}
-
 						var hasBaseStyle = baseStylePropVal === targetElemBasePropVal;
 
 						//ベーススタイルを持っていない場合は、中止してループから抜け出す
@@ -343,34 +368,62 @@ STYLEV.VALIDATOR = {
 				//全てのベーススタイルに適合した場合 TODO: ORもオプションで指定できるようにするか検討
 				if(hasAllBaseStyles) {
 
-
 					//エラースタイルのいずれかに適合するかを検査
 					for (var errorRulesProp in errorRules) {
 						if ( errorRules.hasOwnProperty(errorRulesProp) ) {
-							that.detectErrorAndWarn('error', errorRulesProp, errorRules, elemData, false, false);
+							that.detectErrorAndWarn('error', errorRulesProp, errorRules, elemData, isEmptyElements, false);
 						}
 					}
 
 					//警告スタイルのいずれかに適合するかを検査
 					for (var warningRulesProp in warningRules) {
 						if ( warningRules.hasOwnProperty(warningRulesProp) ) {
-							that.detectErrorAndWarn('warning', warningRulesProp, warningRules, elemData, false, false);
+							that.detectErrorAndWarn('warning', warningRulesProp, warningRules, elemData, isEmptyElements, false);
 						}
 					}
 
+					//TODO: 擬似要素のスタイル取得に問題があるため、一時削除するが、後ほど調査
+//					//擬似要素に対して警告スタイル毎に検査
+//					for (var pseudoBeforeWarningProp in pseudoBeforeWarningRules) {
+//						if (pseudoBeforeWarningRules.hasOwnProperty(pseudoBeforeWarningProp)) {
+//							that.detectErrorAndWarn('warning', pseudoBeforeWarningProp, pseudoBeforeWarningRules, elemData, isEmptyElements, false, 'before');
+//						}
+//					}
+//
+//					//擬似要素に対してエラースタイル毎に検査
+//					for (var pseudoBeforeErrorProp in pseudoBeforeErrorRules) {
+//						if (pseudoBeforeErrorRules.hasOwnProperty(pseudoBeforeErrorProp)) {
+//							that.detectErrorAndWarn('error', pseudoBeforeErrorProp, pseudoBeforeErrorRules, elemData, isEmptyElements, false, 'before');
+//						}
+//					}
+//
+//					//擬似要素に対して警告スタイル毎に検査
+//					for (var pseudoAfterWarningProp in pseudoAfterWarningRules) {
+//						if (pseudoAfterWarningRules.hasOwnProperty(pseudoAfterWarningProp)) {
+//							that.detectErrorAndWarn('warning', pseudoAfterWarningProp, pseudoAfterWarningRules, elemData, isEmptyElements, false, 'after');
+//						}
+//					}
+//
+//					//擬似要素に対してエラースタイル毎に検査
+//					for (var pseudoAfterErrorProp in pseudoAfterErrorRules) {
+//						if (pseudoAfterErrorRules.hasOwnProperty(pseudoAfterErrorProp)) {
+//							that.detectErrorAndWarn('error', pseudoAfterErrorProp, pseudoAfterErrorRules, elemData, isEmptyElements, false, 'after');
+//						}
+//					}
+
 					//HTML以外であれば、親が存在するので親要素のチェック
-					if(elemData.targetElemTagName !== 'html') {
+					if(hasParent) {
 
 						//親要素が警告スタイルのいずれかに適合するかを検査
 						for (var parentWarningRulesProp in parentWarningRules) {
 							if ( parentWarningRules.hasOwnProperty(parentWarningRulesProp) ) {
-								that.detectErrorAndWarn('warning', parentWarningRulesProp, parentWarningRules, elemData, false, true);
+								that.detectErrorAndWarn('warning', parentWarningRulesProp, parentWarningRules, elemData, isEmptyElements, true);
 							}
 						}
 						//親要素がエラースタイルのいずれかに適合するかを検査
 						for (var parentErrorRulesProp in parentErrorRules) {
 							if ( parentErrorRules.hasOwnProperty(parentErrorRulesProp) ) {
-								that.detectErrorAndWarn('error', parentErrorRulesProp, parentErrorRules, elemData, false, true);
+								that.detectErrorAndWarn('error', parentErrorRulesProp, parentErrorRules, elemData, isEmptyElements, true);
 							}
 						}
 					}
@@ -388,9 +441,9 @@ STYLEV.VALIDATOR = {
 								elemData.isDisplayPropChanged = true;
 
 //								if(isTableChildElements) {
-								that.detectErrorAndWarn('error', changeDisplayProp, that.displayChangeableProperties, elemData, false, false);
+								that.detectErrorAndWarn('error', changeDisplayProp, that.displayChangeableProperties, elemData, isEmptyElements, false);
 //								} else {
-//									that.detectErrorAndWarn('warning', changeDisplayProp, that.displayChangeableProperties, elemData, false, false, isReplacedElem);
+//									that.detectErrorAndWarn('warning', changeDisplayProp, that.displayChangeableProperties, elemData, isEmptyElements, isReplacedElem);
 //								}
 
 								elemData.isDisplayPropChanged = false;
@@ -403,32 +456,18 @@ STYLEV.VALIDATOR = {
 					if( isEmptyElements ) {
 
 						//警告スタイル毎に検査
-						for (var emptyElemWarnProp in that.emptyElemRulesData['warning-styles']) {
-							if (that.emptyElemRulesData['warning-styles'].hasOwnProperty(emptyElemWarnProp)) {
-								that.detectErrorAndWarn('warning', emptyElemWarnProp, that.emptyElemRulesData['warning-styles'], elemData, true, false);
+						for (var emptyElemWarningProp in that.emptyElemRulesData['warning-styles']) {
+							if (that.emptyElemRulesData['warning-styles'].hasOwnProperty(emptyElemWarningProp)) {
+								that.detectErrorAndWarn('warning', emptyElemWarningProp, that.emptyElemRulesData['warning-styles'], elemData, isEmptyElements, false);
 							}
 						}
 
 						//エラースタイル毎に検査
 						for (var emptyElemErrorProp in that.emptyElemRulesData['error-styles']) {
 							if (that.emptyElemRulesData['error-styles'].hasOwnProperty(emptyElemErrorProp)) {
-								that.detectErrorAndWarn('error', emptyElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, true, false);
+								that.detectErrorAndWarn('error', emptyElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, isEmptyElements, false);
 							}
 						}
-
-						//擬似要素に対して警告スタイル毎に検査
-//						for (var emptyElemPseudoElemWarnProp in that.emptyElemRulesData['pseudo-elements-warning-styles']) {
-//							if (that.emptyElemRulesData['pseudo-elements-warning-styles'].hasOwnProperty(emptyElemPseudoElemWarnProp)) {
-//								that.detectErrorAndWarn('warning', emptyElemPseudoElemWarnProp, that.emptyElemRulesData['warning-styles'], elemData, true, false);
-//							}
-//						}
-
-						//擬似要素に対してエラースタイル毎に検査
-//						for (var emptyElemPseudoElemErrorProp in that.emptyElemRulesData['pseudo-elements-error-styles']) {
-//							if (that.emptyElemRulesData['pseudo-elements-error-styles'].hasOwnProperty(emptyElemPseudoElemErrorProp)) {
-//								that.detectErrorAndWarn('error', emptyElemPseudoElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, true, false);
-//							}
-//						}
 					}
 
 				}
@@ -453,41 +492,6 @@ STYLEV.VALIDATOR = {
 
 		//バリデータによるDOM変更が全て完了してから監視開始
 		that.ovservationManager = that.connectObserve();
-
-	},
-
-	updateOptions: function() {
-
-		return new Promise(function(resolve, reject) {
-
-			//設定の更新
-			if(STYLEV.isChromeExtension) {
-
-				chrome.storage.sync.get('options', function(message) {
-
-					if(message.options !== undefined) {
-						//オプション設定
-						STYLEV.options = {
-
-							ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
-							ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
-							ENABLE_ANIMATION: message.options.enableAnimation,
-							TARGET_SELECTOR: message.options.targetSelector,
-							TARGET_SELECTOR_TEXT: message.options.targetSelectorText ? message.options.targetSelectorText.split(',') : '',
-							NOT_TARGET_SELECTOR: message.options.notTargetSelector,
-							NOT_TARGET_SELECTOR_TEXT: message.options.notTargetSelectorText ? message.options.notTargetSelectorText.split(',') : ''
-						};
-					}
-
-					resolve();
-
-				});
-
-			} else {
-
-				resolve();
-			}
-		});
 
 	},
 
@@ -541,7 +545,7 @@ STYLEV.VALIDATOR = {
 	},
 
 	//エラーや警告を検知する TODO: propertyも事前に引数として渡して良いのでは？
-	detectErrorAndWarn: function(type, ngStyleRulesProp, ngStyleRules, elemData, isEmptyElements, isParentStructureCheck) {
+	detectErrorAndWarn: function(type, ngStyleRulesProp, ngStyleRules, elemData, isEmptyElements, isParentCheck, pseudoSelector) {
 
 		var that = this;
 
@@ -552,12 +556,10 @@ STYLEV.VALIDATOR = {
 		var ngStyleRulesPropVal = ngStyleRules[ngStyleRulesProp];
 
 		//対象要素のNGスタイルのデフォルト値
-//		var targetElemNgStyleDefaultVal = elemData.targetElemDefaultStyles.getPropertyValue(ngStyleRulesProp);
-		var targetElemNgStyleDefaultVal = that.getStyle(elemData.targetElemDefault, ngStyleRulesProp);
+		var targetElemNgStyleDefaultVal = that.getStyle(elemData.targetElemDefault, ngStyleRulesProp, pseudoSelector);
 
 		//対象要素のNGスタイルの現在の値
-//		var targetElemNgStyleVal = elemData.targetElemStyles.getPropertyValue(ngStyleRulesProp);
-		var targetElemNgStyleVal = that.getStyle(elemData.targetElem, ngStyleRulesProp);
+		var targetElemNgStyleVal = that.getStyle(elemData.targetElem, ngStyleRulesProp, pseudoSelector);
 
 		//NGスタイルのプロパティ値を検索するための正規表現
 		var regexNgStyleRulesPropVal;
@@ -582,7 +584,6 @@ STYLEV.VALIDATOR = {
 
 			//両端にスペースをいれて完全単語検索をしてかつ、複数ワードで検索
 			regexNgStyleRulesPropVal = new RegExp(' ' + ngStyleRulesPropVal.join(' | ') + ' ');
-
 
 		} else {
 
@@ -627,9 +628,8 @@ STYLEV.VALIDATOR = {
 //		console.log('targetElemNgStyleDefaultVal: ' + targetElemNgStyleDefaultVal)
 //		console.log('regexNgStyleRulesPropVal: ' + regexNgStyleRulesPropVal)
 
-		//TODO: 以下の判定処理は、ズタボロ。全体的に修正する。配列の場合がダメダメ。そもそもの設計を見直す
+		//TODO: 以下の判定処理は、ズタボロ。全体的に修正する。
 		//TODO: 0.00001とかの場合を考慮して、parseIntの10進数も考える
-		//TODO: それぞれの条件を変数にいれる
 		//違反スタイルを検知してエラーもしくは警告をだす
 		if(
 
@@ -655,7 +655,7 @@ STYLEV.VALIDATOR = {
 			(!isReverse && ngStyleRulesPropVal === 'inherit' && isInherit) ||
 
 			//反転でない場合かつ、親要素がエラースタイルの場合
-			(!isReverse && isParentStructureCheck && isParentNgStyle) ||
+			(!isReverse && isParentCheck && isParentNgStyle) ||
 
 
 			/////////////////////////////
@@ -677,48 +677,12 @@ STYLEV.VALIDATOR = {
 			(isReverse && ngStyleRulesPropVal === 'inherit' && !isInherit) ||
 
 			//反転の場合かつ、親要素のエラースタイル以外に適合したら
-			(isReverse && isParentStructureCheck && !isParentNgStyle)
+			(isReverse && isParentCheck && !isParentNgStyle)
 
 		){
 
-
-//			console.log('elemData.targetElemTagName: ' + elemData.targetElemTagName);
-//			console.log('ngStyleRulesProp: ' + ngStyleRulesProp);
-//			console.log('elemData.targetElemDisplayPropVal: ' + elemData.targetElemDisplayPropVal);
-//			console.log('isReplacedElem: ' + isReplacedElem);
-//			console.log('replaced: ' + replaced);
-//			console.log('===========================');
-
-			//非置換インライン要素の場合 エラーにしない
-//			if(
-//				//インライン要素
-//				elemData.targetElemDisplayPropVal === 'inline' &&
-//				//かつ対象要素が置換要素 TODO: 本当か確認すｒ　他のタグもある
-//				isReplacedElemTag &&
-//				//かつ置換要素のためのルールでない場合
-//				replaced === 'Replaced elements'
-//			) {
-//
-//				if(
-//					ngStyleRulesProp === 'width' ||
-//					ngStyleRulesProp === 'height' ||
-//					ngStyleRulesProp === 'max-width' ||
-//					ngStyleRulesProp === 'max-height' ||
-//					ngStyleRulesProp === 'min-width' ||
-//					ngStyleRulesProp === 'min-height' ||
-//					ngStyleRulesProp === 'margin' ||
-//					ngStyleRulesProp === 'margin-top' ||
-//					ngStyleRulesProp === 'margin-right' ||
-//					ngStyleRulesProp === 'margin-left' ||
-//					ngStyleRulesProp === 'margin-bottom'
-//				) {
-//					return false;
-//				}
-//			}
-
-
 			//親要素を検査する場合
-			if(isParentStructureCheck) {
+			if(isParentCheck) {
 				message.text = (isEmptyElements ? 'Empty Elements ' : '') +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; display property of parent element is incorrect.(' +elemData.targetElemParentDisplayProp + ')';
 
 			//通常時
@@ -1605,10 +1569,11 @@ STYLEV.VALIDATOR = {
 		}
 	},
 
-	getStyle: function(target, property) {
+	getStyle: function(target, property, pseudo) {
 
 		var culculatedValue;
-		var computedPropertyValue = getComputedStyle(target, '').getPropertyValue(property);
+		var pseudoSelector = pseudo || null;
+		var computedPropertyValue = getComputedStyle(target, pseudoSelector).getPropertyValue(property);
 
 		if( property === 'width' || property === 'height' ) {
 

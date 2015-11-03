@@ -216,16 +216,17 @@ body {
 	display: flex;
 	alignment-baseline: middle;
 }
-.styles-input:before {
-	content: attr(data-id);
-	background: #E7E7E7;
+.styles-select {
+	display: flex;
+	alignment-baseline: middle;
+}
+.styles-select:before {
+	content: attr(data-id) ':';
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	flex-shrink: 0;
-	flex-basis: 30%;
-	padding: 0 10px;
-	display: none;
+	padding-right: 5px;
 }
 .styles-input input[type="text"] {
 	width: 100%;
@@ -354,6 +355,9 @@ button,
 }
 .styles-list-wrapper > li:hover [data-id="title"] a {
 	display: flex;
+}
+.edit-mode .styles-select {
+	display: flex !important;
 }
 .edit-mode .styles-list {
 	display: block !important;
