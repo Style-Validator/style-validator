@@ -428,50 +428,41 @@ STYLEV.VALIDATOR = {
 						}
 					}
 
-					//デフォルトがブロック要素以外の場合は、Displayのプロパティ値を変化させるようなプロパティを指定してはいけない
-					if( elemData.targetElemDefaultDisplayProp !== 'block' &&
-						elemData.targetElemDefaultDisplayProp !== 'list-item' &&
-						elemData.targetElemDefaultDisplayProp !== 'table' &&
-						elemData.targetElemDefaultDisplayProp !== 'none' ) {
+				}
+			}
 
-						//Displayプロパティを変化させるプロパティを指定されている場合
-						for (var changeDisplayProp in that.displayChangeableProperties) {
-							if ( that.displayChangeableProperties.hasOwnProperty(changeDisplayProp) ) {
+			//デフォルトがブロック要素以外の場合は、Displayのプロパティ値を変化させるようなプロパティを指定してはいけない
+			if( elemData.targetElemDefaultDisplayProp !== 'block' &&
+				elemData.targetElemDefaultDisplayProp !== 'list-item' &&
+				elemData.targetElemDefaultDisplayProp !== 'table' ) {
 
-								elemData.isDisplayPropChanged = true;
+				//Displayプロパティを変化させるプロパティを指定されている場合
+				for (var changeDisplayProp in that.displayChangeableProperties) {
+					if ( that.displayChangeableProperties.hasOwnProperty(changeDisplayProp) ) {
 
-//								if(isTableChildElements) {
-								that.detectErrorAndWarn('error', changeDisplayProp, that.displayChangeableProperties, elemData, isEmptyElements, false);
-//								} else {
-//									that.detectErrorAndWarn('warning', changeDisplayProp, that.displayChangeableProperties, elemData, isEmptyElements, isReplacedElem);
-//								}
-
-								elemData.isDisplayPropChanged = false;
-							}
-						}
+						elemData.isDisplayPropChanged = true;
+						that.detectErrorAndWarn('error', changeDisplayProp, that.displayChangeableProperties, elemData, isEmptyElements, false);
+						elemData.isDisplayPropChanged = false;
 					}
+				}
+			}
 
+			//空要素の場合　TODO: インスタンス変数に格納　こうゆうの→that.emptyElemRulesData['warning-styles']
+			if(isEmptyElements) {
 
-					//空要素の場合　TODO: インスタンス変数に格納　こうゆうの→that.emptyElemRulesData['warning-styles']
-					if( isEmptyElements ) {
-
-						//警告スタイル毎に検査
-						for (var emptyElemWarningProp in that.emptyElemRulesData['warning-styles']) {
-							if (that.emptyElemRulesData['warning-styles'].hasOwnProperty(emptyElemWarningProp)) {
-								that.detectErrorAndWarn('warning', emptyElemWarningProp, that.emptyElemRulesData['warning-styles'], elemData, isEmptyElements, false);
-							}
-						}
-
-						//エラースタイル毎に検査
-						for (var emptyElemErrorProp in that.emptyElemRulesData['error-styles']) {
-							if (that.emptyElemRulesData['error-styles'].hasOwnProperty(emptyElemErrorProp)) {
-								that.detectErrorAndWarn('error', emptyElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, isEmptyElements, false);
-							}
-						}
+				//警告スタイル毎に検査
+				for (var emptyElemWarningProp in that.emptyElemRulesData['warning-styles']) {
+					if (that.emptyElemRulesData['warning-styles'].hasOwnProperty(emptyElemWarningProp)) {
+						that.detectErrorAndWarn('warning', emptyElemWarningProp, that.emptyElemRulesData['warning-styles'], elemData, isEmptyElements, false);
 					}
-
 				}
 
+				//エラースタイル毎に検査
+				for (var emptyElemErrorProp in that.emptyElemRulesData['error-styles']) {
+					if (that.emptyElemRulesData['error-styles'].hasOwnProperty(emptyElemErrorProp)) {
+						that.detectErrorAndWarn('error', emptyElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, isEmptyElements, false);
+					}
+				}
 			}
 		}
 
