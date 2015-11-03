@@ -758,6 +758,8 @@ STYLEV.RULES_EDITOR = {
 				input.value = ruleStyles;
 
 				if(id === 'reference-url') {
+					//URLができ次第復活させる
+					target.style.setProperty('display', 'none');
 					var anchor = target.querySelector('a');
 					if(anchor) {
 						anchor.href = ruleStyles;
