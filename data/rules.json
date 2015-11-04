@@ -79,7 +79,7 @@
 		},
 		"error-styles": {
 			"padding": "over-0",
-			"position": "!default"
+			"position": "relative"
 		},
 		"warning-styles": {
 			"vertical-align": "!default",
@@ -98,8 +98,15 @@
 		"base-styles": {
 			"display": "table"
 		},
+		"error-styles": {
+			"position": "relative"
+		},
 		"warning-styles": {
-			"max-height": "!default"
+			"max-height": "!default",
+			"max-width": "!default",
+			"min-height": "!default",
+			"min-width": "!default",
+			"vertical-align": "!default"
 		},
 		"parent-error-styles": {
 			"display": "![none|block|inline-block|list-item|table-cell]"
@@ -357,12 +364,12 @@
 		"reference-url": "http://www.leihauoli.com"
 	},
 	{
-		"title": "No Clearfix Float Element",
+		"title": "Float Element",
 		"base-styles": {
 			"float": "!default"
 		},
-		"pseudo-after-error-styles": {
-			"clear": "default"
+		"warning-styles": {
+			"display": "![block|list-item|table]"
 		},
 		"reference-url": "http://www.leihauoli.com"
 	},
@@ -376,6 +383,9 @@
 	{
 		"title": "Empty Elements",
 		"empty": "Empty elements",
+		"warning-styles": {
+			"padding": "over-0"
+		},
 		"pseudo-before-error-styles": {
 			"content": "!default"
 		},
