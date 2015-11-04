@@ -63,13 +63,21 @@ body {
 .wrapper {
 	display: flex;
 	flex-direction: column;
+	padding-top: 105px;
 }
 /* header */
 .header {
 	display: flex;
-	padding: 4%;
+	padding: 1% 4%;
 	line-height: 32px;
 	font-size: 22px;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 1;
+	background: white;
+	border-bottom: 1px solid #478440;
 }
 .header-heading {
 	flex-grow: 1;
@@ -97,7 +105,7 @@ body {
 	justify-content: flex-end;
 }
 .header > nav > * + * {
-	border-left: 1px solid white;
+	margin-left: 5px;
 }
 /* main */
 .main {
@@ -119,13 +127,10 @@ body {
 .styles-list-wrapper > li {
 	position: relative;
 	margin-bottom: 20px;
-	/*flex-grow: 1;*/
-	/*flex-shrink: 1;*/
-	/*flex-basis: 33.3333%;*/
 	padding: 12% 4% 4%;
 	background: white;
-	/*border-left: 5px solid #478440;*/
 	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
+	border: 1px solid #DDD;
 }
 .styles-list-wrapper > li h3 {
 	color: gray;
@@ -262,10 +267,12 @@ button,
 	color: white !important;
 	border: 0;
 	font-size: 14px;
-	padding: 3% 4%;
+	padding: 3% 4% 2%;
 	cursor: pointer;
 	text-align: center;
 	text-decoration: none !important;
+	border-radius: 4px;
+	border-bottom: 2px solid #3A443A;
 }
 .header > nav button,
 .header > nav .button {
