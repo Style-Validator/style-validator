@@ -1698,7 +1698,7 @@ STYLEV.chromeExtension = {
 
 		execute: function(inspectOfConsoleAPI) {
 
-			var that = STYLEV.chromeExtension;
+			var that = STYLEV.bind2DevToolsInspect;
 
 			//エラーや警告が１件もなければ何もしない
 			if(STYLEV.VALIDATOR.messageArray.length === 0) {
