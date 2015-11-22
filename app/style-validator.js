@@ -68,7 +68,7 @@ STYLEV.VALIDATOR = {
 	//実行するための関数
 	execute: function(callback) {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//インスタンス変数などを設定
 		that.setParameters();
@@ -111,7 +111,7 @@ STYLEV.VALIDATOR = {
 	},
 
 	insertLibraryOnBookmarklet: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		if(STYLEV.isBookmarklet) {
 			that.scriptTag = document.createElement('script');
@@ -123,7 +123,7 @@ STYLEV.VALIDATOR = {
 	},
 
 	send2GA: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		var currentGA = that.head.querySelector('#stylev-ga');
 
@@ -145,7 +145,7 @@ STYLEV.VALIDATOR = {
 	//インスタンス変数の定義
 	setParameters: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//要素の取得
 		that.html = document.querySelector('html');
@@ -189,6 +189,7 @@ STYLEV.VALIDATOR = {
 
 	//Ajaxでデータを取得する関数
 	getURL: function(url) {
+		var that = STYLEV.VALIDATOR;
 
 		return new Promise(function (resolve, reject) {
 			var req = new XMLHttpRequest();
@@ -208,6 +209,7 @@ STYLEV.VALIDATOR = {
 	},
 
 	updateOptions: function() {
+		var that = STYLEV.VALIDATOR;
 
 		return new Promise(function(resolve, reject) {
 
@@ -247,7 +249,7 @@ STYLEV.VALIDATOR = {
 
 		console.info('Validator Started');
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//DOM情報などを初期化
 		that.initializeBeforeValidation();
@@ -489,7 +491,7 @@ STYLEV.VALIDATOR = {
 	//バリデーション実行直前の初期化処理
 	initializeBeforeValidation: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//HTMLタグを判定する用の正規表現
 		that.regexEmptyElem = new RegExp('^( ' + that.tagsEmptyData.join(' | ') + ' )');
@@ -538,7 +540,7 @@ STYLEV.VALIDATOR = {
 	//エラーや警告を検知する TODO: propertyも事前に引数として渡して良いのでは？
 	detectErrorAndWarn: function(type, ngStyleRulesProp, ngStyleRules, elemData, isEmptyElements, isParentCheck, pseudoSelector) {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//メッセージ管理するオブジェクト
 		var message = {};
@@ -709,7 +711,7 @@ STYLEV.VALIDATOR = {
 
 	//監視開始
 	connectObserve: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//監視対象の属性を指定
 		var targetAttributes = [
@@ -863,7 +865,7 @@ STYLEV.VALIDATOR = {
 	//スタイルシート挿入
 	insertStylesheet: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//Extensionが稼働している場合
 		if(STYLEV.isUsingExtension) {
@@ -888,7 +890,7 @@ STYLEV.VALIDATOR = {
 
 	//スタイルシートを削除
 	removeStylesheet: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var targetLink = document.querySelector('#stylev-stylesheet');
@@ -900,7 +902,7 @@ STYLEV.VALIDATOR = {
 
 	//コンソールを削除
 	removeConsole: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var html = document.querySelector('html');
@@ -927,7 +929,7 @@ STYLEV.VALIDATOR = {
 	//デフォルトスタイルを取得するために、ダミーiframeを挿入
 	insertIframe4getDefaultStyles: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var dummyIFrame = document.querySelector('#stylev-dummy-iframe');
@@ -954,7 +956,7 @@ STYLEV.VALIDATOR = {
 
 	//ダミーiframeを削除
 	removeIframe4getDefaultStyles: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var dummyIFrame = document.querySelector('#stylev-dummy-iframe');
@@ -967,7 +969,7 @@ STYLEV.VALIDATOR = {
 
 	//全要素のclassを削除する関数
 	removeAllAttrAndEvents: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		var allElem = document.querySelectorAll('*');
 		var html = document.querySelector('html');
@@ -989,7 +991,7 @@ STYLEV.VALIDATOR = {
 	//結果を表示させる
 	showConsole: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//ドキュメンとフラグメント
 		that.docFlag = document.createDocumentFragment();
@@ -1050,7 +1052,7 @@ STYLEV.VALIDATOR = {
 
 	doAfterParsedConsole: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		setTimeout(function() {
 
@@ -1073,7 +1075,7 @@ STYLEV.VALIDATOR = {
 
 	send2ChromeExtension: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		if(STYLEV.isChromeExtension) {
 
@@ -1102,7 +1104,7 @@ STYLEV.VALIDATOR = {
 	//前回開いた状態を復元する
 	restorePreviousCondition: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//前回のスクロール値まで移動　それがなければ、0がはいる
 		setTimeout(function() {
@@ -1134,7 +1136,7 @@ STYLEV.VALIDATOR = {
 	//コンソール内に表示させる結果の要素を生成
 	createMessagesInConsole: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//エラーや警告が1件もなかった場合
 		if(that.messageArray.length === 0) {
@@ -1192,7 +1194,7 @@ STYLEV.VALIDATOR = {
 
 	//コンソール関連のイベントを登録
 	bindEvents4Console: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 
 		that.consoleHeader.addEventListener('mousedown', function(event) {
@@ -1235,7 +1237,7 @@ STYLEV.VALIDATOR = {
 	//コンソール内の動作
 	actionInConsole: function(messageArray) {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
@@ -1272,7 +1274,7 @@ STYLEV.VALIDATOR = {
 	//ページ内の要素に対する動作
 	toggleSelected: function() {
 
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		//エラーや警告が１件もなければ何もしない
 		if(that.messageArray.length === 0) {
@@ -1343,7 +1345,7 @@ STYLEV.VALIDATOR = {
 
 	//全てを削除
 	destroy: function() {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		that.removeAllAttrAndEvents();
 		that.removeConsole();
@@ -1361,7 +1363,7 @@ STYLEV.VALIDATOR = {
 	},
 
 	setStyleDataBySelectors: function(document) {
-		var that = this;
+		var that = STYLEV.VALIDATOR;
 
 		var stylesheets = document.styleSheets;
 
@@ -1608,7 +1610,7 @@ STYLEV.methods = {
 		//対象要素の位置取得
 		getTargetPos: function(start, end, elapsed, duration) {
 
-			var that = this;
+			var that = STYLEV.methods;
 
 			if (elapsed > duration) return end;
 			return start + (end - start) * that.easeInOutCubic(elapsed / duration); // <-- you can change the easing funtion there
@@ -1617,7 +1619,7 @@ STYLEV.methods = {
 		//実行
 		execute: function(target, duration) {
 
-			var that = this;
+			var that = STYLEV.methods;
 
 			var duration = duration || 500;
 			var scrollTopY = window.pageYOffset;
@@ -1696,7 +1698,7 @@ STYLEV.chromeExtension = {
 
 		execute: function(inspectOfConsoleAPI) {
 
-			var that = this;
+			var that = STYLEV.chromeExtension;
 
 			//エラーや警告が１件もなければ何もしない
 			if(STYLEV.VALIDATOR.messageArray.length === 0) {
@@ -1710,7 +1712,7 @@ STYLEV.chromeExtension = {
 		},
 
 		setParameters: function() {
-			var that = this;
+			var that = STYLEV.chromeExtension;
 
 			//TODO: 全体的に、再取得と削除できないか調査
 			that.consoleWrapper = document.querySelector('#stylev-console-wrapper');
@@ -1723,7 +1725,7 @@ STYLEV.chromeExtension = {
 		},
 
 		bindEvents: function() {
-			var that = this;
+			var that = STYLEV.chromeExtension;
 
 			for(var i = 0, len = that.triggers.length; i < len; i++) {
 				that.triggers[i].addEventListener('click', that.inspectFromConsole, false);

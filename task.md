@@ -1,3 +1,15 @@
+- ルールに柔軟性を
+- レイハウオリのコーディングガイドラインに準拠するかのバリデートルールを
+- ルールセットを選べるようにする　JetBrainsのUIを参考に
+- fetch APIを調査して使う
+- serviceWorkersを調査して使う
+- classListAPIが使えるなら直す
+- 今動いていないので、直す
+- クローリングして、統計をとる
+- ログ解析に、エラーの種類を飛ばす処理を組み込み
+- phantomCSSなどBackgroundで描画させてー検証みたいなことができるか超あs
+- JetBrainsに組み込める領域があるか調査
+- seleniumなどの連携について調査
 - ルール編集画面、フォーカスでいけるようにする
 - インライン要素でサイズ指定可能な要素は、getComputedStyleのwidthの値がpxかautoかで判定する　※http://jsbin.com/julocac/1/edit?html,js,output
 - ルールが表で閲覧できるように自動生成機能をつける
