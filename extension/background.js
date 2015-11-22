@@ -95,7 +95,7 @@ function modifyAndInsertFiles2Tab(tabId) {
 
 		chrome.tabs.executeScript(tabId, {
 
-			file: "./extension/devtools-detect.js"
+			file: "./devtools-detect.js"
 
 		}, function(result) {
 
@@ -118,11 +118,11 @@ function modifyAndInsertFiles2Tab(tabId) {
 
 				chrome.tabs.insertCSS(newTabId, {
 					allFrames: true,
-					file: 'app/style-validator.css'
+					file: './style-validator.css'
 				});
 				chrome.tabs.executeScript(newTabId, {
 					allFrames: true,
-					file: 'app/style-validator.js'
+					file: './style-validator.js'
 				});
 
 				chrome.tabs.remove(tabId);
@@ -134,11 +134,11 @@ function modifyAndInsertFiles2Tab(tabId) {
 
 				chrome.tabs.insertCSS(tabId, {
 					allFrames: true,
-					file: 'app/style-validator.css'
+					file: './style-validator.css'
 				});
 				chrome.tabs.executeScript(tabId, {
 					allFrames: true,
-					file: 'app/style-validator.js'
+					file: './style-validator.js'
 				});
 			});
 		}

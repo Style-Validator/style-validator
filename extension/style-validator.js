@@ -167,11 +167,11 @@ STYLEV.VALIDATOR = {
 			CONSOLE_HEADING_TEXT: 'Style Validator',
 			CONSOLE_HEADER_DEFAULT_HEIGHT: 200,
 			STYLESHEET_ID: 'stylev-stylesheet',
-			STYLESHEET_PATH: that.RESOURCE_ROOT + 'app/style-validator.css',
-			SPECIFICITY_PATH: that.RESOURCE_ROOT + 'extension/specificity.js',
-			GA_PATH: that.RESOURCE_ROOT + './extension/google-analytics.js',
+			STYLESHEET_PATH: that.RESOURCE_ROOT + 'style-validator.css',
+			SPECIFICITY_PATH: that.RESOURCE_ROOT + 'specificity.js',
+			GA_PATH: that.RESOURCE_ROOT + 'google-analytics.js',
 			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
-			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/',
+			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/Style-Validator/',
 			RULES_PATH: that.RESOURCE_ROOT + 'data/rules.json',
 			RULES_BY_EMPTY_TAG_PATH: that.RESOURCE_ROOT + 'data/rules-by-empty-tags.json',
 			TAGS_ALL_PATH: that.RESOURCE_ROOT + 'data/tags-all.json',
@@ -1000,9 +1000,9 @@ STYLEV.VALIDATOR = {
 		that.consoleWrapperShadowRoot = that.consoleWrapper.createShadowRoot();
 
 		if(STYLEV.isChromeExtension) {
-			that.consoleWrapperShadowRoot.innerHTML = '<style>@import "' + STYLEV.chromeExtension.RESOURCE_ROOT + 'app/style-validator-for-console.css' + '";</style>';
+			that.consoleWrapperShadowRoot.innerHTML = '<style>@import "' + STYLEV.chromeExtension.RESOURCE_ROOT + 'style-validator-for-console.css' + '";</style>';
 		} else {
-			that.consoleWrapperShadowRoot.innerHTML = '<style>@import "' + that.settings.SERVER_RESOURCE_ROOT + 'app/style-validator-for-console.css' + '";</style>';
+			that.consoleWrapperShadowRoot.innerHTML = '<style>@import "' + that.settings.SERVER_RESOURCE_ROOT + 'style-validator-for-console.css' + '";</style>';
 		}
 
 		that.consoleHeader = document.createElement('header');

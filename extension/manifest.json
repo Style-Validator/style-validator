@@ -2,20 +2,20 @@
 
 	"manifest_version": 2,
 	"name": "Style Validator",
-	"version": "0.2.7",
+	"version": "0.2.8",
 
 	"description": "Style Validator is a new html/css validator that detect styling problem for each html elements in conjunction with Chrome DevTools.",
 	"icons": {
 
-		"16": "./extension/style-validator.logo_16x16.png",
-		"48": "./extension/style-validator.logo_200x200.png",
-		"128": "./extension/style-validator.logo_200x200.png"
+		"16": "./style-validator.logo_16x16.png",
+		"48": "./style-validator.logo_200x200.png",
+		"128": "./style-validator.logo_200x200.png"
 	},
 
 	"browser_action": {
 		"default_icon": {
-			"19": "./extension/style-validator.logo_200x200.png",
-			"38": "./extension/style-validator.logo_200x200.png"
+			"19": "./style-validator.logo_200x200.png",
+			"38": "./style-validator.logo_200x200.png"
 		},
 		"default_title": "Style Validator"
 	},
@@ -23,7 +23,7 @@
 	"author": "Igari Takeharu",
 
 	"background": {
-		"page": "./extension/background.html",
+		"page": "./background.html",
 		"persistent": false
 	},
 
@@ -34,14 +34,14 @@
 				"https://*/*",
 				"http://*/*"
 			],
-			"css": ["./app/style-validator.css"],
-			"js": ["./extension/specificity.js", "./app/style-validator.js"]
+			"css": ["./style-validator.css"],
+			"js": ["./specificity.js", "./style-validator.js"]
 		}
 	],
 
-	"devtools_page": "./extension/devtools.html",
+	"devtools_page": "./devtools.html",
 
-	"options_page": "./extension/options.html",
+	"options_page": "./options.html",
 
 	"commands": {
 		"toggle-validation": {
@@ -53,7 +53,7 @@
 		}
 	},
 
-	"homepage_url": "http://style-validator.github.io/",
+	"homepage_url": "http://style-validator.github.io/Style-Validator/",
 
 	"offline_enabled": true,
 
@@ -67,9 +67,9 @@
 		"data/tags-replaced-element.json",
 		"data/tags-table-children.json",
 		"data/displayChangeableProperties.json",
-		"app/style-validator-for-console.css",
-		"extension/specificity.js",
-		"extension/google-analytics.js"
+		"style-validator-for-console.css",
+		"specificity.js",
+		"google-analytics.js"
 	],
 
 	"permissions": [

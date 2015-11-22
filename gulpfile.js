@@ -14,10 +14,10 @@ gulp.task('generate', function () {
 
   var header = new Buffer('javascript:');
 
-  gulp.src('app/{,*/}*.js')
+  gulp.src('extension/style-validator.js')
     .pipe(gulpJshint())
     .pipe(gulpUglify())
-    .pipe(gulpConcat('style-validator.js'))
+    .pipe(gulpConcat('style-validator.js'))//TODO: needless?
     .pipe(map(function (file, cb) {
       file.contents = buffer.Buffer.concat([header, file.contents]);
       cb(null, file);
@@ -28,7 +28,7 @@ gulp.task('generate', function () {
 gulp.task('clean', del.bind(null, 'bookmarklet'));
 
 gulp.task('watch', function () {
-	var watcher = gulp.watch('app/{,*/}*.js', ['generate']);
+	var watcher = gulp.watch('extension/style-validator.js', ['generate']);
 	watcher.on('change', function(event) {
 		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
 	});
