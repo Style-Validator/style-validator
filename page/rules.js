@@ -687,7 +687,7 @@ STYLEV.RULES_EDITOR = {
 
 		return new Promise(function(resolve, reject) {
 
-			that.getURL('../data/rules.json')
+			that.getURL('../extension/data/rules.json')
 				.then(JSON.parse)
 				.then(function(data) {
 
