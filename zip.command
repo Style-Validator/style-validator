@@ -1,3 +1,2 @@
-cd ../
 rm -rf Style-Validator.zip
-zip -r Style-Validator.zip Style-Validator -x Style-Validator/node_modules\* Style-Validator/.*\* Style-Validator/dist\* Style-Validator/*.txt Style-Validator/*.md Style-Validator/*.command page\* Style-Validator/gulpfile.js Style-Validator/index.html Style-Validator/index-style.css Style-Validator/favicon.ico Style-Validator/package.json Style-Validator/img\* Style-Validator/docs\*
+zip -r Style-Validator.zip extension
