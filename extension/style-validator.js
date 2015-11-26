@@ -1381,7 +1381,7 @@ STYLEV.VALIDATOR = {
 				var cssRule = cssRules[j];
 
 				//TODO: support media query and keyframes and etc....
-				if(cssRule.media || cssRule.style === undefined) {
+				if(cssRule.media || cssRule.style === undefined || cssRule.selectorText === undefined) {
 					continue;
 				}
 
