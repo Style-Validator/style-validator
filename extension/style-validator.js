@@ -913,12 +913,12 @@ STYLEV.VALIDATOR = {
 
 			html.removeChild(consoleWrapper);
 
-			var triggers = consoleWrapper.shadowRoot.querySelectorAll('a');
-
-			for(var i = 0, len = triggers.length; i < len; i++) {
-				var trigger = triggers[i];
-				trigger.removeEventListener('click');//TODO: 関数を指定する
-			}
+//			var triggers = consoleWrapper.shadowRoot.querySelectorAll('a');
+//
+//			for(var i = 0, len = triggers.length; i < len; i++) {
+//				var trigger = triggers[i];
+//				trigger.removeEventListener('click');//TODO: 関数を指定する
+//			}
 
 			//ログ表示領域分の余白を初期化
 			html.style.setProperty('border-bottom-width', that.htmlDefaultBorderBottomWidth, '');
@@ -1026,15 +1026,15 @@ STYLEV.VALIDATOR = {
 		that.consoleCloseButton.href = 'javascript: void(0);';
 		that.consoleList.id = that.settings.CONSOLE_LIST_ID;
 
-		//コンソールヘッダに表示させるテキストの設定
-		that.consoleHeading.textContent = that.settings.CONSOLE_HEADING_TEXT;
-		that.consoleTotalNum.textContent = 'Total: ' + that.messageArray.length + ' / Error: ' + that.errorNum + ' / warning: ' + that.warningNum;
-
 		//コンソール内に表示させる結果の要素を生成
 		that.createMessagesInConsole();
 
 		//コンソール関連の動作のイベントの登録
 		that.bindEvents4Console();
+
+		//コンソールヘッダに表示させるテキストの設定
+		that.consoleHeading.textContent = that.settings.CONSOLE_HEADING_TEXT;
+		that.consoleTotalNum.textContent = 'Total: ' + that.messageArray.length + ' / Error: ' + that.errorNum + ' / warning: ' + that.warningNum;
 
 		//コンソール内に挿入するHTML要素を挿入 TODO: 同じ記述をまとめる
 		that.consoleHeader.appendChild(that.consoleHeading);
@@ -1145,10 +1145,9 @@ STYLEV.VALIDATOR = {
 			that.congratulationsMessage.dataset.stylevclass = 'stylev-console-perfect';
 			that.congratulationsMessage.textContent = that.settings.CONGRATULATION_MESSAGE_TEXT;
 			that.docFlag.appendChild(that.congratulationsMessage);
-		}
 
 		//エラーや警告が存在した場合
-		else {
+		} else {
 
 			//メッセージの数だけループ
 			for(var i = 0, len = that.messageArray.length; i < len; i++) {
@@ -1610,7 +1609,7 @@ STYLEV.methods = {
 		//対象要素の位置取得
 		getTargetPos: function(start, end, elapsed, duration) {
 
-			var that = STYLEV.methods;
+			var that = STYLEV.methods.smoothScroll;
 
 			if (elapsed > duration) return end;
 			return start + (end - start) * that.easeInOutCubic(elapsed / duration); // <-- you can change the easing funtion there
@@ -1619,7 +1618,7 @@ STYLEV.methods = {
 		//実行
 		execute: function(target, duration) {
 
-			var that = STYLEV.methods;
+			var that = STYLEV.methods.smoothScroll;
 
 			var duration = duration || 500;
 			var scrollTopY = window.pageYOffset;
