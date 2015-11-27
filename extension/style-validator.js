@@ -1400,9 +1400,11 @@ STYLEV.VALIDATOR = {
 
 					var selectorOfCssRules = specificityObjectOfCssRules.selector;
 					var specificityOfCssRules = parseInt(specificityObjectOfCssRules.specificity.replace(/,/g, ''), 10);
-
-					var targetsFromCssRules = document.querySelectorAll(selectorOfCssRules);
-
+					try {
+						var targetsFromCssRules = document.querySelectorAll(selectorOfCssRules);
+					} catch(e){
+						continue;
+					}
 					for(var l = 0, targetsLength = targetsFromCssRules.length; l < targetsLength; l++) {
 
 						var target = targetsFromCssRules[l];
