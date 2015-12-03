@@ -328,6 +328,7 @@ STYLEV.VALIDATOR = {
 				var parentErrorRules = rule['parent-error-styles'];
 				var parentWarningRules = rule['parent-warning-styles'];
 				var replaced = rule['replaced'];
+				var empty = rule['empty'];
 
 				//TODO: 以下に対応させる
 				var pseudoBeforeErrorRules = rule['pseudo-before-error-styles'];
@@ -344,8 +345,16 @@ STYLEV.VALIDATOR = {
 					(replaced === 'Replaced elements' && isReplacedElemTag) ||
 					(replaced === 'Non-replaced elements' && !isReplacedElemTag) ||
 					(replaced === undefined);
+
 				if(!isReplacedRuleOK) {
 					continue;
+				}
+
+				//空要素用のルールだった場合は、空要素でない場合は、中止
+				if(empty === 'Empty elements') {
+					if(!isEmptyElements) {
+						continue;
+					}
 				}
 
 				//全てのベーススタイルの分だけ検査
