@@ -83,12 +83,10 @@ STYLEV.VALIDATOR = {
 		Promise
 			.all([
 				that.getURL(that.settings.RULES_PATH).then(JSON.parse),
-				that.getURL(that.settings.RULES_BY_EMPTY_TAG_PATH).then(JSON.parse),
 				that.getURL(that.settings.TAGS_ALL_PATH).then(JSON.parse),
 				that.getURL(that.settings.EMPTY_TAGS_PATH).then(JSON.parse),
 				that.getURL(that.settings.TAGS_REPLACED_ELEMENT_PATH).then(JSON.parse),
-				that.getURL(that.settings.TAGS_TABLE_CHILDREN_PATH).then(JSON.parse),
-				that.getURL(that.settings.DISPLAY_PROP_CHANGEABLE_PROPERTIES_PATH).then(JSON.parse)
+				that.getURL(that.settings.TAGS_TABLE_CHILDREN_PATH).then(JSON.parse)
 			])
 			.then(function(dataArray) {
 
@@ -173,12 +171,10 @@ STYLEV.VALIDATOR = {
 			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
 			SERVER_RESOURCE_ROOT: 'https://style-validator.github.io/Style-Validator/',
 			RULES_PATH: that.RESOURCE_ROOT + 'data/rules.json',
-			RULES_BY_EMPTY_TAG_PATH: that.RESOURCE_ROOT + 'data/rules-by-empty-tags.json',
 			TAGS_ALL_PATH: that.RESOURCE_ROOT + 'data/tags-all.json',
 			EMPTY_TAGS_PATH: that.RESOURCE_ROOT + 'data/tags-empty.json',
 			TAGS_REPLACED_ELEMENT_PATH: that.RESOURCE_ROOT + 'data/tags-replaced-element.json',
 			TAGS_TABLE_CHILDREN_PATH: that.RESOURCE_ROOT + 'data/tags-table-children.json',
-			DISPLAY_PROP_CHANGEABLE_PROPERTIES_PATH: that.RESOURCE_ROOT + 'data/displayChangeableProperties.json',
 			CONNECTED_2_DEVTOOLS_MESSAGE: 'Connected to DevTools',
 			DISCONNECTED_2_DEVTOOLS_MESSAGE: 'Disconnected to DevTools',
 			CONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-devtools',
@@ -376,6 +372,7 @@ STYLEV.VALIDATOR = {
 				}
 
 
+				//TODO: 以下の処理をまとめる
 				//全てのベーススタイルに適合した場合 TODO: ORもオプションで指定できるようにするか検討
 				if(hasAllBaseStyles) {
 
@@ -441,40 +438,6 @@ STYLEV.VALIDATOR = {
 
 				}
 			}
-
-			//デフォルトがブロック要素以外の場合は、Displayのプロパティ値を変化させるようなプロパティを指定してはいけない
-//			if( elemData.targetElemDefaultDisplayProp !== 'block' &&
-//				elemData.targetElemDefaultDisplayProp !== 'list-item' &&
-//				elemData.targetElemDefaultDisplayProp !== 'table' ) {
-//
-//				//Displayプロパティを変化させるプロパティを指定されている場合
-//				for (var changeDisplayProp in that.displayChangeableProperties) {
-//					if ( that.displayChangeableProperties.hasOwnProperty(changeDisplayProp) ) {
-//
-//						elemData.isDisplayPropChanged = true;
-//						that.detectErrorAndWarn('error', changeDisplayProp, that.displayChangeableProperties, elemData, isEmptyElements, false, rule);
-//						elemData.isDisplayPropChanged = false;
-//					}
-//				}
-//			}
-
-			//空要素の場合　TODO: インスタンス変数に格納　こうゆうの→that.emptyElemRulesData['warning-styles']
-//			if(isEmptyElements) {
-//
-//				//警告スタイル毎に検査
-//				for (var emptyElemWarningProp in that.emptyElemRulesData['warning-styles']) {
-//					if (that.emptyElemRulesData['warning-styles'].hasOwnProperty(emptyElemWarningProp)) {
-//						that.detectErrorAndWarn('warning', emptyElemWarningProp, that.emptyElemRulesData['warning-styles'], elemData, isEmptyElements, false, rule);
-//					}
-//				}
-//
-//				//エラースタイル毎に検査
-//				for (var emptyElemErrorProp in that.emptyElemRulesData['error-styles']) {
-//					if (that.emptyElemRulesData['error-styles'].hasOwnProperty(emptyElemErrorProp)) {
-//						that.detectErrorAndWarn('error', emptyElemErrorProp, that.emptyElemRulesData['error-styles'], elemData, isEmptyElements, false, rule);
-//					}
-//				}
-//			}
 		}
 
 		//デフォルトスタイル取得用のiframeを削除
@@ -685,11 +648,11 @@ STYLEV.VALIDATOR = {
 
 			//親要素を検査する場合
 			if(isParentCheck) {
-				message.text = '[' + rule['title'] + ']' + ' ' /*+ (isEmptyElements ? 'Empty Elements ' : '')*/ +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; display property of parent element is incorrect.(' + 'parent is ' + elemData.targetElemParentDisplayProp + ')';
+				message.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; display property of parent element is incorrect.(' + 'parent is ' + elemData.targetElemParentDisplayProp + ')';
 
 			//通常時
 			} else {
-				message.text = '[' + rule['title'] + ']' + ' ' /*+ (isEmptyElements ? 'Empty Elements ' : '')*/ +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; ' + ngStyleRulesProp + ': ' + targetElemNgStyleVal + ';' + (elemData.isDisplayPropChanged ? '(Display Property has changed.)' : '');
+				message.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; ' + ngStyleRulesProp + ': ' + targetElemNgStyleVal + ';' + (elemData.isDisplayPropChanged ? '(Display Property has changed.)' : '');
 			}
 
 			//要素のID名

@@ -26,7 +26,7 @@ function request(request, response){
 			request.on('end', function() {
 				response.setHeader("Content-Type", "application/json");
 				response.setHeader("Access-Control-Allow-Origin", "*");
-				fs.writeFile("./data/rules.json", store);
+				fs.writeFile("./extension/data/rules.json", store);
 				response.end(store);
 			});
 		}

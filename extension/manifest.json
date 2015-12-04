@@ -61,12 +61,10 @@
 
 	"web_accessible_resources": [
 		"data/rules.json",
-		"data/rules-by-empty-tags.json",
 		"data/tags-all.json",
 		"data/tags-empty.json",
 		"data/tags-replaced-element.json",
 		"data/tags-table-children.json",
-		"data/displayChangeableProperties.json",
 		"style-validator-for-console.css",
 		"specificity.js",
 		"google-analytics.js"
