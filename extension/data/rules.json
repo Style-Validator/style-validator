@@ -9,7 +9,7 @@
 		}
 	},
 	{
-		"title": "Non-replaced Inline Element",
+		"title": "Inline Elements (Non-replaced)",
 		"base-styles": {
 			"display": "inline"
 		},
@@ -27,11 +27,10 @@
 			"text-align": "!inherit",
 			"overflow": "!default",
 			"text-indent": "!default"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
-		"title": "Replaced Inline Element",
+		"title": "Inline Elements (Replaced)",
 		"base-styles": {
 			"display": "inline"
 		},
@@ -40,8 +39,7 @@
 			"padding": "over-0",
 			"text-align": "!inherit",
 			"overflow": "!default"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Block Element",
@@ -52,9 +50,11 @@
 			"vertical-align": "!default"
 		},
 		"parent-error-styles": {
-			"display": "![none|block|inline-block|list-item|table-cell|flex]"
+			"display": "[table|table-row-group|table-row|table-header-group|table-footer-group]"
 		},
-		"reference-url": "http://www.leihauoli.com"
+		"parent-warning-styles": {
+			"display": "![none|block|inline-block|list-item|table-cell|flex]"
+		}
 	},
 	{
 		"title": "Inline Block Element",
@@ -66,8 +66,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|inline|block|inline-block|list-item|table-cell|flex]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "List Item Element",
@@ -79,8 +78,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|block|inline-block|flex]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Inline Table Element",
@@ -100,8 +98,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|block|inline-block|list-item|table-cell]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Element",
@@ -120,8 +117,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|block|inline-block|list-item|table-cell]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Collapse Table Element",
@@ -131,8 +127,7 @@
 		},
 		"error-styles": {
 			"padding": "over-0"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Cell Element",
@@ -151,8 +146,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table|table-row|table-row-group|table-header-group|table-footer-group]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Row Element",
@@ -174,8 +168,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table|table-row-group|table-header-group|table-footer-group]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Row Group Element",
@@ -197,8 +190,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Header Group Element",
@@ -220,8 +212,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Footer Element",
@@ -243,8 +234,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Column Element",
@@ -265,8 +255,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table-column-group|table]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Column Element",
@@ -287,8 +276,7 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Table Caption Element",
@@ -300,78 +288,67 @@
 		},
 		"parent-error-styles": {
 			"display": "![none|table]"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Flex Element",
 		"base-styles": {
 			"display": "flex"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Inline Flex Element",
 		"base-styles": {
 			"display": "inline-flex"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Grid Element",
 		"base-styles": {
 			"display": "grid"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Ruby Element",
 		"base-styles": {
 			"display": "ruby"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Ruby Base Element",
 		"base-styles": {
 			"display": "ruby-base"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Ruby Text Element",
 		"base-styles": {
 			"display": "ruby-text"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Ruby Base Container Element",
 		"base-styles": {
 			"display": "ruby-base-container"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Ruby Text Container Element",
 		"base-styles": {
 			"display": "ruby-text-container"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Run-in Element",
 		"base-styles": {
 			"display": "run-in"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Contents Element",
 		"base-styles": {
 			"display": "contents"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Float Element",
@@ -380,15 +357,13 @@
 		},
 		"warning-styles": {
 			"display": "!default"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Negative Z-Index",
 		"warning-styles": {
 			"z-index": "under-0"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	},
 	{
 		"title": "Empty Elements",
@@ -401,7 +376,6 @@
 		},
 		"pseudo-after-error-styles": {
 			"content": "!default"
-		},
-		"reference-url": "http://www.leihauoli.com"
+		}
 	}
 ]

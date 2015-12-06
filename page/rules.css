@@ -29,10 +29,6 @@ ul {
 img {
 	vertical-align: middle;
 }
-code {
-	display: block;
-	cursor: copy;
-}
 input, select, textarea, button {
 	outline: 0;
 	background-color: inherit;
@@ -361,4 +357,8 @@ button,
 }
 .edit-mode .styles-list {
 	display: block !important;
+}
+
+.hide-rule {
+	display: none;
 }

@@ -81,11 +81,15 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	toggleEditMode: function(rulesListItem) {
+		var that = STYLEV.RULES_EDITOR;
+
 		return function() {
 			event.stopPropagation();
 			event.preventDefault();
 
 			if(rulesListItem.className.indexOf(' edit-mode') !== -1) {
+
+				that.updateShowing(rulesListItem);
 				rulesListItem.className = rulesListItem.className.replace(' edit-mode', '');
 				this.textContent = 'Edit';
 			} else {
@@ -94,6 +98,71 @@ STYLEV.RULES_EDITOR = {
 			}
 		};
 	},
+
+	updateShowing: function(rulesListItem) {
+		var that = STYLEV.RULES_EDITOR;
+
+		//TODO: データの有り無しで表示切り替え
+		var dataElements = rulesListItem.querySelectorAll('.styles-list, .styles-input, .styles-select');
+
+		for(var i = 0, len = dataElements.length; i < len; i++) {
+			var dataElement = dataElements[i];
+			var hasDataFlg = false;
+
+			if(dataElement.classList.contains('styles-list')) {
+				var inputLists = dataElement.querySelectorAll('input');
+				if(inputLists === null) {
+					hasDataFlg = false;
+					break;
+				}
+				for(var j = 0, inputListLen = inputLists.length; j < inputListLen; j++) {
+					var inputList = inputLists[j];
+					if(inputList.value) {
+						hasDataFlg = true;
+						break;
+					}
+				}
+			}
+			if(dataElement.classList.contains('styles-input')) {
+				var inputs = dataElement.querySelectorAll('input');
+				if(inputs === null) {
+					hasDataFlg = false;
+					break;
+				}
+				for(var k = 0, inputLen = inputs.length; k < inputLen; k++) {
+					var input = inputs[k];
+					if(input.value) {
+						hasDataFlg = true;
+						break;
+					}
+				}
+			}
+			if(dataElement.classList.contains('styles-select')) {
+				var selects = dataElement.querySelectorAll('select');
+				if(selects === null) {
+					hasDataFlg = false;
+					break;
+				}
+				for(var l = 0, selectsLen = selects.length; l < selectsLen; l++) {
+					var select = selects[l];
+					if(select.value) {
+						hasDataFlg = true;
+						break;
+					}
+				}
+			}
+
+
+			if(hasDataFlg) {
+				dataElement.classList.remove('hide-rule');
+			} else {
+				dataElement.classList.add('hide-rule');
+			}
+		}
+
+	},
+
+
 
 	removeTheRule: function(rulesListItem) {
 		return function() {
@@ -758,8 +827,9 @@ STYLEV.RULES_EDITOR = {
 				input.value = ruleStyles;
 
 				if(id === 'reference-url') {
-					//TODO: URLができ次第復活させる
-					target.style.setProperty('display', 'none', '');
+					//TODO: URLは強制的にdisplay: none;に。URLができ次第復活させる
+					target.classList.add('hide-rule');
+//					target.style.setProperty('display', 'none', '');
 					var anchor = target.querySelector('a');
 					if(anchor) {
 						anchor.href = ruleStyles;
@@ -770,7 +840,8 @@ STYLEV.RULES_EDITOR = {
 
 		} else {
 
-			target.style.setProperty('display', 'none', '');
+			target.classList.add('hide-rule');
+//			target.style.setProperty('display', 'none', '');
 		}
 	},
 
@@ -794,7 +865,7 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 		var json = [];
 
-		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li')
+		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
 
 		for(var r = 0, rulesListItemsLength = that.rulesListItems.length; r < rulesListItemsLength; r++) {
 
@@ -808,7 +879,7 @@ STYLEV.RULES_EDITOR = {
 				var dataElement = dataElements[i];
 				var id = dataElement.dataset.id;
 
-				if(dataElement.className === 'styles-select') {
+				if(dataElement.classList.contains('styles-select')) {
 
 					var styleSelect = dataElement;
 
@@ -819,7 +890,7 @@ STYLEV.RULES_EDITOR = {
 					}
 				}
 				
-				if(dataElement.className === 'styles-list') {
+				if(dataElement.classList.contains('styles-list')) {
 
 					var styleListItems = dataElement.querySelectorAll('li');
 
@@ -845,7 +916,7 @@ STYLEV.RULES_EDITOR = {
 					}
 				}
 
-				if(dataElement.className === 'styles-input') {
+				if(dataElement.classList.contains('styles-input')) {
 
 					var styleInput = dataElement;
 
