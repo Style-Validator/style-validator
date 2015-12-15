@@ -34,7 +34,7 @@
 				"https://*/*",
 				"http://*/*"
 			],
-			"css": ["./style-validator.css"],
+			"css": ["./style-validator-for-elements.css"],
 			"js": ["./specificity.js", "./style-validator.js"]
 		}
 	],
@@ -67,7 +67,8 @@
 		"data/tags-table-children.json",
 		"style-validator-for-console.css",
 		"specificity.js",
-		"google-analytics.js"
+		"google-analytics.js",
+		"iconmonstr-refresh-3-icon.svg"
 	],
 
 	"permissions": [

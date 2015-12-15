@@ -23,7 +23,7 @@
 	text-indent: 0 !important;
 }
 
-:host > header {
+:host .stylev-console-header {
 	position: relative;
 	background-color: #EEE;
 	border-top: 1px solid #A3A3A3;
@@ -37,10 +37,10 @@
 	box-sizing: border-box;
 	cursor: ns-resize;
 }
-:host > header:active {
+:host .stylev-console-header:active {
 	border-style: dashed;
 }
-:host > header > h1 {
+:host .stylev-console-heading {
 	font-size: 12px;
 	font-weight: normal;
 	width: auto;
@@ -48,7 +48,7 @@
 	float: left;
 	padding: 0 10px;
 }
-:host > header > h1:before {
+:host .stylev-console-heading:before {
 	content: '';
 	display: inline-block;
 	vertical-align: middle;
@@ -59,16 +59,16 @@
 	margin-right: 6px;
 	background-size: contain;
 }
-:host > header > h1:before {
+:host .stylev-console-heading:before {
 	background: url(https://style-validator.github.io/Style-Validator/img/style-validator.logo.black.svg) no-repeat center center;
 }
 @media (max-width: 460px) {
 
-	:host > header > h1 {
+	:host .stylev-console-heading {
 		display: none;
 	}
 }
-:host > header > p {
+:host .stylev-console-mode {
 	clear: none;
 	float: left;
 	padding-left: 30px;
@@ -78,24 +78,24 @@
 	background-size: 20px auto;
 }
 
-:host > header > p[data-stylevclass="stylev-console-mode-devtools"] {
+:host .stylev-console-mode[data-stylevclass="stylev-console-mode-devtools"] {
 	background-color: green;
 	background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-4-icon.svg);
 	color: white;
 }
-:host > header > p[data-stylevclass="stylev-console-mode-no-devtools"] {
+:host .stylev-console-mode[data-stylevclass="stylev-console-mode-no-devtools"] {
 	background-color: red;
 	background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-5-icon.svg);
 	color: white;
 }
 @media (max-width: 600px) {
-	:host > header > h1 {
+	:host .stylev-console-heading {
 		display: none;
 	}
 }
 
 @media (max-width: 450px) {
-	:host > header > p {
+	:host .stylev-console-mode {
 		width: 30px;
 		text-indent: 100%;
 		white-space: nowrap;
@@ -105,33 +105,45 @@
 	}
 }
 
-:host > header > div {
+:host .stylev-console-counter {
 	float: right;
 	padding: 0 10px;
 }
-:host > header {
-	padding-right: 30px;
-}
-:host > header > a {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	text-decoration: none;
-	color: inherit;
-	font-size: 20px;
-	line-height: 30px;
-	height: 30px;
-	margin: auto;
-	width: 30px;
-	text-align: center;
+:host .stylev-console-buttons {
+	float: right;
 	border-left: 1px solid #CCC;
 }
+:host .stylev-console-buttons > a {
+	position: relative;
+	float: left;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	margin: auto;
+	color: inherit;
+	text-align: center;
+	text-decoration: none;
+}
+:host .stylev-console-refresh-button {
+}
+:host .stylev-console-refresh-button-image {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 20px;
+	height: 20px;
+	margin: auto;
+}
+:host .stylev-console-close-button {
+	font-size: 20px;
+}
 
-:host > header > a:before {
+:host .stylev-console-close-button:before {
 	content: '×';
 }
-:host ul {
+:host .stylev-console-list {
 	position: absolute;
 	top: 30px;
 	right: 0;
@@ -140,35 +152,42 @@
 	list-style: none;
 	overflow-y: auto;
 }
-:host ul > li + li {
+:host .stylev-console-list > li + li {
 	border-top: 1px solid #EEE;
 }
-:host ul > li > a {
+:host .stylev-console-list > li > a {
 	display: block;
 	padding: 2px 5px;
 	color: #333;
 	text-decoration: none;
 	cursor: pointer;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	padding-right: 6em;
+	/*white-space: nowrap;*/
+	/*text-overflow: ellipsis;*/
+	/*overflow: hidden;*/
+	/*padding-right: 6em;*//*TODO: test001*/
+	text-indent: calc(-1.2em - 10px);
+	padding-left: calc(1.2em + 10px);
 }
-:host ul > li > a:hover,
-:host ul > li > a:hover span {
+:host .stylev-console-list > li > a:before,
+:host .stylev-console-list > li > a:after {
+	text-indent: 0;
+	margin-left: 5px;
+}
+:host .stylev-console-list > li > a:hover,
+:host .stylev-console-list > li > a:hover span {
 	text-decoration: underline;
 }
-:host ul > li[data-stylevclass*="stylev-trigger-error"] {
+:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-error"] {
 	border-color: #FFD8D7;
 }
-:host ul > li[data-stylevclass*="stylev-trigger-warning"] {
+:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-warning"] {
 	border-color: #FFDD9E;
 }
-:host ul > li[data-stylevclass*="stylev-trigger-error"] > a {
+:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-error"] > a {
 	background-color: #FFEFEF;
 	color: #FF0000;
 }
-:host ul > li[data-stylevclass*="stylev-trigger-error"] > a:before {
+:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-error"] > a:before {
 	content: '×';
 	display: inline-block;
 	width: 1.2em;
@@ -181,11 +200,11 @@
 	color: #FFF;
 	text-align: center;
 }
-:host ul > li[data-stylevclass*="stylev-trigger-warning"] > a {
+:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-warning"] > a {
 	background-color: #FFFBE5;
 	color: #444444;
 }
-:host ul > li[data-stylevclass*="stylev-trigger-warning"] > a:before {
+:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-warning"] > a:before {
 	content: '!';
 	display: inline-block;
 	width: 1.2em;
@@ -198,14 +217,15 @@
 	color: #FFF;
 	text-align: center;
 }
-:host ul > li[data-stylevclass*="stylev-trigger-selected"] > a {
+:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-selected"] > a {
 	font-weight: bold;
 }
 
-:host ul > li > a > span {
+:host .stylev-console-list > li > a > span {
 	position: absolute;
 	right: 0;
 	padding: 0 10px;
+	display: none;/*TODO: test001*/
 }
 
 

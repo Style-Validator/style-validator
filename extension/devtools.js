@@ -14,7 +14,7 @@ var isValidated = false;
 var executeWithInspect = function() {
 	chrome.devtools.inspectedWindow.eval(
 		"var bindInspect = function(){" +
-			"STYLEV.chromeExtension.bind2DevToolsInspect.execute(function(targetElem) {" +
+			"STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.execute(function(targetElem) {" +
 				"inspect(targetElem || $0);" +
 			"});" +
 		"};" +

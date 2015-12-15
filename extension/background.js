@@ -118,7 +118,7 @@ function modifyAndInsertFiles2Tab(tabId) {
 
 				chrome.tabs.insertCSS(newTabId, {
 					allFrames: true,
-					file: './style-validator.css'
+					file: './style-validator-for-elements.css'
 				});
 				chrome.tabs.executeScript(newTabId, {
 					allFrames: true,
@@ -134,7 +134,7 @@ function modifyAndInsertFiles2Tab(tabId) {
 
 				chrome.tabs.insertCSS(tabId, {
 					allFrames: true,
-					file: './style-validator.css'
+					file: './style-validator-for-elements.css'
 				});
 				chrome.tabs.executeScript(tabId, {
 					allFrames: true,

@@ -155,7 +155,7 @@ body {
 	position: absolute;
 	left: 8px;
 	color: #BBB;
-	line-height: 21px;
+	line-height: inherit;
 }
 
 .styles-list[data-id="base-styles"] li + li:before {

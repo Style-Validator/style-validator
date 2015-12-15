@@ -89,7 +89,7 @@ STYLEV.popup = {
 	executeValidate: function() {
 
 		chrome.tabs.executeScript({
-			code: "STYLEV.chromeExtension.execute();"
+			code: "STYLEV.CHROME_EXTENSION.execute();"
 		});
 	}
 };
