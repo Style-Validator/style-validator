@@ -945,7 +945,7 @@ STYLEV.VALIDATOR = {
 			allElem[i].removeAttribute('data-stylevid');
 			allElem[i].removeAttribute('data-stylevclass');
 			allElem[i].removeEventListener('click', STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.inspectFromElements);
-			allElem[i].removeEventListener('click', that.actionInBody);
+			allElem[i].removeEventListener('click', that.actionFromTargets);
 		}
 
 		if(html !== undefined) {
@@ -1150,7 +1150,7 @@ STYLEV.VALIDATOR = {
 				anchor.href = 'javascript: void(0);';
 
 				//クリックイベントを設定
-				anchor.addEventListener('click', that.actionInConsole.bind(that, that.messageArray[i]), false);
+				anchor.addEventListener('click', that.actionFromConsole.bind(that, that.messageArray[i]), false);
 
 				//テキスト情報を挿入
 				anchor.textContent = that.messageArray[i].text;
@@ -1226,8 +1226,8 @@ STYLEV.VALIDATOR = {
 		}
 	},
 
-	//コンソール内の動作
-	actionInConsole: function(messageArray) {
+	//コンソールからの動作
+	actionFromConsole: function(messageArray) {
 
 		var that = STYLEV.VALIDATOR;
 
@@ -1282,14 +1282,14 @@ STYLEV.VALIDATOR = {
 
 		for(var i = 0, len = that.targets.length; i < len; i++) {
 			var target = that.targets[i];
-			target.addEventListener('click', that.actionInBody, false);
+			target.addEventListener('click', that.actionFromTargets, false);
 		}
 
 		return false;
 	},
-	//TODO: actionInConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
+	//TODO: actionFromConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
 	//TODO: あと結構やっつけ処理になっているので後で整理
-	actionInBody: function() {
+	actionFromTargets: function() {
 
 		event.stopPropagation();
 		event.preventDefault();
