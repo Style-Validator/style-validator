@@ -73,12 +73,6 @@ STYLEV.VALIDATOR = {
 		//インスタンス変数などを設定
 		that.setParameters();
 
-		//ライブラリを挿入
-		that.insertLibs4Bookmarklet();
-
-		//GAに送信
-		that.insertGA();
-
 		//データを並列で非同期に取得し、全て終わったらそれぞれのインスタンス変数に格納
 		//TODO: Promiseチェーンをもっと上手く書けないか検討
 		Promise
@@ -212,6 +206,9 @@ STYLEV.VALIDATOR = {
 
 			for(var i = 0 , pathesArrayLen = pathesArray.length; i < pathesArrayLen; i++) {
 				var path = pathesArray[i];
+				if(that.head.querySelectorAll('script[src="' + path + '"]').length) {
+					continue;
+				}
 				that.scriptTag = document.createElement('script');
 				that.scriptTag.src = path;
 				df.appendChild(that.scriptTag);
@@ -485,7 +482,7 @@ STYLEV.VALIDATOR = {
 		//以下の処理の順序が重要
 
 		//再実行時かつ、監視がされていたら監視を切断
-		if(STYLEV.isReLoaded && that.isObserving) {
+		if(!STYLEV.isFirstExecution && that.isObserving) {
 			that.ovservationManager.disconnectObserve();
 		}
 
@@ -514,6 +511,12 @@ STYLEV.VALIDATOR = {
 		//Auto判定のためにDOMカスタムプロパティを全要素に付与
 		that.setStyleDataBySelectors(document);
 		that.setStyleDataBySelectors(that.iframeDocument);
+
+		//GAに送信
+		that.insertGA();
+
+		//ライブラリを挿入
+		that.insertLibs4Bookmarklet();
 
 	},
 
@@ -814,6 +817,8 @@ STYLEV.VALIDATOR = {
 			characterDataOldValue: true
 
 		};
+
+
 
 		that.observer.observe(document.querySelector('body'), observationConfig);
 		that.observer.observe(document.querySelector('head'), observationConfig);

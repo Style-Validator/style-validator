@@ -8,6 +8,12 @@
 	margin: 0;
 	padding: 0;
 }
+:host > * {
+	font-size: 12px;
+	font-family: 'メイリオ', 'Meiryo', sans-serif;
+	text-align: left;
+	text-indent: 0;
+}
 :host {
 	position: fixed;
 	right: 0;
@@ -16,12 +22,6 @@
 	z-index: 10000000000;
 	background: rgba(255, 255, 255, 0.8);
 	min-height: 30px;
-
-	/*inheritable*/
-	font-size: 12px !important;
-	font-family: 'メイリオ', 'Meiryo', sans-serif !important;
-	text-align: left !important;
-	text-indent: 0 !important;
 }
 
 :host .stylev-console-header {
