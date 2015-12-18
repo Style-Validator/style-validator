@@ -146,7 +146,7 @@ STYLEV.VALIDATOR = {
 			CONSOLE_LIST_ID: 'stylev-console-list',
 			STYLESHEET_ID: 'stylev-stylesheet',
 
-			CONSOLE_HEADER_DEFAULT_HEIGHT: 200,
+			CONSOLE_WRAPPER_DEFAULT_HEIGHT: 200,
 			CONSOLE_HEADING_TEXT: 'Style Validator',
 			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
 
@@ -163,10 +163,15 @@ STYLEV.VALIDATOR = {
 			TAGS_REPLACED_ELEMENT_PATH: that.RESOURCE_ROOT + 'data/tags-replaced-element.json',
 			TAGS_TABLE_CHILDREN_PATH: that.RESOURCE_ROOT + 'data/tags-table-children.json',
 			ICON_REFRESH_PATH: that.RESOURCE_ROOT + 'iconmonstr-refresh-3-icon.svg',
+			ICON_CLOSE_PATH: that.RESOURCE_ROOT + 'iconmonstr-x-mark-icon.svg',
+			ICON_MINIMIZE_PATH: that.RESOURCE_ROOT + 'iconmonstr-minus-2-icon.svg',
+			ICON_NORMALIZE_PATH: that.RESOURCE_ROOT + 'iconmonstr-plus-2-icon.svg',
+			ICON_CONNECTED_PATH: that.RESOURCE_ROOT + 'iconmonstr-link-4-icon.svg',
+			ICON_DISCONNECTED_PATH: that.RESOURCE_ROOT + 'iconmonstr-link-5-icon.svg',
+			ICON_LOGO_PATH: that.RESOURCE_ROOT + 'style-validator.logo.black.svg',
 
 			CONNECTED_2_DEVTOOLS_MESSAGE: 'Connected to DevTools',
 			DISCONNECTED_2_DEVTOOLS_MESSAGE: 'Disconnected to DevTools',
-
 			CONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-devtools',
 			DISCONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-no-devtools'
 		};
@@ -949,7 +954,7 @@ STYLEV.VALIDATOR = {
 		}
 
 		if(html !== undefined) {
-			html.removeEventListener('keyup', that.destroyOnEsc);
+			html.removeEventListener('keyup', that.destroyByEsc);
 		}
 
 	},
@@ -974,7 +979,11 @@ STYLEV.VALIDATOR = {
 		//要素を生成
 		that.consoleHeader = document.createElement('header');
 		that.consoleHeading = document.createElement('h1');
+		that.consoleHeadingLogo = document.createElement('a');
+		that.consoleHeadingLogoImage = document.createElement('img');
 		that.consoleMode = document.createElement('p');
+//		that.consoleModeConnectedImage = document.createElement('img');
+//		that.consoleModeDisconnectedImage = document.createElement('img');
 		that.consoleButtons = document.createElement('div');
 		that.consoleRefreshButton = document.createElement('a');
 		that.consoleRefreshButtonImage = document.createElement('img');
@@ -982,6 +991,11 @@ STYLEV.VALIDATOR = {
 		that.consoleBody = document.createElement('div');
 		that.consoleList = document.createElement('ul');
 		that.consoleCloseButton = document.createElement('a');
+		that.consoleCloseButtonImage = document.createElement('img');
+		that.consoleMinimizeButton = document.createElement('a');
+		that.consoleMinimizeButtonImage = document.createElement('img');
+		that.consoleNormalizeButton = document.createElement('a');
+		that.consoleNormalizeButtonImage = document.createElement('img');
 
 		//クリック時の判定
 		that.isMouseDownConsoleHeader = false;
@@ -996,6 +1010,9 @@ STYLEV.VALIDATOR = {
 		that.consoleList.id = that.settings.CONSOLE_LIST_ID;
 		that.consoleHeader.classList.add('stylev-console-header');
 		that.consoleHeading.classList.add('stylev-console-heading');
+		that.consoleHeadingLogo.classList.add('stylev-console-heading-logo');
+		that.consoleHeadingLogoImage.classList.add('stylev-console-heading-logo-image');
+		that.consoleHeadingLogoImage.src = that.settings.ICON_LOGO_PATH;
 		that.consoleMode.classList.add('stylev-console-mode');
 		that.consoleButtons.classList.add('stylev-console-buttons');
 		that.consoleRefreshButton.href = 'javascript: void(0);';
@@ -1007,6 +1024,17 @@ STYLEV.VALIDATOR = {
 		that.consoleList.classList.add('stylev-console-list');
 		that.consoleCloseButton.href = 'javascript: void(0);';
 		that.consoleCloseButton.classList.add('stylev-console-close-button');
+		that.consoleCloseButtonImage.classList.add('stylev-console-close-button-image');
+		that.consoleCloseButtonImage.src = that.settings.ICON_CLOSE_PATH;
+		that.consoleMinimizeButton.href = 'javascript: void(0);';
+		that.consoleMinimizeButton.classList.add('stylev-console-minimize-button');
+		that.consoleMinimizeButtonImage.classList.add('stylev-console-minimize-button-image');
+		that.consoleMinimizeButtonImage.src = that.settings.ICON_MINIMIZE_PATH;
+		that.consoleNormalizeButton.href = 'javascript: void(0);';
+		that.consoleNormalizeButton.hidden = true;
+		that.consoleNormalizeButton.classList.add('stylev-console-normalize-button');
+		that.consoleNormalizeButtonImage.classList.add('stylev-console-normalize-button-image');
+		that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
 
 		//コンソール内に表示させる結果の要素を生成
 		that.createMessagesInConsole();
@@ -1014,15 +1042,25 @@ STYLEV.VALIDATOR = {
 		//コンソール関連の動作のイベントの登録
 		that.bindEvents4Console();
 
-		//コンソールヘッダに表示させるテキストの設定
-		that.consoleHeading.textContent = that.settings.CONSOLE_HEADING_TEXT;
-		that.consoleCounter.textContent = 'Total: ' + that.messageArray.length + ' / Error: ' + that.errorNum + ' / warning: ' + that.warningNum;
+			//コンソールヘッダに表示させるテキストの設定
+		that.consoleHeadingText = document.createTextNode(that.settings.CONSOLE_HEADING_TEXT);
+		that.consoleCounter.textContent = 'Total: ' + that.messageArray.length + ' / Error: ' + that.errorNum + ' / Warning: ' + that.warningNum;
+
+		//ロゴを挿入
+		that.consoleHeadingLogo.appendChild(that.consoleHeadingLogoImage);
+		that.consoleHeadingLogo.appendChild(that.consoleHeadingText);
+		that.consoleHeading.appendChild(that.consoleHeadingLogo);
 
 		//ボタンの中に画像を配置
 		that.consoleRefreshButton.appendChild(that.consoleRefreshButtonImage);
+		that.consoleNormalizeButton.appendChild(that.consoleNormalizeButtonImage);
+		that.consoleMinimizeButton.appendChild(that.consoleMinimizeButtonImage);
+		that.consoleCloseButton.appendChild(that.consoleCloseButtonImage);
 
 		//コンソールヘッダにボタンを配置
 		that.consoleButtons.appendChild(that.consoleRefreshButton);
+		that.consoleButtons.appendChild(that.consoleMinimizeButton);
+		that.consoleButtons.appendChild(that.consoleNormalizeButton);
 		that.consoleButtons.appendChild(that.consoleCloseButton);
 
 		//コンソール内に挿入するHTML要素を挿入 TODO: 同じ記述をまとめる
@@ -1045,7 +1083,7 @@ STYLEV.VALIDATOR = {
 
 		setTimeout(function() {
 
-			that.consoleWrapper.style['height'] = (STYLEV.consoleWrapperHeight || that.settings.CONSOLE_HEADER_DEFAULT_HEIGHT) + 'px';
+			that.consoleWrapper.style.setProperty('height', (STYLEV.consoleWrapperHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT) + 'px', '');
 
 			//コンソールの包括要素のデフォルトの高さを計算し記憶しておく
 			that.consoleWrapperDefaultHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
@@ -1082,8 +1120,13 @@ STYLEV.VALIDATOR = {
 
 				if(message.isConnected2Devtools !== undefined) {
 
+					var consoleModeImage = document.createElement('img');
+					var consoleModeText = document.createTextNode(message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_MESSAGE : that.settings.DISCONNECTED_2_DEVTOOLS_MESSAGE);
+					consoleModeImage.classList.add('stylev-console-mode-image');
+					consoleModeImage.src = message.isConnected2Devtools ? that.settings.ICON_CONNECTED_PATH : that.settings.ICON_DISCONNECTED_PATH;
+					that.consoleMode.appendChild(consoleModeImage);
+					that.consoleMode.appendChild(consoleModeText);
 					STYLEV.methods.addClass(that.consoleMode, message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_CLASS : that.settings.DISCONNECTED_2_DEVTOOLS_CLASS);
-					that.consoleMode.textContent = message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_MESSAGE : that.settings.DISCONNECTED_2_DEVTOOLS_MESSAGE;
 				}
 			});
 		}
@@ -1192,15 +1235,24 @@ STYLEV.VALIDATOR = {
 		}, false);
 
 		that.html.addEventListener('mousemove', function(event) {
+
 			if(that.isMouseDownConsoleHeader) {
 				that.consoleCurrentPosY = event.pageY;
 				that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
-				that.consoleWrapper.style['height'] = (that.consoleWrapperDefaultHeight + that.consoleDiffPosY) + 'px';
-				this.style.setProperty('border-bottom-width', that.consoleWrapperDefaultHeight + that.consoleDiffPosY + 'px', 'important');
+				that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDefaultHeight + that.consoleDiffPosY) + 'px', '');
+				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDefaultHeight + that.consoleDiffPosY + 'px', 'important');
+
+				if(that.consoleWrapper.offsetHeight === 30) {
+					that.consoleNormalizeButton.hidden = false;
+					that.consoleMinimizeButton.hidden = true;
+				} else if(that.consoleWrapper.offsetHeight > 30) {
+					that.consoleNormalizeButton.hidden = true;
+					that.consoleMinimizeButton.hidden = false;
+				}
 			}
 		}, false);
 
-		that.html.addEventListener('mouseup', function() {
+		that.html.addEventListener('mouseup', function(event) {
 			that.isMouseDownConsoleHeader = false;
 			that.consoleWrapperDefaultHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
 			STYLEV.consoleWrapperHeight = that.consoleWrapperDefaultHeight;
@@ -1214,10 +1266,22 @@ STYLEV.VALIDATOR = {
 			that.validate();
 		}, false);
 
-		that.html.addEventListener('keyup', that.destroyOnEsc, false);
+		that.consoleMinimizeButton.addEventListener('click', function() {
+			this.hidden = true;
+			that.consoleNormalizeButton.hidden = false;
+			that.minimize();
+		}, false);
+
+		that.consoleNormalizeButton.addEventListener('click', function() {
+			this.hidden = true;
+			that.consoleMinimizeButton.hidden = false;
+			that.normalize();
+		}, false);
+
+		that.html.addEventListener('keyup', that.destroyByEsc, false);
 	},
 
-	destroyOnEsc: function() {
+	destroyByEsc: function() {
 
 		var that = STYLEV.VALIDATOR;
 
@@ -1352,6 +1416,18 @@ STYLEV.VALIDATOR = {
 				chrome.runtime.sendMessage({name: 'validatedStatus2False'});
 			}, 0);
 		}
+	},
+
+	minimize: function() {
+		var that = STYLEV.VALIDATOR;
+		that.consoleWrapper.style.setProperty('height', that.consoleHeader.style.getPropertyValue('height'), '');
+		that.consoleWrapperDefaultHeight = that.consoleWrapper.offsetHeight;
+	},
+
+	normalize: function() {
+		var that = STYLEV.VALIDATOR;
+		that.consoleWrapper.style.setProperty('height', that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
+		that.consoleWrapperDefaultHeight = that.consoleWrapper.offsetHeight;
 	},
 
 	setStyleDataBySelectors: function(document) {

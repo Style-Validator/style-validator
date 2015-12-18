@@ -68,7 +68,13 @@
 		"style-validator-for-console.css",
 		"specificity.js",
 		"google-analytics.js",
-		"iconmonstr-refresh-3-icon.svg"
+		"iconmonstr-refresh-3-icon.svg",
+		"iconmonstr-minus-2-icon.svg",
+		"iconmonstr-x-mark-icon.svg",
+		"iconmonstr-plus-2-icon.svg",
+		"style-validator.logo.black.svg",
+		"iconmonstr-link-4-icon.svg",
+		"iconmonstr-link-5-icon.svg"
 	],
 
 	"permissions": [

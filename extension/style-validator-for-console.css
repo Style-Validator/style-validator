@@ -15,6 +15,7 @@
 	left: 0;
 	z-index: 10000000000;
 	background: rgba(255, 255, 255, 0.8);
+	min-height: 30px;
 
 	/*inheritable*/
 	font-size: 12px !important;
@@ -48,20 +49,23 @@
 	float: left;
 	padding: 0 10px;
 }
-:host .stylev-console-heading:before {
-	content: '';
-	display: inline-block;
-	vertical-align: middle;
-	line-height: 1;
+:host .stylev-console-heading-logo {
+	display: block;
+}
+:host .stylev-console-heading-logo-image {
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*bottom: 0;*/
+	/*left: 0;*/
 	width: 20px;
 	height: 20px;
-	margin-top: -3px;
-	margin-right: 6px;
-	background-size: contain;
+	vertical-align: text-bottom;
+	margin-right: 5px;
+	/*margin-top: -3px;*/
+	/*margin-top: auto;*/
+	/*margin-bottom: auto;*/
 }
-:host .stylev-console-heading:before {
-	background: url(https://style-validator.github.io/Style-Validator/img/style-validator.logo.black.svg) no-repeat center center;
-}
+
 @media (max-width: 460px) {
 
 	:host .stylev-console-heading {
@@ -71,22 +75,26 @@
 :host .stylev-console-mode {
 	clear: none;
 	float: left;
-	padding-left: 30px;
+	padding-left: 10px;
 	padding-right: 10px;
 	background-position: 5px center;
 	background-repeat: no-repeat;
 	background-size: 20px auto;
+	color: white;
 }
-
+:host .stylev-console-mode-image {
+	width: 20px;
+	height: 20px;
+	vertical-align: text-bottom;
+	margin-right: 5px;
+}
 :host .stylev-console-mode[data-stylevclass="stylev-console-mode-devtools"] {
 	background-color: green;
-	background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-4-icon.svg);
-	color: white;
+	/*background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-4-icon.svg);*/
 }
 :host .stylev-console-mode[data-stylevclass="stylev-console-mode-no-devtools"] {
 	background-color: red;
-	background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-5-icon.svg);
-	color: white;
+	/*background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-5-icon.svg);*/
 }
 @media (max-width: 600px) {
 	:host .stylev-console-heading {
@@ -119,29 +127,42 @@
 	width: 30px;
 	height: 30px;
 	line-height: 30px;
-	margin: auto;
 	color: inherit;
 	text-align: center;
 	text-decoration: none;
+	font-size: 20px;
 }
-:host .stylev-console-refresh-button {
-}
-:host .stylev-console-refresh-button-image {
+:host .stylev-console-buttons > a > img {
 	position: absolute;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	width: 20px;
-	height: 20px;
 	margin: auto;
 }
-:host .stylev-console-close-button {
-	font-size: 20px;
+:host .stylev-console-refresh-button {
 }
-
-:host .stylev-console-close-button:before {
-	content: '×';
+:host .stylev-console-refresh-button-image {
+	width: 20px;
+	height: 20px;
+}
+:host .stylev-console-close-button {
+}
+:host .stylev-console-close-button-image {
+	width: 15px;
+	height: 15px;
+}
+:host .stylev-console-minimize-button {
+}
+:host .stylev-console-minimize-button-image {
+	width: 15px;
+	height: 15px;
+}
+:host .stylev-console-normalize-button {
+}
+:host .stylev-console-normalize-button-image {
+	width: 15px;
+	height: 15px;
 }
 :host .stylev-console-list {
 	position: absolute;
