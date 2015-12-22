@@ -169,8 +169,8 @@ STYLEV.VALIDATOR = {
 
 			CONNECTED_2_DEVTOOLS_MESSAGE: 'Connected to DevTools',
 			DISCONNECTED_2_DEVTOOLS_MESSAGE: 'Disconnected to DevTools',
-			CONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-devtools',
-			DISCONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-no-devtools'
+			CONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-devtools-connected',
+			DISCONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-devtools-disconnected'
 		};
 
 	},
@@ -233,7 +233,7 @@ STYLEV.VALIDATOR = {
 
 		that.scriptTagGA = document.createElement('script');
 		that.scriptTagGA.src  = that.settings.GA_PATH;
-		that.scriptTagGA.async  = true;
+		that.scriptTagGA.async  = "async";
 		that.scriptTagGA.id = 'stylev-ga';
 
 		/* append */
@@ -473,6 +473,12 @@ STYLEV.VALIDATOR = {
 			callback.bind(that)();
 		}
 
+		//GAタグを挿入
+		that.insertGA();
+
+		//ライブラリを挿入
+		that.insertLibs4Bookmarklet();
+
 		//バリデータによるDOM変更が全て完了してから監視開始
 		that.moManager.connect();
 	},
@@ -484,8 +490,8 @@ STYLEV.VALIDATOR = {
 
 		//以下の処理の順序が重要
 
-		//再実行時かつ、監視がされていたら監視を切断
-		if(!STYLEV.isFirstExecution && that.isObserving) {
+		//再実行時かつ、監視がされていたら監視を切断 TODO: コメントを修正する必要あり？
+		if(that.moManager !== null) {
 			that.moManager.disconnect();
 		}
 
@@ -514,12 +520,6 @@ STYLEV.VALIDATOR = {
 		//Auto判定のためにDOMカスタムプロパティを全要素に付与
 		that.setStyleDataBySelectors(document);
 		that.setStyleDataBySelectors(that.iframeDocument);
-
-		//GAに送信
-		that.insertGA();
-
-		//ライブラリを挿入
-		that.insertLibs4Bookmarklet();
 
 	},
 
@@ -698,6 +698,7 @@ STYLEV.VALIDATOR = {
 
 		//監視する実行スパンをミリ秒で指定
 		var OBSERVE_INTERVAL = 1000;
+		var RESET_INTERVAL = 3000;
 
 		if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
 			if(that.isObserving) {
@@ -714,7 +715,7 @@ STYLEV.VALIDATOR = {
 				clearTimeout(that.observationTimer);
 			}
 
-			//監視タイマーの設定
+			//監視タイマーの設定　※高速な連続反応に対応するため、実行を遅らせる
 			that.observationTimer = setTimeout(function() {
 
 				//consoleに出すメッセージの配列
@@ -728,22 +729,19 @@ STYLEV.VALIDATOR = {
 
 					var mutation = mutations[i];
 
-					/********************************************
-					* FROM: IGNORING
-					* */
-
 					//無視する要素のIDと一致した場合、処理を中止
 					var regexIgnoreElemsStylevId = new RegExp(' ' + STYLEV.ignoreElemsStylevId.join(' | ') + ' ');
 					if(regexIgnoreElemsStylevId.test(' ' + mutation.target.dataset.stylevid + ' ')) {
 						continue;
 					}
 
+					//1つでも通過したら、無視しない
 					isIgnore = false;
 
 					//要素の記録が存在する場合
 					if(STYLEV.affectedElemsStylevId.length) {
 
-						//現在の要素と、1つ前の要素が同じ場合
+						//現在の要素と、1つ前の要素が同じ場合は、同一要素として数を数える※アニメーションなどで激しい属性変更が起きた場合に備える
 						if(mutation.target.dataset.stylevid === STYLEV.affectedElemsStylevId[STYLEV.affectedElemsStylevId.length - 1]) {
 							STYLEV.sameElemCount++;
 						} else {
@@ -764,10 +762,6 @@ STYLEV.VALIDATOR = {
 						STYLEV.sameElemCount = 0;
 						STYLEV.ignoreElemsStylevId.push(mutation.target.dataset.stylevid);
 					}
-
-					/*
-					 * END:  IGNORING
-					 ****************************************** */
 
 					if(mutation.target.tagName) {
 						var attrsArray=[];
@@ -818,6 +812,11 @@ STYLEV.VALIDATOR = {
 
 
 			}, OBSERVE_INTERVAL);
+
+			//定期的にリセットする
+			that.resetTImer = setInterval(function() {
+				STYLEV.ignoreElemsStylevId = [];
+			}, RESET_INTERVAL);
 		});
 
 		//対象要素の配下の全要素を監視し、ノードの追加・変更・削除と属性の追加・変更・削除を検知
@@ -833,8 +832,9 @@ STYLEV.VALIDATOR = {
 
 		return {
 			
-			connect: function() {
+			connect: function(settings) {
 				//TODO: 属性回避ができれば、全要素を対象に変更
+//				that.observer.observe(document.querySelector('html'), observationConfig);
 				that.observer.observe(document.querySelector('body'), observationConfig);
 				that.observer.observe(document.querySelector('head'), observationConfig);
 				that.isObserving = true;
@@ -842,7 +842,9 @@ STYLEV.VALIDATOR = {
 			},
 
 			disconnect: function() {
-				//監視がされている場合、監視を止める
+
+				clearTimeout(that.observationTimer);
+				clearTimeout(that.resetTImer);
 				that.observer.disconnect();
 				that.isObserving = false;
 				console.info('Observer Disconnected');
@@ -967,8 +969,10 @@ STYLEV.VALIDATOR = {
 		for(var i = 0, len = allElem.length; i < len; i++) {
 			allElem[i].removeAttribute('data-stylevid');
 			allElem[i].removeAttribute('data-stylevclass');
-			allElem[i].removeEventListener('click', STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.inspectFromElements);
-			allElem[i].removeEventListener('click', that.actionFromTargets);
+			allElem[i].classList.remove('stylev-target-error');
+			allElem[i].classList.remove('stylev-target-warning');
+			allElem[i].removeEventListener('click', STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.inspectFromTargets);
+			allElem[i].removeEventListener('click', that.selectElementFromTargets);
 		}
 
 		if(html !== undefined) {
@@ -1211,7 +1215,7 @@ STYLEV.VALIDATOR = {
 				anchor.href = 'javascript: void(0);';
 
 				//クリックイベントを設定
-				anchor.addEventListener('click', that.actionFromConsole.bind(that, that.messageArray[i]), false);
+				anchor.addEventListener('click', that.selectElementFromConsole.bind(that, that.messageArray[i]), false);
 
 				//テキスト情報を挿入
 				anchor.textContent = that.messageArray[i].text;
@@ -1309,9 +1313,15 @@ STYLEV.VALIDATOR = {
 	},
 
 	//コンソールからの動作
-	actionFromConsole: function(messageArray) {
+	selectElementFromConsole: function(messageArray) {
 
 		var that = STYLEV.VALIDATOR;
+
+		//監視を中断
+		that.moManager.disconnect();
+
+		event.preventDefault();
+		event.stopPropagation();
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
@@ -1343,6 +1353,9 @@ STYLEV.VALIDATOR = {
 		//対象の要素までスクロール
 		STYLEV.methods.smoothScroll.execute(target);
 
+		//監視を復活
+		that.moManager.connect();
+
 	},
 
 	//ページ内の要素に対する動作
@@ -1364,21 +1377,22 @@ STYLEV.VALIDATOR = {
 
 		for(var i = 0, len = that.targets.length; i < len; i++) {
 			var target = that.targets[i];
-			target.addEventListener('click', that.actionFromTargets, false);
+			target.addEventListener('click', that.selectElementFromTargets, false);
 		}
 
 		return false;
 	},
-	//TODO: actionFromConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
+	//TODO: selectElementFromConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
 	//TODO: あと結構やっつけ処理になっているので後で整理
-	actionFromTargets: function() {
+	selectElementFromTargets: function() {
+
+		var that = STYLEV.VALIDATOR;
+
+		//監視を中断
+		that.moManager.disconnect();
 
 		event.stopPropagation();
 		event.preventDefault();
-
-
-
-		var that = STYLEV.VALIDATOR;
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
@@ -1411,6 +1425,9 @@ STYLEV.VALIDATOR = {
 
 		//コンソール内の対象要素の行を先頭に
 		that.consoleTriggerWrapper.scrollTop = distance;
+
+		//監視を復活
+		that.moManager.connect();
 
 	},
 
@@ -1771,27 +1788,25 @@ STYLEV.CHROME_EXTENSION = {
 		},
 
 		setParameters: function() {
-			var that = STYLEV.CHROME_EXTENSION;
+			var that = STYLEV.CHROME_EXTENSION.bind2DevToolsInspect;
 
 			//TODO: 全体的に、再取得と削除できないか調査
 			that.consoleWrapper = document.querySelector('#stylev-console-wrapper');
 			that.consoleWrapperShadowRoot = that.consoleWrapper.shadowRoot;
 			that.consoleList = that.consoleWrapperShadowRoot.querySelector('#stylev-console-list');
 			that.triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid]');
-			that.targets = document.querySelector('body').querySelectorAll('[data-stylevclass*="stylev-target-error"], [data-stylevclass*="stylev-target-warning"]');
-			//that.targets = document.querySelectorAll('[data-stylevclass*="stylev-target-error"], [data-stylevclass*="stylev-target-warning"]');
-			//TODO: 何故指定したクラス以外の要素が入ってきてしまうのか調査
+			that.targets = document.querySelectorAll('.stylev-target-error,.stylev-target-warning');
 		},
 
 		bindEvents: function() {
-			var that = STYLEV.CHROME_EXTENSION;
+			var that = STYLEV.CHROME_EXTENSION.bind2DevToolsInspect;
 
 			for(var i = 0, len = that.triggers.length; i < len; i++) {
 				that.triggers[i].addEventListener('click', that.inspectFromConsole, false);
 			}
 
-			for(var j = 0, len = that.targets.length; j < len; j++) {
-				that.targets[j].addEventListener('click', that.inspectFromElements, false);
+			for(var j = 0, targetsLen = that.targets.length; j < targetsLen; j++) {
+				that.targets[j].addEventListener('click', that.inspectFromTargets, false);
 			}
 		},
 
@@ -1815,7 +1830,7 @@ STYLEV.CHROME_EXTENSION = {
 		},
 
 		//対象要素からインスペクトする
-		inspectFromElements: function() {
+		inspectFromTargets: function() {
 
 			event.preventDefault();
 			event.stopPropagation();

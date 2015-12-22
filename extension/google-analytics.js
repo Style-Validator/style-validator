@@ -26,9 +26,9 @@ function hasAnalyticsGoogle(){
 	return false;
 }
 
-function sendError(errorMessage, URL, lineNumber, columnNumber, errorObject) {
-	ga('styleValidator.send', 'event', 'js-error', 'error', 'error-content', '' + errorMessage + ' / ' + URL + ' / ' + lineNumber + ' / ' + columnNumber );
-}
+//function sendError(errorMessage, URL, lineNumber, columnNumber, errorObject) {
+//	ga('styleValidator.send', 'event', 'js-error', 'error', 'error-content', '' + errorMessage + ' / ' + URL + ' / ' + lineNumber + ' / ' + columnNumber );
+//}
 
 if(!hasAnalyticsGoogle()) {
 
@@ -42,5 +42,5 @@ if(!hasAnalyticsGoogle()) {
 ga('create', 'UA-53227157-5', 'auto', {'name': 'styleValidator'});
 ga('styleValidator.send', 'event', 'button', 'click', 'executing validation', 1);
 
-window.removeEventListener('error', sendError);
-window.addEventListener('error', sendError, false);
+//window.removeEventListener('error', sendError);
+//window.addEventListener('error', sendError, false);

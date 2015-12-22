@@ -88,13 +88,11 @@
 	vertical-align: text-bottom;
 	margin-right: 5px;
 }
-:host .stylev-console-mode[data-stylevclass="stylev-console-mode-devtools"] {
+:host .stylev-console-mode-devtools-connected {
 	background-color: green;
-	/*background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-4-icon.svg);*/
 }
-:host .stylev-console-mode[data-stylevclass="stylev-console-mode-no-devtools"] {
+:host .stylev-console-mode-devtools-disconnected {
 	background-color: red;
-	/*background-image: url(https://style-validator.github.io/Style-Validator/img/iconmonstr-link-5-icon.svg);*/
 }
 @media (max-width: 600px) {
 	:host .stylev-console-heading {
@@ -179,6 +177,7 @@
 :host .stylev-console-list > li > a {
 	display: block;
 	padding: 2px 5px;
+	padding-right: 7em;
 	color: #333;
 	text-decoration: none;
 	cursor: pointer;
@@ -198,17 +197,24 @@
 :host .stylev-console-list > li > a:hover span {
 	text-decoration: underline;
 }
-:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-error"] {
+:host .stylev-console-list > li > a > span {
+	position: absolute;
+	right: 0;
+	padding: 0 10px;
+	text-indent: 0;
+	/*display: none;*//*TODO: test001*/
+}
+:host .stylev-console-list > li.stylev-trigger-error {
 	border-color: #FFD8D7;
 }
-:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-warning"] {
+:host .stylev-console-list > li.stylev-trigger-warning {
 	border-color: #FFDD9E;
 }
-:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-error"] > a {
+:host .stylev-console-list > li.stylev-trigger-error > a {
 	background-color: #FFEFEF;
 	color: #FF0000;
 }
-:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-error"] > a:before {
+:host .stylev-console-list > li.stylev-trigger-error > a:before {
 	content: '×';
 	display: inline-block;
 	width: 1.2em;
@@ -221,11 +227,11 @@
 	color: #FFF;
 	text-align: center;
 }
-:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-warning"] > a {
+:host .stylev-console-list > li.stylev-trigger-warning > a {
 	background-color: #FFFBE5;
 	color: #444444;
 }
-:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-warning"] > a:before {
+:host .stylev-console-list > li.stylev-trigger-warning > a:before {
 	content: '!';
 	display: inline-block;
 	width: 1.2em;
@@ -238,16 +244,10 @@
 	color: #FFF;
 	text-align: center;
 }
-:host .stylev-console-list > li[data-stylevclass*="stylev-trigger-selected"] > a {
+:host .stylev-console-list > li.stylev-trigger-selected > a {
 	font-weight: bold;
 }
 
-:host .stylev-console-list > li > a > span {
-	position: absolute;
-	right: 0;
-	padding: 0 10px;
-	display: none;/*TODO: test001*/
-}
 
 
 :host [data-stylevclass="stylev-console-perfect"] {
