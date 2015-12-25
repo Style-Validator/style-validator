@@ -51,7 +51,9 @@ function toggleValidation() {
 				//DevToolsと接続されていない場合
 				} else {
 					chrome.tabs.executeScript(tabId, {
-						code: "console.info('Executed from Background Page');STYLEV.VALIDATOR.execute();"
+						code:
+							"console.info('Executed from Background Page');" +
+							"STYLEV.VALIDATOR.execute();"
 					});
 				}
 
@@ -64,7 +66,9 @@ function toggleValidation() {
 
 				//コンソールを削除
 				chrome.tabs.executeScript(tabId, {
-					code: "console.info('Validator has Removed.');STYLEV.VALIDATOR.destroy();"
+					code:
+						"console.info('Validator has Removed.');" +
+						"STYLEV.VALIDATOR.destroy();"
 				});
 
 				//コンソールを開いたという情報を保存
@@ -268,7 +272,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 								//Background Modeで実行
 								chrome.tabs.executeScript(tabId, {
-									code: "console.info('Executed from Background Page');STYLEV.VALIDATOR.execute();"
+									code:
+										"console.info('Executed from Background Page');" +
+										"STYLEV.VALIDATOR.execute();"
 								});
 
 								//モードテキストを変更
@@ -319,7 +325,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 			} else {
 
 				chrome.tabs.executeScript(tabId, {
-					code: "console.info('Executed from Background Page');STYLEV.VALIDATOR.execute();"
+					code:
+						"console.info('Executed from Background Page');" +
+						"STYLEV.VALIDATOR.execute();"
 				});
 			}
 		}

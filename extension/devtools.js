@@ -14,18 +14,14 @@ var isValidated = false;
 var executeWithInspect = function() {
 	chrome.devtools.inspectedWindow.eval(
 		"var bindInspect = function(){" +
-			"STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.execute(function(targetElem) {" +
+			"STYLEV.CHROME_DEVTOOLS.execute(function(targetElem) {" +
 //				"inspect(targetElem || $0);" +
 				"inspect(targetElem);" +
 			"});" +
 		"};" +
 		"STYLEV.VALIDATOR.updateOptions().then(function() {" +
 			"console.info('Executed from DevTools Page');" +
-			"if(STYLEV.isFirstExecution) {" +
-				"STYLEV.VALIDATOR.execute(bindInspect);" +
-			"} else {" +
-				"STYLEV.VALIDATOR.validate(bindInspect);" +
-			"}" +
+			"STYLEV.VALIDATOR.execute(bindInspect);" +
 		"});"
 		,
 		{ useContentScriptContext: true }

@@ -38,7 +38,7 @@ html {
 	outline-style: solid;
 	outline-color: #F6BE00;
 }
-[data-stylevclass*="stylev-animation"] .stylev-target-warning {
+.stylev-animation .stylev-target-warning {
 	-webkit-animation: warning 1s infinite alternate;
 	-moz-animation: warning 1s infinite alternate;
 	animation: warning 1s infinite alternate;
@@ -62,7 +62,7 @@ html {
 	outline-style: solid;
 	outline-color: #EE363B;
 }
-[data-stylevclass*="stylev-animation"] .stylev-target-error {
+.stylev-animation .stylev-target-error {
 	-webkit-animation: error 1s infinite alternate;
 	-moz-animation: error 1s infinite alternate;
 	animation: error 1s infinite alternate;
@@ -92,7 +92,7 @@ html {
 	outline-style: solid;
 	outline-color: #EE363B;
 }
-[data-stylevclass*="stylev-animation"] .stylev-target-error.stylev-target-warning {
+.stylev-animation .stylev-target-error.stylev-target-warning {
 	-webkit-animation: errorAndWarning 1s infinite alternate;
 	-moz-animation: errorAndWarning 1s infinite alternate;
 	animation: errorAndWarning 1s infinite alternate;

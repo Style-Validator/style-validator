@@ -42,6 +42,7 @@
 	border-style: dashed;
 }
 :host .stylev-console-heading {
+	display: none;
 	font-size: 12px;
 	font-weight: normal;
 	width: auto;
@@ -74,7 +75,7 @@
 }
 :host .stylev-console-mode {
 	clear: none;
-	float: left;
+	float: right;
 	padding-left: 10px;
 	padding-right: 10px;
 	background-position: 5px center;
@@ -102,17 +103,27 @@
 
 @media (max-width: 450px) {
 	:host .stylev-console-mode {
+		position: relative;
 		width: 30px;
+		color: transparent;
 		text-indent: 100%;
 		white-space: nowrap;
 		overflow: hidden;
 		padding: 0;
 		background-position: center center;
 	}
+	:host .stylev-console-mode-image {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
+	}
 }
 
 :host .stylev-console-counter {
-	float: right;
+	float: left;
 	padding: 0 10px;
 }
 :host .stylev-console-buttons {
@@ -162,9 +173,16 @@
 	width: 15px;
 	height: 15px;
 }
-:host .stylev-console-list {
+:host .stylev-console-body {
 	position: absolute;
 	top: 30px;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}
+:host .stylev-console-list {
+	position: absolute;
+	top: 0;
 	right: 0;
 	left: 0;
 	bottom: 0;
@@ -250,7 +268,7 @@
 
 
 
-:host [data-stylevclass="stylev-console-perfect"] {
+:host .stylev-console-perfect {
 	position: absolute;
 	top: 0;
 	right: 0;

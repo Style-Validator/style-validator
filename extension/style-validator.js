@@ -70,11 +70,19 @@ STYLEV.VALIDATOR = {
 
 		var that = STYLEV.VALIDATOR;
 
+		//二回目の実行の場合は、即検証に入る
+		if(!STYLEV.isFirstExecution) {
+
+			that.validate(callback);
+			return false;
+		}
+
 		//インスタンス変数などを設定
 		that.setParameters();
 
 		//データを並列で非同期に取得し、全て終わったらそれぞれのインスタンス変数に格納
 		//TODO: Promiseチェーンをもっと上手く書けないか検討
+		//TODO: 別関数に外出しして、読みやすくする
 		Promise
 
 			//同時にJSONをリクエスト
@@ -116,6 +124,8 @@ STYLEV.VALIDATOR = {
 					STYLEV.isFirstExecution = false;
 				});
 			});
+
+		return false;
 	},
 
 	//インスタンス変数の定義
@@ -128,13 +138,15 @@ STYLEV.VALIDATOR = {
 		that.head = document.querySelector('head');
 		that.body = document.querySelector('body');
 
-
 		//html要素のボーダーボトムのスタイルの初期値を記憶
 		//このバリデータによる指定がない場合は、消す処理（null）をいれ、指定があった場合は、初期の数値に戻す
 		that.htmlDefaultBorderBottomWidth = that.html.style.borderBottomWidth === '' ? null : that.html.style.borderBottomWidth;
 
 		//リソースルートを設定
 		that.RESOURCE_ROOT = STYLEV.CHROME_EXTENSION.RESOURCE_ROOT || 'https://style-validator.github.io/';
+
+		//監視フラグの初期化
+		that.isObserving = false;
 
 		//静的な設定値 TODO: 他にもsettingsにまとめられる値があるので後で精査
 		that.settings = {
@@ -214,6 +226,7 @@ STYLEV.VALIDATOR = {
 				}
 				that.scriptTag = document.createElement('script');
 				that.scriptTag.src = path;
+				that.scriptTag.classList.add('stylev-ignore');
 				df.appendChild(that.scriptTag);
 			}
 
@@ -235,6 +248,7 @@ STYLEV.VALIDATOR = {
 		that.scriptTagGA.src  = that.settings.GA_PATH;
 		that.scriptTagGA.async  = "async";
 		that.scriptTagGA.id = 'stylev-ga';
+		that.scriptTagGA.classList.add('stylev-ignore');
 
 		/* append */
 		that.head.appendChild(that.scriptTagGA);
@@ -256,7 +270,7 @@ STYLEV.VALIDATOR = {
 						//オプション設定
 						STYLEV.options = {
 
-							ENABLE_MUTATION_OBSERVER: message.options.enabledsetupMutationObserver,
+							ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
 							ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
 							ENABLE_ANIMATION: message.options.enableAnimation,
 							TARGET_SELECTOR: message.options.targetSelector,
@@ -304,7 +318,6 @@ STYLEV.VALIDATOR = {
 				continue;
 			}
 
-			elemData.targetElem.dataset.stylevid = 'stylev-' + i;
 			elemData.targetElemStyles = getComputedStyle(elemData.targetElem, '');
 			elemData.targetParentElem = elemData.targetElem.parentElement;
 
@@ -479,6 +492,8 @@ STYLEV.VALIDATOR = {
 		//ライブラリを挿入
 		that.insertLibs4Bookmarklet();
 
+		console.log('Validated and Console Displayed');
+
 		//バリデータによるDOM変更が全て完了してから監視開始
 		that.moManager.connect();
 	},
@@ -491,9 +506,7 @@ STYLEV.VALIDATOR = {
 		//以下の処理の順序が重要
 
 		//再実行時かつ、監視がされていたら監視を切断 TODO: コメントを修正する必要あり？
-		if(that.moManager !== null) {
-			that.moManager.disconnect();
-		}
+		that.moManager.disconnect();
 
 		//コンソールを削除
 		that.removeConsole();
@@ -502,17 +515,20 @@ STYLEV.VALIDATOR = {
 		that.removeAllAttrAndEvents();
 
 		//全要素を取得
-		that.allElem = document.querySelectorAll('*');
+		that.allElem = document.querySelectorAll('*:not(.stylev-ignore)');
 		that.allElemLength = that.allElem.length;
 
 		//エラー及び警告メッセージを管理する配列の初期化
-		that.messageArray = [];
+		that.resultArray = [];
 
 		//エラー数の初期化
 		that.errorNum = 0;
 
 		//警告数の初期化
 		that.warningNum = 0;
+
+		//エラー要素数のカウンター　※注意：エラーの数ではない
+		that.errorIndex = 0;
 
 		//デフォルトスタイル取得用iframeを挿入
 		that.insertIframe4getDefaultStyles();
@@ -529,7 +545,7 @@ STYLEV.VALIDATOR = {
 		var that = STYLEV.VALIDATOR;
 
 		//メッセージ管理するオブジェクト
-		var message = {};
+		var result = {};
 
 		//JSONデータのNGスタイルのプロパティ値
 		var ngStyleRulesPropVal = ngStyleRules[ngStyleRulesProp];
@@ -651,23 +667,35 @@ STYLEV.VALIDATOR = {
 
 		){
 
+			if(
+				!(
+					elemData.targetElem.classList.contains('stylev-target-error') ||
+				 	elemData.targetElem.classList.contains('stylev-target-warning')
+				)
+			) {
+				that.errorIndex++;
+			}
+
+			//エラーの発生した要素に、IDを振る
+			elemData.targetElem.dataset.stylevid = 'stylev-' + that.errorIndex;
+
 			//親要素を検査する場合
 			if(isParentCheck) {
-				message.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; display property of parent element is incorrect.(' + 'parent is ' + elemData.targetElemParentDisplayProp + ' element)';
+				result.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; display property of parent element is incorrect.(' + 'parent is ' + elemData.targetElemParentDisplayProp + ' element)';
 
 			//通常時
 			} else {
-				message.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; ' + ngStyleRulesProp + ': ' + targetElemNgStyleVal + ';' + (elemData.isDisplayPropChanged ? '(Display Property has changed.)' : '');
+				result.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; ' + ngStyleRulesProp + ': ' + targetElemNgStyleVal + ';' + (elemData.isDisplayPropChanged ? '(Display Property has changed.)' : '');
 			}
 
 			//要素のID名
-			message.idName = elemData.targetElem.dataset.stylevid;
+			result.idName = elemData.targetElem.dataset.stylevid;
 
 			//エラーか警告かのタイプ
-			message.type = type;
+			result.type = type;
 
 			//メッセージ配列に挿入
-			that.messageArray.push(message);
+			that.resultArray.push(result);
 
 			//エラー
 			if(type === 'error') {
@@ -682,9 +710,6 @@ STYLEV.VALIDATOR = {
 			}
 		}
 	},
-
-	//監視
-	moManager: null,
 
 	//監視開始
 	setupMutationObserver: function() {
@@ -701,9 +726,7 @@ STYLEV.VALIDATOR = {
 		var RESET_INTERVAL = 3000;
 
 		if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
-			if(that.isObserving) {
-				that.moManager.disconnect();
-			}
+			that.moManager.disconnect();
 			return false;
 		}
 
@@ -719,7 +742,7 @@ STYLEV.VALIDATOR = {
 			that.observationTimer = setTimeout(function() {
 
 				//consoleに出すメッセージの配列
-				var message = [];
+				var messageArray = [];
 
 				//反応したとき無視するかどうか
 				var isIgnore = true;
@@ -773,28 +796,28 @@ STYLEV.VALIDATOR = {
 								attrsArray.push(attr.nodeName + '="' + attr.nodeValue + '"');
 							}
 						}
-						message.push(mutation.target.dataset.stylevid + ': <' + mutation.target.tagName.toLowerCase() + attrsArray.join(' ') + '>');
+						messageArray.push(mutation.target.dataset.stylevid + ': <' + mutation.target.tagName.toLowerCase() + attrsArray.join(' ') + '>');
 					}
 
 					if(mutation.type === 'attributes') {
-						message.push(mutation.attributeName + ' ' + mutation.type + ' of above is changed from "' + mutation.oldValue + '".');
+						messageArray.push(mutation.attributeName + ' ' + mutation.type + ' of above is changed from "' + mutation.oldValue + '".');
 					}
 					if(mutation.type === 'characterData') {
-						message.push(mutation.characterData + ' ' + mutation.type + ' of above is changed from "' + mutation.oldValue + '".');
+						messageArray.push(mutation.characterData + ' ' + mutation.type + ' of above is changed from "' + mutation.oldValue + '".');
 					}
 
 					if(mutation.addedNodes.length) {
 						for(var i = 0, len = mutation.addedNodes.length; i < len; i++) {
-							message.push(mutation.addedNodes[i].outerHTML + ' is added.');
+							messageArray.push(mutation.addedNodes[i].outerHTML + ' is added.');
 						}
 					}
 					if(mutation.removedNodes.length) {
 						for(var i = 0, len = mutation.removedNodes.length; i < len; i++) {
-							message.push(mutation.removedNodes[i].outerHTML + ' is removed.');
+							messageArray.push(mutation.removedNodes[i].outerHTML + ' is removed.');
 						}
 					}
 
-					console.info(message.join('\n\n'));
+					console.info(messageArray.join('\n\n'));
 				}
 
 				//無視しない場合
@@ -832,22 +855,25 @@ STYLEV.VALIDATOR = {
 
 		return {
 			
-			connect: function(settings) {
-				//TODO: 属性回避ができれば、全要素を対象に変更
-//				that.observer.observe(document.querySelector('html'), observationConfig);
-				that.observer.observe(document.querySelector('body'), observationConfig);
-				that.observer.observe(document.querySelector('head'), observationConfig);
-				that.isObserving = true;
-				console.info('Observer Connected');
+			connect: function() {
+				if(!that.isObserving) {
+					//TODO: 属性回避ができれば、全要素を対象に変更
+					//that.observer.observe(document.querySelector('html'), observationConfig);
+					that.observer.observe(document.querySelector('body'), observationConfig);
+					that.observer.observe(document.querySelector('head'), observationConfig);
+					that.isObserving = true;
+					console.info('Mutation Observer Connected');
+				}
 			},
 
 			disconnect: function() {
-
-				clearTimeout(that.observationTimer);
-				clearTimeout(that.resetTImer);
-				that.observer.disconnect();
-				that.isObserving = false;
-				console.info('Observer Disconnected');
+				if(that.isObserving) {
+					clearTimeout(that.observationTimer);
+					clearTimeout(that.resetTImer);
+					that.observer.disconnect();
+					that.isObserving = false;
+					console.info('Mutation Observer Disconnected');
+				}
 			}
 		}
 
@@ -870,6 +896,7 @@ STYLEV.VALIDATOR = {
 			that.linkTag.id = that.settings.STYLESHEET_ID;
 			that.linkTag.rel = 'stylesheet';
 			that.linkTag.type = 'text/css';
+			that.linkTag.classList.add('stylev-ignore');
 			that.linkTag.href = that.settings.STYLESHEET_PATH;
 
 			/* append */
@@ -971,8 +998,8 @@ STYLEV.VALIDATOR = {
 			allElem[i].removeAttribute('data-stylevclass');
 			allElem[i].classList.remove('stylev-target-error');
 			allElem[i].classList.remove('stylev-target-warning');
-			allElem[i].removeEventListener('click', STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.inspectFromTargets);
-			allElem[i].removeEventListener('click', that.selectElementFromTargets);
+			allElem[i].removeEventListener('click', STYLEV.CHROME_DEVTOOLS.inspectFromTargets);
+			allElem[i].removeEventListener('click', that.markElementFromTargets);
 		}
 
 		if(html !== undefined) {
@@ -1004,12 +1031,13 @@ STYLEV.VALIDATOR = {
 		that.consoleHeadingLogo = document.createElement('a');
 		that.consoleHeadingLogoImage = document.createElement('img');
 		that.consoleMode = document.createElement('p');
-//		that.consoleModeConnectedImage = document.createElement('img');
-//		that.consoleModeDisconnectedImage = document.createElement('img');
 		that.consoleButtons = document.createElement('div');
 		that.consoleRefreshButton = document.createElement('a');
 		that.consoleRefreshButtonImage = document.createElement('img');
 		that.consoleCounter = document.createElement('div');
+		that.consoleFilterCheckBoxTotal = document.createElement('input');
+		that.consoleFilterCheckBoxError = document.createElement('input');
+		that.consoleFilterCheckBoxWarning = document.createElement('input');
 		that.consoleBody = document.createElement('div');
 		that.consoleList = document.createElement('ul');
 		that.consoleCloseButton = document.createElement('a');
@@ -1057,6 +1085,10 @@ STYLEV.VALIDATOR = {
 		that.consoleNormalizeButton.classList.add('stylev-console-normalize-button');
 		that.consoleNormalizeButtonImage.classList.add('stylev-console-normalize-button-image');
 		that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
+		that.consoleFilterCheckBoxTotal.type = 'checkbox';
+		that.consoleFilterCheckBoxError.type = 'checkbox';
+		that.consoleFilterCheckBoxWarning.type = 'checkbox';
+
 
 		//コンソール内に表示させる結果の要素を生成
 		that.createMessagesInConsole();
@@ -1066,7 +1098,7 @@ STYLEV.VALIDATOR = {
 
 			//コンソールヘッダに表示させるテキストの設定
 		that.consoleHeadingText = document.createTextNode(that.settings.CONSOLE_HEADING_TEXT);
-		that.consoleCounter.textContent = 'Total: ' + that.messageArray.length + ' / Error: ' + that.errorNum + ' / Warning: ' + that.warningNum;
+		that.consoleCounter.textContent = 'Total: ' + that.resultArray.length + ' / Error: ' + that.errorNum + ' / Warning: ' + that.warningNum;
 
 		//ロゴを挿入
 		that.consoleHeadingLogo.appendChild(that.consoleHeadingLogoImage);
@@ -1130,7 +1162,7 @@ STYLEV.VALIDATOR = {
 
 			//アイコンに件数を表示させる
 			chrome.runtime.sendMessage({
-				setBadgeText: that.messageArray.length
+				setBadgeText: that.resultArray.length
 			});
 
 			//DevToolsの接続状態を表示させる
@@ -1171,8 +1203,8 @@ STYLEV.VALIDATOR = {
 		});
 
 		//最後にフォーカスしていた要素に対して、インスペクト
-		if(typeof STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.inspectOfConsoleAPI === 'function') {
-			STYLEV.CHROME_EXTENSION.bind2DevToolsInspect.inspectOfConsoleAPI();
+		if(typeof STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI === 'function') {
+			STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI();
 		}
 
 		//選択した行があった場合、選択した行と現在のリストを比べて、同一のものに選択状態のclassを付与
@@ -1193,10 +1225,10 @@ STYLEV.VALIDATOR = {
 		var that = STYLEV.VALIDATOR;
 
 		//エラーや警告が1件もなかった場合
-		if(that.messageArray.length === 0) {
+		if(that.resultArray.length === 0) {
 
 			that.congratulationsMessage = document.createElement('li');
-			that.congratulationsMessage.dataset.stylevclass = 'stylev-console-perfect';
+			that.congratulationsMessage.classList.add('stylev-console-perfect');
 			that.congratulationsMessage.textContent = that.settings.CONGRATULATION_MESSAGE_TEXT;
 			that.docFlag.appendChild(that.congratulationsMessage);
 
@@ -1204,36 +1236,37 @@ STYLEV.VALIDATOR = {
 		} else {
 
 			//メッセージの数だけループ
-			for(var i = 0, len = that.messageArray.length; i < len; i++) {
+			for(var i = 0, len = that.resultArray.length; i < len; i++) {
 
 				//ログの行を表示させるHTML要素を生成
 				var li = document.createElement('li');
 				var anchor = document.createElement('a');
 				var logID = document.createElement('span');
+				var result = that.resultArray[i];
 
 				//属性を設定
 				anchor.href = 'javascript: void(0);';
 
 				//クリックイベントを設定
-				anchor.addEventListener('click', that.selectElementFromConsole.bind(that, that.messageArray[i]), false);
+				anchor.addEventListener('click', that.markElementFromConsole.bind(that, result), false);
 
 				//テキスト情報を挿入
-				anchor.textContent = that.messageArray[i].text;
+				anchor.textContent = result.text;
 
 				//ID情報を挿入
-				anchor.dataset.stylevconsoleid = that.messageArray[i].idName;
-				logID.textContent = that.messageArray[i].idName;
+				anchor.dataset.stylevconsoleid = result.idName;
+				logID.textContent = result.idName;
 
 				//エラーか警告のタイプのクラス名を設定
-				li.classList.add('stylev-trigger-' + that.messageArray[i].type);
+				li.classList.add('stylev-trigger-' + result.type);
 
 				//エラー数をカウント
-				if(that.messageArray[i].type === 'error') {
+				if(result.type === 'error') {
 					that.errorNum++;
 				}
 
 				//警告数をカウント
-				if(that.messageArray[i].type === 'warning') {
+				if(result.type === 'warning') {
 					that.warningNum++;
 				}
 
@@ -1249,14 +1282,17 @@ STYLEV.VALIDATOR = {
 	bindEvents4Console: function() {
 		var that = STYLEV.VALIDATOR;
 
-
-		that.consoleHeader.addEventListener('mousedown', function(event) {
+		that.consoleWrapper.addEventListener('click', function() {
 			event.preventDefault();
+			event.stopPropagation();
+		}, false);
+
+		that.consoleHeader.addEventListener('mousedown', function() {
 			that.isMouseDownConsoleHeader = true;
 			that.consoleStartPosY = event.pageY;
 		}, false);
 
-		that.html.addEventListener('mousemove', function(event) {
+		that.html.addEventListener('mousemove', function() {
 
 			if(that.isMouseDownConsoleHeader) {
 				that.consoleCurrentPosY = event.pageY;
@@ -1274,7 +1310,7 @@ STYLEV.VALIDATOR = {
 			}
 		}, false);
 
-		that.html.addEventListener('mouseup', function(event) {
+		that.html.addEventListener('mouseup', function() {
 			that.isMouseDownConsoleHeader = false;
 			that.consoleWrapperDefaultHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
 			STYLEV.consoleWrapperHeight = that.consoleWrapperDefaultHeight;
@@ -1300,28 +1336,23 @@ STYLEV.VALIDATOR = {
 			that.normalize();
 		}, false);
 
-		that.html.addEventListener('keyup', that.destroyByEsc, false);
-	},
+		that.html.addEventListener('keyup', function() {
 
-	destroyByEsc: function() {
-
-		var that = STYLEV.VALIDATOR;
-
-		if(event.keyCode === 27) {
-			that.destroy();
-		}
+			if(event.keyCode === 27) {
+				that.destroy();
+			}
+		}, false);
 	},
 
 	//コンソールからの動作
-	selectElementFromConsole: function(messageArray) {
+	markElementFromConsole: function(result) {
+
+		event.preventDefault();
 
 		var that = STYLEV.VALIDATOR;
 
 		//監視を中断
 		that.moManager.disconnect();
-
-		event.preventDefault();
-		event.stopPropagation();
 
 		//TODO: 全体的に、再取得と削除できないか調査
 		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
@@ -1344,10 +1375,10 @@ STYLEV.VALIDATOR = {
 		}
 
 		//全ての対象要素から選択状態を外し、クリックした要素に選択状態を付加
-		for(var j = 0, len = that.allElem.length; j < len; j++) {
+		for(var j = 0, allElemLen = that.allElem.length; j < allElemLen; j++) {
 			that.allElem[j].classList.remove('stylev-target-selected');
 		}
-		var target = document.querySelector('[data-stylevid="' + messageArray.idName + '"]');
+		var target = document.querySelector('[data-stylevid="' + result.idName + '"]');
 		target.classList.add('stylev-target-selected');
 
 		//対象の要素までスクロール
@@ -1364,7 +1395,7 @@ STYLEV.VALIDATOR = {
 		var that = STYLEV.VALIDATOR;
 
 		//エラーや警告が１件もなければ何もしない
-		if(that.messageArray.length === 0) {
+		if(that.resultArray.length === 0) {
 			return false;
 		}
 
@@ -1377,14 +1408,14 @@ STYLEV.VALIDATOR = {
 
 		for(var i = 0, len = that.targets.length; i < len; i++) {
 			var target = that.targets[i];
-			target.addEventListener('click', that.selectElementFromTargets, false);
+			target.addEventListener('click', that.markElementFromTargets, false);
 		}
 
 		return false;
 	},
-	//TODO: selectElementFromConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
+	//TODO: markElementFromConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
 	//TODO: あと結構やっつけ処理になっているので後で整理
-	selectElementFromTargets: function() {
+	markElementFromTargets: function() {
 
 		var that = STYLEV.VALIDATOR;
 
@@ -1397,13 +1428,13 @@ STYLEV.VALIDATOR = {
 		//TODO: 全体的に、再取得と削除できないか調査
 		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
 
-		//全ての行から選択状態を外し、クリックした行に選択状態を付加
-		for(var i = 0, len = that.consoleTriggers.length; i < len; i++) {
+		//コンソールの全ての行から選択状態を外し、クリックした行に選択状態を付加
+		for(var i = 0, consoleTriggersLen = that.consoleTriggers.length; i < consoleTriggersLen; i++) {
 			that.consoleTriggers[i].classList.remove('stylev-trigger-selected');
 		}
 		var triggers = wrapper.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevid + '"]');
 
-		for(var i = 0, len = triggers.length; i < len; i++) {
+		for(var i = 0, triggersLen = triggers.length; i < triggersLen; i++) {
 			var trigger = triggers[i];
 			trigger.parentElement.classList.add('stylev-trigger-selected');
 
@@ -1443,9 +1474,7 @@ STYLEV.VALIDATOR = {
 		that.removeAllAttrAndEvents();
 		that.removeConsole();
 
-		if(that.isObserving) {
-			that.moManager.disconnect();
-		}
+		that.moManager.disconnect();
 		that.removeStylesheet();
 
 		if(STYLEV.isChromeExtension) {
@@ -1757,6 +1786,8 @@ STYLEV.methods = {
 //Chrome Extension
 STYLEV.CHROME_EXTENSION = {
 
+	RESOURCE_ROOT: null,
+
 	execute: function() {
 
 		console.info('Style Validator with Chrome Extension');
@@ -1765,90 +1796,88 @@ STYLEV.CHROME_EXTENSION = {
 			chrome.runtime.sendMessage({name: 'execute'});
 		}, 0);
 
-	},
-
-	RESOURCE_ROOT: null,
-
-	//DevToolsページ内で使うコンソールAPI関数を登録する
-	bind2DevToolsInspect: {
-
-		execute: function(inspectOfConsoleAPI) {
-
-			var that = STYLEV.CHROME_EXTENSION.bind2DevToolsInspect;
-
-			//エラーや警告が１件もなければ何もしない
-			if(STYLEV.VALIDATOR.messageArray.length === 0) {
-				return false;
-			}
-			that.inspectOfConsoleAPI = inspectOfConsoleAPI;
-			that.setParameters();
-			that.bindEvents();
-
-			return false;
-		},
-
-		setParameters: function() {
-			var that = STYLEV.CHROME_EXTENSION.bind2DevToolsInspect;
-
-			//TODO: 全体的に、再取得と削除できないか調査
-			that.consoleWrapper = document.querySelector('#stylev-console-wrapper');
-			that.consoleWrapperShadowRoot = that.consoleWrapper.shadowRoot;
-			that.consoleList = that.consoleWrapperShadowRoot.querySelector('#stylev-console-list');
-			that.triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid]');
-			that.targets = document.querySelectorAll('.stylev-target-error,.stylev-target-warning');
-		},
-
-		bindEvents: function() {
-			var that = STYLEV.CHROME_EXTENSION.bind2DevToolsInspect;
-
-			for(var i = 0, len = that.triggers.length; i < len; i++) {
-				that.triggers[i].addEventListener('click', that.inspectFromConsole, false);
-			}
-
-			for(var j = 0, targetsLen = that.targets.length; j < targetsLen; j++) {
-				that.targets[j].addEventListener('click', that.inspectFromTargets, false);
-			}
-		},
-
-		//コンソールからインスペクト
-		inspectFromConsole: function(){
-
-			event.preventDefault();
-
-			var that = STYLEV.CHROME_EXTENSION.bind2DevToolsInspect;
-
-			var trigger = event.currentTarget;
-			var targetID = trigger.querySelector('span').textContent;
-			var targetElem = document.querySelector('[data-stylevid="' + targetID + '"]');
-
-			try {
-				that.inspectOfConsoleAPI(targetElem);
-			} catch(e) {
-				console.error(e);
-			}
-
-		},
-
-		//対象要素からインスペクトする
-		inspectFromTargets: function() {
-
-			event.preventDefault();
-			event.stopPropagation();
-
-			var that = STYLEV.CHROME_EXTENSION.bind2DevToolsInspect;
-
-			var target = event.target;
-
-			try {
-				that.inspectOfConsoleAPI(target);
-			} catch(e) {
-				console.error(e);
-			}
-
-		}
 	}
 
 };
+
+//DevToolsページ内で使うコンソールAPI関数を登録する
+STYLEV.CHROME_DEVTOOLS = {
+
+	execute: function(inspectOfConsoleAPI) {
+
+		var that = STYLEV.CHROME_DEVTOOLS;
+
+		//エラーや警告が１件もなければ何もしない
+		if(STYLEV.VALIDATOR.resultArray.length === 0) {
+			return false;
+		}
+		that.inspectOfConsoleAPI = inspectOfConsoleAPI;
+		that.setParameters();
+		that.bindEvents();
+
+		return false;
+	},
+
+	setParameters: function() {
+		var that = STYLEV.CHROME_DEVTOOLS;
+
+		//TODO: 全体的に、再取得と削除できないか調査
+		that.consoleWrapper = document.querySelector('#stylev-console-wrapper');
+		that.consoleWrapperShadowRoot = that.consoleWrapper.shadowRoot;
+		that.consoleList = that.consoleWrapperShadowRoot.querySelector('#stylev-console-list');
+		that.triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid]');
+		that.targets = document.querySelectorAll('.stylev-target-error,.stylev-target-warning');
+	},
+
+	bindEvents: function() {
+		var that = STYLEV.CHROME_DEVTOOLS;
+
+		for(var i = 0, triggersLen = that.triggers.length; i < triggersLen; i++) {
+			that.triggers[i].addEventListener('click', that.inspectFromConsole, false);
+		}
+
+		for(var j = 0, targetsLen = that.targets.length; j < targetsLen; j++) {
+			that.targets[j].addEventListener('click', that.inspectFromTargets, false);
+		}
+	},
+
+	//コンソールからインスペクト
+	inspectFromConsole: function(){
+
+		event.preventDefault();
+
+		var that = STYLEV.CHROME_DEVTOOLS;
+
+		var trigger = event.currentTarget;
+		var targetID = trigger.querySelector('span').textContent;
+		var targetElem = document.querySelector('[data-stylevid="' + targetID + '"]');
+
+		try {
+			that.inspectOfConsoleAPI(targetElem);
+		} catch(e) {
+			console.error(e);
+		}
+
+	},
+
+	//対象要素からインスペクトする
+	inspectFromTargets: function() {
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		var that = STYLEV.CHROME_DEVTOOLS;
+
+		var target = event.target;
+
+		try {
+			that.inspectOfConsoleAPI(target);
+		} catch(e) {
+			console.error(e);
+		}
+
+	}
+}
 
 
 //Chrome Extensionの場合
@@ -1893,21 +1922,14 @@ if(STYLEV.isChromeExtension){
 
 			if(changes.options) {
 
-				var html = document.querySelector('html');
-
+				//TODO: class変更による検証再実行が嫌なら、監視を停止してトグルする
 				if(changes.options.newValue.enableAnimation) {
 
-					if(html.dataset.stylevclass !== undefined) {
-						html.dataset.stylevclass += ' stylev-animation';
-					} else {
-						html.dataset.stylevclass = 'stylev-animation';
-					}
+					STYLEV.VALIDATOR.html.classList.add('stylev-animation');
 
 				} else {
 
-					if(html.dataset.stylevclass.indexOf(' stylev-animation') !== -1) {
-						html.dataset.stylevclass -= ' stylev-animation';
-					}
+					STYLEV.VALIDATOR.html.classList.remove('stylev-animation');
 				}
 
 			}
