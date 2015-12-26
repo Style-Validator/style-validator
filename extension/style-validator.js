@@ -725,11 +725,6 @@ STYLEV.VALIDATOR = {
 		var OBSERVE_INTERVAL = 1000;
 		var RESET_INTERVAL = 3000;
 
-		if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
-			that.moManager.disconnect();
-			return false;
-		}
-
 		that.observer = new MutationObserver(function (mutations) {
 
 			//監視タイマーがある場合は、クリア
@@ -856,6 +851,9 @@ STYLEV.VALIDATOR = {
 		return {
 			
 			connect: function() {
+				if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
+					return true;
+				}
 				if(!that.isObserving) {
 					//TODO: 属性回避ができれば、全要素を対象に変更
 					//that.observer.observe(document.querySelector('html'), observationConfig);
@@ -864,9 +862,13 @@ STYLEV.VALIDATOR = {
 					that.isObserving = true;
 					console.info('Mutation Observer Connected');
 				}
+				return false;
 			},
 
 			disconnect: function() {
+				if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
+					return true;
+				}
 				if(that.isObserving) {
 					clearTimeout(that.observationTimer);
 					clearTimeout(that.resetTImer);
@@ -874,6 +876,7 @@ STYLEV.VALIDATOR = {
 					that.isObserving = false;
 					console.info('Mutation Observer Disconnected');
 				}
+				return false;
 			}
 		}
 
@@ -1128,10 +1131,10 @@ STYLEV.VALIDATOR = {
 		that.consoleBody.appendChild(that.consoleList);
 		that.html.appendChild(that.consoleWrapper);
 
-		that.doAfterParsedConsole();
+		that.doAfterShowingConsole();
 	},
 
-	doAfterParsedConsole: function() {
+	doAfterShowingConsole: function() {
 
 		var that = STYLEV.VALIDATOR;
 
@@ -1288,11 +1291,15 @@ STYLEV.VALIDATOR = {
 		}, false);
 
 		that.consoleHeader.addEventListener('mousedown', function() {
+			event.preventDefault();
+			event.stopPropagation();
 			that.isMouseDownConsoleHeader = true;
 			that.consoleStartPosY = event.pageY;
 		}, false);
 
 		that.html.addEventListener('mousemove', function() {
+			event.preventDefault();
+			event.stopPropagation();
 
 			if(that.isMouseDownConsoleHeader) {
 				that.consoleCurrentPosY = event.pageY;
@@ -1311,6 +1318,8 @@ STYLEV.VALIDATOR = {
 		}, false);
 
 		that.html.addEventListener('mouseup', function() {
+			event.preventDefault();
+			event.stopPropagation();
 			that.isMouseDownConsoleHeader = false;
 			that.consoleWrapperDefaultHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
 			STYLEV.consoleWrapperHeight = that.consoleWrapperDefaultHeight;
@@ -1348,6 +1357,7 @@ STYLEV.VALIDATOR = {
 	markElementFromConsole: function(result) {
 
 		event.preventDefault();
+		event.stopPropagation();
 
 		var that = STYLEV.VALIDATOR;
 
@@ -1847,6 +1857,7 @@ STYLEV.CHROME_DEVTOOLS = {
 	inspectFromConsole: function(){
 
 		event.preventDefault();
+		event.stopPropagation();
 
 		var that = STYLEV.CHROME_DEVTOOLS;
 
@@ -1870,7 +1881,7 @@ STYLEV.CHROME_DEVTOOLS = {
 
 		var that = STYLEV.CHROME_DEVTOOLS;
 
-		var target = event.target;
+		var target = event.currentTarget;
 
 		try {
 			that.inspectOfConsoleAPI(target);
