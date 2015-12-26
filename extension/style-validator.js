@@ -926,23 +926,15 @@ STYLEV.VALIDATOR = {
 		var that = STYLEV.VALIDATOR;
 
 		//TODO: 全体的に、再取得と削除できないか調査
-		var html = document.querySelector('html');
-		//TODO: 全体的に、再取得と削除できないか調査
 		var consoleWrapper = document.querySelector('#stylev-console-wrapper');
 
 		if(consoleWrapper !== null) {
 
-			html.removeChild(consoleWrapper);
-
-//			var triggers = consoleWrapper.shadowRoot.querySelectorAll('a');
-//
-//			for(var i = 0, len = triggers.length; i < len; i++) {
-//				var trigger = triggers[i];
-//				trigger.removeEventListener('click');//TODO: 関数を指定する
-//			}
+			//TODO: 削除する要素は再取得しないといけないのか？調査
+			that.html.removeChild(consoleWrapper);
 
 			//ログ表示領域分の余白を初期化
-			html.style.setProperty('border-bottom-width', that.htmlDefaultBorderBottomWidth, '');
+			that.html.style.setProperty('border-bottom-width', that.htmlDefaultBorderBottomWidth, '');
 
 		}
 	},
@@ -1143,11 +1135,11 @@ STYLEV.VALIDATOR = {
 			that.consoleWrapper.style.setProperty('height', (STYLEV.consoleWrapperHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT) + 'px', '');
 
 			//コンソールの包括要素のデフォルトの高さを計算し記憶しておく
-			that.consoleWrapperDefaultHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
+			that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
 
 			//コンソールの包括要素の高さ分だけ最下部に余白をつくる
 			//コンソールで隠れる要素がでないための対応
-			that.html.style.setProperty('border-bottom-width', that.consoleWrapperDefaultHeight + 'px', 'important');
+			that.html.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + 'px', 'important');
 
 			//表示結果をChrome Extensionに伝える
 			that.send2ChromeExtension();
@@ -1304,8 +1296,8 @@ STYLEV.VALIDATOR = {
 			if(that.isMouseDownConsoleHeader) {
 				that.consoleCurrentPosY = event.pageY;
 				that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
-				that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDefaultHeight + that.consoleDiffPosY) + 'px', '');
-				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDefaultHeight + that.consoleDiffPosY + 'px', 'important');
+				that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', '');
+				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
 
 				if(that.consoleWrapper.offsetHeight === 30) {
 					that.consoleNormalizeButton.hidden = false;
@@ -1321,8 +1313,10 @@ STYLEV.VALIDATOR = {
 			event.preventDefault();
 			event.stopPropagation();
 			that.isMouseDownConsoleHeader = false;
-			that.consoleWrapperDefaultHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
-			STYLEV.consoleWrapperHeight = that.consoleWrapperDefaultHeight;
+			setTimeout(function() {
+				that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
+				STYLEV.consoleWrapperHeight = that.consoleWrapperDynamicHeight;
+			}, 0);
 		}, false);
 
 		that.consoleCloseButton.addEventListener('click', function() {
@@ -1499,13 +1493,13 @@ STYLEV.VALIDATOR = {
 	minimize: function() {
 		var that = STYLEV.VALIDATOR;
 		that.consoleWrapper.style.setProperty('height', that.consoleHeader.style.getPropertyValue('height'), '');
-		that.consoleWrapperDefaultHeight = that.consoleWrapper.offsetHeight;
+		that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 	},
 
 	normalize: function() {
 		var that = STYLEV.VALIDATOR;
 		that.consoleWrapper.style.setProperty('height', that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
-		that.consoleWrapperDefaultHeight = that.consoleWrapper.offsetHeight;
+		that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 	},
 
 	setStyleDataBySelectors: function(document) {
@@ -1881,7 +1875,7 @@ STYLEV.CHROME_DEVTOOLS = {
 
 		var that = STYLEV.CHROME_DEVTOOLS;
 
-		var target = event.currentTarget;
+		var target = event.target;
 
 		try {
 			that.inspectOfConsoleAPI(target);
