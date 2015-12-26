@@ -991,9 +991,3 @@ STYLEV.RULES_EDITOR = {
 };
 
 STYLEV.RULES_EDITOR.execute();
-
-//syntax highlight override
-Prism.languages.css = {
-	'selector': /"(.*":\s*)/,
-	'string': /("|')(\\(?:\r\n|[\w\W])|(?!\1)[^\\\r\n])*\1/
-};

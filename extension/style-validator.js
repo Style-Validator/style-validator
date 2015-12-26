@@ -677,7 +677,7 @@ STYLEV.VALIDATOR = {
 			}
 
 			//エラーの発生した要素に、IDを振る
-			elemData.targetElem.dataset.stylevid = 'stylev-' + that.errorIndex;
+			elemData.targetElem.dataset.stylevid = that.errorIndex;
 
 			//親要素を検査する場合
 			if(isParentCheck) {
@@ -1474,7 +1474,9 @@ STYLEV.VALIDATOR = {
 		that.removeAllAttrAndEvents();
 		that.removeConsole();
 
-		that.moManager.disconnect();
+		if(that.moManager !== undefined) {
+			that.moManager.disconnect();
+		}
 		that.removeStylesheet();
 
 		if(STYLEV.isChromeExtension) {
@@ -1826,7 +1828,7 @@ STYLEV.CHROME_DEVTOOLS = {
 		that.consoleWrapperShadowRoot = that.consoleWrapper.shadowRoot;
 		that.consoleList = that.consoleWrapperShadowRoot.querySelector('#stylev-console-list');
 		that.triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid]');
-		that.targets = document.querySelectorAll('.stylev-target-error,.stylev-target-warning');
+		that.targets = document.querySelectorAll('.stylev-target-error, .stylev-target-warning');
 	},
 
 	bindEvents: function() {
@@ -1849,7 +1851,7 @@ STYLEV.CHROME_DEVTOOLS = {
 		var that = STYLEV.CHROME_DEVTOOLS;
 
 		var trigger = event.currentTarget;
-		var targetID = trigger.querySelector('span').textContent;
+		var targetID = trigger.dataset.stylevconsoleid;
 		var targetElem = document.querySelector('[data-stylevid="' + targetID + '"]');
 
 		try {

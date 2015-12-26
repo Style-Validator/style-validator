@@ -120,7 +120,7 @@
 		}
 	},
 	{
-		"title": "Collapse Table Element",
+		"title": "Collapsed Table Element",
 		"base-styles": {
 			"display": "table",
 			"border-collapse": "collapse"
@@ -370,12 +370,6 @@
 		"empty": "Empty elements",
 		"warning-styles": {
 			"padding": "over-0"
-		},
-		"pseudo-before-error-styles": {
-			"content": "!default"
-		},
-		"pseudo-after-error-styles": {
-			"content": "!default"
 		}
 	}
 ]
