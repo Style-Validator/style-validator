@@ -43,7 +43,7 @@
 	border-style: dashed;
 }
 :host .stylev-console-heading {
-	display: none;
+	/*display: none;*/
 	font-size: 12px;
 	font-weight: normal;
 	width: auto;
@@ -61,7 +61,7 @@
 	/*left: 0;*/
 	width: 20px;
 	height: 20px;
-	vertical-align: text-bottom;
+	vertical-align: -15%;
 	margin-right: 5px;
 	/*margin-top: -3px;*/
 	/*margin-top: auto;*/
@@ -87,7 +87,7 @@
 :host .stylev-console-mode-image {
 	width: 20px;
 	height: 20px;
-	vertical-align: text-bottom;
+	vertical-align: -20%;
 	margin-right: 5px;
 }
 :host .stylev-console-mode-devtools-connected {
@@ -125,7 +125,7 @@
 
 :host .stylev-console-counter {
 	float: left;
-	padding: 0 10px;
+	/*padding: 0 10px;*/
 }
 :host .stylev-console-buttons {
 	float: right;
@@ -156,6 +156,29 @@
 	width: 20px;
 	height: 20px;
 }
+:host .stylev-console-refresh-button-image-active {
+	-webkit-animation: active-refresh-button 1s infinite;
+	-o-animation: active-refresh-button 1s infinite;
+	animation: active-refresh-button 1s infinite;
+}
+@keyframes active-refresh-button {
+	0% {
+		-webkit-transform: scale(1);
+	}
+	100% {
+		-webkit-transform: scale(1.25);
+	}
+}
+@-webkit-keyframes active-refresh-button {
+	0% {
+		-webkit-transform: scale(1);
+	}
+	100% {
+		-webkit-transform: scale(1.25);
+	}
+}
+
+
 :host .stylev-console-close-button {
 }
 :host .stylev-console-close-button-image {
@@ -261,8 +284,6 @@
 :host .stylev-console-list > li.stylev-trigger-selected > a {
 	font-weight: bold;
 }
-
-
 
 :host .stylev-console-perfect {
 	position: absolute;

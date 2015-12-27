@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "Style Validator",
-	"version": "0.3.0.1",
+	"version": "0.3.0.2",
 
 	"description": "Style Validator is a new CSS Validator that detect styling problem for each html elements in conjunction with Chrome DevTools.",
 	"icons": {
@@ -69,6 +69,7 @@
 		"specificity.js",
 		"google-analytics.js",
 		"iconmonstr-refresh-3-icon.svg",
+		"iconmonstr-refresh-3-icon-active.svg",
 		"iconmonstr-minus-2-icon.svg",
 		"iconmonstr-x-mark-icon.svg",
 		"iconmonstr-plus-2-icon.svg",

@@ -52,6 +52,7 @@ function toggleValidation() {
 				} else {
 					chrome.tabs.executeScript(tabId, {
 						code:
+							"console.info('Style Validator by Chrome Extension');" +
 							"console.info('Executed from Background Page');" +
 							"STYLEV.VALIDATOR.execute();"
 					});
@@ -67,8 +68,8 @@ function toggleValidation() {
 				//コンソールを削除
 				chrome.tabs.executeScript(tabId, {
 					code:
-						"console.info('Validator has Removed.');" +
-						"STYLEV.VALIDATOR.destroy();"
+							"console.info('Removed from Background Page');" +
+							"STYLEV.VALIDATOR.destroy();"
 				});
 
 				//コンソールを開いたという情報を保存
@@ -273,6 +274,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 								//Background Modeで実行
 								chrome.tabs.executeScript(tabId, {
 									code:
+										"console.info('Style Validator by Chrome Extension');" +
 										"console.info('Executed from Background Page');" +
 										"STYLEV.VALIDATOR.execute();"
 								});
@@ -326,6 +328,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 				chrome.tabs.executeScript(tabId, {
 					code:
+						"console.info('Style Validator by Chrome Extension');" +
 						"console.info('Executed from Background Page');" +
 						"STYLEV.VALIDATOR.execute();"
 				});

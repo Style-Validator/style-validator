@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- ***** base ***** -->
+	<base>
+
+	<!-- ***** data ***** -->
+	<title>Edit Validation Rules | Style Validator</title>
+
+	<!-- ***** robots ***** -->
+	<meta name="robots" content="noindex,nofollow" />
+
+	<!-- ***** favicon ***** -->
+	<link rel="icon" type="image/x-icon" href="../favicon.ico?v=1">
+	<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?v=1">
+
+	<!-- ***** styles***** -->
+	<link href="rules.css" rel="stylesheet" />
+	<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">
+	<style>
+		html {
+			font-family: 'Nunito', sans-serif;
+		}
+	</style>
+
+	<!-- ***** scripts***** -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-53227157-3', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</head>
+<body>
+<div class="wrapper">
+	<header class="header">
+		<h1 class="header-heading"><a href="../"><img src="../img/style-validator.logo.svg" width="40" height="40" />Validation Rules - View and Edit</a></h1>
+		<nav>
+			<button id="add-button"><img src="../img/iconmonstr-selection-10-icon.svg" width="20" height="20" /> Add</button>
+			<a id="download-button" download="rules.json" class="button" title="Override a file at '/Style-Validator/data/rules.json'"><img src="../img/iconmonstr-download-2-icon.svg" width="20" height="20" /> Download</a>
+			<button id="save-button"><img src="../img/iconmonstr-save-icon.svg" width="20" height="20" /> Save</button>
+		</nav>
+	</header>
+	<main class="main">
+		<ul id="rules-list" class="styles-list-wrapper col"></ul>
+	</main>
+</div>
+
+<template id="template-rule">
+	<li>
+		<section class="styles-input" data-id="title"><input type="text" /><a href="javascript: void(0);" class="remove-button">Remove</a><a href="javascript: void(0);" class="edit-button">Edit</a></section>
+		<ul class="styles-list" data-id="base-styles"></ul>
+		<section class="styles-select" data-id="replaced">
+			<select>
+				<option value="" selected="selected">------------</option>
+				<option value="Non-replaced elements">Non-replaced elements</option>
+				<option value="Replaced elements">Replaced elements</option>
+			</select>
+		</section>
+		<section class="styles-select" data-id="empty">
+			<select>
+				<option value="" selected="selected">------------</option>
+				<option value="Empty elements">Empty elements</option>
+			</select>
+		</section>
+		<ul class="styles-list" data-id="error-styles"></ul>
+		<ul class="styles-list" data-id="warning-styles"></ul>
+		<ul class="styles-list" data-id="parent-error-styles"></ul>
+		<ul class="styles-list" data-id="parent-warning-styles"></ul>
+		<!--<ul class="styles-list" data-id="pseudo-before-error-styles"></ul>-->
+		<!--<ul class="styles-list" data-id="pseudo-before-warning-styles"></ul>-->
+		<!--<ul class="styles-list" data-id="pseudo-after-error-styles"></ul>-->
+		<!--<ul class="styles-list" data-id="pseudo-after-warning-styles"></ul>-->
+		<!--<section class="styles-input" data-id="message"><input type="text" /></section>-->
+		<!--<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="../img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>-->
+	</li>
+</template>
+<template id="template-property">
+	<li>
+		<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="value" /> ;
+	</li>
+</template>
+<datalist id="all-css-properties"></datalist>
+<datalist id="value">
+	<option value="default">default</option>
+	<option value="!default">!default</option>
+	<option value="!0">!0</option>
+	<option value="over-0">over-0</option>
+	<option value="under-0">under-0</option>
+	<option value="initial">initial</option>
+	<option value="inherit">inherit</option>
+	<option value="unset">unset</option>
+</datalist>
+<script src="../extension/specificity.js"></script>
+<script src="./rules.js"></script>
+</body>
+</html>

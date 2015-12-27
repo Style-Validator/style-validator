@@ -1,4 +1,5 @@
-- JetBrainsと連携させる
+- 再構築をbodyだけにする　見た目が悪いため　
+- optionページとruleページの統合を検討
 - ソースマップと連携させる
 - Chirimenと連動させて、LEDを発光させる。全プロジェクトの健康状態を図る。IoTと連動させて、便利にするなど。
 - BG実行計画：イベンドを登録している要素だったらい、イベント自体をキャッチして、ランダムで実行させ、ウィンドウの幅や高さを変えながらを自動で、行うようにする
@@ -47,3 +48,4 @@
 - http://stackoverflow.com/questions/12468176/what-is-a-non-replaced-inline-element
 - https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
 - エラー判定ロジックの配列の処理ができていない
+- JetBrainsと連携させる
