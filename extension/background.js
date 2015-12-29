@@ -33,7 +33,7 @@ chrome.storage.local.get(isDevtoolsOpened, function(item) {
 //検証したり止めたり
 function toggleValidation() {
 
-	//	実行したり破壊したりの処理
+	//実行したり破壊したりの処理
 	chrome.tabs.query({active: true, currentWindow: true, windowType: 'normal'}, function(tabs) {
 
 		//タブが1つも無い場合エラーを回避するために、存在判定

@@ -53,6 +53,12 @@
 			"display": "block"
 		},
 		"ng-styles": {
+			"warning-styles": {
+				"vertical-align": "!default"
+			},
+			"parent-error-styles": {
+				"display": "[table|table-row-group|table-row|table-header-group|table-footer-group]"
+			},
 			"parent-warning-styles": {
 				"display": "![none|block|inline-block|list-item|table-cell|flex]"
 			}
@@ -64,6 +70,9 @@
 			"display": "inline-block"
 		},
 		"ng-styles": {
+			"warning-styles": {
+				"float": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|inline|block|inline-block|list-item|table-cell|flex]"
 			}
@@ -75,6 +84,9 @@
 			"display": "list-item"
 		},
 		"ng-styles": {
+			"warning-styles": {
+				"vertical-align": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|block|inline-block|flex]"
 			}
@@ -86,6 +98,17 @@
 			"display": "inline-table"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"padding": "over-0",
+				"position": "relative"
+			},
+			"warning-styles": {
+				"vertical-align": "!default",
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|block|inline-block|list-item|table-cell]"
 			}
@@ -97,6 +120,16 @@
 			"display": "table"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"position": "relative"
+			},
+			"warning-styles": {
+				"max-height": "!default",
+				"max-width": "!default",
+				"min-height": "!default",
+				"min-width": "!default",
+				"vertical-align": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|block|inline-block|list-item|table-cell]"
 			}
@@ -120,6 +153,16 @@
 			"display": "table-cell"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"margin": "over-0",
+				"position": "!default"
+			},
+			"warning-styles": {
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table|table-row|table-row-group|table-header-group|table-footer-group]"
 			}
@@ -131,6 +174,19 @@
 			"display": "table-row"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"margin": "over-0",
+				"padding": "over-0",
+				"border-width": "over-0",
+				"position": "!default"
+			},
+			"warning-styles": {
+				"box-shadow": "!default",
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table|table-row-group|table-header-group|table-footer-group]"
 			}
@@ -142,6 +198,19 @@
 			"display": "table-row-group"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"margin": "over-0",
+				"padding": "over-0",
+				"border-width": "over-0",
+				"position": "!default"
+			},
+			"warning-styles": {
+				"box-shadow": "!default",
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table]"
 			}
@@ -153,6 +222,19 @@
 			"display": "table-header-group"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"margin": "over-0",
+				"padding": "over-0",
+				"border-width": "over-0",
+				"position": "!default"
+			},
+			"warning-styles": {
+				"box-shadow": "!default",
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table]"
 			}
@@ -164,6 +246,19 @@
 			"display": "table-footer-group"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"margin": "over-0",
+				"padding": "over-0",
+				"border-width": "over-0",
+				"position": "!default"
+			},
+			"warning-styles": {
+				"box-shadow": "!default",
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table]"
 			}
@@ -175,6 +270,18 @@
 			"display": "table-column"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"margin": "over-0",
+				"position": "!default"
+			},
+			"warning-styles": {
+				"padding": "over-0",
+				"box-shadow": "!default",
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table-column-group|table]"
 			}
@@ -186,6 +293,18 @@
 			"display": "table-column-group"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"margin": "over-0",
+				"position": "!default"
+			},
+			"warning-styles": {
+				"padding": "over-0",
+				"box-shadow": "!default",
+				"min-width": "!default",
+				"min-height": "!default",
+				"max-width": "!default",
+				"max-height": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table]"
 			}
@@ -197,6 +316,9 @@
 			"display": "table-caption"
 		},
 		"ng-styles": {
+			"error-styles": {
+				"position": "!default"
+			},
 			"parent-error-styles": {
 				"display": "![none|table]"
 			}

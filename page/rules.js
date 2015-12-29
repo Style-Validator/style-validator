@@ -768,7 +768,8 @@ STYLEV.RULES_EDITOR = {
 
 						var clone = document.importNode(that.templateRule, true);
 						var styleSelects = clone.querySelectorAll('.styles-select');
-						var styleLists = clone.querySelectorAll('.styles-list');
+						var styleBaseLists = clone.querySelectorAll('.styles-base-list');
+						var styleNgLists = clone.querySelectorAll('.styles-ng-list');
 						var styleInputs = clone.querySelectorAll('.styles-input');
 
 						for(var h = 0, styleSelectsLength = styleSelects.length; h < styleSelectsLength; h++) {
@@ -776,10 +777,19 @@ STYLEV.RULES_EDITOR = {
 							styleSelect.querySelector('select').tabIndex = 1;
 							that.addPropertyFromHTMLToJSON(styleSelect, rule, styleSelect.dataset.id);
 						}
-						for(var j = 0, styleListsLength = styleLists.length; j < styleListsLength; j++) {
-							var styleList = styleLists[j];
-							styleList.tabIndex = 1;
-							that.addPropertyFromHTMLToJSON(styleList, rule, styleList.dataset.id);
+						for(var j = 0, styleListsBaseLength = styleBaseLists.length; j < styleListsBaseLength; j++) {
+							var styleBaseList = styleBaseLists[j];
+							styleBaseList.tabIndex = 1;
+
+							that.addPropertyFromHTMLToJSON(styleBaseList, rule, styleBaseList.dataset.id);
+						}
+						if(rule['ng-styles'] !== undefined) {
+							for(var m = 0, styleListsNgLength = styleNgLists.length; m < styleListsNgLength; m++) {
+								var styleNgList = styleNgLists[m];
+								styleNgList.tabIndex = 1;
+
+								that.addPropertyFromHTMLToJSON(styleNgList, rule['ng-styles'], styleNgList.dataset.id);
+							}
 						}
 						for(var k = 0, styleInputsLength = styleInputs.length; k < styleInputsLength; k++) {
 							var styleInput = styleInputs[k];
@@ -805,15 +815,19 @@ STYLEV.RULES_EDITOR = {
 
 		if(ruleStyles) {
 
-			if(target.className === 'styles-select') {
+			if(target.classList.contains('styles-select')) {
 
 				var select = target.querySelector('select');
 				select.value = ruleStyles;
 
 			}
-			if(target.className === 'styles-list') {
+			if( target.classList.contains('styles-base-list') ||
+				target.classList.contains('styles-ng-list')) {
+
 				for(var property in ruleStyles) {
 					if(ruleStyles.hasOwnProperty(property)) {
+
+
 						var propertyValue = ruleStyles[property];
 						var styleListItem = that.insertProperty(target, property, propertyValue);
 						that.modifyCSSProperty(null, styleListItem);
@@ -822,7 +836,7 @@ STYLEV.RULES_EDITOR = {
 					}
 				}
 			}
-			if(target.className === 'styles-input') {
+			if(target.classList.contains('styles-input')) {
 				var input = target.querySelector('input');
 				input.value = ruleStyles;
 
@@ -889,8 +903,8 @@ STYLEV.RULES_EDITOR = {
 						rule[id] = styleSelectItem.value;
 					}
 				}
-				
-				if(dataElement.classList.contains('styles-list')) {
+
+				if(dataElement.classList.contains('styles-base-list')) {
 
 					var styleListItems = dataElement.querySelectorAll('li');
 
@@ -911,8 +925,27 @@ STYLEV.RULES_EDITOR = {
 //							propertyValue.dataset_isvalid === 'true'
 //						) {
 
-							rule[id][property.value] = propertyValue.value;
+						rule[id][property.value] = propertyValue.value;
 //						}
+					}
+				}
+				if(dataElement.classList.contains('styles-ng-list')) {
+
+					var styleListItems = dataElement.querySelectorAll('li');
+
+					if(!styleListItems.length) {
+						continue;
+					}
+					rule['ng-styles'] = {};
+					rule['ng-styles'][id] = {};
+
+					for(var j = 0, styleListItemsLength = styleListItems.length; j < styleListItemsLength; j++) {
+
+						var styleListItem = styleListItems[j];
+						var property = styleListItem.querySelector('.css-property');
+						var propertyValue = styleListItem.querySelector('.css-property-value');
+
+						rule['ng-styles'][id][property.value] = propertyValue.value;
 					}
 				}
 

@@ -53,7 +53,7 @@
 <template id="template-rule">
 	<li>
 		<section class="styles-input" data-id="title"><input type="text" /><a href="javascript: void(0);" class="remove-button">Remove</a><a href="javascript: void(0);" class="edit-button">Edit</a></section>
-		<ul class="styles-list" data-id="base-styles"></ul>
+		<ul class="styles-list styles-base-list" data-id="base-styles"></ul>
 		<section class="styles-select" data-id="replaced">
 			<select>
 				<option value="" selected="selected">------------</option>
@@ -67,14 +67,14 @@
 				<option value="Empty elements">Empty elements</option>
 			</select>
 		</section>
-		<ul class="styles-list" data-id="error-styles"></ul>
-		<ul class="styles-list" data-id="warning-styles"></ul>
-		<ul class="styles-list" data-id="parent-error-styles"></ul>
-		<ul class="styles-list" data-id="parent-warning-styles"></ul>
-		<!--<ul class="styles-list" data-id="pseudo-before-error-styles"></ul>-->
-		<!--<ul class="styles-list" data-id="pseudo-before-warning-styles"></ul>-->
-		<!--<ul class="styles-list" data-id="pseudo-after-error-styles"></ul>-->
-		<!--<ul class="styles-list" data-id="pseudo-after-warning-styles"></ul>-->
+		<ul class="styles-list styles-ng-list" data-id="error-styles"></ul>
+		<ul class="styles-list styles-ng-list" data-id="warning-styles"></ul>
+		<ul class="styles-list styles-ng-list" data-id="parent-error-styles"></ul>
+		<ul class="styles-list styles-ng-list" data-id="parent-warning-styles"></ul>
+		<!--<ul class="styles-ng-list" data-id="pseudo-before-error-styles"></ul>-->
+		<!--<ul class="styles-ng-list" data-id="pseudo-before-warning-styles"></ul>-->
+		<!--<ul class="styles-ng-list" data-id="pseudo-after-error-styles"></ul>-->
+		<!--<ul class="styles-ng-list" data-id="pseudo-after-warning-styles"></ul>-->
 		<!--<section class="styles-input" data-id="message"><input type="text" /></section>-->
 		<!--<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="../img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>-->
 	</li>
