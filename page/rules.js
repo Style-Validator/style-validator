@@ -11,6 +11,11 @@ STYLEV.RULES_EDITOR = {
 		that.insertDummyElements();
 		that.getAllCSSProperties();
 		that.setCSSPropertyDataList();
+		that.removeSaveButtonWhenNotLocal();
+		that.initializeRuleArea();
+	},
+	initializeRuleArea: function() {
+		var that = STYLEV.RULES_EDITOR;
 
 		that.showCurrentJSON()
 			.then(function() {
@@ -40,7 +45,9 @@ STYLEV.RULES_EDITOR = {
 		that.dummyElement4detectWidth.classList.add('dummy')
 		that.dummyElement4testStyle = document.createElement('div');
 		that.dummyElement4testStyle.id = 'dummy-element-4-test-style';
-		that.dummyElement4testStyle.classList.add('dummy')
+		that.dummyElement4testStyle.classList.add('dummy');
+		that.reasonCheckbox = document.querySelector('#reason-checkbox');
+		that.referenceURLCheckbox = document.querySelector('#reference-url-checkbox');
 		that.allCSSProperties = [];
 		that.INPUT_ARROW_WIDTH = 22;
 	},
@@ -51,17 +58,44 @@ STYLEV.RULES_EDITOR = {
 		that.stylesSelects = that.rulesList.querySelectorAll('.styles-select');
 		that.stylesLists = that.rulesList.querySelectorAll('.styles-list');
 		that.stylesInputs = that.rulesList.querySelectorAll('.styles-input');
+		that.reasons = that.rulesList.querySelectorAll('.reason');
+		that.referenceURLs = that.rulesList.querySelectorAll('.reference-url');
 	},
 	bindEvents: function() {
 		var that = STYLEV.RULES_EDITOR;
 
-		that.resetButton.addEventListener('click', that.showCurrentJSON, false);
+		that.resetButton.addEventListener('click', that.initializeRuleArea, false);
 		that.addButton.addEventListener('click', that.addRule, false);
 		that.saveButton.addEventListener('click', that.saveJSON, false);
 		that.downloadButton.addEventListener('mousedown', that.setParamAndFunc2DownloadButton, false);
+		that.reasonCheckbox.addEventListener('change', that.toggleReason, false);
+		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL, false);
 
 		that.bind2RuleBox();
 		that.bind2StylesList();
+	},
+
+	toggleReason: function(event) {
+		var that = STYLEV.RULES_EDITOR;
+		for(var i = 0, reasons = that.reasons, reasonsLen = reasons.length; i < reasonsLen; i++) {
+			var reason = reasons[i];
+			reason.hidden = !event.currentTarget.checked;
+		}
+	},
+
+	toggleReferenceURL: function(event) {
+		var that = STYLEV.RULES_EDITOR;
+		for(var i = 0, referenceURLs = that.referenceURLs, referenceURLsLen = referenceURLs.length; i < referenceURLsLen; i++) {
+			var referenceURL = referenceURLs[i];
+			referenceURL.hidden = !event.currentTarget.checked;
+		}
+	},
+
+	removeSaveButtonWhenNotLocal: function() {
+		var that = STYLEV.RULES_EDITOR;
+		if(location.hostname === 'style-validator.io') {
+			that.saveButton.hidden = true;
+		}
 	},
 	
 	setParamAndFunc2DownloadButton: function() {
@@ -203,9 +237,9 @@ STYLEV.RULES_EDITOR = {
 		that.dummyElementWrapper.appendChild(that.dummyElement4detectWidth);
 		that.dummyElementWrapper.appendChild(that.dummyElement4testStyle);
 	},
-	insertProperty: function(styleList, property, propertyValue, reason, referenceURL) {
+	insertProperty: function(event, styleList, property, propertyValue, reason, referenceURL) {
 		var that = STYLEV.RULES_EDITOR;
-		var styleList = styleList.nodeType ? styleList : event.currentTarget;
+		var styleList = styleList || event.currentTarget || event.target;
 
 		var clone;
 		if(styleList.dataset.id === 'base-styles') {
@@ -263,11 +297,10 @@ STYLEV.RULES_EDITOR = {
 		cssPropertyValue.addEventListener('focus', that.applySameStyles, false);
 		cssPropertyValue.addEventListener('blur', that.applyValidationResult, false);
 	},
-	modifyCSSProperty: function(styleListItem) {
+	modifyCSSProperty: function(event, styleListItem) {
 		var that = STYLEV.RULES_EDITOR;
 
-		var currentTarget = event.currentTarget.nodeType === 1 ? event.currentTarget : null;
-		var styleListItem = currentTarget ? that.closest(currentTarget, 'li') : styleListItem;
+		var styleListItem = styleListItem || that.closest(event.currentTarget, 'li');
 		var cssProperty = styleListItem.querySelector('.css-property');
 		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
 
@@ -278,11 +311,10 @@ STYLEV.RULES_EDITOR = {
 
 		return false;
 	},
-	modifyCSSPropertyValue: function(styleListItem) {
+	modifyCSSPropertyValue: function(event, styleListItem) {
 		var that = STYLEV.RULES_EDITOR;
 
-		var currentTarget = event.currentTarget.nodeType === 1 ? event.currentTarget : null;
-		var styleListItem = currentTarget ? that.closest(currentTarget, 'li') : styleListItem;
+		var styleListItem = styleListItem || that.closest(event.currentTarget, 'li');
 		var cssProperty = styleListItem.querySelector('.css-property');
 		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
 
@@ -290,32 +322,31 @@ STYLEV.RULES_EDITOR = {
 		cssPropertyValue.style.width = (that.dummyElement4detectWidth.offsetWidth * 1.05 + that.INPUT_ARROW_WIDTH) + 'px';
 		that.validatePropertyValue(cssProperty, cssPropertyValue);
 	},
-	moveFocusByEnter: function() {
+	moveFocusByEnter: function(event) {
 		var that = STYLEV.RULES_EDITOR;
-		var currentTarget = event.currentTarget;
-		var styleListItem = that.closest(currentTarget, 'li');
+		var styleListItem = that.closest(event.currentTarget, 'li');
 		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
 		if(event.keyCode === 13) {
 			cssPropertyValue.focus();
 		}
 	},
-	insertPropertyByEnter: function() {
+	insertPropertyByEnter: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 
-		var currentTarget = event.currentTarget;
-		var styleListItem = that.closest(currentTarget, 'li');
+		var styleListItem = that.closest(event.currentTarget, 'li');
 		var cssProperty = styleListItem.querySelector('.css-property');
 		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
 		var styleList = styleListItem.parentElement;
+		var enterKey = 13;
 
-		if(event.keyCode === 13) {
+		if(event.keyCode === enterKey) {
 
 			if(!cssProperty.value || !cssPropertyValue.value) {
 				that.removeProperty(styleList, styleListItem);
 				return false;
 			}
 
-			that.insertProperty(styleListItem);
+			that.insertProperty(null, styleList);
 		}
 		return false;
 	},
@@ -588,11 +619,10 @@ STYLEV.RULES_EDITOR = {
 
 		}
 	},
-	applyValidationResult: function(styleListItem) {
+	applyValidationResult: function(event, styleListItem) {
 
 		var that = STYLEV.RULES_EDITOR;
-		var currentTarget = event.currentTarget.nodeType === 1 ? event.currentTarget : null;
-		var styleListItem = currentTarget ? that.closest(currentTarget, 'li') : styleListItem;
+		var styleListItem = styleListItem || that.closest(event.currentTarget, 'li');
 		var cssProperty = styleListItem.querySelector('.css-property');
 		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
 		var styleList = styleListItem.parentElement;
@@ -602,25 +632,29 @@ STYLEV.RULES_EDITOR = {
 			return false;
 		}
 
-		if(currentTarget) {
-			currentTarget.style.setProperty('margin-right',(-that.INPUT_ARROW_WIDTH) + 'px', '');
-			setTimeout(that.updateValidClass, 0, currentTarget);
+		if(event && event.currentTarget) {
+
+			event.currentTarget.style.setProperty('margin-right',(-that.INPUT_ARROW_WIDTH) + 'px', '');
+			setTimeout(that.updateValidClass, 0, event.currentTarget);
+
 		} else {
+
 			cssProperty.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
 			cssPropertyValue.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
 			setTimeout(that.updateValidClass, 0, cssProperty);
 			setTimeout(that.updateValidClass, 0, cssPropertyValue);
 		}
 
+		return false;
 	},
-	updateValidClass: function(currentTarget) {
-		if(currentTarget && currentTarget.value) {
-			if(currentTarget.dataset_isvalid === 'true') {
-				currentTarget.classList.remove('invalid');
-				currentTarget.classList.add('valid');
+	updateValidClass: function(target) {
+		if(target && target.value) {
+			if(target.dataset_isvalid === 'true') {
+				target.classList.remove('invalid');
+				target.classList.add('valid');
 			} else {
-				currentTarget.classList.remove('valid');
-				currentTarget.classList.add('invalid');
+				target.classList.remove('valid');
+				target.classList.add('invalid');
 			}
 		}
 	},
@@ -637,7 +671,7 @@ STYLEV.RULES_EDITOR = {
 	stopPropagation: function() {
 		event.stopPropagation();
 	},
-	applySameStyles: function() {
+	applySameStyles: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 		var currentTarget = event.currentTarget;
 		that.dummyElement4detectWidth.innerHTML = currentTarget.value;
@@ -769,10 +803,10 @@ STYLEV.RULES_EDITOR = {
 							propertyValue = propertyValue[0];
 						}
 
-						var styleListItem = that.insertProperty(target, property, propertyValue, reason, referenceURL);
-						that.modifyCSSProperty(styleListItem);
-						that.modifyCSSPropertyValue(styleListItem);
-						that.applyValidationResult(styleListItem);
+						var styleListItem = that.insertProperty(null, target, property, propertyValue, reason, referenceURL);
+						that.modifyCSSProperty(null, styleListItem);
+						that.modifyCSSPropertyValue(null, styleListItem);
+						that.applyValidationResult(null, styleListItem);
 					}
 				}
 			}
@@ -986,15 +1020,16 @@ STYLEV.RULES_EDITOR = {
 
 		for(var i = 0, textareas = that.textareas, textareasLen = textareas.length; i < textareasLen; i++) {
 			var textarea = textareas[i];
-			textarea.addEventListener('input', that.adjustHeight, false);
+			that.adjustHeight(null, textarea);
+			textarea.removeEventListener('keyup', that.adjustHeight);
 			textarea.addEventListener('keyup', that.adjustHeight, false);
 		}
-
 	},
-	adjustHeight: function() {
-		var currentTarget = event.currentTarget;
-		currentTarget.style.setProperty('height', 0 + 'px', '');
-		currentTarget.style.setProperty('height', currentTarget.scrollHeight + 'px', '');
+	adjustHeight: function(event, target) {
+		var target = target || event.currentTarget || event.target;
+		target.style.setProperty('height', 0 + 'px', '');
+		target.style.setProperty('height', target.scrollHeight + 'px', '');
+		return false;
 	}
 
 };
