@@ -1261,7 +1261,7 @@ STYLEV.VALIDATOR = {
 				//テキスト情報を挿入
 				anchor.textContent = result.text;
 				logID.textContent = result.idName;
-				why.textContent = 'why?';
+				why.textContent = '?';
 
 				//属性を設定
 				anchor.dataset.stylevconsoleid = result.idName;

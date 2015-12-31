@@ -8,7 +8,7 @@
 			"warning-styles": {
 				"display": [
 					"!default",
-					"Needless Style",
+					"It's needless style. Defined display property has changed to block(or list-item) forcibly. So, this display property is needless.",
 					"http://style-validator.io/Style-Validator/page/why.html#1"
 				]
 			}

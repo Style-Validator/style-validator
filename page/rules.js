@@ -24,6 +24,7 @@ STYLEV.RULES_EDITOR = {
 	setParameters: function() {
 		var that = STYLEV.RULES_EDITOR;
 
+		that.resetButton = document.querySelector('#reset-button');
 		that.addButton = document.querySelector('#add-button');
 		that.saveButton = document.querySelector('#save-button');
 		that.downloadButton = document.querySelector('#download-button');
@@ -54,6 +55,7 @@ STYLEV.RULES_EDITOR = {
 	bindEvents: function() {
 		var that = STYLEV.RULES_EDITOR;
 
+		that.resetButton.addEventListener('click', that.showCurrentJSON, false);
 		that.addButton.addEventListener('click', that.addRule, false);
 		that.saveButton.addEventListener('click', that.saveJSON, false);
 		that.downloadButton.addEventListener('mousedown', that.setParamAndFunc2DownloadButton, false);
@@ -685,6 +687,8 @@ STYLEV.RULES_EDITOR = {
 	showCurrentJSON: function() {
 		var that = STYLEV.RULES_EDITOR;
 		var df = document.createDocumentFragment();
+
+		that.rulesList.innerHTML = '';//TODO: add loading image...
 
 		return new Promise(function(resolve, reject) {
 
