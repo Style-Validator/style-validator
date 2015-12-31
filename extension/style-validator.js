@@ -325,7 +325,7 @@ STYLEV.VALIDATOR = {
 			}
 
 			elemData.targetElemStyles = getComputedStyle(elemData.targetElem, '');
-			elemData.targetParentElem = elemData.targetElem.parentElement;
+			elemData.targetParentElem = elemData.targetElem.parentElement || null;
 
 			//親要素が合った場合
 			if(elemData.targetParentElem) {
@@ -371,6 +371,7 @@ STYLEV.VALIDATOR = {
 				var ngStyles = rule['ng-styles'];
 				var replaced = rule['replaced'];
 				var empty = rule['empty'];
+				var baseStylesText = '';
 
 				//初期化
 				elemData.isDisplayPropChanged = false;
@@ -402,6 +403,9 @@ STYLEV.VALIDATOR = {
 
 						var baseStylePropVal = baseStyles[baseStyleProp];
 
+						baseStylesText += baseStyleProp + ': ';
+						baseStylesText += baseStylePropVal + ';';
+
 						var targetElemBasePropVal = getComputedStyle(elemData.targetElem, '').getPropertyValue(baseStyleProp);
 
 						var hasBaseStyle = baseStylePropVal === targetElemBasePropVal;
@@ -428,7 +432,7 @@ STYLEV.VALIDATOR = {
 
 									var ngStylePropVal = ngStyleProps[ngStyleProp];
 
-									that.detectErrorAndWarn(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData);
+									that.detectError(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData, baseStylesText);
 								}
 							}
 						}
@@ -474,8 +478,8 @@ STYLEV.VALIDATOR = {
 		STYLEV.isValidated = true;
 	},
 
-	//エラーや警告を検知する TODO: propertyも事前に引数として渡して良いのでは？
-	detectErrorAndWarn: function(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData) {
+	//エラーや警告を検知する
+	detectError: function(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData, baseStylesText) {
 
 		var that = STYLEV.VALIDATOR;
 
@@ -485,10 +489,7 @@ STYLEV.VALIDATOR = {
 		var splitTypeArray = ngStyleType.split('-');
 
 		//親要素をチェックする
-		var isParentType = splitTypeArray[0] === 'parent';
-
-		//エラータイプ
-		var type = splitTypeArray[splitTypeArray.length-2];
+		var isParentCheking = elemData.targetParentElem && splitTypeArray[0] === 'parent';
 
 		//擬似セレクター
 		var pseudoSelector = splitTypeArray[0] === 'pseudo' ? splitTypeArray[1] : null;
@@ -501,6 +502,15 @@ STYLEV.VALIDATOR = {
 
 		//NGスタイルのプロパティ値を検索するための正規表現
 		var regexNgStyleRulesPropVal;
+
+		//値が配列の場合
+		var comment = '';
+		var referenceURL = null;
+		if(ngStylePropVal instanceof Array) {
+			result.comment = ngStylePropVal[1] || null;
+			result.referenceURL = ngStylePropVal[2] || null;
+			ngStylePropVal = ngStylePropVal[0];
+		}
 
 		//否定表現の有無を検査
 		var isReverse = ngStylePropVal.indexOf('!') === 0;
@@ -529,7 +539,6 @@ STYLEV.VALIDATOR = {
 			regexNgStyleRulesPropVal = new RegExp(' ' + ngStylePropVal + ' ');
 		}
 
-
 		//親要素を持つ場合
 		if(elemData.targetParentElem) {
 
@@ -549,9 +558,9 @@ STYLEV.VALIDATOR = {
 		}
 
 		var isNgStyle = regexNgStyleRulesPropVal.test(' ' + targetElemNgStyleVal + ' ');
-		var is0Over = (parseInt(targetElemNgStyleVal, 10) > 0);
-		var is0Under = (parseInt(targetElemNgStyleVal, 10) < 0);
-		var is0 = (parseInt(targetElemNgStyleVal, 10) === 0);
+		var isZeroOver = (parseInt(targetElemNgStyleVal, 10) > 0);
+		var isZeroUnder = (parseInt(targetElemNgStyleVal, 10) < 0);
+		var isZero = (parseInt(targetElemNgStyleVal, 10) === 0);
 		var isDefault = (targetElemNgStyleVal === targetElemNgStyleDefaultVal);
 		var isInheritWithLineHeight = (that.controlFloat(parseFloat(targetElemNgStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNgStyleVal), 1));
 		var isInherit = (targetElemNgStyleVal === targetElemParentNgStyleVal);
@@ -569,10 +578,10 @@ STYLEV.VALIDATOR = {
 			(!isReverse && isNgStyle) ||
 
 			//0以上
-			(!isReverse && ngStylePropVal === 'over-0' && is0Over) ||
+			(!isReverse && ngStylePropVal === 'over-0' && isZeroOver) ||
 
 			//0以下
-			(!isReverse && ngStylePropVal === 'under-0' && is0Under) ||
+			(!isReverse && ngStylePropVal === 'under-0' && isZeroUnder) ||
 
 			//デフォルト値の場合
 			(!isReverse && ngStylePropVal === 'default' && isDefault) ||
@@ -584,7 +593,7 @@ STYLEV.VALIDATOR = {
 			(!isReverse && ngStylePropVal === 'inherit' && isInherit) ||
 
 			//反転でない場合かつ、親要素がエラースタイルの場合
-			(!isReverse && isParentType && isParentNgStyle) ||
+			(!isReverse && isParentCheking && isParentNgStyle) ||
 
 
 			/////////////////////////////
@@ -594,7 +603,7 @@ STYLEV.VALIDATOR = {
 //			(isReverse && !isNgStyle) ||
 
 			//0以外
-			(isReverse && ngStylePropVal === '0' && !is0) ||
+			(isReverse && ngStylePropVal === '0' && !isZero) ||
 
 			//デフォルト値以外
 			(isReverse && ngStylePropVal === 'default' && !isDefault) ||
@@ -605,8 +614,8 @@ STYLEV.VALIDATOR = {
 			//継承スタイル以外（通常：line-height以外）
 			(isReverse && ngStylePropVal === 'inherit' && !isInherit) ||
 
-			//反転の場合かつ、親要素のエラースタイル以外に適合したら
-			(isReverse && isParentType && !isParentNgStyle)
+			//反転の場合かつ、親要素のOKスタイル以外に適合したら
+			(isReverse && isParentCheking && !isParentNgStyle)
 
 		){
 
@@ -623,31 +632,44 @@ STYLEV.VALIDATOR = {
 			elemData.targetElem.dataset.stylevid = that.errorIndex;
 
 			//親要素を検査する場合
-			if(isParentType) {
-				result.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; display property of parent element is incorrect.(' + 'parent is ' + elemData.targetElemParentDisplayProp + ' element)';
+			if(isParentCheking) {
+				result.text =
+					'[' + rule['title'] + ']' + ' ' +
+					'<' + elemData.targetElemTagName + '> ' +
+					baseStylesText + ' ' +
+					'parent element\'s style is ' +
+					ngStyleProp + ': ' + targetElemParentNgStyleVal + ';' + ' ' +
+					result.comment;
+//					'display property of parent element is incorrect.' +
+//					'(' + 'parent is ' + elemData.targetElemParentDisplayProp + ' element)';
 
 			//通常時
 			} else {
-				result.text = '[' + rule['title'] + ']' + ' ' +'<' + elemData.targetElemTagName + '>' + ' display: ' + elemData.targetElemDisplayPropVal + '; ' + ngStyleProp + ': ' + targetElemNgStyleVal + ';';
+				result.text =
+					'[' + rule['title'] + ']' + ' '+
+					'<' + elemData.targetElemTagName + '>' + ' ' +
+					baseStylesText + ' ' +
+					ngStyleProp + ': ' + targetElemNgStyleVal + ';' + ' ' +
+					result.comment;
 			}
 
 			//要素のID名
 			result.idName = elemData.targetElem.dataset.stylevid;
 
 			//エラーか警告かのタイプ
-			result.type = type;
+			result.errorLevel = splitTypeArray[splitTypeArray.length - 2];
 
 			//メッセージ配列に挿入
 			that.resultArray.push(result);
 
 			//エラー
-			if(type === 'error') {
+			if(result.errorLevel === 'error') {
 
 				elemData.targetElem.classList.add('stylev-target-error');
 			}
 
 			//警告
-			if(type === 'warning') {
+			if(result.errorLevel === 'warning') {
 
 				elemData.targetElem.classList.add('stylev-target-warning');
 			}
@@ -729,37 +751,34 @@ STYLEV.VALIDATOR = {
 			that.informUpdating();
 
 			//監視対象毎に
-			mutationsLoop: for(var i = 0, len = mutations.length; i < len; i++) {
+			mutationsLoop: for(var i = 0, mutationsLen = mutations.length; i < mutationsLen; i++) {
 
 				var mutation = mutations[i];
 
 				//無視する要素のIDと一致した場合、処理を中止
-//				var regexIgnoreElemsStylevId = new RegExp(' ' + STYLEV.ignoreElemsStylevId.join(' | ') + ' ');
-//				if(regexIgnoreElemsStylevId.test(' ' + mutation.target.dataset.stylevid + ' ')) {
-//					continue;
-//				}
+				var regexIgnoreElemsStylevId = new RegExp(' ' + STYLEV.ignoreElemsStylevId.join(' | ') + ' ');
+				if(regexIgnoreElemsStylevId.test(' ' + mutation.target.dataset.stylevid + ' ')) {
+					continue;
+				}
 
 				if(mutation.target.classList.contains('stylev-ignore')) {
 					continue;
 				}
 
-				//変更された要素がscriptタグでかつ、GAのスクリプトの場合は処理を中断 TODO: 下部のaddedNodesと処理をまとめられるか？要確認
-				if(mutation.addedNodes.length) {
-					for(var i = 0, len = mutation.addedNodes.length; i < len; i++) {
-						var addedNode = mutation.addedNodes[i];
-						if( addedNode.tagName.toLocaleLowerCase() === 'script' &&
-							addedNode.src.indexOf('analytics.js') !== -1) {
-							continue mutationsLoop;
-						}
+				//TODO: 下部のaddedNodesと処理をまとめられるか？要確認
+				//変更された要素がscriptタグでかつ、GAのスクリプトの場合は処理を中断
+				for(var j = 0, addedNodes = mutation.addedNodes, addedNodesLen = addedNodes.length; j < addedNodesLen; j++) {
+					var addedNode = addedNodes[j];
+					if( addedNode.tagName.toLocaleLowerCase() === 'script' &&
+						addedNode.src.indexOf('analytics.js') !== -1) {
+						continue mutationsLoop;
 					}
 				}
-				if(mutation.removedNodes.length) {
-					for(var i = 0, len = mutation.removedNodes.length; i < len; i++) {
-						var removedNode = mutation.removedNodes[i];
-						if( removedNode.tagName.toLocaleLowerCase() === 'script' &&
-							removedNode.src.indexOf('analytics.js') !== -1) {
-							continue mutationsLoop;
-						}
+				for(var k = 0, removedNodes = mutation.removedNodes, removeNodesLen = removedNodes.length; k < removeNodesLen; k++) {
+					var removedNode = removedNodes[k];
+					if( removedNode.tagName.toLocaleLowerCase() === 'script' &&
+						removedNode.src.indexOf('analytics.js') !== -1) {
+						continue mutationsLoop;
 					}
 				}
 
@@ -767,35 +786,35 @@ STYLEV.VALIDATOR = {
 				isIgnore = false;
 
 				//要素の記録が存在する場合
-//				if(STYLEV.affectedElemsStylevId.length) {
-//
-//					//現在の要素と、1つ前の要素が同じ場合は、同一要素として数を数える※アニメーションなどで激しい属性変更が起きた場合に備える
-//					if(mutation.target.dataset.stylevid === STYLEV.affectedElemsStylevId[STYLEV.affectedElemsStylevId.length - 1]) {
-//						STYLEV.sameElemCount++;
-//					} else {
-//						STYLEV.sameElemCount = 0;
-//					}
-//				}
+				if(STYLEV.affectedElemsStylevId.length) {
+
+					//現在の要素と、1つ前の要素が同じ場合は、同一要素として数を数える※アニメーションなどで激しい属性変更が起きた場合に備える
+					if(mutation.target.dataset.stylevid === STYLEV.affectedElemsStylevId[STYLEV.affectedElemsStylevId.length - 1]) {
+						STYLEV.sameElemCount++;
+					} else {
+						STYLEV.sameElemCount = 0;
+					}
+				}
 
 				//前回の要素と今回の要素が同じだった回数が5より少ない場合
-//				if(STYLEV.sameElemCount < 5) {
-//
-//					//影響した要素のIDを保管
-//					STYLEV.affectedElemsStylevId.push(mutation.target.dataset.stylevid);
-//
-//				} else {
-//
-//					//初期化
-//					STYLEV.affectedElemsStylevId = [];
-//					STYLEV.sameElemCount = 0;
-//					STYLEV.ignoreElemsStylevId.push(mutation.target.dataset.stylevid);
-//				}
+				if(STYLEV.sameElemCount < 5) {
+
+					//影響した要素のIDを保管
+					STYLEV.affectedElemsStylevId.push(mutation.target.dataset.stylevid);
+
+				} else {
+
+					//初期化
+					STYLEV.affectedElemsStylevId = [];
+					STYLEV.sameElemCount = 0;
+					STYLEV.ignoreElemsStylevId.push(mutation.target.dataset.stylevid);
+				}
 
 				if(mutation.target.tagName) {
 					var attrsArray=[];
-					for (var attr, i = 0, attrs = mutation.target.attributes, n = attrs.length; i < n; i++){
-						attr = attrs[i];
-						attrsArray.push(' ' + attr.nodeName + '="' + attr.nodeValue + '"');
+					for (var l = 0, attributes = mutation.target.attributes, attributesLen = attributes.length; l < attributesLen; l++){
+						var attribute = attributes[l];
+						attrsArray.push(' ' + attribute.nodeName + '="' + attribute.nodeValue + '"');
 					}
 					that.moMessageArray.push('<' + mutation.target.tagName.toLowerCase() + attrsArray.join(' ') + '>');
 				}
@@ -806,16 +825,13 @@ STYLEV.VALIDATOR = {
 				if(mutation.type === 'characterData') {
 					that.moMessageArray.push(mutation.characterData + ' ' + mutation.type + ' of above is changed from "' + mutation.oldValue + '".');
 				}
-
-				if(mutation.addedNodes.length) {
-					for(var i = 0, len = mutation.addedNodes.length; i < len; i++) {
-						that.moMessageArray.push(mutation.addedNodes[i].outerHTML + ' is added.');
-					}
+				for(var m = 0, addedNodes = mutation.addedNodes, addedNodesLen = addedNodes.length; m < addedNodesLen; m++) {
+					var addedNode = addedNodes[m];
+					that.moMessageArray.push(addedNode.outerHTML + ' is added.');
 				}
-				if(mutation.removedNodes.length) {
-					for(var i = 0, len = mutation.removedNodes.length; i < len; i++) {
-						that.moMessageArray.push(mutation.removedNodes[i].outerHTML + ' is removed.');
-					}
+				for(var n = 0, removedNodes = mutation.removedNodes, removedNodesLen = removedNodes.length; n < removedNodesLen; n++) {
+					var removedNode = removedNodes[n];
+					that.moMessageArray.push(removedNode.outerHTML + ' is removed.');
 				}
 
 				console.info('DOM modified...')
@@ -862,6 +878,7 @@ STYLEV.VALIDATOR = {
 			}, IGNORING_ELEM_ARRAY_RESET_INTERVAL);
 		});
 
+		//TODO: 属性の監視を止めて、スタイル情報を監視する形に変更するか検討
 		//対象要素の配下の全要素を監視し、ノードの追加・変更・削除と属性の追加・変更・削除を検知
 		var observationConfig = {
 			attributes: true,
@@ -1232,6 +1249,7 @@ STYLEV.VALIDATOR = {
 				var li = document.createElement('li');
 				var anchor = document.createElement('a');
 				var logID = document.createElement('span');
+				var why = document.createElement('a');
 				var result = that.resultArray[i];
 
 				//属性を設定
@@ -1242,27 +1260,36 @@ STYLEV.VALIDATOR = {
 
 				//テキスト情報を挿入
 				anchor.textContent = result.text;
-
-				//ID情報を挿入
-				anchor.dataset.stylevconsoleid = result.idName;
 				logID.textContent = result.idName;
+				why.textContent = 'why?';
 
-				//エラーか警告のタイプのクラス名を設定
-				li.classList.add('stylev-trigger-' + result.type);
+				//属性を設定
+				anchor.dataset.stylevconsoleid = result.idName;
+				anchor.classList.add('stylev-console-list-anchor');
+				logID.classList.add('stylev-console-list-logid');
+				why.classList.add('stylev-console-list-why');
+				why.href = result.referenceURL;
 
 				//エラー数をカウント
-				if(result.type === 'error') {
+				if(result.errorLevel === 'error') {
+
+					//エラーか警告のタイプのクラス名を設定
+					li.classList.add('stylev-trigger-error');
 					that.errorNum++;
 				}
 
 				//警告数をカウント
-				if(result.type === 'warning') {
+				if(result.errorLevel === 'warning') {
+
+					//エラーか警告のタイプのクラス名を設定
+					li.classList.add('stylev-trigger-warning');
 					that.warningNum++;
 				}
 
 				//DocumentFlagmentにHTML要素を挿入
-				anchor.appendChild(logID);
 				li.appendChild(anchor);
+				logID.appendChild(why);
+				li.appendChild(logID);
 				that.docFlag.appendChild(li);
 			}
 		}

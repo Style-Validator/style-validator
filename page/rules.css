@@ -33,6 +33,7 @@ input, select, textarea, button {
 	outline: 0;
 	background-color: inherit;
 	color: inherit;
+	line-height: inherit;
 }
 input, select, textarea, button, h1, h2, h3, h4, h5, h6 {
 	font-size: inherit;
@@ -116,14 +117,10 @@ body {
 
 /* styles-list */
 .styles-list-wrapper {
-	/*display: flex;*/
-	/*flex-wrap: wrap;*/
-	/* margin-bottom: -20px; */
 }
 .styles-list-wrapper > li {
 	position: relative;
 	margin-bottom: 20px;
-	padding: 12% 4% 4%;
 	background: white;
 	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
 	border: 1px solid #DDD;
@@ -134,7 +131,6 @@ body {
 .styles-list-wrapper > li h3 > span {
 	color: #BBB;
 }
-
 .styles-list-wrapper.col {
 	-webkit-column-width: 300px;
 	-webkit-column-gap: 1em;
@@ -142,6 +138,15 @@ body {
 .styles-list-wrapper.col > li {
 	display: inline-block;
 	width: 100%;
+}
+.styles-list-header {
+
+}
+.styles-list-body {
+	padding: 2% 4%;
+}
+.styles-list-body > * + * {
+	margin-top: 10px;
 }
 .styles-list {
 	cursor: pointer;
@@ -158,7 +163,7 @@ body {
 	line-height: inherit;
 }
 
-.styles-list[data-id="base-styles"] li + li:before {
+.styles-list[data-id="base-styles"] > li + li:before {
 	content: 'and';
 	left: 0;
 }
@@ -178,11 +183,25 @@ body {
 	clear: both;
 	white-space: nowrap;
 }
-.styles-list > li input[type="text"] {
-	width: 25px;
+/* test1
+.style-list-meta-data {
+	display: none;
+}
+*/
+/* test1
+.styles-list > li:hover > .style-list-meta-data {
+	display: list-item;
+}
+*/
+.styles-list > li input[type="text"],
+.styles-list > li textarea {
 	border: 0;
 	padding: 0;
 	background-color: transparent;
+}
+.styles-list > li input[type="text"].css-property,
+.styles-list > li input[type="text"].css-property-value {
+	width: 25px;
 }
 .styles-list > li input[type="text"].css-property-value {
 	max-width: 188px;
@@ -193,13 +212,18 @@ body {
 .styles-list > li input[type="text"].css-property-value.valid {
 	color: #007300;
 }
+.styles-list > li input[type="text"].reference-url {
+	color: #359C62;
+}
 .styles-list > li input[type="text"].invalid {
 	text-decoration: line-through;
 	color: #999;
 }
 
 .styles-list > li input[type="text"]:focus,
-.styles-list > li input[type="text"]:hover {
+.styles-list > li input[type="text"]:hover,
+.styles-list > li textarea:focus,
+.styles-list > li textarea:hover {
 	outline: 1px solid #999;
 	outline-offset: 0;
 	box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.5);
@@ -210,9 +234,19 @@ body {
 	text-decoration: none !important;
 	color: initial !important;
 }
-.styles-list-wrapper > li > * + * {
-	margin-top: 10px;
+
+.style-list-meta-data > li {
+	/*display: inline-block;*/
 }
+.style-list-meta-data > li input[type="text"],
+.style-list-meta-data > li textarea {
+	width: 100%;
+}
+.style-list-meta-data > li textarea {
+	resize: none;
+	height: 1.14em;
+}
+
 .styles-input {
 	display: flex;
 	alignment-baseline: middle;
@@ -286,18 +320,16 @@ button,
 }
 
 [data-id="title"] {
-	position: absolute;
-	right: 0;
-	left: 0;
-	top: 0;
+	/*position: absolute;*/
+	/*right: 0;*/
+	/*left: 0;*/
+	/*top: 0;*/
 	border-bottom: 1px solid #E5E5E5;
 	font-size: 20px;
 }
 [data-id="title"]:before {
 	display: none;
 }
-
-
 
 [data-id*="error"],
 [data-id*="warning"] {
@@ -332,10 +364,6 @@ button,
 [data-id*="warning"]:before {
 	content: '== ' attr(data-id) ' ==\A And if the following styles defined, alert as WARNING';
 	background-color: #F7BF00;
-}
-[data-id="reference-url"],
-[data-id="reference-url"] input[type="text"] {
-	background-color: #EFEFEF;
 }
 
 .styles-input a {

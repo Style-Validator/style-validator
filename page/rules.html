@@ -16,7 +16,7 @@
 
 	<!-- ***** styles***** -->
 	<link href="rules.css" rel="stylesheet" />
-	<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">
+	<!--<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">-->
 	<style>
 		html {
 			font-family: 'Nunito', sans-serif;
@@ -41,7 +41,7 @@
 		<h1 class="header-heading"><a href="../"><img src="../img/style-validator.logo.svg" width="40" height="40" />Validation Rules - View and Edit</a></h1>
 		<nav>
 			<button id="add-button"><img src="../img/iconmonstr-selection-10-icon.svg" width="20" height="20" /> Add</button>
-			<a id="download-button" download="rules.json" class="button" title="Override a file at '/Style-Validator/data/rules.json'"><img src="../img/iconmonstr-download-2-icon.svg" width="20" height="20" /> Download</a>
+			<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a file at '/Style-Validator/data/rules.json'"><img src="../img/iconmonstr-download-2-icon.svg" width="20" height="20" /> Download</a>
 			<button id="save-button"><img src="../img/iconmonstr-save-icon.svg" width="20" height="20" /> Save</button>
 		</nav>
 	</header>
@@ -52,40 +52,53 @@
 
 <template id="template-rule">
 	<li>
-		<section class="styles-input" data-id="title"><input type="text" /><a href="javascript: void(0);" class="remove-button">Remove</a><a href="javascript: void(0);" class="edit-button">Edit</a></section>
-		<ul class="styles-list styles-base-list" data-id="base-styles"></ul>
-		<section class="styles-select" data-id="replaced">
-			<select>
-				<option value="" selected="selected">------------</option>
-				<option value="Non-replaced elements">Non-replaced elements</option>
-				<option value="Replaced elements">Replaced elements</option>
-			</select>
-		</section>
-		<section class="styles-select" data-id="empty">
-			<select>
-				<option value="" selected="selected">------------</option>
-				<option value="Empty elements">Empty elements</option>
-			</select>
-		</section>
-		<ul class="styles-list styles-ng-list" data-id="error-styles"></ul>
-		<ul class="styles-list styles-ng-list" data-id="warning-styles"></ul>
-		<ul class="styles-list styles-ng-list" data-id="parent-error-styles"></ul>
-		<ul class="styles-list styles-ng-list" data-id="parent-warning-styles"></ul>
-		<!--<ul class="styles-ng-list" data-id="pseudo-before-error-styles"></ul>-->
-		<!--<ul class="styles-ng-list" data-id="pseudo-before-warning-styles"></ul>-->
-		<!--<ul class="styles-ng-list" data-id="pseudo-after-error-styles"></ul>-->
-		<!--<ul class="styles-ng-list" data-id="pseudo-after-warning-styles"></ul>-->
-		<!--<section class="styles-input" data-id="message"><input type="text" /></section>-->
-		<!--<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="../img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>-->
+		<header class="styles-list-header styles-input" data-id="title"><input type="text" /><a href="javascript: void(0);" class="remove-button">Remove</a><a href="javascript: void(0);" class="edit-button">Edit</a></header>
+		<div class="styles-list-body">
+			<ul class="styles-list styles-list-base" data-id="base-styles"></ul>
+			<section class="styles-select" data-id="replaced">
+				<select>
+					<option value="" selected="selected">------------</option>
+					<option value="Non-replaced elements">Non-replaced elements</option>
+					<option value="Replaced elements">Replaced elements</option>
+				</select>
+			</section>
+			<section class="styles-select" data-id="empty">
+				<select>
+					<option value="" selected="selected">------------</option>
+					<option value="Empty elements">Empty elements</option>
+				</select>
+			</section>
+			<ul class="styles-list styles-list-ng" data-id="error-styles"></ul>
+			<ul class="styles-list styles-list-ng" data-id="warning-styles"></ul>
+			<ul class="styles-list styles-list-ng" data-id="parent-error-styles"></ul>
+			<ul class="styles-list styles-list-ng" data-id="parent-warning-styles"></ul>
+			<!--<ul class="styles-list-ng" data-id="pseudo-before-error-styles"></ul>-->
+			<!--<ul class="styles-list-ng" data-id="pseudo-before-warning-styles"></ul>-->
+			<!--<ul class="styles-list-ng" data-id="pseudo-after-error-styles"></ul>-->
+			<!--<ul class="styles-list-ng" data-id="pseudo-after-warning-styles"></ul>-->
+			<!--<section class="styles-input" data-id="message"><input type="text" /></section>-->
+			<!--<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="../img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>-->
+		</div>
 	</li>
 </template>
-<template id="template-property">
+<template id="template-property-base">
 	<li>
-		<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="value" /> ;
+		<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="css-properties-value" /> ;
+	</li>
+</template>
+<template id="template-property-ng">
+	<li>
+		<section>
+			<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="css-properties-value" /> ;
+		</section>
+		<ul class="style-list-meta-data">
+			<li><textarea placeholder="Reason" class="reason"></textarea></li>
+			<li><input type="text" placeholder="reference URL" class="reference-url" /></li>
+		</ul>
 	</li>
 </template>
 <datalist id="all-css-properties"></datalist>
-<datalist id="value">
+<datalist id="css-properties-value">
 	<option value="default">default</option>
 	<option value="!default">!default</option>
 	<option value="!0">!0</option>
@@ -95,7 +108,7 @@
 	<option value="inherit">inherit</option>
 	<option value="unset">unset</option>
 </datalist>
-<script src="../extension/specificity.js"></script>
+<script src="./specificity.js"></script>
 <script src="./rules.js"></script>
 </body>
 </html>

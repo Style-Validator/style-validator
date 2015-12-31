@@ -213,33 +213,31 @@
 	list-style: none;
 	overflow-y: auto;
 }
+:host .stylev-console-list > li {
+	display: flex;
+	justify-content: space-between;
+}
 :host .stylev-console-list > li + li {
 	border-top: 1px solid #EEE;
 }
-:host .stylev-console-list > li > a {
+:host .stylev-console-list-anchor {
 	display: block;
 	padding: 2px 5px;
-	padding-right: 2em;
-	color: #333;
-	text-decoration: none;
+	color: inherit !important;
+	text-decoration: none !important;
 	cursor: pointer;
 	text-indent: calc(-1.2em - 10px);
 	padding-left: calc(1.2em + 10px);
 }
-:host .stylev-console-list > li > a:before,
-:host .stylev-console-list > li > a:after {
+:host .stylev-console-list-anchor:before {
 	text-indent: 0;
 	margin-left: 5px;
 }
-:host .stylev-console-list > li > a:hover,
-:host .stylev-console-list > li > a:hover span {
+:host .stylev-console-list-anchor:hover {
 	text-decoration: underline;
 }
-:host .stylev-console-list > li > a > span {
-	position: absolute;
-	right: 0;
-	padding: 0 10px;
-	text-indent: 0;
+:host .stylev-console-list-logid {
+	padding: 2px 5px;
 }
 :host .stylev-console-list > li.stylev-trigger-error {
 	border-color: #FFD8D7;
@@ -247,7 +245,7 @@
 :host .stylev-console-list > li.stylev-trigger-warning {
 	border-color: #FFDD9E;
 }
-:host .stylev-console-list > li.stylev-trigger-error > a {
+:host .stylev-console-list > li.stylev-trigger-error {
 	background-color: #FFEFEF;
 	color: #FF0000;
 }
@@ -264,7 +262,7 @@
 	color: #FFF;
 	text-align: center;
 }
-:host .stylev-console-list > li.stylev-trigger-warning > a {
+:host .stylev-console-list > li.stylev-trigger-warning {
 	background-color: #FFFBE5;
 	color: #444444;
 }

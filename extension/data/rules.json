@@ -6,7 +6,11 @@
 		},
 		"ng-styles": {
 			"warning-styles": {
-				"display": "!default"
+				"display": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -18,18 +22,66 @@
 		"replaced": "Non-replaced elements",
 		"ng-styles": {
 			"warning-styles": {
-				"width": "!default",
-				"height": "!default",
-				"min-width": "!default",
-				"min-height": "!default",
-				"max-width": "!default",
-				"max-height": "!default",
-				"margin-top": "!0",
-				"margin-bottom": "!0",
-				"float": "!default",
-				"text-align": "!inherit",
-				"overflow": "!default",
-				"text-indent": "!default"
+				"width": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"height": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"min-width": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"min-height": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"max-width": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"max-height": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"margin-top": [
+					"!0",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"margin-bottom": [
+					"!0",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"float": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"text-align": [
+					"!inherit",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"overflow": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"text-indent": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -41,9 +93,21 @@
 		"replaced": "Replaced elements",
 		"ng-styles": {
 			"warning-styles": {
-				"padding": "over-0",
-				"text-align": "!inherit",
-				"overflow": "!default"
+				"padding": [
+					"over-0",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"text-align": [
+					"!inherit",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				],
+				"overflow": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -54,7 +118,11 @@
 		},
 		"ng-styles": {
 			"parent-warning-styles": {
-				"display": "![none|block|inline-block|list-item|table-cell|flex]"
+				"display": [
+					"![none|block|inline-block|list-item|table-cell|flex]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -65,7 +133,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|inline|block|inline-block|list-item|table-cell|flex]"
+				"display": [
+					"![none|inline|block|inline-block|list-item|table-cell|flex]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -76,7 +148,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|block|inline-block|flex]"
+				"display": [
+					"![none|block|inline-block|flex]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -87,7 +163,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|block|inline-block|list-item|table-cell]"
+				"display": [
+					"![none|block|inline-block|list-item|table-cell]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -98,7 +178,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|block|inline-block|list-item|table-cell]"
+				"display": [
+					"![none|block|inline-block|list-item|table-cell]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -110,7 +194,11 @@
 		},
 		"ng-styles": {
 			"error-styles": {
-				"padding": "over-0"
+				"padding": [
+					"over-0",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -121,7 +209,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table|table-row|table-row-group|table-header-group|table-footer-group]"
+				"display": [
+					"![none|table|table-row|table-row-group|table-header-group|table-footer-group]",
+					"",
+					""
+				]
 			}
 		}
 	},
@@ -132,7 +224,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table|table-row-group|table-header-group|table-footer-group]"
+				"display": [
+					"![none|table|table-row-group|table-header-group|table-footer-group]",
+					"parent style is bad.",
+					"http://style-validator.io/Style-Validator/page/why.html"
+				]
 			}
 		}
 	},
@@ -143,7 +239,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table]"
+				"display": [
+					"![none|table]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -154,7 +254,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table]"
+				"display": [
+					"![none|table]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -165,7 +269,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table]"
+				"display": [
+					"![none|table]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -176,7 +284,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table-column-group|table]"
+				"display": [
+					"![none|table-column-group|table]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -187,7 +299,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table]"
+				"display": [
+					"![none|table]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -198,7 +314,11 @@
 		},
 		"ng-styles": {
 			"parent-error-styles": {
-				"display": "![none|table]"
+				"display": [
+					"![none|table]",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -269,7 +389,11 @@
 		},
 		"ng-styles": {
 			"warning-styles": {
-				"display": "!default"
+				"display": [
+					"!default",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -277,7 +401,11 @@
 		"title": "Negative Z-Index",
 		"ng-styles": {
 			"warning-styles": {
-				"z-index": "under-0"
+				"z-index": [
+					"under-0",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	},
@@ -286,7 +414,11 @@
 		"empty": "Empty elements",
 		"ng-styles": {
 			"warning-styles": {
-				"padding": "over-0"
+				"padding": [
+					"over-0",
+					"Needless Style",
+					"http://style-validator.io/Style-Validator/page/why.html#1"
+				]
 			}
 		}
 	}
