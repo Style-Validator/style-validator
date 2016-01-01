@@ -91,10 +91,6 @@ body {
 	color: inherit !important;
 	text-decoration: none !important;
 }
-.header-heading a span {
-	/* display: inline-block; */
-	/* white-space: nowrap; */
-}
 .header-heading img {
 	margin-top: -0.5%;
 	margin-right: 10px;
@@ -107,8 +103,6 @@ body {
 .header-nav {
 	display: flex;
 	flex-basis: 400px;
-	/* flex-shrink: 0; */
-	/* flex-grow: 1; */
 	justify-content: flex-end;
 }
 .header-nav > * + * {
@@ -187,7 +181,11 @@ body {
 }
 .styles-list > li + li:before {
 	position: absolute;
+	top: 1px;
 	left: 0;
+	width: 2em;
+	padding-right: 0.25em;
+	text-align: right;
 	color: #BBB;
 	line-height: inherit;
 }

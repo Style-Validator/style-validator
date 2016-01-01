@@ -258,6 +258,7 @@ STYLEV.RULES_EDITOR = {
 		}
 		if(referenceURL) {
 			clone.querySelector('.reference-url').value = referenceURL;
+			clone.querySelector('.reference-url').addEventListener('dblclick', that.jump2urlOfValue, false);
 		}
 
 		styleList.appendChild(clone);
@@ -267,6 +268,11 @@ STYLEV.RULES_EDITOR = {
 
 		return appendedListItem;
 	},
+
+	jump2urlOfValue: function(event) {
+		location.href = event.currentTarget.value;
+	},
+
 	doInsertedProp: function(appendedListItem) {
 		var that = STYLEV.RULES_EDITOR;
 		var cssProperty = appendedListItem.querySelector('.css-property');
