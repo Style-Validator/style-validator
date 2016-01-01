@@ -9,7 +9,7 @@
 				"display": [
 					"!default",
 					"Display property is needless. Defined display property has changed to block(or list-item) forcibly. So this display property is needless.",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"float": [
 					"!default",
@@ -30,62 +30,62 @@
 				"width": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"height": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"min-width": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"min-height": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"max-width": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"max-height": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"margin-top": [
 					"!0",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"margin-bottom": [
 					"!0",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"float": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"text-align": [
 					"!inherit",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"overflow": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"text-indent": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -101,17 +101,17 @@
 				"padding": [
 					"over-0",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"text-align": [
 					"!inherit",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				],
 				"overflow": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -126,7 +126,7 @@
 				"display": [
 					"![none|block|inline-block|list-item|table-cell|flex]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -141,7 +141,7 @@
 				"display": [
 					"![none|inline|block|inline-block|list-item|table-cell|flex]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -156,7 +156,7 @@
 				"display": [
 					"![none|block|inline-block|flex]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -171,7 +171,7 @@
 				"display": [
 					"![none|block|inline-block|list-item|table-cell]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -186,7 +186,7 @@
 				"display": [
 					"![none|block|inline-block|list-item|table-cell]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -202,7 +202,7 @@
 				"padding": [
 					"over-0",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -247,7 +247,7 @@
 				"display": [
 					"![none|table]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -262,7 +262,7 @@
 				"display": [
 					"![none|table]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -277,7 +277,7 @@
 				"display": [
 					"![none|table]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -292,7 +292,7 @@
 				"display": [
 					"![none|table-column-group|table]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -307,7 +307,7 @@
 				"display": [
 					"![none|table]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -322,7 +322,7 @@
 				"display": [
 					"![none|table]",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -397,7 +397,7 @@
 				"display": [
 					"!default",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -409,7 +409,7 @@
 				"z-index": [
 					"under-0",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}
@@ -422,7 +422,7 @@
 				"padding": [
 					"over-0",
 					"Needless Style",
-					"http://style-validator.io/Style-Validator/page/why.html#1"
+					""
 				]
 			}
 		}

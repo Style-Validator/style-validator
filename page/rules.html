@@ -63,9 +63,10 @@
 		</div>
 	</header>
 	<main class="main">
-		<ul id="rules-list" class="styles-list-wrapper col"></ul>
+		<div class="loadingSpinner">Loading...</div>
+		<ul id="rules-list" class="styles-list-wrapper"></ul>
 	</main>
-	<footer>
+	<footer class="footer">
 		<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
 	</footer>
 </div>
@@ -74,7 +75,6 @@
 	<li>
 		<header class="styles-list-header styles-input" data-id="title"><input type="text" /><a href="javascript: void(0);" class="remove-button">Remove</a><a href="javascript: void(0);" class="edit-button">Edit</a></header>
 		<div class="styles-list-body">
-			<ul class="styles-list styles-list-base" data-id="base-styles"></ul>
 			<section class="styles-select" data-id="replaced">
 				<select>
 					<option value="" selected="selected">------------</option>
@@ -88,6 +88,7 @@
 					<option value="Empty elements">Empty elements</option>
 				</select>
 			</section>
+			<ul class="styles-list styles-list-base" data-id="base-styles"></ul>
 			<ul class="styles-list styles-list-ng" data-id="error-styles"></ul>
 			<ul class="styles-list styles-list-ng" data-id="warning-styles"></ul>
 			<ul class="styles-list styles-list-ng" data-id="parent-error-styles"></ul>

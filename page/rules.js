@@ -19,7 +19,7 @@ STYLEV.RULES_EDITOR = {
 
 		that.showCurrentJSON()
 			.then(function() {
-
+				that.removeLoadingSpinner();
 				that.setParametersAfterAdding();
 				that.bindEvents();
 				that.setStyleDataOfWidthHeight();
@@ -409,7 +409,7 @@ STYLEV.RULES_EDITOR = {
 				var cssRule = cssRules[j];
 
 				//TODO: support media query
-				if(cssRule.media) {
+				if(cssRule.media || cssRule.style === undefined || cssRule.selectorText === undefined) {
 					continue;
 				}
 
@@ -1038,13 +1038,23 @@ STYLEV.RULES_EDITOR = {
 		return target;
 	},
 
+	resizeTimer: null,
+	RESIZE_INTERVAL_MILISECCOND: 1000,
+
 	resizeTextareaBasedOnLine: function() {
 		var that = STYLEV.RULES_EDITOR;
 		var reasons = that.reasons;
-		for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
-			var reason = reasons[i];
-			that.adjustHeight(null, reason);
+
+		if(that.resizeTimer) {
+			clearTimeout(that.resizeTimer);
 		}
+
+		that.resizeTimer = setTimeout(function() {
+			for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
+				var reason = reasons[i];
+				that.adjustHeight(null, reason);
+			}
+		}, that.RESIZE_INTERVAL_MILISECCOND);
 	},
 
 	bindEvents2Textarea: function(textarea) {
@@ -1056,6 +1066,11 @@ STYLEV.RULES_EDITOR = {
 		var target = target || event.currentTarget || event.target;
 		target.style.setProperty('height', 0 + 'px', '');
 		target.style.setProperty('height', target.scrollHeight + 'px', '');
+	},
+
+	removeLoadingSpinner: function() {
+		var loadingSpinner = document.querySelector('.loadingSpinner');
+		loadingSpinner.parentElement.removeChild(loadingSpinner);
 	}
 
 };
