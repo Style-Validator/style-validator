@@ -1364,10 +1364,11 @@ STYLEV.VALIDATOR = {
 		that.html.addEventListener('keyup', that.destroyByEsc, false);
 	},
 
-	destroyByEsc: function() {
+	destroyByEsc: function(event) {
 		var that = STYLEV.VALIDATOR;
+		var escKeyCode = 27;
 
-		if(event.keyCode === 27) {
+		if(event.keyCode === escKeyCode) {
 			that.destroy();
 		}
 	},

@@ -139,27 +139,17 @@ body {
 
 /* styles-list */
 .styles-list-wrapper {
+	-webkit-column-width: 300px;
+	-webkit-column-gap: 1em;
 }
 .styles-list-wrapper > li {
+	display: inline-block;
+	width: 100%;
 	position: relative;
 	margin-bottom: 20px;
 	background: white;
 	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
 	border: 1px solid #DDD;
-}
-.styles-list-wrapper > li h3 {
-	color: gray;
-}
-.styles-list-wrapper > li h3 > span {
-	color: #BBB;
-}
-.styles-list-wrapper.col {
-	-webkit-column-width: 300px;
-	-webkit-column-gap: 1em;
-}
-.styles-list-wrapper.col > li {
-	display: inline-block;
-	width: 100%;
 }
 .styles-list-header {
 
@@ -241,8 +231,10 @@ body {
 .styles-list[data-id*="warning-styles"]:before	{ background-color: #F7BF00; }
 
 .styles-list > li {
-	clear: both;
 	white-space: nowrap;
+}
+.styles-list > li + li {
+	margin-top: 10px;
 }
 .styles-list-meta-data {
 	margin-top: 2px;
@@ -252,7 +244,7 @@ body {
 	padding-left: 1.5em;
 }
 .styles-list-meta-data-reason {
-	background: url(../img/iconmonstr-help-6-icon.svg) no-repeat left 0.2em;
+	background: url(../img/iconmonstr-help-3-icon.svg) no-repeat left 0.2em;
 	background-size: 1.2em auto;
 }
 .styles-list-meta-data-reference-url {
@@ -323,7 +315,7 @@ body {
 }
 .styles-list-meta-data > li textarea {
 	resize: none;
-	height: 1.14em;
+	height: 1.4em;
 	font-style: italic;
 	overflow: hidden;
 }

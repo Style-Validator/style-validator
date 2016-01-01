@@ -23,7 +23,8 @@ STYLEV.RULES_EDITOR = {
 				that.setParametersAfterAdding();
 				that.bindEvents();
 				that.setStyleDataOfWidthHeight();
-				that.resizeBasedOnLine();
+				that.resizeTextareaBasedOnLine();
+
 			});
 	},
 	setParameters: function() {
@@ -39,10 +40,10 @@ STYLEV.RULES_EDITOR = {
 		that.templatePropertyNg = document.querySelector('#template-property-ng').content;
 		that.templateRule = document.querySelector('#template-rule').content;
 		that.dummyElementWrapper = document.createElement('div');
-		that.dummyElementWrapper.classList.add('dummy-wrapper')
+		that.dummyElementWrapper.classList.add('dummy-wrapper');
 		that.dummyElement4detectWidth = document.createElement('div');
 		that.dummyElement4detectWidth.id = 'dummy-element-4-detect-width';
-		that.dummyElement4detectWidth.classList.add('dummy')
+		that.dummyElement4detectWidth.classList.add('dummy');
 		that.dummyElement4testStyle = document.createElement('div');
 		that.dummyElement4testStyle.id = 'dummy-element-4-test-style';
 		that.dummyElement4testStyle.classList.add('dummy');
@@ -70,6 +71,7 @@ STYLEV.RULES_EDITOR = {
 		that.downloadButton.addEventListener('mousedown', that.setParamAndFunc2DownloadButton, false);
 		that.reasonCheckbox.addEventListener('change', that.toggleReason, false);
 		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL, false);
+		window.addEventListener('resize', that.resizeTextareaBasedOnLine, false);
 
 		that.bind2RuleBox();
 		that.bind2StylesList();
@@ -207,23 +209,23 @@ STYLEV.RULES_EDITOR = {
 		};
 	},
 
-	bind2StylesList: function(targetStyleLists) {
+	bind2StylesList: function(targetstylesLists) {
 		var that = STYLEV.RULES_EDITOR;
 
-		that.stylesLists = targetStyleLists ? targetStyleLists : that.stylesLists;
+		that.stylesLists = targetstylesLists ? targetstylesLists : that.stylesLists;
 
 		for(var i = 0, len = that.stylesLists.length; i < len; i++) {
 			var stylesList = that.stylesLists[i];
-			stylesList.addEventListener('click', that.insertProperty, false);
+//			stylesList.addEventListener('click', that.insertProperty, false);
 			stylesList.addEventListener('focus', that.insertProperty, false);
 		}
 	},
 	addRule: function() {
 		var that = STYLEV.RULES_EDITOR;
 		var clone = document.importNode(that.templateRule, true);
-		var styleLists = clone.querySelectorAll('.styles-list');
+		var stylesLists = clone.querySelectorAll('.styles-list');
 
-		that.bind2StylesList(styleLists);
+		that.bind2StylesList(stylesLists);
 		that.rulesList.insertBefore(clone, that.rulesList.firstChild);
 		that.setParametersAfterAdding();
 		that.bind2RuleBox();
@@ -236,12 +238,15 @@ STYLEV.RULES_EDITOR = {
 		that.dummyElementWrapper.appendChild(that.dummyElement4detectWidth);
 		that.dummyElementWrapper.appendChild(that.dummyElement4testStyle);
 	},
-	insertProperty: function(event, styleList, property, propertyValue, reason, referenceURL) {
-		var that = STYLEV.RULES_EDITOR;
-		var styleList = styleList || event.currentTarget || event.target;
+	insertProperty: function(event, stylesList, property, propertyValue, reason, referenceURL) {
 
-		var clone;
-		if(styleList.dataset.id === 'base-styles') {
+		var that = STYLEV.RULES_EDITOR;
+		var stylesList = stylesList || event.currentTarget || event.target;
+		var isBaseStyles = stylesList.dataset.id === 'base-styles';
+
+		var clone = null;
+
+		if(isBaseStyles) {
 			clone = document.importNode(that.templatePropertyBase, true);
 		} else {
 			clone = document.importNode(that.templatePropertyNg, true);
@@ -258,56 +263,62 @@ STYLEV.RULES_EDITOR = {
 		}
 		if(referenceURL) {
 			clone.querySelector('.reference-url').value = referenceURL;
-			clone.querySelector('.reference-url').addEventListener('dblclick', that.jump2urlOfValue, false);
 		}
 
-		styleList.appendChild(clone);
+		stylesList.appendChild(clone);
 
-		var appendedListItem = styleList.querySelector(':scope > li:last-child');
-		that.doInsertedProp(appendedListItem);
+		var appendedStylesListItem = stylesList.querySelector(':scope > li:last-child');
+		that.doInsertedProperty(appendedStylesListItem, isBaseStyles);
 
-		return appendedListItem;
+		return appendedStylesListItem;
 	},
 
 	jump2urlOfValue: function(event) {
 		location.href = event.currentTarget.value;
 	},
 
-	doInsertedProp: function(appendedListItem) {
+	doInsertedProperty: function(appendedStylesListItem, isBaseStyles) {
 		var that = STYLEV.RULES_EDITOR;
-		var cssProperty = appendedListItem.querySelector('.css-property');
-		var cssPropertyValue = appendedListItem.querySelector('.css-property-value');
-		that.bind2ListItem(appendedListItem);
-		that.bind2CSSProperty(cssProperty);
-		that.bind2CSSPropertyValue(cssPropertyValue);
+		var cssProperty = appendedStylesListItem.querySelector('.css-property');
+		var cssPropertyValue = appendedStylesListItem.querySelector('.css-property-value');
+		that.bindEvents2ListItem(appendedStylesListItem);
+		that.bindEvents2CSSPropertyAndValue(cssProperty, cssPropertyValue);
+
+		if(!isBaseStyles) {
+			var reason = appendedStylesListItem.querySelector('.reason');
+			var referenceURL = appendedStylesListItem.querySelector('.reference-url');
+			that.bindEvents2Textarea(reason);
+			referenceURL.addEventListener('dblclick', that.jump2urlOfValue, false);
+		}
+
 		cssProperty.focus();
 	},
-	bind2ListItem: function(appendedListItem) {
+	bindEvents2ListItem: function(appendedStylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
-		appendedListItem.addEventListener('click', that.stopPropagation, false);
+		appendedStylesListItem.addEventListener('click', that.stopPropagation, false);
 	},
-	bind2CSSProperty: function(cssProperty) {
+	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue) {
 		var that = STYLEV.RULES_EDITOR;
 		cssProperty.addEventListener('click', that.stopPropagation, false);
 		cssProperty.addEventListener('keyup', that.moveFocusByEnter, false);
+		cssProperty.addEventListener('keyup', that.fireBlurEventByEscKey, false);
 		cssProperty.addEventListener('input', that.modifyCSSProperty, false);
 		cssProperty.addEventListener('focus', that.applySameStyles, false);
 		cssProperty.addEventListener('blur', that.applyValidationResult, false);
-	},
-	bind2CSSPropertyValue: function(cssPropertyValue) {
-		var that = STYLEV.RULES_EDITOR;
+
 		cssPropertyValue.addEventListener('click', that.stopPropagation, false);
-		cssPropertyValue.addEventListener('keyup', that.insertPropertyByEnter, false);
+		cssPropertyValue.addEventListener('keyup', that.insertPropertyByEnterKey, false);
+		cssPropertyValue.addEventListener('keyup', that.fireBlurEventByEscKey, false);
 		cssPropertyValue.addEventListener('input', that.modifyCSSPropertyValue, false);
 		cssPropertyValue.addEventListener('focus', that.applySameStyles, false);
 		cssPropertyValue.addEventListener('blur', that.applyValidationResult, false);
 	},
-	modifyCSSProperty: function(event, styleListItem) {
+	modifyCSSProperty: function(event, stylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
 
-		var styleListItem = styleListItem || that.closest(event.currentTarget, 'li');
-		var cssProperty = styleListItem.querySelector('.css-property');
-		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
+		var stylesListItem = stylesListItem || that.closest(event.currentTarget, 'li');
+		var cssProperty = stylesListItem.querySelector('.css-property');
+		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
 
 		that.dummyElement4detectWidth.innerHTML = cssProperty.value;
 		cssProperty.style.setProperty('width', (that.dummyElement4detectWidth.offsetWidth * 1.05 + that.INPUT_ARROW_WIDTH) + 'px', 'important');
@@ -316,44 +327,50 @@ STYLEV.RULES_EDITOR = {
 
 		return false;
 	},
-	modifyCSSPropertyValue: function(event, styleListItem) {
+	modifyCSSPropertyValue: function(event, stylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
 
-		var styleListItem = styleListItem || that.closest(event.currentTarget, 'li');
-		var cssProperty = styleListItem.querySelector('.css-property');
-		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
+		var stylesListItem = stylesListItem || that.closest(event.currentTarget, 'li');
+		var cssProperty = stylesListItem.querySelector('.css-property');
+		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
 
 		that.dummyElement4detectWidth.innerHTML = cssPropertyValue.value;
 		cssPropertyValue.style.width = (that.dummyElement4detectWidth.offsetWidth * 1.05 + that.INPUT_ARROW_WIDTH) + 'px';
 		that.validatePropertyValue(cssProperty, cssPropertyValue);
 	},
+	fireBlurEventByEscKey: function(event) {
+		var escKeyCode = 27;
+
+		if(event.keyCode === escKeyCode) {
+			event.currentTarget.blur();
+		}
+	},
 	moveFocusByEnter: function(event) {
 		var that = STYLEV.RULES_EDITOR;
-		var styleListItem = that.closest(event.currentTarget, 'li');
-		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
-		if(event.keyCode === 13) {
+		var stylesListItem = that.closest(event.currentTarget, 'li');
+		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
+		var enterKeyCode = 13;
+		if(event.keyCode === enterKeyCode) {
 			cssPropertyValue.focus();
 		}
 	},
-	insertPropertyByEnter: function(event) {
+	insertPropertyByEnterKey: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 
-		var styleListItem = that.closest(event.currentTarget, 'li');
-		var cssProperty = styleListItem.querySelector('.css-property');
-		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
-		var styleList = styleListItem.parentElement;
-		var enterKey = 13;
+		var stylesListItem = that.closest(event.currentTarget, 'li');
+		var stylesList = stylesListItem.parentElement;
+		var cssProperty = stylesListItem.querySelector('.css-property');
+		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
+		var enterKeyCode = 13;
 
-		if(event.keyCode === enterKey) {
+		if(event.keyCode === enterKeyCode) {
 
 			if(!cssProperty.value || !cssPropertyValue.value) {
-				that.removeProperty(styleList, styleListItem);
-				return false;
+				that.removeProperty(stylesList, stylesListItem);
+			} else {
+				that.insertProperty(null, stylesList);
 			}
-
-			that.insertProperty(null, styleList);
 		}
-		return false;
 	},
 	validateProperty: function(cssProperty, cssPropertyValue) {
 		var that = STYLEV.RULES_EDITOR;
@@ -624,33 +641,34 @@ STYLEV.RULES_EDITOR = {
 
 		}
 	},
-	applyValidationResult: function(event, styleListItem) {
+	applyValidationResult: function(event, stylesListItem) {
 
 		var that = STYLEV.RULES_EDITOR;
-		var styleListItem = styleListItem || that.closest(event.currentTarget, 'li');
-		var cssProperty = styleListItem.querySelector('.css-property');
-		var cssPropertyValue = styleListItem.querySelector('.css-property-value');
-		var styleList = styleListItem.parentElement;
+		var stylesListItem = stylesListItem || that.closest(event.currentTarget, 'li');
+		var cssProperty = stylesListItem.querySelector('.css-property');
+		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
+		var stylesList = stylesListItem.parentElement;
 
 		if(!cssProperty.value && !cssPropertyValue.value) {
-			that.removeProperty(styleList, styleListItem);
-			return false;
-		}
 
-		if(event && event.currentTarget) {
-
-			event.currentTarget.style.setProperty('margin-right',(-that.INPUT_ARROW_WIDTH) + 'px', '');
-			setTimeout(that.updateValidClass, 0, event.currentTarget);
+			that.removeProperty(stylesList, stylesListItem);
 
 		} else {
 
-			cssProperty.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
-			cssPropertyValue.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
-			setTimeout(that.updateValidClass, 0, cssProperty);
-			setTimeout(that.updateValidClass, 0, cssPropertyValue);
-		}
+			if(event && event.currentTarget) {
 
-		return false;
+				event.currentTarget.style.setProperty('margin-right',(-that.INPUT_ARROW_WIDTH) + 'px', '');
+				setTimeout(that.updateValidClass, 0, event.currentTarget);
+
+			} else {
+
+				cssProperty.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
+				cssPropertyValue.style.setProperty('margin-right', (-that.INPUT_ARROW_WIDTH) + 'px', '');
+				setTimeout(that.updateValidClass, 0, cssProperty);
+				setTimeout(that.updateValidClass, 0, cssPropertyValue);
+			}
+
+		}
 	},
 	updateValidClass: function(target) {
 		if(target && target.value) {
@@ -684,9 +702,8 @@ STYLEV.RULES_EDITOR = {
 		that.dummyElement4detectWidth.style['font-family'] = getComputedStyle(currentTarget, '').getPropertyValue('font-family');
 		currentTarget.select();
 	},
-	removeProperty: function(styleList, styleListItem) {
-		var that = STYLEV.RULES_EDITOR;
-		styleList.removeChild(styleListItem);
+	removeProperty: function(stylesList, stylesListItem) {
+		stylesList.removeChild(stylesListItem);
 	},
 	getAllCSSProperties: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -744,8 +761,8 @@ STYLEV.RULES_EDITOR = {
 
 						var clone = document.importNode(that.templateRule, true);
 						var styleSelects = clone.querySelectorAll('.styles-select');
-						var styleListsBase = clone.querySelectorAll('.styles-list-base');
-						var styleListsNg = clone.querySelectorAll('.styles-list-ng');
+						var stylesListsBase = clone.querySelectorAll('.styles-list-base');
+						var stylesListsNg = clone.querySelectorAll('.styles-list-ng');
 						var styleInputs = clone.querySelectorAll('.styles-input');
 
 						for(var h = 0, styleSelectsLength = styleSelects.length; h < styleSelectsLength; h++) {
@@ -753,15 +770,15 @@ STYLEV.RULES_EDITOR = {
 							styleSelect.querySelector('select').tabIndex = 1;
 							that.addPropertyFromJSON2HTML(styleSelect, rule, styleSelect.dataset.id);
 						}
-						for(var j = 0, styleListsBaseLength = styleListsBase.length; j < styleListsBaseLength; j++) {
-							var styleListBase = styleListsBase[j];
-							styleListBase.tabIndex = 1;
-							that.addPropertyFromJSON2HTML(styleListBase, rule, styleListBase.dataset.id);
+						for(var j = 0, stylesListsBaseLength = stylesListsBase.length; j < stylesListsBaseLength; j++) {
+							var stylesListBase = stylesListsBase[j];
+							stylesListBase.tabIndex = 1;
+							that.addPropertyFromJSON2HTML(stylesListBase, rule, stylesListBase.dataset.id);
 						}
-						for(var m = 0, styleListsNgLength = styleListsNg.length; m < styleListsNgLength; m++) {
-							var styleListNg = styleListsNg[m];
-							styleListNg.tabIndex = 1;
-							that.addPropertyFromJSON2HTML(styleListNg, ngStyles, styleListNg.dataset.id);
+						for(var m = 0, stylesListsNgLength = stylesListsNg.length; m < stylesListsNgLength; m++) {
+							var stylesListNg = stylesListsNg[m];
+							stylesListNg.tabIndex = 1;
+							that.addPropertyFromJSON2HTML(stylesListNg, ngStyles, stylesListNg.dataset.id);
 						}
 						for(var k = 0, styleInputsLength = styleInputs.length; k < styleInputsLength; k++) {
 							var styleInput = styleInputs[k];
@@ -808,10 +825,10 @@ STYLEV.RULES_EDITOR = {
 							propertyValue = propertyValue[0];
 						}
 
-						var styleListItem = that.insertProperty(null, target, property, propertyValue, reason, referenceURL);
-						that.modifyCSSProperty(null, styleListItem);
-						that.modifyCSSPropertyValue(null, styleListItem);
-						that.applyValidationResult(null, styleListItem);
+						var stylesListItem = that.insertProperty(null, target, property, propertyValue, reason, referenceURL);
+						that.modifyCSSProperty(null, stylesListItem);
+						that.modifyCSSPropertyValue(null, stylesListItem);
+						that.applyValidationResult(null, stylesListItem);
 					}
 				}
 			}
@@ -867,18 +884,18 @@ STYLEV.RULES_EDITOR = {
 
 				if(dataElement.classList.contains('styles-list-base')) {
 
-					var styleListItems = dataElement.querySelectorAll(':scope > li');
+					var stylesListItems = dataElement.querySelectorAll(':scope > li');
 
-					if(!styleListItems.length) {
+					if(!stylesListItems.length) {
 						continue;
 					}
 					rule[id] = {};
 
-					for(var j = 0, styleListItemsLength = styleListItems.length; j < styleListItemsLength; j++) {
+					for(var j = 0, stylesListItemsLength = stylesListItems.length; j < stylesListItemsLength; j++) {
 
-						var styleListItem = styleListItems[j];
-						var property = styleListItem.querySelector('.css-property');
-						var propertyValue = styleListItem.querySelector('.css-property-value');
+						var stylesListItem = stylesListItems[j];
+						var property = stylesListItem.querySelector('.css-property');
+						var propertyValue = stylesListItem.querySelector('.css-property-value');
 
 						//TODO: 検証が通っていないものも入れるようにしているが、後々ベストな振る舞いについて考える
 //						if (
@@ -892,21 +909,21 @@ STYLEV.RULES_EDITOR = {
 				}
 				if(dataElement.classList.contains('styles-list-ng')) {
 
-					var styleListItems = dataElement.querySelectorAll(':scope > li');
+					var stylesListItems = dataElement.querySelectorAll(':scope > li');
 
-					if(!styleListItems.length) {
+					if(!stylesListItems.length) {
 						continue;
 					}
 					rule['ng-styles'] = {};
 					rule['ng-styles'][id] = {};
 
-					for(var j = 0, styleListItemsLength = styleListItems.length; j < styleListItemsLength; j++) {
+					for(var j = 0, stylesListItemsLength = stylesListItems.length; j < stylesListItemsLength; j++) {
 
-						var styleListItem = styleListItems[j];
-						var property = styleListItem.querySelector('.css-property');
-						var propertyValue = styleListItem.querySelector('.css-property-value');
-						var reason = styleListItem.querySelector('.reason');
-						var referenceURL = styleListItem.querySelector('.reference-url');
+						var stylesListItem = stylesListItems[j];
+						var property = stylesListItem.querySelector('.css-property');
+						var propertyValue = stylesListItem.querySelector('.css-property-value');
+						var reason = stylesListItem.querySelector('.reason');
+						var referenceURL = stylesListItem.querySelector('.reference-url');
 
 						rule['ng-styles'][id][property.value] = [];
 						rule['ng-styles'][id][property.value][0] = propertyValue.value;
@@ -1021,22 +1038,12 @@ STYLEV.RULES_EDITOR = {
 		return target;
 	},
 
-	resizeBasedOnLine: function() {
+	resizeTextareaBasedOnLine: function() {
 		var that = STYLEV.RULES_EDITOR;
-		that.textareas = document.querySelectorAll('textarea');
-
-		that.resizeTextarea(that.bindEvents2Textarea);
-		window.addEventListener('resize', that.resizeTextarea, false);
-
-	},
-
-	resizeTextarea: function(bindEvents) {
-		var that = STYLEV.RULES_EDITOR;
-		var hasCallback = typeof bindEvents === 'function';
-		for(var i = 0, textareas = that.textareas, textareasLen = textareas.length; i < textareasLen; i++) {
-			var textarea = textareas[i];
-			that.adjustHeight(null, textarea);
-			hasCallback && bindEvents(textarea);
+		var reasons = that.reasons;
+		for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
+			var reason = reasons[i];
+			that.adjustHeight(null, reason);
 		}
 	},
 
