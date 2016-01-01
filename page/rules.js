@@ -107,33 +107,32 @@ STYLEV.RULES_EDITOR = {
 
 	bind2RuleBox: function() {
 		var that = STYLEV.RULES_EDITOR;
-
 		for(var i = 0, len = that.rulesListItems.length; i < len; i++) {
 			var rulesListItem = that.rulesListItems[i];
 			var editButton = rulesListItem.querySelector('.edit-button');
 			var removeButton = rulesListItem.querySelector('.remove-button');
-			editButton.addEventListener('click', (that.toggleEditMode(rulesListItem)), false);
-			removeButton.addEventListener('click', (that.removeTheRule(rulesListItem)), false);
+			editButton.addEventListener('click', that.toggleEditMode, false);
+			removeButton.addEventListener('click', that.removeTheRule, false);
 		}
 	},
 
-	toggleEditMode: function(rulesListItem) {
+	toggleEditMode: function() {
 		var that = STYLEV.RULES_EDITOR;
 
-		return function() {
-			event.stopPropagation();
-			event.preventDefault();
+		event.stopPropagation();
+		event.preventDefault();
 
-			if(rulesListItem.classList.contains('edit-mode')) {
+		var rulesListItem = that.closest(event.currentTarget, 'li');
 
-				that.modifyBasedOnCurrentData(rulesListItem);
-				rulesListItem.classList.remove('edit-mode');
-				this.textContent = 'Edit';
-			} else {
-				rulesListItem.classList.add('edit-mode');
-				this.textContent = 'Set';
-			}
-		};
+		if(rulesListItem.classList.contains('edit-mode')) {
+
+			that.modifyBasedOnCurrentData(rulesListItem);
+			rulesListItem.classList.remove('edit-mode');
+			this.textContent = 'Edit';
+		} else {
+			rulesListItem.classList.add('edit-mode');
+			this.textContent = 'Set';
+		}
 	},
 
 	modifyBasedOnCurrentData: function(rulesListItem) {
@@ -982,7 +981,8 @@ STYLEV.RULES_EDITOR = {
 	showErrorMsg: function() {
 		alert('It could not connect to api server. Connect to api server, or click download button.')
 	},
-	closest: function(elem, selector) {
+
+	closest: function(target, selector) {
 		var selector = selector.toLowerCase();
 
 		if(selector.indexOf(' ') !== -1 || selector.split(/[\.|#]/).length > 1) {
@@ -1002,34 +1002,47 @@ STYLEV.RULES_EDITOR = {
 		}());
 
 		while(
-			elem !== null &&
+			target !== null &&
 			!(
-				(selectorType === 'tag' && elem.tagName.toLowerCase() === selector) ||
-				(selectorType === 'class' && elem.classList.contains(selector)) ||
-				(selectorType === 'id' && elem.id === selector)
+				(selectorType === 'tag' && target.tagName.toLowerCase() === selector) ||
+				(selectorType === 'class' && target.classList.contains(selector)) ||
+				(selectorType === 'id' && target.id === selector)
 			)
 		) {
-			elem = elem.parentElement;
+			target = target.parentElement;
 		}
 
-		return elem;
+		return target;
 	},
+
 	resizeBasedOnLine: function() {
 		var that = STYLEV.RULES_EDITOR;
 		that.textareas = document.querySelectorAll('textarea');
 
+		that.resizeTextarea(that.bindEvents2Textarea);
+		window.addEventListener('resize', that.resizeTextarea, false);
+
+	},
+
+	resizeTextarea: function(bindEvents) {
+		var that = STYLEV.RULES_EDITOR;
+		var hasCallback = typeof bindEvents === 'function';
 		for(var i = 0, textareas = that.textareas, textareasLen = textareas.length; i < textareasLen; i++) {
 			var textarea = textareas[i];
 			that.adjustHeight(null, textarea);
-			textarea.removeEventListener('keyup', that.adjustHeight);
-			textarea.addEventListener('keyup', that.adjustHeight, false);
+			hasCallback && bindEvents(textarea);
 		}
 	},
+
+	bindEvents2Textarea: function(textarea) {
+		var that = STYLEV.RULES_EDITOR;
+		textarea.addEventListener('keyup', that.adjustHeight, false);
+	},
+
 	adjustHeight: function(event, target) {
 		var target = target || event.currentTarget || event.target;
 		target.style.setProperty('height', 0 + 'px', '');
 		target.style.setProperty('height', target.scrollHeight + 'px', '');
-		return false;
 	}
 
 };

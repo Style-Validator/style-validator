@@ -35,7 +35,7 @@ input, select, textarea, button {
 	color: inherit;
 }
 input, textarea {
-	line-height: inherit;
+	 line-height: inherit;
 }
 input, select, textarea, button, h1, h2, h3, h4, h5, h6 {
 	font-size: inherit;
@@ -72,8 +72,9 @@ body {
 	left: 0;
 	z-index: 1;
 	padding: 1% 4%;
-	background: #DBE0DB;
+	background: #FFFFFF;
 	color: #355431;
+	border-bottom: 1px solid #478440;
 }
 .header-first {
 	display: flex;
@@ -289,11 +290,13 @@ body {
 	resize: none;
 	height: 1.14em;
 	font-style: italic;
+	overflow: hidden;
 }
 
 .styles-input {
 	display: flex;
 	alignment-baseline: middle;
+	justify-content: space-between;
 }
 .styles-select {
 	display: flex;
@@ -356,10 +359,6 @@ button,
 }
 
 [data-id="title"] {
-	/*position: absolute;*/
-	/*right: 0;*/
-	/*left: 0;*/
-	/*top: 0;*/
 	border-bottom: 1px solid #E5E5E5;
 	font-size: 20px;
 }
@@ -406,12 +405,34 @@ button,
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
-	flex-basis: 60px;
+	flex-basis: 40px;
 	align-items: center;
 }
 [data-id="title"] a {
 	display: none;
 	font-size: 12px;
+	text-indent: -9999px;
+	white-space: nowrap;
+	overflow: hidden;
+	background-repeat:  no-repeat;
+	background-position: center center;
+	background-size: 18px auto;
+}
+.edit-button {
+	background-image: url(../img/iconmonstr-edit-8-icon.svg);
+}
+.edit-mode .edit-button {
+	display: flex;
+	background-image: url(../img/iconmonstr-save-5-icon.svg);
+	background-size: 20px auto;
+}
+.remove-button {
+	background-image: url(../img/iconmonstr-x-mark-3-icon.svg);
+}
+.edit-mode .remove-button {
+	display: flex;
+	opacity: 0;
+	pointer-events: none;
 }
 .styles-list-wrapper > li:hover [data-id="title"] a {
 	display: flex;
@@ -422,7 +443,6 @@ button,
 .edit-mode .styles-list {
 	display: block !important;
 }
-
 .hide-rule {
 	display: none;
 }
