@@ -217,15 +217,16 @@ STYLEV.RULES_EDITOR = {
 
 	},
 
-	removeTheRule: function(rulesListItem) {
-		return function() {
-			event.stopPropagation();
-			event.preventDefault();
+	removeTheRule: function(event) {
+		var that = STYLEV.RULES_EDITOR;
+		event.stopPropagation();
+		event.preventDefault();
 
-			if(confirm('Are you sure you want to remove the rule?')) {
-				rulesListItem.parentElement.removeChild(rulesListItem);
-			}
-		};
+		var rulesListItem = that.closest(event.currentTarget, 'li');
+
+		if(confirm('Are you sure you want to remove this rule?')) {
+			rulesListItem.parentElement.removeChild(rulesListItem);
+		}
 	},
 
 	bind2StylesList: function(targetstylesLists) {
@@ -270,16 +271,11 @@ STYLEV.RULES_EDITOR = {
 			clone = document.importNode(that.templatePropertyNg, true);
 		}
 
-		if(property) {
-			clone.querySelector('.css-property').value = property;
-		}
-		if(propertyValue) {
-			clone.querySelector('.css-property-value').value = propertyValue;
-		}
-		if(reason) {
+		clone.querySelector('.css-property').value = property;
+		clone.querySelector('.css-property-value').value = propertyValue;
+
+		if(!isBaseStyles) {
 			clone.querySelector('.reason').value = reason;
-		}
-		if(referenceURL) {
 			clone.querySelector('.reference-url').value = referenceURL;
 		}
 
@@ -300,13 +296,18 @@ STYLEV.RULES_EDITOR = {
 		var cssProperty = appendedStylesListItem.querySelector('.css-property');
 		var cssPropertyValue = appendedStylesListItem.querySelector('.css-property-value');
 		that.bindEvents2ListItem(appendedStylesListItem);
-		that.bindEvents2CSSPropertyAndValue(cssProperty, cssPropertyValue);
 
-		if(!isBaseStyles) {
+		if(isBaseStyles) {
+
+			that.bindEvents2CSSPropertyAndValue(cssProperty, cssPropertyValue);
+
+		} else {
+
 			var reason = appendedStylesListItem.querySelector('.reason');
 			var referenceURL = appendedStylesListItem.querySelector('.reference-url');
 			that.bindEvents2Textarea(reason);
 			referenceURL.addEventListener('dblclick', that.jump2urlOfValue, false);
+			that.bindEvents2CSSPropertyAndValue(cssProperty, cssPropertyValue, reason, referenceURL);
 		}
 
 		cssProperty.focus();
@@ -319,8 +320,9 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 		appendedStylesListItem.addEventListener('click', that.stopPropagation, false);
 	},
-	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue) {
+	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue, reason, referenceURL) {
 		var that = STYLEV.RULES_EDITOR;
+
 		cssProperty.addEventListener('click', that.stopPropagation, false);
 		cssProperty.addEventListener('keyup', that.moveFocusByEnter, false);
 		cssProperty.addEventListener('keyup', that.fireBlurEventByEscKey, false);
@@ -329,11 +331,20 @@ STYLEV.RULES_EDITOR = {
 		cssProperty.addEventListener('blur', that.applyValidationResult, false);
 
 		cssPropertyValue.addEventListener('click', that.stopPropagation, false);
-		cssPropertyValue.addEventListener('keyup', that.insertPropertyByEnterKey, false);
+		cssPropertyValue.addEventListener('keyup', that.moveFocusByEnter, false);
 		cssPropertyValue.addEventListener('keyup', that.fireBlurEventByEscKey, false);
 		cssPropertyValue.addEventListener('input', that.modifyCSSPropertyValue, false);
 		cssPropertyValue.addEventListener('focus', that.applySameStyles, false);
 		cssPropertyValue.addEventListener('blur', that.applyValidationResult, false);
+
+		if(reason) {
+			reason.addEventListener('keyup', that.fireBlurEventByEscKey, false);
+		}
+		if(referenceURL) {
+			referenceURL.addEventListener('keyup', that.fireBlurEventByEscKey, false);
+			referenceURL.addEventListener('keyup', that.insertPropertyByEnterKey, false);
+		}
+
 	},
 	modifyCSSProperty: function(event, stylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
@@ -370,10 +381,18 @@ STYLEV.RULES_EDITOR = {
 	moveFocusByEnter: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 		var stylesListItem = that.closest(event.currentTarget, 'li');
-		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
+		var inputs = stylesListItem.querySelectorAll('input, textarea, select');
 		var enterKeyCode = 13;
+
 		if(event.keyCode === enterKeyCode) {
-			cssPropertyValue.focus();
+			for(var i = 0, inputsLen = inputs.length; i < inputsLen; i++) {
+				var input = inputs[i];
+				var nextInput = inputs[i+1];
+
+				if(input.isEqualNode(event.currentTarget)) {
+					nextInput && nextInput.focus();
+				}
+			}
 		}
 	},
 	insertPropertyByEnterKey: function(event) {
