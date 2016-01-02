@@ -8,6 +8,7 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 
 		that.setParameters();
+		that.applyFromLocalStorage();
 		that.insertDummyElements();
 		that.getAllCSSProperties();
 		that.setCSSPropertyDataList();
@@ -24,12 +25,15 @@ STYLEV.RULES_EDITOR = {
 				that.bindEvents();
 				that.setStyleDataOfWidthHeight();
 				that.resizeTextareaBasedOnLine();
-
+				that.toggleReason();
+				that.toggleReferenceURL();
+				that.isShowAllAtFirst = true;
 			});
 	},
 	setParameters: function() {
 		var that = STYLEV.RULES_EDITOR;
 
+		that.isShowAllAtFirst = false;
 		that.resetButton = document.querySelector('#reset-button');
 		that.addButton = document.querySelector('#add-button');
 		that.saveButton = document.querySelector('#save-button');
@@ -49,8 +53,16 @@ STYLEV.RULES_EDITOR = {
 		that.dummyElement4testStyle.classList.add('dummy');
 		that.reasonCheckbox = document.querySelector('#reason-checkbox');
 		that.referenceURLCheckbox = document.querySelector('#reference-url-checkbox');
+
 		that.allCSSProperties = [];
 		that.INPUT_ARROW_WIDTH = 22;
+	},
+	applyFromLocalStorage: function() {
+		var that = STYLEV.RULES_EDITOR;
+		that.reasonCheckboxData = localStorage.getItem(that.reasonCheckbox.id);
+		that.reasonCheckbox.checked = that.reasonCheckboxData ? that.reasonCheckboxData === 'true' : that.reasonCheckbox.checked;
+		that.referenceURLCheckboxData = localStorage.getItem(that.referenceURLCheckbox.id);
+		that.referenceURLCheckbox.checked = that.referenceURLCheckboxData ? that.referenceURLCheckboxData === 'true' : that.referenceURLCheckbox.checked;
 	},
 	setParametersAfterAdding: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -60,7 +72,11 @@ STYLEV.RULES_EDITOR = {
 		that.stylesLists = that.rulesList.querySelectorAll('.styles-list');
 		that.stylesInputs = that.rulesList.querySelectorAll('.styles-input');
 		that.reasons = that.rulesList.querySelectorAll('.reason');
-		that.referenceURLs = that.rulesList.querySelectorAll('.reference-url');
+	},
+	setParametersAfterInsertingProperty: function() {
+		var that = STYLEV.RULES_EDITOR;
+
+		that.reasons = that.rulesList.querySelectorAll('.reasons');
 	},
 	bindEvents: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -68,7 +84,7 @@ STYLEV.RULES_EDITOR = {
 		that.resetButton.addEventListener('click', that.initializeRuleArea, false);
 		that.addButton.addEventListener('click', that.addRule, false);
 		that.saveButton.addEventListener('click', that.saveJSON, false);
-		that.downloadButton.addEventListener('mousedown', that.setParamAndFunc2DownloadButton, false);
+		that.downloadButton.addEventListener('mousedown', that.setDownloadButton, false);
 		that.reasonCheckbox.addEventListener('change', that.toggleReason, false);
 		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL, false);
 		window.addEventListener('resize', that.resizeTextareaBasedOnLine, false);
@@ -79,18 +95,22 @@ STYLEV.RULES_EDITOR = {
 
 	toggleReason: function(event) {
 		var that = STYLEV.RULES_EDITOR;
-		for(var i = 0, reasons = that.reasons, reasonsLen = reasons.length; i < reasonsLen; i++) {
+		var reasons = that.rulesList.querySelectorAll('.reason');
+		for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
 			var reason = reasons[i];
-			reason.hidden = !event.currentTarget.checked;
+			reason.hidden = !that.reasonCheckbox.checked;
 		}
+		localStorage.setItem(that.reasonCheckbox.id, that.reasonCheckbox.checked);
 	},
 
 	toggleReferenceURL: function(event) {
 		var that = STYLEV.RULES_EDITOR;
-		for(var i = 0, referenceURLs = that.referenceURLs, referenceURLsLen = referenceURLs.length; i < referenceURLsLen; i++) {
+		var referenceURLs = that.rulesList.querySelectorAll('.reference-url');
+		for(var i = 0, referenceURLsLen = referenceURLs.length; i < referenceURLsLen; i++) {
 			var referenceURL = referenceURLs[i];
-			referenceURL.hidden = !event.currentTarget.checked;
+			referenceURL.hidden = !that.referenceURLCheckbox.checked;
 		}
+		localStorage.setItem(that.referenceURLCheckbox.id, that.referenceURLCheckbox.checked);
 	},
 
 	removeSaveButtonWhenNotLocal: function() {
@@ -100,7 +120,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	
-	setParamAndFunc2DownloadButton: function() {
+	setDownloadButton: function() {
 		var that = STYLEV.RULES_EDITOR;
 		var json = that.generateJSON();
 		this.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json, null, '\t'));
@@ -140,7 +160,6 @@ STYLEV.RULES_EDITOR = {
 	modifyBasedOnCurrentData: function(rulesListItem) {
 		var that = STYLEV.RULES_EDITOR;
 
-		//TODO: データの有り無しで表示切り替え
 		var dataElements = rulesListItem.querySelectorAll('.styles-list, .styles-input, .styles-select');
 
 		for(var i = 0, len = dataElements.length; i < len; i++) {
@@ -216,7 +235,6 @@ STYLEV.RULES_EDITOR = {
 
 		for(var i = 0, len = that.stylesLists.length; i < len; i++) {
 			var stylesList = that.stylesLists[i];
-//			stylesList.addEventListener('click', that.insertProperty, false);
 			stylesList.addEventListener('focus', that.insertProperty, false);
 		}
 	},
@@ -268,7 +286,7 @@ STYLEV.RULES_EDITOR = {
 		stylesList.appendChild(clone);
 
 		var appendedStylesListItem = stylesList.querySelector(':scope > li:last-child');
-		that.doInsertedProperty(appendedStylesListItem, isBaseStyles);
+		that.doAfterInsertingProperty(appendedStylesListItem, isBaseStyles);
 
 		return appendedStylesListItem;
 	},
@@ -277,7 +295,7 @@ STYLEV.RULES_EDITOR = {
 		location.href = event.currentTarget.value;
 	},
 
-	doInsertedProperty: function(appendedStylesListItem, isBaseStyles) {
+	doAfterInsertingProperty: function(appendedStylesListItem, isBaseStyles) {
 		var that = STYLEV.RULES_EDITOR;
 		var cssProperty = appendedStylesListItem.querySelector('.css-property');
 		var cssPropertyValue = appendedStylesListItem.querySelector('.css-property-value');
@@ -292,6 +310,10 @@ STYLEV.RULES_EDITOR = {
 		}
 
 		cssProperty.focus();
+
+		if(that.isShowAllAtFirst) {
+			that.setParametersAfterInsertingProperty();
+		}
 	},
 	bindEvents2ListItem: function(appendedStylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
@@ -703,7 +725,9 @@ STYLEV.RULES_EDITOR = {
 		currentTarget.select();
 	},
 	removeProperty: function(stylesList, stylesListItem) {
+		var that = STYLEV.RULES_EDITOR;
 		stylesList.removeChild(stylesListItem);
+		that.setParametersAfterInsertingProperty();
 	},
 	getAllCSSProperties: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -1005,7 +1029,7 @@ STYLEV.RULES_EDITOR = {
 		alert('It could not connect to api server. Connect to api server, or click download button.')
 	},
 
-	closest: function(target, selector) {
+	closest: function(element, selector) {
 		var selector = selector.toLowerCase();
 
 		if(selector.indexOf(' ') !== -1 || selector.split(/[\.|#]/).length > 1) {
@@ -1025,17 +1049,17 @@ STYLEV.RULES_EDITOR = {
 		}());
 
 		while(
-			target !== null &&
+			element !== null &&
 			!(
-				(selectorType === 'tag' && target.tagName.toLowerCase() === selector) ||
-				(selectorType === 'class' && target.classList.contains(selector)) ||
-				(selectorType === 'id' && target.id === selector)
+				(selectorType === 'tag' && element.tagName.toLowerCase() === selector) ||
+				(selectorType === 'class' && element.classList.contains(selector)) ||
+				(selectorType === 'id' && element.id === selector)
 			)
 		) {
-			target = target.parentElement;
+			element = element.parentElement;
 		}
 
-		return target;
+		return element;
 	},
 
 	resizeTimer: null,
@@ -1043,12 +1067,11 @@ STYLEV.RULES_EDITOR = {
 
 	resizeTextareaBasedOnLine: function() {
 		var that = STYLEV.RULES_EDITOR;
-		var reasons = that.reasons;
-
 		if(that.resizeTimer) {
 			clearTimeout(that.resizeTimer);
 		}
 
+		var reasons = that.reasons;
 		that.resizeTimer = setTimeout(function() {
 			for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
 				var reason = reasons[i];
@@ -1069,7 +1092,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	removeLoadingSpinner: function() {
-		var loadingSpinner = document.querySelector('.loadingSpinner');
+		var loadingSpinner = document.querySelector('#loadingSpinner');
 		loadingSpinner.parentElement.removeChild(loadingSpinner);
 	}
 

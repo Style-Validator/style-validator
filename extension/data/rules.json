@@ -13,7 +13,7 @@
 				],
 				"float": [
 					"!default",
-					"Float property is needless. Defined float property is no effective.",
+					"Needless. Defined property is no effective.",
 					""
 				]
 			}
@@ -21,70 +21,75 @@
 	},
 	{
 		"title": "Inline Elements (Non-replaced)",
+		"replaced": "Non-replaced elements",
 		"base-styles": {
 			"display": "inline"
 		},
-		"replaced": "Non-replaced elements",
 		"ng-styles": {
 			"warning-styles": {
 				"width": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"height": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"min-width": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"min-height": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"max-width": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"max-height": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"margin-top": [
 					"!0",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"margin-bottom": [
 					"!0",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"float": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"text-align": [
 					"!inherit",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"overflow": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"text-indent": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
+					""
+				],
+				"white-space": [
+					"!default",
+					"Needless. Defined property is no effective.",
 					""
 				]
 			}
@@ -92,25 +97,25 @@
 	},
 	{
 		"title": "Inline Elements (Replaced)",
+		"replaced": "Replaced elements",
 		"base-styles": {
 			"display": "inline"
 		},
-		"replaced": "Replaced elements",
 		"ng-styles": {
 			"warning-styles": {
 				"padding": [
 					"over-0",
-					"Needless Style",
+					"Not so good. If you will control size, use width/ height.",
 					""
 				],
 				"text-align": [
 					"!inherit",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				],
 				"overflow": [
 					"!default",
-					"Needless Style",
+					"Needless. Defined property is no effective.",
 					""
 				]
 			}
@@ -232,7 +237,7 @@
 				"display": [
 					"![none|table|table-row-group|table-header-group|table-footer-group]",
 					"parent style is bad.",
-					"http://style-validator.io/Style-Validator/page/why.html"
+					""
 				]
 			}
 		}

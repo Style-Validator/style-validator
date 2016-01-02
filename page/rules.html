@@ -16,7 +16,7 @@
 
 	<!-- ***** styles***** -->
 	<link href="rules.css" rel="stylesheet" />
-	<!--<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">-->
+	<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">
 	<style>
 		html {
 			font-family: 'Nunito', sans-serif;
@@ -51,7 +51,7 @@
 			<nav class="header-second-nav">
 				<ul class="header-second-nav-list">
 					<li><label><input type="checkbox" checked="checked" id="reason-checkbox" /> Reason</label></li>
-					<li><label><input type="checkbox" checked="checked" id="reference-url-checkbox" /> Reference URL</label></li>
+					<li><label><input type="checkbox" id="reference-url-checkbox" /> Reference URL</label></li>
 				</ul>
 				<!-- TODO: implement display change function
 				<ul class="header-second-nav-list">
@@ -63,7 +63,7 @@
 		</div>
 	</header>
 	<main class="main">
-		<div class="loadingSpinner">Loading...</div>
+		<div id="loadingSpinner">Loading...</div>
 		<ul id="rules-list" class="styles-list-wrapper"></ul>
 	</main>
 	<footer class="footer">
@@ -113,8 +113,8 @@
 			<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="css-properties-value" /> ;
 		</section>
 		<ul class="styles-list-meta-data">
-			<li><label class="styles-list-meta-data-reason"><textarea placeholder="Reason" class="reason"></textarea></label></li>
-			<li><label class="styles-list-meta-data-reference-url"><input type="text" placeholder="Reference URL" class="reference-url" /></label></li>
+			<li><label class="styles-list-meta-data-reason"><textarea placeholder="Input Reason" class="reason"></textarea></label></li>
+			<li><label class="styles-list-meta-data-reference-url"><input type="text" placeholder="Input Reference URL" class="reference-url" /></label></li>
 		</ul>
 	</li>
 </template>
