@@ -271,12 +271,20 @@ STYLEV.RULES_EDITOR = {
 			clone = document.importNode(that.templatePropertyNg, true);
 		}
 
-		clone.querySelector('.css-property').value = property;
-		clone.querySelector('.css-property-value').value = propertyValue;
+		if(property) {
+			clone.querySelector('.css-property').value = property;
+		}
+		if(propertyValue) {
+			clone.querySelector('.css-property-value').value = propertyValue;
+		}
 
 		if(!isBaseStyles) {
-			clone.querySelector('.reason').value = reason;
-			clone.querySelector('.reference-url').value = referenceURL;
+			if(reason) {
+				clone.querySelector('.reason').value = reason;
+			}
+			if(referenceURL) {
+				clone.querySelector('.reference-url').value = referenceURL;
+			}
 		}
 
 		stylesList.appendChild(clone);
@@ -879,14 +887,6 @@ STYLEV.RULES_EDITOR = {
 				var input = target.querySelector('input');
 				input.value = ruleStyles;
 
-				if(id === 'reference-url') {
-					//TODO: URLは強制的にdisplay: none;に。URLができ次第復活させる
-					target.classList.add('hide-rule');
-					var anchor = target.querySelector('a');
-					if(anchor) {
-						anchor.href = ruleStyles;
-					}
-				}
 			}
 
 
@@ -957,12 +957,12 @@ STYLEV.RULES_EDITOR = {
 					if(!stylesListItems.length) {
 						continue;
 					}
-					rule['ng-styles'] = {};
+					rule['ng-styles'] = rule['ng-styles'] || {};
 					rule['ng-styles'][id] = {};
 
-					for(var j = 0, stylesListItemsLength = stylesListItems.length; j < stylesListItemsLength; j++) {
+					for(var k = 0, stylesListItemsLength = stylesListItems.length; k < stylesListItemsLength; k++) {
 
-						var stylesListItem = stylesListItems[j];
+						var stylesListItem = stylesListItems[k];
 						var property = stylesListItem.querySelector('.css-property');
 						var propertyValue = stylesListItem.querySelector('.css-property-value');
 						var reason = stylesListItem.querySelector('.reason');
@@ -1082,7 +1082,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	resizeTimer: null,
-	RESIZE_INTERVAL_MILISECCOND: 1000,
+	RESIZE_INTERVAL_MILLISECOND: 1000,
 
 	resizeTextareaBasedOnLine: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -1091,20 +1091,27 @@ STYLEV.RULES_EDITOR = {
 		}
 
 		var reasons = that.reasons;
-		that.resizeTimer = setTimeout(function() {
+		if(!that.isShowAllAtFirst) {
 			for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
 				var reason = reasons[i];
-				that.adjustHeight(null, reason);
+				that.adjustHeightOfTextarea(null, reason);
 			}
-		}, that.RESIZE_INTERVAL_MILISECCOND);
+		} else {
+			that.resizeTimer = setTimeout(function() {
+				for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
+					var reason = reasons[i];
+					that.adjustHeightOfTextarea(null, reason);
+				}
+			}, that.RESIZE_INTERVAL_MILLISECOND);
+		}
 	},
 
 	bindEvents2Textarea: function(textarea) {
 		var that = STYLEV.RULES_EDITOR;
-		textarea.addEventListener('keyup', that.adjustHeight, false);
+		textarea.addEventListener('keyup', that.adjustHeightOfTextarea, false);
 	},
 
-	adjustHeight: function(event, target) {
+	adjustHeightOfTextarea: function(event, target) {
 		var target = target || event.currentTarget || event.target;
 		target.style.setProperty('height', 0 + 'px', '');
 		target.style.setProperty('height', target.scrollHeight + 'px', '');

@@ -74,7 +74,7 @@
 				],
 				"text-align": [
 					"!inherit",
-					"Needless. Defined property is no effective.",
+					"Needless. Defined property is no effective. Need to non inline element and width property.",
 					""
 				],
 				"overflow": [
@@ -105,7 +105,7 @@
 			"warning-styles": {
 				"padding": [
 					"over-0",
-					"Not so good. If you will control size, use width/ height.",
+					"Not so good. If you have to control size, use width/height property simply.",
 					""
 				],
 				"text-align": [
@@ -129,8 +129,8 @@
 		"ng-styles": {
 			"parent-warning-styles": {
 				"display": [
-					"![none|block|inline-block|list-item|table-cell|flex]",
-					"Needless Style",
+					"[inline]",
+					"Closest parent element is better to be non inline element.",
 					""
 				]
 			}

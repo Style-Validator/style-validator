@@ -262,6 +262,9 @@ body {
 .styles-list > li input[type="text"].css-property-value {
 	max-width: 188px;
 }
+/*.styles-list > li input[type="text"].css-property-value:focus {
+	max-width: none;
+}*/
 .styles-list > li input[type="text"].css-property.valid {
 	color: #CA0000;
 }
@@ -294,14 +297,14 @@ body {
 	color: initial !important;
 }
 
-.styles-list-meta-data > li {
-	/*display: inline-block;*/
+.styles-list-meta-data label {
+	display: block;
 }
-.styles-list-meta-data > li input[type="text"],
-.styles-list-meta-data > li textarea {
+.styles-list-meta-data input[type="text"],
+.styles-list-meta-data textarea {
 	width: 100%;
 }
-.styles-list-meta-data > li textarea {
+.styles-list-meta-data textarea {
 	resize: none;
 	height: 1.4em;
 	font-style: italic;
