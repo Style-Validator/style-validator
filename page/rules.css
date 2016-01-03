@@ -204,6 +204,10 @@ body {
 	color: white;
 	padding: 1% 2.5%;
 	border-left: 1px dashed white;
+	display: none;
+}
+.styles-list:hover:after {
+	display: block;
 }
 .styles-list {
 	padding-bottom: 10px;

@@ -127,6 +127,13 @@
 			"display": "block"
 		},
 		"ng-styles": {
+			"parent-error-styles": {
+				"display": [
+					"[table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
+					"Closest parent element should be non table element except for table-cell.",
+					""
+				]
+			},
 			"parent-warning-styles": {
 				"display": [
 					"[inline]",
