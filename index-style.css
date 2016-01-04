@@ -26,8 +26,9 @@ a:active {
 
 /* page style */
 body {
-	padding: 0 20px;
+	padding: 25px 25px;
 	color: #464646;
+	margin: 0;
 }
 .wrapper {
 	max-width: 1200px;
@@ -38,9 +39,11 @@ body {
 }
 .header-heading {
 	margin: 0;
+	font-size: 22px;
 }
 .main {
 	overflow: hidden;
+	margin-top: 20px;
 }
 .header {
 	position: relative;
@@ -85,8 +88,9 @@ hr {
 }
 .header-heading img {
 	position: relative;
-	top: -2px;
+	top: -1px;
 	margin-right: 10px;
+	width: 40px;
 }
 .main-capture {
 	float: right;
