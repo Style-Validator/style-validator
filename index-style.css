@@ -4,14 +4,13 @@
 ul {
 	list-style: none;
 }
-
 img {
 	vertical-align: middle;
 	pointer-events: none;
 }
-
 html {
 	font-family: Roboto, 'Noto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 13px;
 }
 
 /* anchors */
@@ -27,23 +26,27 @@ a:active {
 
 /* page style */
 body {
-	padding: 1vw 4vw;
+	padding: 0 20px;
 	color: #464646;
 }
-
 .wrapper {
 	max-width: 1200px;
 	min-width: 1000px;
 	margin: 0 auto;
 }
-main {
+.header {
+}
+.header-heading {
+	margin: 0;
+}
+.main {
 	overflow: hidden;
 }
-header {
+.header {
 	position: relative;
 	overflow: hidden;
 }
-nav {
+.header-nav {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -54,24 +57,25 @@ nav {
 	margin-top: auto;
 	margin-bottom: auto;
 }
-nav ul {
+.header-nav-list {
 	margin: 0;
 }
-nav ul li {
+.header-nav-list > li {
 	display: inline-block;
 	vertical-align: middle;
 }
-nav ul li + li {
+.header-nav-list > li + li {
 	margin-left: 20px;
 }
-nav ul li a {
+.header-nav-list > li a {
 	display: block;
 }
-nav img {
+.header-nav img {
 	margin-right: 10px;
+	height: 25px;
+	width: auto;
 }
-
-ol li + li {
+.note-list > li + li {
 	margin-top: 10px;
 }
 hr {
@@ -79,30 +83,23 @@ hr {
 	border-color: #000;
 	border-width: 1px 0 0 0;
 }
-
-h1 img {
+.header-heading img {
 	position: relative;
-	top: -4px;
+	top: -2px;
 	margin-right: 10px;
 }
-
-.content-capture {
+.main-capture {
 	float: right;
 	width: 60%;
 	margin-top: 20px;
-	/* margin-left: 30px; */
 	-webkit-box-reflect: below 40px
 	-webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%);
 }
-.content-body {
+.main-body {
 	float: left;
 	width: 40%;
 	padding-right: 30px;
 	box-sizing: border-box;
-}
-
-h3 + * {
-	position: relative;
 }
 .browser-support {
 	position: absolute;
@@ -116,7 +113,6 @@ h3 + * {
 	filter: gray;
 	filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
 }
-
 .browser-support > li {
 	float: right;
 }
@@ -127,10 +123,12 @@ h3 + * {
 	width: 20px;
 	height: auto;
 }
-h3 + * a {
+.section-heading + * {
+	position: relative;
+}
+.section-heading + * a {
 	display: block;
 	padding: 10px 15px;
-	/*border: 1px solid #E9E9E9;*/
 	border: 1px solid gray;
 	text-decoration: none !important;
 	-webkit-transition: 0.2s ease;
@@ -141,14 +139,12 @@ h3 + * a {
 	background-color: rgba(255, 255, 255, 0.7);
 	color: #359C62 !important;
 }
-h3 + * a:hover {
-	/*background-color: white;*/
+.section-heading + * a:hover {
 	border-color: rgb(49, 194, 92);
 }
-h3 + * a > img {
+.section-heading + * a > img {
 	margin-top: 10px;
 }
-
 #bookmarklet:after {
 	content: 'Bookmark this link.';
 	display: block;

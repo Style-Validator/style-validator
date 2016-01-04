@@ -62,30 +62,26 @@
 <body>
 
 <div class="wrapper">
-	<header itemscope itemtype="http://schema.org/SoftwareApplication">
-		<h1 itemprop="name"><img src="./extension/style-validator.logo.svg" width="60" />Style Validator</h1>
-		<nav>
-			<div>
-				<ul>
-					<!--<li><a href="//github.com/igari/style-validator" target="_blank"><img src="./img/GitHub-Mark-32px.png" />Github (Docs and Code)</a></li>-->
-					<li><a href="./page/demo-simple.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Simple Demo</a></li>
-					<li><a href="./page/demo.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Demo</a></li>
-					<li><a href="./page/rules.html" target="_blank"><img src="./img/iconmonstr-edit-8-icon.svg" width="32" alt="" />Edit Rules of Validation</a></li>
-				</ul>
-			</div>
+	<header class="header" itemscope itemtype="http://schema.org/SoftwareApplication">
+		<h1 class="header-heading" itemprop="name"><img src="./extension/style-validator.logo.svg" width="60" />Style Validator</h1>
+		<nav class="header-nav">
+			<ul class="header-nav-list">
+				<li><a href="https://github.com/igari/style-validator" target="_blank"><img src="./img/GitHub-Mark-32px.png" />Github (Docs and Code)</a></li>
+				<li><a href="./page/demo-simple.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Simple Demo</a></li>
+				<li><a href="./page/demo.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Demo</a></li>
+				<li><a href="./page/rules.html" target="_blank"><img src="./img/iconmonstr-edit-8-icon.svg" width="32" alt="" />Edit Rules of Validation</a></li>
+			</ul>
 		</nav>
 	</header>
-	<main>
-		<!--TODO: make image gif animation-->
-		<img class="content-capture" src="img/screenshot.gif" />
-		<div class="content-body">
-			<section>
-				<h2>A <em>CSS Validator</em> that detect risky CSS.NOT syntax.</h2>
-				<hr />
-				<div>
-					<section>
-						<h3>Chrome Extension (for only chrome browser)</h3>
-						<ul>
+	<main class="main">
+		<img class="main-capture" src="img/screenshot.gif" />
+		<div class="main-body">
+			<section class="content-header">
+				<h2 class="content-heading">A <em>CSS Validator</em> that detect Risky styles NOT syntax.</h2>
+				<div class="content-body">
+					<section class="section">
+						<h3 class="section-heading">Chrome Extension (for only chrome browser)</h3>
+						<ul class="section-body cassette-list">
 							<li>
 								<a href="https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link', 1);">
 									Style Validator<br />
@@ -97,9 +93,9 @@
 							</li>
 						</ul>
 					</section>
-					<section>
-						<h3>JavaScript Bookmarklet</h3>
-						<ul>
+					<section class="section">
+						<h3 class="section-heading">JavaScript Bookmarklet</h3>
+						<ul class="section-body cassette-list">
 							<li>
 								<a id="bookmarklet" href="//style-validator.github.io/Style-Validator/bookmarklet/style-validator.js" onclick="ga('send', 'event', 'button', 'click', 'JavaScript Bookmarklet', 2);">
 									Style Validator<br />
@@ -108,7 +104,7 @@
 										<li><img src="./img/chrome_128x128.png" /></li>
 										<li><img src="./img/opera_128x128.png" /></li>
 										<li><img src="./img/firefox_128x128.png" /></li>
-										<li class="disabled"><img src="./img/safari_128x128.png" /></li>
+										<li><img src="./img/safari_128x128.png" /></li>
 										<li class="disabled"><img src="./img/internet-explorer_128x128.png" /></li>
 										<li class="disabled"><img src="./img/edge_128x128.png" /></li>
 									</ul>
@@ -116,9 +112,9 @@
 							</li>
 						</ul>
 					</section>
-					<section>
-						<h3>Differences from W3C CSS Validator and Existing HTML/CSS Validator.</h3>
-						<ol>
+					<section class="section">
+						<h3 class="section-heading">Differences from W3C CSS Validator and Existing HTML/CSS Validator.</h3>
+						<ol class="section-body note-list">
 							<li>This will NOT detect syntax error. Instead, detect layout broken CSS Properties.</li>
 							<li>It validate with tracking every DOM change. For example, in case of changed DOM by AJAX and user action, it is.</li>
 							<li>This check validity of relationship between elements and styles.</li>
@@ -128,8 +124,7 @@
 			</section>
 		</div>
 	</main>
-	<hr />
-	<footer>
+	<footer class="footer">
 		<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
 	</footer>
 </div>

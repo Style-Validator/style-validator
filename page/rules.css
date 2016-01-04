@@ -174,12 +174,12 @@ body {
 	position: relative;
 	padding-left: 2.2em;
 	padding-right: 1em;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 }
 .styles-list > li + li:before {
 	position: absolute;
-	top: 5px;
+	top: 0.5em;
 	left: 0;
 	width: 2.2em;
 	padding-right: 0.25em;
