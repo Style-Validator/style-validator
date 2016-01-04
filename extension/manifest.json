@@ -4,7 +4,7 @@
 	"name": "Style Validator",
 	"version": "0.3.0.2",
 
-	"description": "Style Validator is a new CSS Validator that detect styling problem for each html elements in conjunction with Chrome DevTools.",
+	"description": "Style Validator is a new CSS Validator that detect CSS problem for each HTML elements in conjunction with Chrome DevTools.",
 	"icons": {
 
 		"16": "./style-validator.logo_16x16.png",

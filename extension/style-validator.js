@@ -80,8 +80,6 @@ STYLEV.VALIDATOR = {
 		//インスタンス変数などを設定
 		that.setParameters();
 
-		//ライブラリを挿入
-		that.insertLibs4Bookmarklet();
 
 		//データを並列で非同期に取得し、全て終わったらそれぞれのインスタンス変数に格納
 		//TODO: Promiseチェーンをもっと上手く書けないか検討
@@ -95,7 +93,7 @@ STYLEV.VALIDATOR = {
 				that.getDataFromURL(that.settings.EMPTY_TAGS_PATH).then(JSON.parse),
 				that.getDataFromURL(that.settings.TAGS_REPLACED_ELEMENT_PATH).then(JSON.parse),
 				that.getDataFromURL(that.settings.TAGS_TABLE_CHILDREN_PATH).then(JSON.parse)
-			])
+			].concat(that.insertLibs4Bookmarklet()))
 
 			//全てのJSONを読み込み終わったら
 			.then(function(dataArray) {
@@ -194,7 +192,6 @@ STYLEV.VALIDATOR = {
 	//Ajaxでデータを取得する関数
 	//promiseオブジェクトを返す
 	getDataFromURL: function(url) {
-		var that = STYLEV.VALIDATOR;
 
 		return new Promise(function (resolve, reject) {
 			var req = new XMLHttpRequest();
@@ -213,6 +210,30 @@ STYLEV.VALIDATOR = {
 		});
 	},
 
+	getScriptFromURL: function(path, docFlag) {
+		var that = STYLEV.VALIDATOR;
+
+		return new Promise(function(resolve, reject) {
+
+			var script = document.createElement('script');
+			script.src = path;
+			script.classList.add('stylev-ignore');
+			script.addEventListener('load', function() {
+				resolve();
+			}, false);
+			script.addEventListener('error', function(event) {
+				reject(new URIError("The script " + event.target.src + " is not accessible."));
+			}, false);
+
+			if(docFlag) {
+				docFlag.appendChild(script);
+			} else {
+				that.head.appendChild(script);
+			}
+		});
+
+	},
+
 	insertLibs4Bookmarklet: function() {
 		var that = STYLEV.VALIDATOR;
 
@@ -221,6 +242,7 @@ STYLEV.VALIDATOR = {
 			var pathesArray = [
 				that.settings.SPECIFICITY_PATH
 			];
+			var promiseArray = [];
 			var docFlag = document.createDocumentFragment();
 
 			for(var i = 0 , pathesArrayLen = pathesArray.length; i < pathesArrayLen; i++) {
@@ -228,15 +250,17 @@ STYLEV.VALIDATOR = {
 				if(that.head.querySelectorAll('script[src="' + path + '"]').length) {
 					continue;
 				}
-				that.scriptTag = document.createElement('script');
-				that.scriptTag.src = path;
-				that.scriptTag.classList.add('stylev-ignore');
-				docFlag.appendChild(that.scriptTag);
+				promiseArray.push(that.getScriptFromURL(path, docFlag));
+				
 			}
 
 			/* append */
 			that.head.appendChild(docFlag);
+
 		}
+
+		return promiseArray;
+
 	},
 
 	insertGA: function() {
@@ -1101,7 +1125,7 @@ STYLEV.VALIDATOR = {
 		that.createMessagesInConsole();
 
 		//コンソール関連の動作のイベントの登録
-		that.bindEvents4Console();
+		that.bindEvents2Console();
 
 			//コンソールヘッダに表示させるテキストの設定
 		that.consoleHeadingText = document.createTextNode(that.settings.CONSOLE_HEADING_TEXT);
@@ -1296,72 +1320,58 @@ STYLEV.VALIDATOR = {
 	},
 
 	//コンソール関連のイベントを登録
-	bindEvents4Console: function() {
+	bindEvents2Console: function() {
 		var that = STYLEV.VALIDATOR;
 
-		that.consoleWrapper.addEventListener('click', function() {
-			event.preventDefault();
-			event.stopPropagation();
-		}, false);
-
-		that.consoleHeader.addEventListener('mousedown', function() {
-			event.preventDefault();
-			event.stopPropagation();
-			that.isMouseDownConsoleHeader = true;
-			that.consoleStartPosY = event.pageY;
-		}, false);
-
-		that.html.addEventListener('mousemove', function() {
-			event.preventDefault();
-			event.stopPropagation();
-
-			if(that.isMouseDownConsoleHeader) {
-				that.consoleCurrentPosY = event.pageY;
-				that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
-				that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', '');
-				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
-
-				if(that.consoleWrapper.offsetHeight === 30) {
-					that.consoleNormalizeButton.hidden = false;
-					that.consoleMinimizeButton.hidden = true;
-				} else if(that.consoleWrapper.offsetHeight > 30) {
-					that.consoleNormalizeButton.hidden = true;
-					that.consoleMinimizeButton.hidden = false;
-				}
-			}
-		}, false);
-
-		that.html.addEventListener('mouseup', function() {
-			event.preventDefault();
-			event.stopPropagation();
-			if(that.isMouseDownConsoleHeader) {
-				that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
-				STYLEV.consoleWrapperHeight = that.consoleWrapperDynamicHeight;
-			}
-			that.isMouseDownConsoleHeader = false;
-		}, false);
-
-		that.consoleCloseButton.addEventListener('click', function() {
-			that.destroy();
-		}, false);
-
-		that.consoleRefreshButton.addEventListener('click', function() {
-			that.validate();
-		}, false);
-
-		that.consoleMinimizeButton.addEventListener('click', function() {
-			this.hidden = true;
-			that.consoleNormalizeButton.hidden = false;
-			that.minimize();
-		}, false);
-
-		that.consoleNormalizeButton.addEventListener('click', function() {
-			this.hidden = true;
-			that.consoleMinimizeButton.hidden = false;
-			that.normalize();
-		}, false);
-
+		that.consoleWrapper.addEventListener('click', that.stopPropagation, false);
+		that.consoleHeader.addEventListener('mousedown', that.initConsoleHeader, false);
+		that.html.addEventListener('mousemove', that.moveConsoleHeader, false);
+		that.html.addEventListener('mouseup', that.offConsoleHeader, false);
+		that.consoleCloseButton.addEventListener('click', that.destroy, false);
+		that.consoleRefreshButton.addEventListener('click', that.validate, false);
+		that.consoleMinimizeButton.addEventListener('click', that.minimize, false);
+		that.consoleNormalizeButton.addEventListener('click', that.normalize, false);
 		that.html.addEventListener('keyup', that.destroyByEsc, false);
+	},
+
+	stopPropagation: function(event) {
+		event.stopPropagation();
+	},
+
+	initConsoleHeader: function(event) {
+		var that = STYLEV.VALIDATOR;
+		event.stopPropagation();
+		that.isMouseDownConsoleHeader = true;
+		that.consoleStartPosY = event.pageY;
+	},
+
+	moveConsoleHeader: function(event) {
+		var that = STYLEV.VALIDATOR;
+		event.stopPropagation();
+		if(that.isMouseDownConsoleHeader) {
+			that.consoleCurrentPosY = event.pageY;
+			that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
+			that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', '');
+			event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
+
+			if(that.consoleWrapper.offsetHeight === 30) {
+				that.consoleNormalizeButton.hidden = false;
+				that.consoleMinimizeButton.hidden = true;
+			} else if(that.consoleWrapper.offsetHeight > 30) {
+				that.consoleNormalizeButton.hidden = true;
+				that.consoleMinimizeButton.hidden = false;
+			}
+		}
+	},
+
+	offConsoleHeader: function(event) {
+		var that = STYLEV.VALIDATOR;
+		event.stopPropagation();
+		if(that.isMouseDownConsoleHeader) {
+			that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
+			STYLEV.consoleWrapperHeight = that.consoleWrapperDynamicHeight;
+		}
+		that.isMouseDownConsoleHeader = false;
 	},
 
 	destroyByEsc: function(event) {
@@ -1389,24 +1399,24 @@ STYLEV.VALIDATOR = {
 		var lines = wrapper.querySelectorAll('li');
 
 		//全ての行から選択状態を外す
-		for(var i = 0, len = lines.length; i < len; i++) {
+		for(var i = 0, linesLen = lines.length; i < linesLen; i++) {
 			lines[i].classList.remove('stylev-trigger-selected');
 		}
 
 		//クリックした行と同じidを持つ行に選択状態を付加
 		var triggers = wrapper.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
-		for(var i = 0, len = triggers.length; i < len; i++) {
+		for(var j = 0, triggersLen = triggers.length; j < triggersLen; j++) {
 
-			var trigger = triggers[i];
+			var trigger = triggers[j];
 			trigger.parentElement.classList.add('stylev-trigger-selected');
-			if(i === 0) {
+			if(j === 0) {
 				STYLEV.selectedLineInConsole = trigger.parentElement;
 			}
 		}
 
 		//全ての対象要素から選択状態を外し、クリックした要素に選択状態を付加
-		for(var j = 0, allElemLen = that.allElem.length; j < allElemLen; j++) {
-			that.allElem[j].classList.remove('stylev-target-selected');
+		for(var k = 0, allElemLen = that.allElem.length; k < allElemLen; k++) {
+			that.allElem[k].classList.remove('stylev-target-selected');
 		}
 		var target = document.querySelector('[data-stylevid="' + result.idName + '"]');
 		target.classList.add('stylev-target-selected');
@@ -1498,8 +1508,9 @@ STYLEV.VALIDATOR = {
 	},
 
 	//全てを削除
-	destroy: function() {
+	destroy: function(event) {
 		var that = STYLEV.VALIDATOR;
+		var isFromCloseButton = event && event.currentTarget.className === that.consoleCloseButton.className;
 
 		that.removeAllAttrAndEvents();
 		that.removeConsole();
@@ -1508,7 +1519,7 @@ STYLEV.VALIDATOR = {
 			that.moManager.disconnect();
 		}
 
-		if(STYLEV.isBookmarklet) {
+		if(STYLEV.isBookmarklet && isFromCloseButton) {
 			that.removeStylesheet();
 		}
 
@@ -1523,14 +1534,18 @@ STYLEV.VALIDATOR = {
 		console.info('Style Validator has removed.')
 	},
 
-	minimize: function() {
+	minimize: function(event) {
 		var that = STYLEV.VALIDATOR;
+		that.consoleMinimizeButton.hidden = true;
+		that.consoleNormalizeButton.hidden = false;
 		that.consoleWrapper.style.setProperty('height', that.consoleHeader.style.getPropertyValue('height'), '');
 		that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 	},
 
-	normalize: function() {
+	normalize: function(event) {
 		var that = STYLEV.VALIDATOR;
+		that.consoleMinimizeButton.hidden = false;
+		that.consoleNormalizeButton.hidden = true;
 		that.consoleWrapper.style.setProperty('height', that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
 		that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 	},

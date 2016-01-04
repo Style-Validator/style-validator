@@ -45,12 +45,7 @@
 
 	<!-- ***** styles***** -->
 	<link rel="stylesheet" href="./index-style.css">
-	<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">
-	<style>
-		* {
-			font-family: 'Nunito', sans-serif;
-		}
-	</style>
+	<!--<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">-->
 
 	<!-- ***** scripts***** -->
 	<script>
@@ -85,7 +80,7 @@
 		<img class="content-capture" src="img/screenshot.gif" />
 		<div class="content-body">
 			<section>
-				<h2>"Validation in the Browser".<br />Style Validator is a new CSS Validator that check computedStyle NOT syntax.</h2>
+				<h2>A <em>CSS Validator</em> that detect risky CSS.NOT syntax.</h2>
 				<hr />
 				<div>
 					<section>
@@ -93,7 +88,7 @@
 						<ul>
 							<li>
 								<a href="https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link', 1);">
-									Style Validator 0.2.5<br />
+									Style Validator<br />
 									<img src="./img/chromeWebStore.png" />
 									<ul class="browser-support">
 										<li><img src="./img/chrome_128x128.png" /></li>
@@ -102,12 +97,12 @@
 							</li>
 						</ul>
 					</section>
-					<!--<section>
+					<section>
 						<h3>JavaScript Bookmarklet</h3>
 						<ul>
 							<li>
 								<a id="bookmarklet" href="//style-validator.github.io/Style-Validator/bookmarklet/style-validator.js" onclick="ga('send', 'event', 'button', 'click', 'JavaScript Bookmarklet', 2);">
-									Style Validator 0.2.5<br />
+									Style Validator<br />
 									<img src="./img/bookmarkbar.png" width="206" />
 									<ul class="browser-support">
 										<li><img src="./img/chrome_128x128.png" /></li>
@@ -120,9 +115,9 @@
 								</a>
 							</li>
 						</ul>
-					</section>-->
+					</section>
 					<section>
-						<h3>Differences from W3C CSS Validator and Existing html/css Validator.</h3>
+						<h3>Differences from W3C CSS Validator and Existing HTML/CSS Validator.</h3>
 						<ol>
 							<li>This will NOT detect syntax error. Instead, detect layout broken CSS Properties.</li>
 							<li>It validate with tracking every DOM change. For example, in case of changed DOM by AJAX and user action, it is.</li>

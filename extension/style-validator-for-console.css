@@ -283,7 +283,8 @@
 	font-weight: bold;
 }
 
-:host .stylev-console-perfect {
+:host .stylev-console-list > li.stylev-console-perfect {
+	display: block;
 	position: absolute;
 	top: 0;
 	right: 0;

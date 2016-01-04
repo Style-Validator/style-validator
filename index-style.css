@@ -10,6 +10,10 @@ img {
 	pointer-events: none;
 }
 
+html {
+	font-family: Roboto, 'Noto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 /* anchors */
 a:link,
 a:visited {
@@ -23,12 +27,7 @@ a:active {
 
 /* page style */
 body {
-	padding: 2vw 4vw;
-	background: -webkit-linear-gradient(90deg, #F1F8FF 10%, rgba(7, 234, 215, 0.11) 90%);
-	background:    -moz-linear-gradient(90deg, #F1F8FF 10%, rgba(7, 234, 215, 0.11) 90%);
-	background:     -ms-linear-gradient(90deg, #F1F8FF 10%, rgba(7, 234, 215, 0.11) 90%);
-	background:      -o-linear-gradient(90deg, #F1F8FF 10%, rgba(7, 234, 215, 0.11) 90%);
-	background:         linear-gradient(90deg, #F1F8FF 10%, rgba(7, 234, 215, 0.11) 90%);
+	padding: 1vw 4vw;
 	color: #464646;
 }
 
@@ -132,7 +131,7 @@ h3 + * a {
 	display: block;
 	padding: 10px 15px;
 	/*border: 1px solid #E9E9E9;*/
-	border: 1px solid transparent;
+	border: 1px solid gray;
 	text-decoration: none !important;
 	-webkit-transition: 0.2s ease;
 	-moz-transition: 0.2s ease;
