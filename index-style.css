@@ -1,83 +1,130 @@
 @charset "utf-8";
 
-/* reset */
-ul {
-	list-style: none;
-}
-img {
-	vertical-align: middle;
-	pointer-events: none;
-}
-html {
-	font-family: Roboto, 'Noto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	font-size: 13px;
-}
-
-/* anchors */
-a:link,
-a:visited {
-	color: #359C62;
-	text-decoration: none;
-}
-a:hover,
-a:active {
-	text-decoration: underline;
-}
-
-/* page style */
-body {
-	padding: 25px 25px;
-	color: #464646;
-	margin: 0;
-}
 .wrapper {
-	max-width: 1200px;
-	min-width: 1000px;
+	/*max-width: 1200px;*/
+	/*min-width: 1000px; */
 	margin: 0 auto;
+	padding-top: 86px;
 }
-.header {
+
+.kv {
+	display: flex;
+	justify-content: center;
+	max-width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 4% 2% 9%;
 }
-.header-heading {
-	margin: 0;
-	font-size: 22px;
-}
-.main {
-	overflow: hidden;
-	margin-top: 20px;
-}
-.header {
-	position: relative;
-	overflow: hidden;
-}
-.header-nav {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	margin: 0;
-	height: 50px;
-	line-height: 50px;
+.kv-logo {
+	/* margin-right: 2%; */
+	flex-basis: 33.3%;
 	margin-top: auto;
 	margin-bottom: auto;
 }
-.header-nav-list {
-	margin: 0;
+.kv-logo-image {
+	width: 100%;
+	height: auto;
 }
-.header-nav-list > li {
-	display: inline-block;
-	vertical-align: middle;
+.kv-caption {
+	margin-top: auto;
+	margin-bottom: auto;
+	padding-left: 5%;
+	flex-basis: 66.6%;
 }
-.header-nav-list > li + li {
-	margin-left: 20px;
+.kv-header {
+	display: flex;
 }
-.header-nav-list > li a {
-	display: block;
+.kv-heading {
+	font-size: 34px;
+	font-weight: normal;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#355431+0,7db9e8+100 */
+	background: #355431;/* Old browsers */
+	background: -moz-linear-gradient(left,  #355431 0%, #45853C 100%);/* FF3.6-15 */
+	background: -webkit-linear-gradient(left,  #355431 0%,#45853C 100%);/* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right,  #355431 0%,#45853C 100%);/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#355431', endColorstr='#45853C',GradientType=1 );/* IE6-9 *//* if we can clip, do it */
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	margin-bottom: 4%;
 }
-.header-nav img {
-	margin-right: 10px;
-	height: 25px;
-	width: auto;
+.kv-body {
+	font-size: 15px;
 }
+
+.kv-buttons-list {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 4%;
+}
+.kv-buttons-list > li {
+	flex: 1 1 50%;
+	display: flex;
+}
+.kv-buttons-list > li + li {
+	padding-left: 10px;
+}
+.kv-buttons-list a {
+	display: flex;
+	padding: 3% 5%;
+	border: 1px solid transparent;
+	text-decoration: none !important;
+	-webkit-transition: 0.2s ease;
+	-moz-transition: 0.2s ease;
+	-ms-transition: 0.2s ease;
+	-o-transition: 0.2s ease;
+	transition: 0.2s ease;
+	background-color: white;
+	color: #359C62 !important;
+	flex: 1 1 auto;
+	box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+.kv-buttons-list a:hover {
+	border-color: rgb(49, 194, 92);
+}
+.kv-buttons-list a > img {
+	margin-top: 10px;
+	max-width: 100%;
+	height: auto;
+}
+.kv-buttons-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex: 1 1 auto;
+}
+.kv-buttons-wrapper > * {
+}
+.kv-buttons-heading {
+	margin-bottom: 5px;
+	font-weight: normal;
+}
+.kv-buttons-image-wrapper img {
+	max-width: 100%;
+	height: auto;
+}
+.kv-buttons-caption {
+
+}
+
+.main {
+	/* overflow: hidden; */
+	/* margin-top: 20px; */
+}
+.installation {
+	background: #8FFFCB;
+	padding: 7% 2%;
+}
+.installation-heading {
+	font-size: 35px;
+	text-align: center;
+	margin-bottom: 5%;
+}
+.buttons {
+	display: flex;
+	justify-content: center;
+}
+
+
 .note-list > li + li {
 	margin-top: 10px;
 }
@@ -88,27 +135,26 @@ hr {
 }
 .header-heading img {
 	position: relative;
-	top: -1px;
-	margin-right: 10px;
-	width: 40px;
+	top: -2px;
+	margin-right: 8px;
+	width: 46px;
 }
 .main-capture {
-	float: right;
-	width: 60%;
-	margin-top: 20px;
+	/* float: right; */
+	max-width: 100%;
+	/* margin-top: 20px; */
 	-webkit-box-reflect: below 40px
 	-webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%);
 }
 .main-body {
-	float: left;
-	width: 40%;
+	/* float: left; */
+	/* width: 40%; */
 	padding-right: 30px;
 	box-sizing: border-box;
 }
 .browser-support {
-	position: absolute;
-	top: 10px;
-	right: 15px;
+	display: flex;
+	justify-content: flex-end;
 }
 .browser-support > li.disabled {
 	-webkit-filter: grayscale(1);
@@ -118,39 +164,69 @@ hr {
 	filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
 }
 .browser-support > li {
-	float: right;
+	/* float: right; */
 }
 .browser-support > li + li {
-	margin-right: 5px;
+	padding-left: 5px;
 }
 .browser-support > li img {
 	width: 20px;
 	height: auto;
 }
-.section-heading + * {
-	position: relative;
+.buttons-section {
+	flex-basis: 380px;
 }
-.section-heading + * a {
-	display: block;
-	padding: 10px 15px;
-	border: 1px solid gray;
-	text-decoration: none !important;
-	-webkit-transition: 0.2s ease;
-	-moz-transition: 0.2s ease;
-	-ms-transition: 0.2s ease;
-	-o-transition: 0.2s ease;
-	transition: 0.2s ease;
-	background-color: rgba(255, 255, 255, 0.7);
-	color: #359C62 !important;
+.buttons-section + .buttons-section {
+	margin-left: 2%;
 }
-.section-heading + * a:hover {
-	border-color: rgb(49, 194, 92);
+.buttons-section-heading {
+	margin-top: 0;
+	font-size: 18px;
+	font-weight: normal;
+	text-align: center;
+	margin-bottom: 10px;
 }
-.section-heading + * a > img {
-	margin-top: 10px;
+.content-width {
+	max-width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.explanation {
+	background: #C3F5E7;
+	overflow: hidden;
+}
+.explanation-inner {
+	display: flex;
+	justify-content: center;
+	padding: 6% 2%;
+}
+.explanation-section {
+	flex-basis: 33.3%;
+}
+.explanation-section-heading {
+	margin-top: 0;
+	font-size: 22px;
+	margin-bottom: 20px;
+}
+.explanation-section-body {
+	font-size: 16px;
+}
+.explanation-image {
+	flex-basis: 66.66%;
+	padding-left: 5%;
 }
 #bookmarklet:after {
 	content: 'Bookmark this link.';
-	display: block;
+	display: none;
 	color: #7C7D80 !important;
+}
+.slide {padding: 4%;background: darkslateblue;color: white;}
+.slide-header {margin-bottom: 2%;}
+.slide-heading {
+	font-size: 36px;
+	text-align: center;
+	font-weight: normal;
+}
+.slide-body {
+	text-align: center;
 }

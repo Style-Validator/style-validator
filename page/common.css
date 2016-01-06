@@ -1,0 +1,133 @@
+/* reset */
+body, div, p, ul, ol, li, dl, dt, dd,
+h1, h2, h3, h4, h5, h6, table, th, td, img, form, figure {
+	margin: 0;
+	padding: 0;
+}
+ul, ol {
+	list-style: none;
+}
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: inherit;
+}
+nav.main-header-nav-display-mode {
+	list-style: none;
+}
+img, input, select, textarea, button, svg, canvas {
+	vertical-align: middle;
+}
+input, select, textarea, button {
+	outline: 0;
+	background-color: inherit;
+	color: inherit;
+}
+input, textarea {
+	line-height: inherit;
+}
+input, select, textarea, button, h1, h2, h3, h4, h5, h6 {
+	font-size: inherit;
+	font-family: inherit;
+}
+
+html {
+	font-size: 13px;
+	line-height: 1.4;
+	font-family: Roboto, 'Noto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	background-color: #F9F9F9;
+	color: #768A7E;
+}
+
+/* anchors */
+a:link,
+a:visited {
+	color: #359C62;
+	text-decoration: none;
+}
+a:hover,
+a:active {
+	text-decoration: underline;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	padding: 20px 25px;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	background: #F9F9F9;
+	z-index: 1000;
+}
+.header-heading {
+	margin: 0;
+	font-size: 26px;
+	font-weight: normal;
+	flex-shrink: 0;
+}
+.header-nav {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+.header-nav-list {
+	margin: 0;
+	display: flex;
+}
+.header-nav-list > li {
+	/* display: inline-block; */
+	/* vertical-align: middle; */
+}
+.header-nav-list > li + li {
+	margin-left: 20px;
+}
+.header-nav-list > li a {
+	display: block;
+}
+.header-nav img {
+	margin-right: 6px;
+	height: 25px;
+	width: auto;
+}
+
+.footer {
+	padding: 1% 4%;
+	background: #333333;
+	color: white;
+	min-height: 210px;
+	/* margin-top: 60px; */
+}
+
+/* module */
+input[type="text"] {
+	background-color: white;
+	border: 1px solid #999;
+}
+button,
+.button {
+	background-color: #FAFAFA;
+	color: initial !important;
+	border: 0;
+	font-size: 11px;
+	padding: 4px 2px;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none !important;
+	border-radius: 4px;
+	border-bottom: 2px solid #CECECE;
+}
+.note-list {
+	counter-reset: note-list;
+}
+.note-list > li {
+	text-indent: -1.1em;
+	padding-left: 1.1em;
+}
+.note-list > li:before {
+	counter-increment: note-list;
+	content: counter(note-list,decimal) ', ';
+}

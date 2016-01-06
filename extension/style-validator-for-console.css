@@ -14,6 +14,7 @@
 	text-align: left;
 	text-indent: 0;
 	line-height: 1.7;
+	color: #333333;
 }
 :host {
 	position: fixed;

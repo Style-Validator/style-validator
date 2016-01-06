@@ -17,13 +17,13 @@
 	<meta name="format-detection" content="telephone=no, email=no, address=no" />
 
 	<!-- ***** data ***** -->
-	<title>Style Validator - to reduce patch.</title>
+	<title>Style Validator | Reduce Meaningless Patches for Cross Browser</title>
 	<meta name="description" content="Style Validator is a new html/css validator with chrome extension or bookmarklet." />
 	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon" />
 
 	<!-- ***** ogp ***** -->
 	<meta property="og:site_name" content="Style Validator" />
-	<meta property="og:title" content="Style Validator - to reduce patch." />
+	<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://style-validator.github.io/" />
 	<meta property="og:description" content="Style Validator is a new html/css validator with chrome extension or bookmarklet." />
@@ -44,6 +44,7 @@
 	<meta name="theme-color" content="#52B050">
 
 	<!-- ***** styles***** -->
+	<link rel="stylesheet" href="./page/common.css">
 	<link rel="stylesheet" href="./index-style.css">
 	<!--<link href="//fonts.googleapis.com/css?family=Nunito&subset=latin" rel="stylesheet">-->
 
@@ -66,63 +67,95 @@
 		<h1 class="header-heading" itemprop="name"><img src="./extension/style-validator.logo.svg" width="60" />Style Validator</h1>
 		<nav class="header-nav">
 			<ul class="header-nav-list">
-				<li><a href="https://github.com/style-validator" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Github Link', 3);"><img src="./img/GitHub-Mark-32px.png" />Github (Docs and Code)</a></li>
+				<li><a href="https://github.com/style-validator" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Github Link', 3);"><img src="./img/GitHub-Mark-32px-lightgreen.png" />Github</a></li>
 				<li><a href="./page/demo-simple.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Simple Demo</a></li>
 				<li><a href="./page/demo.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Demo</a></li>
-				<li><a href="./page/rules.html" target="_blank"><img src="./img/iconmonstr-edit-8-icon.svg" width="32" alt="" />Edit Rules of Validation</a></li>
+				<li><a href="./page/rules.html" target="_blank"><img src="./img/iconmonstr-edit-8-icon.svg" width="32" alt="" />Rules</a></li>
 			</ul>
 		</nav>
 	</header>
 	<main class="main">
-		<img class="main-capture" src="img/screenshot.gif" />
-		<div class="main-body">
-			<section class="content-header">
-				<h2 class="content-heading">A <em>CSS Validator</em> that detect Risky styles NOT syntax.</h2>
-				<div class="content-body">
-					<section class="section">
-						<h3 class="section-heading">Chrome Extension (for only chrome browser)</h3>
-						<ul class="section-body cassette-list">
-							<li>
-								<a href="https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link', 1);">
-									Style Validator<br />
-									<img src="./img/chromeWebStore.png" />
-									<ul class="browser-support">
-										<li><img src="./img/chrome_128x128.png" /></li>
-									</ul>
-								</a>
-							</li>
-						</ul>
-					</section>
-					<section class="section">
-						<h3 class="section-heading">JavaScript Bookmarklet</h3>
-						<ul class="section-body cassette-list">
-							<li>
-								<a id="bookmarklet" href="//style-validator.github.io/Style-Validator/bookmarklet/style-validator.js" onclick="ga('send', 'event', 'button', 'click', 'JavaScript Bookmarklet', 2);">
-									Style Validator<br />
-									<img src="./img/bookmarkbar.png" width="206" />
-									<ul class="browser-support">
-										<li><img src="./img/chrome_128x128.png" /></li>
-										<li><img src="./img/opera_128x128.png" /></li>
-										<li><img src="./img/firefox_128x128.png" /></li>
-										<li><img src="./img/safari_128x128.png" /></li>
-										<li class="disabled"><img src="./img/internet-explorer_128x128.png" /></li>
-										<li class="disabled"><img src="./img/edge_128x128.png" /></li>
-									</ul>
-								</a>
-							</li>
-						</ul>
-					</section>
-					<section class="section">
-						<h3 class="section-heading">Differences from W3C CSS Validator and Existing HTML/CSS Validator.</h3>
-						<ol class="section-body note-list">
-							<li>This will NOT detect syntax error. Instead, detect layout broken CSS Properties.</li>
-							<li>It validate with tracking every DOM change. For example, in case of changed DOM by AJAX and user action, it is.</li>
-							<li>This check validity of relationship between elements and styles.</li>
-						</ol>
-					</section>
+		<figure class="kv content-width">
+			<div class="kv-logo"><img src="./img/style-validator.logo.nopadding.svg" class="kv-logo-image"/></div>
+			<figcaption class="kv-caption">
+				<div class="kv-header">
+					<h2 class="kv-heading">Validation in the Browser</h2>
 				</div>
-			</section>
-		</div>
+				<div class="kv-body">
+					<p class="kv-body-p">
+						A new <em>CSS Validator</em> that detect risky CSS that might break the layout. NOT syntax error. Current Web Site & Application need validation in the browser. Style Validator can detect error that occurred after JavaScript has executed. And also, it can validate matching of style and style.<br />
+					</p>
+					<ul class="kv-buttons-list">
+						<li>
+							<a href="https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link', 1);">
+								<figure class="kv-buttons-wrapper">
+									<h3 class="kv-buttons-heading">Chrome Extension</h3>
+									<div class="kv-buttons-image-wrapper">
+										<img src="./img/chromeWebStore.png" />
+									</div>
+									<figcaption class="kv-buttons-caption">
+										<ul class="browser-support">
+											<li><img src="./img/chrome_128x128.png" /></li>
+										</ul>
+									</figcaption>
+								</figure>
+							</a>
+						</li>
+						<li>
+							<a id="bookmarklet" href="//style-validator.github.io/Style-Validator/bookmarklet/style-validator.js" onclick="ga('send', 'event', 'button', 'click', 'JavaScript Bookmarklet', 2);">
+								<figure class="kv-buttons-wrapper">
+									<h3 class="kv-buttons-heading">JavaScript Bookmarklet</h3>
+									<div class="kv-buttons-image-wrapper">
+										<img src="./img/bookmarkbar.png" width="206" />
+									</div>
+									<figcaption class="kv-buttons-caption">
+										<ul class="browser-support">
+											<li><img src="./img/chrome_128x128.png" /></li>
+											<li><img src="./img/opera_128x128.png" /></li>
+											<li class="disabled"><img src="./img/firefox_128x128.png" /></li>
+											<li class="disabled"><img src="./img/safari_128x128.png" /></li>
+											<li class="disabled"><img src="./img/internet-explorer_128x128.png" /></li>
+											<li class="disabled"><img src="./img/edge_128x128.png" /></li>
+										</ul>
+									</figcaption>
+								</figure>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</figcaption>
+		</figure>
+		<section class="explanation">
+			<div class="explanation-inner content-width">
+				<div class="explanation-section">
+					<div class="explanation-section-header">
+						<h3 class="explanation-section-heading">
+							Differences from Existing HTML/CSS Validator.
+						</h3>
+					</div>
+					<ol class="explanation-section-body note-list">
+						<li>Validation of computed style</li>
+						<li>Validation of matching of style and style</li>
+						<li>Validation of while tracking DOM modification. (e.g. after modifying DOM by JavaScript or Media Query)</li>
+					</ol>
+				</div>
+
+				<figure class="explanation-image">
+					<img class="main-capture" src="img/screenshot.gif" />
+				</figure>
+			</div>
+		</section>
+		<!--TODO: Add Section of Reduce Meaningless Patches-->
+		<section class="slide">
+			<div class="slide-inner content-width">
+				<div class="slide-header">
+					<h3 class="slide-heading">Keynote</h3>
+				</div>
+				<div class="slide-body">
+					<iframe src="//www.slideshare.net/slideshow/embed_code/key/lMxVcs5tLhMySU" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/TakeharuIgari/style-validator-at-breakout-session-of-tpac2015" title="Style Validator at breakout session of TPAC2015" target="_blank">Style Validator at breakout session of TPAC2015</a> </strong> from <strong><a href="//www.slideshare.net/TakeharuIgari" target="_blank">Takeharu Igari</a></strong> </div>
+				</div>
+			</div>
+		</section>
 	</main>
 	<footer class="footer">
 		<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>

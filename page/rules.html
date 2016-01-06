@@ -15,6 +15,7 @@
 	<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?v=1">
 
 	<!-- ***** styles***** -->
+	<link href="common.css" rel="stylesheet" />
 	<link href="rules.css" rel="stylesheet" />
 
 	<!-- ***** scripts***** -->
@@ -31,38 +32,93 @@
 </head>
 <body>
 <div class="wrapper">
-	<header class="header">
-		<div class="header-first">
-			<h1 class="header-heading"><a href="../"><img src="../img/style-validator.logo.svg" width="40" height="40" /> Rules</a></h1>
-			<nav class="header-nav">
-				<button id="reset-button" type="reset"><img src="../img/iconmonstr-undo-4-icon.svg" width="20" height="20" /> Reset</button>
-				<button id="add-button"><img src="../img/iconmonstr-selection-10-icon.svg" width="20" height="20" /> Add</button>
-				<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a file at '/Style-Validator/data/rules.json'"><img src="../img/iconmonstr-download-2-icon.svg" width="20" height="20" /> DL</a>
-				<button id="save-button"><img src="../img/iconmonstr-save-icon.svg" width="20" height="20" /> Save</button>
-			</nav>
+	<aside class="aside">
+		<header class="aside-header">
+			<h1 class="aside-heading"><a href="../"><img src="../img/style-validator.logo.svg" width="40" height="40" /> Rules</a></h1>
+		</header>
+		<div class="aside-body">
+			<section class="aside-section">
+				<label>
+					Preset:
+					<select>
+						<option>Default</option>
+					</select>
+				</label>
+			</section>
+			<section class="aside-section">
+				<header class="aside-section-header">
+					<h2 class="aside-section-heading">Popular</h2>
+				</header>
+				<div class="aside-section-body">
+					<ul>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+					</ul>
+				</div>
+			</section>
+			<section class="aside-section">
+				<header class="aside-section-header">
+					<h2 class="aside-section-heading">Recently updated</h2>
+				</header>
+				<div class="aside-section-body">
+					<ul>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+					</ul>
+				</div>
+			</section>
+			<section class="aside-section">
+				<header class="aside-section-header">
+					<h2 class="aside-section-heading">Recently selected</h2>
+				</header>
+				<div class="aside-section-body">
+					<ul>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+						<li><a href="javascript: void(0)">Default</a></li>
+					</ul>
+				</div>
+			</section>
 		</div>
-		<div class="header-second">
-			<nav class="header-second-nav">
-				<ul class="header-second-nav-list">
-					<li><label><input type="checkbox" checked="checked" id="reason-checkbox" /> Reason</label></li>
-					<li><label><input type="checkbox" id="reference-url-checkbox" /> Reference URL</label></li>
-				</ul>
-				<!-- TODO: implement display change function
-				<ul class="header-second-nav-list">
-					<li><label><input type="radio" checked="checked" id="display-mode-column" /> Column Mode</label></li>
-					<li><label><input type="radio" id="display-mode-list" /> List Mode</label></li>
-				</ul>
-				 -->
-			</nav>
-		</div>
-	</header>
+	</aside>
 	<main class="main">
+		<header class="main-header">
+			<nav class="main-header-nav-search">
+				<label class="main-header-nav-search-label">
+					<img src="../img/iconmonstr-magnifier-6.svg" />
+					<input type="search" placeholder="Search Property" class="main-header-nav-search-input" />
+				</label>
+			</nav>
+			<nav class="main-header-nav-display-mode">
+				<ul class="main-header-nav-display-mode-list">
+					<li><label><input type="checkbox" checked="checked" id="reason-checkbox" /><img src="../img/iconmonstr-help-3-icon.svg" alt="Reason" /></label></li>
+					<li><label><input type="checkbox" id="reference-url-checkbox" /><img src="../img/iconmonstr-link-icon-gray.svg" alt="Reference URL" /></label></li>
+				</ul>
+			</nav>
+			<nav class="main-header-nav-display-mode">
+				<ul class="main-header-nav-display-mode-list">
+					<li><label><input type="radio" checked="checked" id="display-mode-column" /><img src="../img/iconmonstr-view-6.svg" alt="Column Mode" /></label></li>
+					<li><label><input type="radio" id="display-mode-list" /><img src="../img/iconmonstr-menu-2.svg" alt="List Mode" /></label></li>
+				</ul>
+			</nav>
+			<nav class="main-header-nav">
+				<button id="reset-button" type="reset"><img src="../img/iconmonstr-undo-4-icon.svg" width="20" height="20" />Reset</button>
+				<button id="add-button"><img src="../img/iconmonstr-selection-10-icon.svg" width="20" height="20" />Add</button>
+				<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a file at '/Style-Validator/data/rules.json'"><img src="../img/iconmonstr-download-2-icon.svg" width="20" height="20" />DL</a>
+				<button id="save-button"><img src="../img/iconmonstr-save-icon.svg" width="20" height="20" />Save</button>
+			</nav>
+		</header>
 		<div id="loadingSpinner">Loading...</div>
 		<ul id="rules-list" class="styles-list-wrapper"></ul>
+		<footer class="footer">
+			<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
+		</footer>
 	</main>
-	<footer class="footer">
-		<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
-	</footer>
 </div>
 
 <template id="template-rule">

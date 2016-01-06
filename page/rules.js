@@ -304,18 +304,14 @@ STYLEV.RULES_EDITOR = {
 		var cssProperty = appendedStylesListItem.querySelector('.css-property');
 		var cssPropertyValue = appendedStylesListItem.querySelector('.css-property-value');
 		that.bindEvents2ListItem(appendedStylesListItem);
+		that.bindEvents2CSSPropertyAndValue(cssProperty, cssPropertyValue);
 
-		if(isBaseStyles) {
-
-			that.bindEvents2CSSPropertyAndValue(cssProperty, cssPropertyValue);
-
-		} else {
+		if(!isBaseStyles) {
 
 			var reason = appendedStylesListItem.querySelector('.reason');
 			var referenceURL = appendedStylesListItem.querySelector('.reference-url');
 			that.bindEvents2Textarea(reason);
-			referenceURL.addEventListener('dblclick', that.jump2urlOfValue, false);
-			that.bindEvents2CSSPropertyAndValue(cssProperty, cssPropertyValue, reason, referenceURL);
+			that.bindEvents2ReferenceURL(referenceURL);
 		}
 
 		cssProperty.focus();
@@ -324,34 +320,37 @@ STYLEV.RULES_EDITOR = {
 			that.setParametersAfterInsertingProperty();
 		}
 	},
+	bindEvents2ReferenceURL: function(referenceURL) {
+		var that = STYLEV.RULES_EDITOR;
+		referenceURL.addEventListener('dblclick', that.jump2urlOfValue, false);
+		referenceURL.addEventListener('keyup', that.insertPropertyByEnterKey, false);
+	},
+
 	bindEvents2ListItem: function(appendedStylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
+		var inputs = appendedStylesListItem.querySelectorAll('input, textarea');
+
 		appendedStylesListItem.addEventListener('click', that.stopPropagation, false);
+
+		for(var i = 0, inputsLen = inputs.length; i < inputsLen; i++) {
+			var input = inputs[i];
+			input.addEventListener('focus', that.selectOnFocus, false);
+			input.addEventListener('click', that.stopPropagation, false);
+			input.addEventListener('keyup', that.fireBlurEventByEscKey, false);
+			input.addEventListener('keyup', that.moveFocusByEnter, false);
+		}
 	},
-	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue, reason, referenceURL) {
+	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue) {
 		var that = STYLEV.RULES_EDITOR;
 
-		cssProperty.addEventListener('click', that.stopPropagation, false);
-		cssProperty.addEventListener('keyup', that.moveFocusByEnter, false);
-		cssProperty.addEventListener('keyup', that.fireBlurEventByEscKey, false);
 		cssProperty.addEventListener('input', that.modifyCSSProperty, false);
-		cssProperty.addEventListener('focus', that.applySameStyles, false);
+		cssProperty.addEventListener('focus', that.applySameStyles2dummyElem, false);
 		cssProperty.addEventListener('blur', that.applyValidationResult, false);
 
-		cssPropertyValue.addEventListener('click', that.stopPropagation, false);
-		cssPropertyValue.addEventListener('keyup', that.moveFocusByEnter, false);
-		cssPropertyValue.addEventListener('keyup', that.fireBlurEventByEscKey, false);
 		cssPropertyValue.addEventListener('input', that.modifyCSSPropertyValue, false);
-		cssPropertyValue.addEventListener('focus', that.applySameStyles, false);
+		cssPropertyValue.addEventListener('focus', that.applySameStyles2dummyElem, false);
 		cssPropertyValue.addEventListener('blur', that.applyValidationResult, false);
 
-		if(reason) {
-			reason.addEventListener('keyup', that.fireBlurEventByEscKey, false);
-		}
-		if(referenceURL) {
-			referenceURL.addEventListener('keyup', that.fireBlurEventByEscKey, false);
-			referenceURL.addEventListener('keyup', that.insertPropertyByEnterKey, false);
-		}
 
 	},
 	modifyCSSProperty: function(event, stylesListItem) {
@@ -389,7 +388,7 @@ STYLEV.RULES_EDITOR = {
 	moveFocusByEnter: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 		var stylesListItem = that.closest(event.currentTarget, 'li');
-		var inputs = stylesListItem.querySelectorAll('input, textarea, select');
+		var inputs = stylesListItem.querySelectorAll('input, textarea');
 		var enterKeyCode = 13;
 
 		if(event.keyCode === enterKeyCode) {
@@ -743,13 +742,15 @@ STYLEV.RULES_EDITOR = {
 	stopPropagation: function() {
 		event.stopPropagation();
 	},
-	applySameStyles: function(event) {
+	applySameStyles2dummyElem: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 		var currentTarget = event.currentTarget;
 		that.dummyElement4detectWidth.innerHTML = currentTarget.value;
 		that.dummyElement4detectWidth.style['font-size'] = getComputedStyle(currentTarget, '').getPropertyValue('font-size');
 		that.dummyElement4detectWidth.style['font-family'] = getComputedStyle(currentTarget, '').getPropertyValue('font-family');
-		currentTarget.select();
+	},
+	selectOnFocus: function(event) {
+		event.currentTarget.select();
 	},
 	removeProperty: function(stylesList, stylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
