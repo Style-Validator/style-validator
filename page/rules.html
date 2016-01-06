@@ -82,8 +82,8 @@
 			</nav>
 			<nav class="main-header-nav-display-mode">
 				<ul class="main-header-nav-display-mode-list">
-					<li><label><input type="radio" checked="checked" id="display-mode-column" /><img src="/Style-Validator/img/iconmonstr-view-6.svg" alt="Column Mode" /></label></li>
-					<li><label><input type="radio" id="display-mode-list" /><img src="/Style-Validator/img/iconmonstr-menu-2.svg" alt="List Mode" /></label></li>
+					<li><label><input type="radio" name="display-mode-list" value="column" checked="checked" id="display-column-mode" /><img src="/Style-Validator/img/iconmonstr-view-6.svg" alt="Column Mode" /></label></li>
+					<li><label><input type="radio" name="display-mode-list" value="list" id="display-list-mode" /><img src="/Style-Validator/img/iconmonstr-menu-2.svg" alt="List Mode" /></label></li>
 				</ul>
 			</nav>
 			<nav class="main-header-nav">
@@ -94,7 +94,7 @@
 			</nav>
 		</header>
 		<div id="loadingSpinner">Loading...</div>
-		<ul id="rules-list"></ul>
+		<ul id="rules-list" class="rules-list"></ul>
 		<?php _include('footer.html'); ?>
 	</main>
 </div>

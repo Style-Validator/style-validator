@@ -128,13 +128,13 @@ body {
 }
 
 /* styles-list */
-#rules-list {
+.rules-list {
 	-webkit-column-width: 300px;
 	-webkit-column-gap: 1em;
 	padding: 4%;
 	min-height: 100%;
 }
-#rules-list > li {
+.rules-list > li {
 	display: inline-block;
 	width: 100%;
 	position: relative;
@@ -372,27 +372,20 @@ body {
 .edit-button {
 	background-image: url(../img/iconmonstr-edit-8-icon.svg);
 }
-.edit-mode .edit-button {
-	display: flex;
-	background-image: url(../img/iconmonstr-save-5-icon.svg);
-	background-size: 20px auto;
-}
 .remove-button {
 	background-image: url(../img/iconmonstr-x-mark-3-icon.svg);
 }
+.edit-mode .edit-button {
+	background-image: url(../img/iconmonstr-save-5-icon.svg);
+	background-size: 20px auto;
+}
 .edit-mode .remove-button {
-	display: flex;
 	opacity: 0;
 	pointer-events: none;
 }
-#rules-list > li:hover [data-id="title"] a {
+.rules-list > li:hover [data-id="title"] a,
+.rules-list > li.edit-mode [data-id="title"] a {
 	display: flex;
-}
-.edit-mode .type-select {
-	display: flex !important;
-}
-.edit-mode .styles-list {
-	display: block !important;
 }
 #loadingSpinner {
 	position: fixed;
@@ -440,3 +433,45 @@ body {
 	}
 }
 
+
+.rules-list-list {
+	-webkit-column-width: auto;
+	-webkit-column-gap: normal;
+}
+.rules-list-list > li {
+	/*display: flex;*/
+}
+.rules-list-list .rules-list-body {
+	/* padding: 0; */
+}
+.rules-list-list .rules-list-body > *:not(.hidden) ~ *:not(.hidden) {
+	/*margin-top: 0;*/
+}
+.rules-list-list .styles-list {
+	display: flex;
+	flex-wrap: wrap;
+}
+.rules-list-list .styles-list:before {
+	flex-basis: 100%;
+	flex-shrink: 0;
+}
+.rules-list-list .styles-list > li + li {
+	border-top: 0;
+}
+.rules-list-list .styles-list + .styles-list {
+	border-top: 1px solid #EEE;
+}
+.rules-list-list .styles-list > li {
+	flex-basis: 33.3%;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid #EEE;
+	border-right: 1px solid #EEE;
+	overflow: hidden;
+}
+.rules-list-list .styles-list > li + li:before {
+	top: 1em;
+}
+.rules-list-list .styles-list > li:only-child {
+	flex-basis: 100%;
+}

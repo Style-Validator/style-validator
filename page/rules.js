@@ -27,6 +27,7 @@ STYLEV.RULES_EDITOR = {
 				that.resizeTextareaBasedOnLine();
 				that.toggleReason();
 				that.toggleReferenceURL();
+				that.toggleDisplayMode();
 				that.searchProperty();
 				that.isShowedAllAtFirst = true;
 			});
@@ -57,6 +58,10 @@ STYLEV.RULES_EDITOR = {
 		that.searchPropertyInput = document.querySelector('#search-property-input');
 		that.searchedRulesCount = document.querySelector('#searched-rules-count');
 		that.totalRulesCount = document.querySelector('#total-rules-count');
+		that.displayModeLList = document.querySelector('#display-mode-list');
+		that.displayListMode = document.querySelector('#display-list-mode');
+		that.displayColumnMode = document.querySelector('#display-column-mode');
+
 		that.allCSSProperties = [];
 		that.INPUT_ARROW_WIDTH = 22;
 	},
@@ -94,9 +99,36 @@ STYLEV.RULES_EDITOR = {
 		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL, false);
 		window.addEventListener('resize', that.resizeTextareaBasedOnLine, false);
 		that.searchPropertyInput.addEventListener('keyup', that.searchProperty, false);
+		that.displayListMode.addEventListener('change', that.toggleDisplayMode, false);
+		that.displayColumnMode.addEventListener('change', that.toggleDisplayMode, false);
 
 		that.bind2RuleBox();
 		that.bind2StylesList();
+	},
+
+	toggleDisplayMode: function(event) {
+		var that = STYLEV.RULES_EDITOR;
+		var valueFromEvent = event && event.currentTarget.value;
+		var displayMode = valueFromEvent || localStorage.getItem(that.rulesList.id);
+
+		switch(displayMode) {
+			case 'column':
+				that.rulesList.classList.remove('rules-list-list');
+				break;
+			case 'list':
+				that.rulesList.classList.add('rules-list-list');
+				break;
+			default:
+				break;
+		}
+
+		localStorage.setItem(that.rulesList.id, displayMode);
+
+		if(!valueFromEvent) {
+			that.displayListMode.checked = displayMode === 'list';
+			that.displayColumnMode.checked = displayMode === 'column';
+		}
+
 	},
 
 	searchProperty: function(event) {
@@ -197,22 +229,35 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 
-	toggleEditMode: function() {
+	toggleEditMode: function(event) {
 		var that = STYLEV.RULES_EDITOR;
 
 		event.stopPropagation();
 		event.preventDefault();
 
 		var rulesListItem = that.closest(event.currentTarget, 'li');
+		var isEditMode = rulesListItem.classList.contains('edit-mode');
 
-		if(rulesListItem.classList.contains('edit-mode')) {
-
+		function reset() {
 			that.modifyBasedOnCurrentData(rulesListItem);
 			rulesListItem.classList.remove('edit-mode');
-			this.textContent = 'Edit';
-		} else {
+			event.currentTarget.textContent = 'Edit';
+
+		}
+
+		function showAll() {
+			var stylesLists = rulesListItem.querySelectorAll('.styles-list');
 			rulesListItem.classList.add('edit-mode');
-			this.textContent = 'Set';
+			event.currentTarget.textContent = 'Set';
+			that.each(stylesLists, function(stylesList) {
+				stylesList.classList.remove('hidden');
+			});
+		}
+
+		if(isEditMode) {
+			reset();
+		} else {
+			showAll();
 		}
 	},
 
@@ -223,32 +268,33 @@ STYLEV.RULES_EDITOR = {
 
 		for(var i = 0, len = dataElements.length; i < len; i++) {
 			var dataElement = dataElements[i];
-			var hasDataFlg = false;
+			var hasData = false;
 
 			if(dataElement.classList.contains('styles-list')) {
 				var inputLists = dataElement.querySelectorAll('input');
 				if(inputLists === null) {
-					hasDataFlg = false;
+					hasData = false;
 					break;
 				}
 				for(var j = 0, inputListLen = inputLists.length; j < inputListLen; j++) {
 					var inputList = inputLists[j];
 					if(inputList.value) {
-						hasDataFlg = true;
+						hasData = true;
 						break;
 					}
 				}
+//				hasData = dataElement.hasChildNodes();TODO: try after
 			}
 			if(dataElement.classList.contains('text-input')) {
 				var inputs = dataElement.querySelectorAll('input');
 				if(inputs === null) {
-					hasDataFlg = false;
+					hasData = false;
 					break;
 				}
 				for(var k = 0, inputLen = inputs.length; k < inputLen; k++) {
 					var input = inputs[k];
 					if(input.value) {
-						hasDataFlg = true;
+						hasData = true;
 						break;
 					}
 				}
@@ -256,18 +302,18 @@ STYLEV.RULES_EDITOR = {
 			if(dataElement.classList.contains('type-select')) {
 				var selects = dataElement.querySelectorAll('select');
 				if(selects === null) {
-					hasDataFlg = false;
+					hasData = false;
 					break;
 				}
 				for(var l = 0, selectsLen = selects.length; l < selectsLen; l++) {
 					var select = selects[l];
 					if(select.value) {
-						hasDataFlg = true;
+						hasData = true;
 						break;
 					}
 				}
 			}
-			if(hasDataFlg) {
+			if(hasData) {
 				dataElement.classList.remove('hidden');
 			} else {
 				dataElement.classList.add('hidden');
@@ -1178,6 +1224,15 @@ STYLEV.RULES_EDITOR = {
 	removeLoadingSpinner: function() {
 		var loadingSpinner = document.querySelector('#loadingSpinner');
 		loadingSpinner.parentElement.removeChild(loadingSpinner);
+	},
+
+	each: function(elements, fn) {
+		var length = elements.length;
+		var isFunc = typeof fn === 'function';
+		for(var i = 0; i < length; i++) {
+			var element = elements[i];
+			isFunc && fn(element, i);
+		}
 	}
 
 };
