@@ -1,11 +1,59 @@
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Style-Validator/including-parts/common.html'); ?>
-<?php _include('head.html'); ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- ***** charset ***** -->
+<meta charset="utf-8" />
+
+<!-- ***** robots ***** -->
+<meta name="robots" content="noydir" />
+<meta name="robots" content="noodp" />
+<meta name="robots" content="index,follow" />
+
+<!-- ***** viewport ***** -->
+<meta name="viewport" content="width=device-width" />
+
+<!-- ***** format-detection ***** -->
+<meta name="format-detection" content="telephone=no, email=no, address=no" />
 <title>Rules | Style Validator</title>
-<?php _include('meta.html'); ?>
-<?php _include('icon.html'); ?>
-<?php _include('style-common.html'); ?>
+<!-- ***** data ***** -->
+<meta name="description" content="Style Validator is a new html/css validator with chrome extension or bookmarklet." />
+<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon" />
+
+<!-- ***** ogp ***** -->
+<meta property="og:site_name" content="Style Validator" />
+<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://style-validator.github.io/" />
+<meta property="og:description" content="Style Validator is a new html/css validator with chrome extension or bookmarklet." />
+<meta property="og:image" content="https://style-validator.github.io/img/style-validator.logo.png" />
+<!-- ***** favicon ***** -->
+<link rel="icon" type="image/x-icon" href="/Style-Validator/favicon.ico?v=1">
+<link rel="shortcut icon" type="image/x-icon" href="/Style-Validator/favicon.ico?v=1">
+
+<!-- ***** app icon ***** -->
+<link rel="apple-touch-icon" href="/Style-Validator/img/style-validator.logo.png">
+<meta name="apple-mobile-web-app-title" content="Style Validator">
+<meta name="application-name" content="Style Validator">
+
+<!-- ***** app icon (for ms app)***** -->
+<meta name="msapplication-TileColor" content="#F0F8FF">
+<meta name="msapplication-TileImage" content="/Style-Validator/img/ms-style-validator.logo.png">
+<meta name="theme-color" content="#52B050">
+<!-- ***** styles***** -->
+<link rel="stylesheet" href="/Style-Validator/page/common.css">
 <link href="/Style-Validator/page/rules.css" rel="stylesheet" />
-<?php _include('script-common.html'); ?>
+<!-- ***** scripts***** -->
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-53227157-3', 'auto');
+	ga('send', 'pageview');
+
+</script>
 </head>
 <body>
 <div class="wrapper">
@@ -95,7 +143,9 @@
 		</header>
 		<div id="loadingSpinner">Loading...</div>
 		<ul id="rules-list" class="rules-list"></ul>
-		<?php _include('footer.html'); ?>
+		<footer class="footer">
+			<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
+		</footer>
 	</main>
 </div>
 
@@ -161,6 +211,19 @@
 </datalist>
 <script src="/Style-Validator/page/specificity.js"></script>
 <script src="/Style-Validator/page/rules.js"></script>
-<?php _include('jsonld.html'); ?>
+<script type="application/ld+json">
+	{
+	"@context" : "http://schema.org",
+	"@type" : "SoftwareApplication",
+	"name" : "Style Validator",
+	"image" : "http://www.google.com/img/style-validator.logo.nopadding.svg",
+	"author" : {
+	"@type" : "Person",
+	"name" : "igari"
+	},
+	"downloadUrl" : "https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod",
+	"screenshot" : "http://www.google.com/img/screenshot.gif"
+	}
+</script>
 </body>
 </html>
