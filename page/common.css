@@ -132,3 +132,7 @@ button,
 	counter-increment: note-list;
 	content: counter(note-list,decimal) ', ';
 }
+
+.hidden {
+	display: none !important;
+}

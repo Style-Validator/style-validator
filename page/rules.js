@@ -27,13 +27,14 @@ STYLEV.RULES_EDITOR = {
 				that.resizeTextareaBasedOnLine();
 				that.toggleReason();
 				that.toggleReferenceURL();
-				that.isShowAllAtFirst = true;
+				that.searchProperty();
+				that.isShowedAllAtFirst = true;
 			});
 	},
 	setParameters: function() {
 		var that = STYLEV.RULES_EDITOR;
 
-		that.isShowAllAtFirst = false;
+		that.isShowedAllAtFirst = false;
 		that.resetButton = document.querySelector('#reset-button');
 		that.addButton = document.querySelector('#add-button');
 		that.saveButton = document.querySelector('#save-button');
@@ -53,7 +54,9 @@ STYLEV.RULES_EDITOR = {
 		that.dummyElement4testStyle.classList.add('dummy');
 		that.reasonCheckbox = document.querySelector('#reason-checkbox');
 		that.referenceURLCheckbox = document.querySelector('#reference-url-checkbox');
-
+		that.searchPropertyInput = document.querySelector('#search-property-input');
+		that.searchedRulesCount = document.querySelector('#searched-rules-count');
+		that.totalRulesCount = document.querySelector('#total-rules-count');
 		that.allCSSProperties = [];
 		that.INPUT_ARROW_WIDTH = 22;
 	},
@@ -68,12 +71,14 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
-		that.stylesSelects = that.rulesList.querySelectorAll('.styles-select');
+		that.typeSelects = that.rulesList.querySelectorAll('.type-select');
 		that.stylesLists = that.rulesList.querySelectorAll('.styles-list');
-		that.stylesInputs = that.rulesList.querySelectorAll('.styles-input');
+		that.textInputs = that.rulesList.querySelectorAll('.text-input');
+
 		that.reasons = that.rulesList.querySelectorAll('.reason');
+		that.cssProperties = that.rulesList.querySelectorAll('.css-property');
 	},
-	setParametersAfterInsertingProperty: function() {
+	setParametersAfterToggledProperty: function() {
 		var that = STYLEV.RULES_EDITOR;
 
 		that.reasons = that.rulesList.querySelectorAll('.reasons');
@@ -88,9 +93,63 @@ STYLEV.RULES_EDITOR = {
 		that.reasonCheckbox.addEventListener('change', that.toggleReason, false);
 		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL, false);
 		window.addEventListener('resize', that.resizeTextareaBasedOnLine, false);
+		that.searchPropertyInput.addEventListener('keyup', that.searchProperty, false);
 
 		that.bind2RuleBox();
 		that.bind2StylesList();
+	},
+
+	searchProperty: function(event) {
+		var that = STYLEV.RULES_EDITOR;
+		var rulesListItems = that.rulesListItems;
+		var rulesListItemsLen = rulesListItems.length;
+		var inputValue = that.searchPropertyInput.value;
+		var count = 0;
+		that.totalRulesCount.textContent = rulesListItemsLen + '';
+
+		if(inputValue) {
+
+			for(var i = 0; i < rulesListItemsLen; i++) {
+
+				var rulesListItem = rulesListItems[i];
+				var cssProperties = rulesListItem.querySelectorAll('.css-property');
+				var cssPropertiesLen = cssProperties.length;
+				var hasWord = false;
+
+				for(var j = 0; j < cssPropertiesLen; j++) {
+					var cssProperty = cssProperties[j];
+					var cssPropertyValue = cssProperty.value;
+
+					console.log('cssPropertyValue:' + cssPropertyValue);
+					console.log('inputValue:' + inputValue);
+
+					if(cssPropertyValue.indexOf(inputValue) !== -1) {
+						hasWord = true;
+						break;
+					}
+				}
+
+				console.log(inputValue);
+
+				if(hasWord) {
+					count++;
+					rulesListItem.classList.remove('hidden');
+				} else {
+					rulesListItem.classList.add('hidden');
+				}
+			}
+
+			that.searchedRulesCount.textContent = count;
+
+		} else {
+
+			for(var i = 0; i < rulesListItemsLen; i++) {
+				var rulesListItem = rulesListItems[i];
+				rulesListItem.classList.remove('hidden');
+			}
+
+			that.searchedRulesCount.textContent = rulesListItemsLen;
+		}
 	},
 
 	toggleReason: function(event) {
@@ -160,7 +219,7 @@ STYLEV.RULES_EDITOR = {
 	modifyBasedOnCurrentData: function(rulesListItem) {
 		var that = STYLEV.RULES_EDITOR;
 
-		var dataElements = rulesListItem.querySelectorAll('.styles-list, .styles-input, .styles-select');
+		var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
 
 		for(var i = 0, len = dataElements.length; i < len; i++) {
 			var dataElement = dataElements[i];
@@ -180,7 +239,7 @@ STYLEV.RULES_EDITOR = {
 					}
 				}
 			}
-			if(dataElement.classList.contains('styles-input')) {
+			if(dataElement.classList.contains('text-input')) {
 				var inputs = dataElement.querySelectorAll('input');
 				if(inputs === null) {
 					hasDataFlg = false;
@@ -194,7 +253,7 @@ STYLEV.RULES_EDITOR = {
 					}
 				}
 			}
-			if(dataElement.classList.contains('styles-select')) {
+			if(dataElement.classList.contains('type-select')) {
 				var selects = dataElement.querySelectorAll('select');
 				if(selects === null) {
 					hasDataFlg = false;
@@ -209,9 +268,9 @@ STYLEV.RULES_EDITOR = {
 				}
 			}
 			if(hasDataFlg) {
-				dataElement.classList.remove('hide-rule');
+				dataElement.classList.remove('hidden');
 			} else {
-				dataElement.classList.add('hide-rule');
+				dataElement.classList.add('hidden');
 			}
 		}
 
@@ -248,7 +307,7 @@ STYLEV.RULES_EDITOR = {
 		that.rulesList.insertBefore(clone, that.rulesList.firstChild);
 		that.setParametersAfterAdding();
 		that.bind2RuleBox();
-		that.rulesList.querySelector('.styles-input').querySelector('input').focus();
+		that.rulesList.querySelector('.text-input').querySelector('input').focus();
 	},
 	insertDummyElements: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -316,8 +375,8 @@ STYLEV.RULES_EDITOR = {
 
 		cssProperty.focus();
 
-		if(that.isShowAllAtFirst) {
-			that.setParametersAfterInsertingProperty();
+		if(that.isShowedAllAtFirst) {
+			that.setParametersAfterToggledProperty();
 		}
 	},
 	bindEvents2ReferenceURL: function(referenceURL) {
@@ -755,7 +814,7 @@ STYLEV.RULES_EDITOR = {
 	removeProperty: function(stylesList, stylesListItem) {
 		var that = STYLEV.RULES_EDITOR;
 		stylesList.removeChild(stylesListItem);
-		that.setParametersAfterInsertingProperty();
+		that.setParametersAfterToggledProperty();
 	},
 	getAllCSSProperties: function() {
 		var that = STYLEV.RULES_EDITOR;
@@ -796,8 +855,6 @@ STYLEV.RULES_EDITOR = {
 		var that = STYLEV.RULES_EDITOR;
 		var df = document.createDocumentFragment();
 
-		that.rulesList.innerHTML = '';//TODO: add loading image...
-
 		return new Promise(function(resolve, reject) {
 
 			that.getURL('../extension/data/rules.json')
@@ -812,15 +869,15 @@ STYLEV.RULES_EDITOR = {
 						var ngStyles = rule['ng-styles'];
 
 						var clone = document.importNode(that.templateRule, true);
-						var styleSelects = clone.querySelectorAll('.styles-select');
+						var typeSelects = clone.querySelectorAll('.type-select');
 						var stylesListsBase = clone.querySelectorAll('.styles-list-base');
 						var stylesListsNg = clone.querySelectorAll('.styles-list-ng');
-						var styleInputs = clone.querySelectorAll('.styles-input');
+						var textInputs = clone.querySelectorAll('.text-input');
 
-						for(var h = 0, styleSelectsLength = styleSelects.length; h < styleSelectsLength; h++) {
-							var styleSelect = styleSelects[h];
-							styleSelect.querySelector('select').tabIndex = 1;
-							that.addPropertyFromJSON2HTML(styleSelect, rule, styleSelect.dataset.id);
+						for(var h = 0, typeSelectsLength = typeSelects.length; h < typeSelectsLength; h++) {
+							var typeSelect = typeSelects[h];
+							typeSelect.querySelector('select').tabIndex = 1;
+							that.addPropertyFromJSON2HTML(typeSelect, rule, typeSelect.dataset.id);
 						}
 						for(var j = 0, stylesListsBaseLength = stylesListsBase.length; j < stylesListsBaseLength; j++) {
 							var stylesListBase = stylesListsBase[j];
@@ -832,10 +889,10 @@ STYLEV.RULES_EDITOR = {
 							stylesListNg.tabIndex = 1;
 							that.addPropertyFromJSON2HTML(stylesListNg, ngStyles, stylesListNg.dataset.id);
 						}
-						for(var k = 0, styleInputsLength = styleInputs.length; k < styleInputsLength; k++) {
-							var styleInput = styleInputs[k];
-							styleInput.querySelector('input').tabIndex = 1;
-							that.addPropertyFromJSON2HTML(styleInput, rule, styleInput.dataset.id);
+						for(var k = 0, textInputsLength = textInputs.length; k < textInputsLength; k++) {
+							var textInput = textInputs[k];
+							textInput.querySelector('input').tabIndex = 1;
+							that.addPropertyFromJSON2HTML(textInput, rule, textInput.dataset.id);
 						}
 
 						df.appendChild(clone);
@@ -856,7 +913,7 @@ STYLEV.RULES_EDITOR = {
 
 		if(ruleStyles) {
 
-			if(target.classList.contains('styles-select')) {
+			if(target.classList.contains('type-select')) {
 
 				var select = target.querySelector('select');
 				select.value = ruleStyles;
@@ -884,7 +941,7 @@ STYLEV.RULES_EDITOR = {
 					}
 				}
 			}
-			if(target.classList.contains('styles-input')) {
+			if(target.classList.contains('text-input')) {
 				var input = target.querySelector('input');
 				input.value = ruleStyles;
 
@@ -893,7 +950,7 @@ STYLEV.RULES_EDITOR = {
 
 		} else {
 
-			target.classList.add('hide-rule');
+			target.classList.add('hidden');
 		}
 	},
 
@@ -908,21 +965,21 @@ STYLEV.RULES_EDITOR = {
 			var rule = {};
 
 			var rulesListItem = that.rulesListItems[r];
-			var dataElements = rulesListItem.querySelectorAll('.styles-list, .styles-input, .styles-select');
+			var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
 
 			for(var i = 0, len = dataElements.length; i < len; i++) {
 
 				var dataElement = dataElements[i];
 				var id = dataElement.dataset.id;
 
-				if(dataElement.classList.contains('styles-select')) {
+				if(dataElement.classList.contains('type-select')) {
 
-					var styleSelect = dataElement;
+					var typeSelect = dataElement;
 
-					var styleSelectItem = styleSelect.querySelector('select');
+					var typeSelectItem = typeSelect.querySelector('select');
 
-					if(styleSelectItem.value) {
-						rule[id] = styleSelectItem.value;
+					if(typeSelectItem.value) {
+						rule[id] = typeSelectItem.value;
 					}
 				}
 
@@ -976,14 +1033,14 @@ STYLEV.RULES_EDITOR = {
 					}
 				}
 
-				if(dataElement.classList.contains('styles-input')) {
+				if(dataElement.classList.contains('text-input')) {
 
-					var styleInput = dataElement;
+					var textInput = dataElement;
 
-					var styleInputItem = styleInput.querySelector('input');
+					var textInputItem = textInput.querySelector('input');
 
-					if(styleInputItem.value) {
-						rule[id] = styleInputItem.value;
+					if(textInputItem.value) {
+						rule[id] = textInputItem.value;
 					}
 				}
 
@@ -1092,7 +1149,7 @@ STYLEV.RULES_EDITOR = {
 		}
 
 		var reasons = that.reasons;
-		if(!that.isShowAllAtFirst) {
+		if(!that.isShowedAllAtFirst) {
 			for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
 				var reason = reasons[i];
 				that.adjustHeightOfTextarea(null, reason);

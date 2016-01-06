@@ -68,13 +68,16 @@
 			<nav class="main-header-nav-search">
 				<label class="main-header-nav-search-label">
 					<img src="/Style-Validator/img/iconmonstr-magnifier-6.svg" />
-					<input type="search" placeholder="Search Property" class="main-header-nav-search-input" />
+					<input type="search" placeholder="Search Property" class="main-header-nav-search-input" id="search-property-input" />
 				</label>
+				<div class="main-header-nav-search-count">
+					<output id="searched-rules-count"></output> / <output id="total-rules-count"></output>
+				</div>
 			</nav>
 			<nav class="main-header-nav-display-mode">
 				<ul class="main-header-nav-display-mode-list">
 					<li><label><input type="checkbox" checked="checked" id="reason-checkbox" /><img src="/Style-Validator/img/iconmonstr-help-3-icon.svg" alt="Reason" /></label></li>
-					<li><label><input type="checkbox" id="reference-url-checkbox" /><img src="/Style-Validator/img/iconmonstr-link-icon-gray.svg" alt="Reference URL" /></label></li>
+					<li><label><input type="checkbox" checked="checked" id="reference-url-checkbox" /><img src="/Style-Validator/img/iconmonstr-link-icon-gray.svg" alt="Reference URL" /></label></li>
 				</ul>
 			</nav>
 			<nav class="main-header-nav-display-mode">
@@ -91,23 +94,27 @@
 			</nav>
 		</header>
 		<div id="loadingSpinner">Loading...</div>
-		<ul id="rules-list" class="styles-list-wrapper"></ul>
+		<ul id="rules-list"></ul>
 		<?php _include('footer.html'); ?>
 	</main>
 </div>
 
 <template id="template-rule">
 	<li>
-		<header class="styles-list-header styles-input" data-id="title"><input type="text" /><a href="javascript: void(0);" class="remove-button">Remove</a><a href="javascript: void(0);" class="edit-button">Edit</a></header>
-		<div class="styles-list-body">
-			<section class="styles-select" data-id="replaced">
+		<header class="rules-list-header text-input" data-id="title">
+			<input type="text" />
+			<a href="javascript: void(0);" class="remove-button">Remove</a>
+			<a href="javascript: void(0);" class="edit-button">Edit</a>
+		</header>
+		<div class="rules-list-body">
+			<section class="type-select" data-id="replaced">
 				<select>
 					<option value="" selected="selected">------------</option>
 					<option value="Non-replaced elements">Non-replaced elements</option>
 					<option value="Replaced elements">Replaced elements</option>
 				</select>
 			</section>
-			<section class="styles-select" data-id="empty">
+			<section class="type-select" data-id="empty">
 				<select>
 					<option value="" selected="selected">------------</option>
 					<option value="Empty elements">Empty elements</option>
@@ -122,8 +129,6 @@
 			<!--<ul class="styles-list-ng" data-id="pseudo-before-warning-styles"></ul>-->
 			<!--<ul class="styles-list-ng" data-id="pseudo-after-error-styles"></ul>-->
 			<!--<ul class="styles-list-ng" data-id="pseudo-after-warning-styles"></ul>-->
-			<!--<section class="styles-input" data-id="message"><input type="text" /></section>-->
-			<!--<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="/Style-Validator/img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>-->
 		</div>
 	</li>
 </template>
