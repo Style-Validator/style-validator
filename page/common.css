@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 /* reset */
 body, div, p, ul, ol, li, dl, dt, dd,
 h1, h2, h3, h4, h5, h6, table, th, td, img, form, figure {
@@ -79,8 +81,7 @@ a:active {
 	display: flex;
 }
 .header-nav-list > li {
-	/* display: inline-block; */
-	/* vertical-align: middle; */
+	flex-shrink: 0;
 }
 .header-nav-list > li + li {
 	margin-left: 20px;

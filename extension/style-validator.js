@@ -1273,7 +1273,7 @@ STYLEV.VALIDATOR = {
 				var li = document.createElement('li');
 				var anchor = document.createElement('a');
 				var logID = document.createElement('span');
-				var why = document.createElement('a');
+				var reference = document.createElement('a');
 				var result = that.resultArray[i];
 
 				//属性を設定
@@ -1285,14 +1285,14 @@ STYLEV.VALIDATOR = {
 				//テキスト情報を挿入
 				anchor.textContent = result.text;
 				logID.textContent = result.idName;
-				why.textContent = '?';
+				reference.textContent = '?';
 
 				//属性を設定
 				anchor.dataset.stylevconsoleid = result.idName;
 				anchor.classList.add('stylev-console-list-anchor');
 				logID.classList.add('stylev-console-list-logid');
-				why.classList.add('stylev-console-list-why');
-				why.href = result.referenceURL;
+				reference.classList.add('stylev-console-list-reference');
+				reference.href = result.referenceURL;
 
 				//エラー数をカウント
 				if(result.errorLevel === 'error') {
@@ -1312,7 +1312,7 @@ STYLEV.VALIDATOR = {
 
 				//DocumentFlagmentにHTML要素を挿入
 				li.appendChild(anchor);
-				logID.appendChild(why);
+				logID.appendChild(reference);
 				li.appendChild(logID);
 				that.docFlag.appendChild(li);
 			}

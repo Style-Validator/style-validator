@@ -1,41 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<!-- ***** base ***** -->
-	<base>
-
-	<!-- ***** data ***** -->
-	<title>Rules | Style Validator</title>
-
-	<!-- ***** robots ***** -->
-	<meta name="robots" content="noindex,nofollow" />
-
-	<!-- ***** favicon ***** -->
-	<link rel="icon" type="image/x-icon" href="../favicon.ico?v=1">
-	<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?v=1">
-
-	<!-- ***** styles***** -->
-	<link href="common.css" rel="stylesheet" />
-	<link href="rules.css" rel="stylesheet" />
-
-	<!-- ***** scripts***** -->
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-		ga('create', 'UA-53227157-3', 'auto');
-		ga('send', 'pageview');
-
-	</script>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/Style-Validator/including-parts/common.html'); ?>
+<?php _include('head.html'); ?>
+<title>Rules | Style Validator</title>
+<?php _include('meta.html'); ?>
+<?php _include('icon.html'); ?>
+<?php _include('style-common.html'); ?>
+<link href="/Style-Validator/page/rules.css" rel="stylesheet" />
+<?php _include('script-common.html'); ?>
 </head>
 <body>
 <div class="wrapper">
-	<aside class="aside">
-		<header class="aside-header">
-			<h1 class="aside-heading"><a href="../"><img src="../img/style-validator.logo.svg" width="40" height="40" /> Rules</a></h1>
-		</header>
+	<header class="aside">
+		<div class="aside-header">
+			<h1 class="aside-heading"><a href="/Style-Validator/"><img src="/Style-Validator/img/style-validator.logo.svg" width="40" height="40" /> Rules</a></h1>
+		</div>
 		<div class="aside-body">
 			<section class="aside-section">
 				<label>
@@ -46,9 +23,9 @@
 				</label>
 			</section>
 			<section class="aside-section">
-				<header class="aside-section-header">
+				<div class="aside-section-header">
 					<h2 class="aside-section-heading">Popular</h2>
-				</header>
+				</div>
 				<div class="aside-section-body">
 					<ul>
 						<li><a href="javascript: void(0)">Default</a></li>
@@ -59,9 +36,9 @@
 				</div>
 			</section>
 			<section class="aside-section">
-				<header class="aside-section-header">
+				<div class="aside-section-header">
 					<h2 class="aside-section-heading">Recently updated</h2>
-				</header>
+				</div>
 				<div class="aside-section-body">
 					<ul>
 						<li><a href="javascript: void(0)">Default</a></li>
@@ -72,9 +49,9 @@
 				</div>
 			</section>
 			<section class="aside-section">
-				<header class="aside-section-header">
+				<div class="aside-section-header">
 					<h2 class="aside-section-heading">Recently selected</h2>
-				</header>
+				</div>
 				<div class="aside-section-body">
 					<ul>
 						<li><a href="javascript: void(0)">Default</a></li>
@@ -85,39 +62,37 @@
 				</div>
 			</section>
 		</div>
-	</aside>
+	</header>
 	<main class="main">
 		<header class="main-header">
 			<nav class="main-header-nav-search">
 				<label class="main-header-nav-search-label">
-					<img src="../img/iconmonstr-magnifier-6.svg" />
+					<img src="/Style-Validator/img/iconmonstr-magnifier-6.svg" />
 					<input type="search" placeholder="Search Property" class="main-header-nav-search-input" />
 				</label>
 			</nav>
 			<nav class="main-header-nav-display-mode">
 				<ul class="main-header-nav-display-mode-list">
-					<li><label><input type="checkbox" checked="checked" id="reason-checkbox" /><img src="../img/iconmonstr-help-3-icon.svg" alt="Reason" /></label></li>
-					<li><label><input type="checkbox" id="reference-url-checkbox" /><img src="../img/iconmonstr-link-icon-gray.svg" alt="Reference URL" /></label></li>
+					<li><label><input type="checkbox" checked="checked" id="reason-checkbox" /><img src="/Style-Validator/img/iconmonstr-help-3-icon.svg" alt="Reason" /></label></li>
+					<li><label><input type="checkbox" id="reference-url-checkbox" /><img src="/Style-Validator/img/iconmonstr-link-icon-gray.svg" alt="Reference URL" /></label></li>
 				</ul>
 			</nav>
 			<nav class="main-header-nav-display-mode">
 				<ul class="main-header-nav-display-mode-list">
-					<li><label><input type="radio" checked="checked" id="display-mode-column" /><img src="../img/iconmonstr-view-6.svg" alt="Column Mode" /></label></li>
-					<li><label><input type="radio" id="display-mode-list" /><img src="../img/iconmonstr-menu-2.svg" alt="List Mode" /></label></li>
+					<li><label><input type="radio" checked="checked" id="display-mode-column" /><img src="/Style-Validator/img/iconmonstr-view-6.svg" alt="Column Mode" /></label></li>
+					<li><label><input type="radio" id="display-mode-list" /><img src="/Style-Validator/img/iconmonstr-menu-2.svg" alt="List Mode" /></label></li>
 				</ul>
 			</nav>
 			<nav class="main-header-nav">
-				<button id="reset-button" type="reset"><img src="../img/iconmonstr-undo-4-icon.svg" width="20" height="20" />Reset</button>
-				<button id="add-button"><img src="../img/iconmonstr-selection-10-icon.svg" width="20" height="20" />Add</button>
-				<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a file at '/Style-Validator/data/rules.json'"><img src="../img/iconmonstr-download-2-icon.svg" width="20" height="20" />DL</a>
-				<button id="save-button"><img src="../img/iconmonstr-save-icon.svg" width="20" height="20" />Save</button>
+				<button id="reset-button" type="reset"><img src="/Style-Validator/img/iconmonstr-undo-4-icon.svg" width="20" height="20" />Reset</button>
+				<button id="add-button"><img src="/Style-Validator/img/iconmonstr-selection-10-icon.svg" width="20" height="20" />Add</button>
+				<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a file at '/Style-Validator/data/rules.json'"><img src="/Style-Validator/img/iconmonstr-download-2-icon.svg" width="20" height="20" />DL</a>
+				<button id="save-button"><img src="/Style-Validator/img/iconmonstr-save-icon.svg" width="20" height="20" />Save</button>
 			</nav>
 		</header>
 		<div id="loadingSpinner">Loading...</div>
 		<ul id="rules-list" class="styles-list-wrapper"></ul>
-		<footer class="footer">
-			<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
-		</footer>
+		<?php _include('footer.html'); ?>
 	</main>
 </div>
 
@@ -148,7 +123,7 @@
 			<!--<ul class="styles-list-ng" data-id="pseudo-after-error-styles"></ul>-->
 			<!--<ul class="styles-list-ng" data-id="pseudo-after-warning-styles"></ul>-->
 			<!--<section class="styles-input" data-id="message"><input type="text" /></section>-->
-			<!--<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="../img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>-->
+			<!--<section class="styles-input" data-id="reference-url"><input type="text" /><a href="javascript: void(0);" target="_blank"><img src="/Style-Validator/img/iconmonstr-link-icon.svg" width="20" height="20" /></a></section>-->
 		</div>
 	</li>
 </template>
@@ -179,7 +154,8 @@
 	<option value="inherit">inherit</option>
 	<option value="unset">unset</option>
 </datalist>
-<script src="./specificity.js"></script>
-<script src="./rules.js"></script>
+<script src="/Style-Validator/page/specificity.js"></script>
+<script src="/Style-Validator/page/rules.js"></script>
+<?php _include('jsonld.html'); ?>
 </body>
 </html>
