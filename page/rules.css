@@ -112,7 +112,7 @@ body {
 	width: 16px;
 	height: 16px;
 }
-.main-header-nav-search {align-items: center;}
+.main-header-nav-search {align-items: center;justify-content: space-between;}
 .main-header-nav-search img {
 	width: 20px;
 	height: auto;
