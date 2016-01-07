@@ -2,10 +2,10 @@
 
 var STYLEV = STYLEV || {};
 
-STYLEV.RULES_EDITOR = {
+STYLEV.RULES = {
 
 	execute: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		that.setParameters();
 		that.applyFromLocalStorage();
@@ -16,7 +16,7 @@ STYLEV.RULES_EDITOR = {
 		that.initializeRuleArea();
 	},
 	initializeRuleArea: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		that.showCurrentJSON()
 			.then(function() {
@@ -33,7 +33,7 @@ STYLEV.RULES_EDITOR = {
 			});
 	},
 	setParameters: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		that.isShowedAllAtFirst = false;
 		that.resetButton = document.querySelector('#reset-button');
@@ -66,14 +66,14 @@ STYLEV.RULES_EDITOR = {
 		that.INPUT_ARROW_WIDTH = 22;
 	},
 	applyFromLocalStorage: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		that.reasonCheckboxData = localStorage.getItem(that.reasonCheckbox.id);
 		that.reasonCheckbox.checked = that.reasonCheckboxData ? that.reasonCheckboxData === 'true' : that.reasonCheckbox.checked;
 		that.referenceURLCheckboxData = localStorage.getItem(that.referenceURLCheckbox.id);
 		that.referenceURLCheckbox.checked = that.referenceURLCheckboxData ? that.referenceURLCheckboxData === 'true' : that.referenceURLCheckbox.checked;
 	},
 	setParametersAfterAdding: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
 		that.typeSelects = that.rulesList.querySelectorAll('.type-select');
@@ -84,12 +84,12 @@ STYLEV.RULES_EDITOR = {
 		that.cssProperties = that.rulesList.querySelectorAll('.css-property');
 	},
 	setParametersAfterToggledProperty: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		that.reasons = that.rulesList.querySelectorAll('.reasons');
 	},
 	bindEvents: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		that.resetButton.addEventListener('click', that.initializeRuleArea, false);
 		that.addButton.addEventListener('click', that.addRule, false);
@@ -107,7 +107,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	toggleDisplayMode: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var valueFromEvent = event && event.currentTarget.value;
 		var displayMode = valueFromEvent || localStorage.getItem(that.rulesList.id);
 
@@ -132,7 +132,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	searchProperty: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var rulesListItems = that.rulesListItems;
 		var rulesListItemsLen = rulesListItems.length;
 		var inputValue = that.searchPropertyInput.value;
@@ -185,7 +185,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	toggleReason: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var reasons = that.rulesList.querySelectorAll('.reason');
 		for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
 			var reason = reasons[i];
@@ -195,7 +195,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	toggleReferenceURL: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var referenceURLs = that.rulesList.querySelectorAll('.reference-url');
 		for(var i = 0, referenceURLsLen = referenceURLs.length; i < referenceURLsLen; i++) {
 			var referenceURL = referenceURLs[i];
@@ -205,21 +205,21 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	removeSaveButtonWhenNotLocal: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		if(location.hostname === 'style-validator.io') {
 			that.saveButton.hidden = true;
 		}
 	},
 	
 	setDownloadButton: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var json = that.generateJSON();
 		this.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json, null, '\t'));
 		alert('Download and replace file which named rules.json without rename the file');
 	},
 
 	bind2RuleBox: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		for(var i = 0, len = that.rulesListItems.length; i < len; i++) {
 			var rulesListItem = that.rulesListItems[i];
 			var editButton = rulesListItem.querySelector('.edit-button');
@@ -230,7 +230,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	toggleEditMode: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		event.stopPropagation();
 		event.preventDefault();
@@ -262,7 +262,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	modifyBasedOnCurrentData: function(rulesListItem) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
 
@@ -323,7 +323,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	removeTheRule: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		event.stopPropagation();
 		event.preventDefault();
 
@@ -335,7 +335,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	bind2StylesList: function(targetstylesLists) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		that.stylesLists = targetstylesLists ? targetstylesLists : that.stylesLists;
 
@@ -345,7 +345,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	addRule: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var clone = document.importNode(that.templateRule, true);
 		var stylesLists = clone.querySelectorAll('.styles-list');
 
@@ -356,7 +356,7 @@ STYLEV.RULES_EDITOR = {
 		that.rulesList.querySelector('.text-input').querySelector('input').focus();
 	},
 	insertDummyElements: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		document.documentElement.appendChild(that.dummyElementWrapper);
 		that.dummyElementWrapper.appendChild(that.dummyElement4detectWidth);
@@ -364,7 +364,7 @@ STYLEV.RULES_EDITOR = {
 	},
 	insertProperty: function(event, stylesList, property, propertyValue, reason, referenceURL) {
 
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var stylesList = stylesList || event.currentTarget || event.target;
 		var isBaseStyles = stylesList.dataset.id === 'base-styles';
 
@@ -405,7 +405,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	doAfterInsertingProperty: function(appendedStylesListItem, isBaseStyles) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var cssProperty = appendedStylesListItem.querySelector('.css-property');
 		var cssPropertyValue = appendedStylesListItem.querySelector('.css-property-value');
 		that.bindEvents2ListItem(appendedStylesListItem);
@@ -426,13 +426,13 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	bindEvents2ReferenceURL: function(referenceURL) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		referenceURL.addEventListener('dblclick', that.jump2urlOfValue, false);
 		referenceURL.addEventListener('keyup', that.insertPropertyByEnterKey, false);
 	},
 
 	bindEvents2ListItem: function(appendedStylesListItem) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var inputs = appendedStylesListItem.querySelectorAll('input, textarea');
 
 		appendedStylesListItem.addEventListener('click', that.stopPropagation, false);
@@ -446,7 +446,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		cssProperty.addEventListener('input', that.modifyCSSProperty, false);
 		cssProperty.addEventListener('focus', that.applySameStyles2dummyElem, false);
@@ -459,7 +459,7 @@ STYLEV.RULES_EDITOR = {
 
 	},
 	modifyCSSProperty: function(event, stylesListItem) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		var stylesListItem = stylesListItem || that.closest(event.currentTarget, 'li');
 		var cssProperty = stylesListItem.querySelector('.css-property');
@@ -473,7 +473,7 @@ STYLEV.RULES_EDITOR = {
 		return false;
 	},
 	modifyCSSPropertyValue: function(event, stylesListItem) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		var stylesListItem = stylesListItem || that.closest(event.currentTarget, 'li');
 		var cssProperty = stylesListItem.querySelector('.css-property');
@@ -491,7 +491,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	moveFocusByEnter: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var stylesListItem = that.closest(event.currentTarget, 'li');
 		var inputs = stylesListItem.querySelectorAll('input, textarea');
 		var enterKeyCode = 13;
@@ -508,7 +508,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	insertPropertyByEnterKey: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		var stylesListItem = that.closest(event.currentTarget, 'li');
 		var stylesList = stylesListItem.parentElement;
@@ -526,7 +526,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	validateProperty: function(cssProperty, cssPropertyValue) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		var property = cssProperty.value;
 		var propertyValue = cssPropertyValue.value;
@@ -544,7 +544,7 @@ STYLEV.RULES_EDITOR = {
 
 	},
 	setStyleDataOfWidthHeight: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		var stylesheets = document.styleSheets;
 
@@ -706,7 +706,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	getUncomputedStyle: function(target, property, propertyValue) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var culculatedValue;
 
 		if(
@@ -741,7 +741,7 @@ STYLEV.RULES_EDITOR = {
 	},
 	validatePropertyValue: function(cssProperty, cssPropertyValue) {
 
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var property = cssProperty.value;
 		var propertyValue = cssPropertyValue.value;
 
@@ -796,7 +796,7 @@ STYLEV.RULES_EDITOR = {
 	},
 	applyValidationResult: function(event, stylesListItem) {
 
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var stylesListItem = stylesListItem || that.closest(event.currentTarget, 'li');
 		var cssProperty = stylesListItem.querySelector('.css-property');
 		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
@@ -835,7 +835,7 @@ STYLEV.RULES_EDITOR = {
 		}
 	},
 	setCSSPropertyDataList: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var df = document.createDocumentFragment();
 		for(var j = 0, propLen = that.allCSSProperties.length; j < propLen; j++) {
 			var prop = that.allCSSProperties[j];
@@ -848,7 +848,7 @@ STYLEV.RULES_EDITOR = {
 		event.stopPropagation();
 	},
 	applySameStyles2dummyElem: function(event) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var currentTarget = event.currentTarget;
 		that.dummyElement4detectWidth.innerHTML = currentTarget.value;
 		that.dummyElement4detectWidth.style['font-size'] = getComputedStyle(currentTarget, '').getPropertyValue('font-size');
@@ -858,12 +858,12 @@ STYLEV.RULES_EDITOR = {
 		event.currentTarget.select();
 	},
 	removeProperty: function(stylesList, stylesListItem) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		stylesList.removeChild(stylesListItem);
 		that.setParametersAfterToggledProperty();
 	},
 	getAllCSSProperties: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var properties = document.documentElement.style;
 
 		for(var property in properties) {
@@ -898,7 +898,7 @@ STYLEV.RULES_EDITOR = {
 			});
 	},
 	showCurrentJSON: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var df = document.createDocumentFragment();
 
 		return new Promise(function(resolve, reject) {
@@ -954,7 +954,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	addPropertyFromJSON2HTML: function(target, rule, id) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var ruleStyles = rule && rule[id];
 
 		if(ruleStyles) {
@@ -1001,7 +1001,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	generateJSON: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		var json = [];
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
@@ -1117,7 +1117,7 @@ STYLEV.RULES_EDITOR = {
 		});
 	},
 	saveJSON: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 
 		var xhr = new XMLHttpRequest();
 		var apiURI = 'http://localhost:8001/saveJSON';
@@ -1153,30 +1153,45 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	closest: function(element, selector) {
-		var selector = selector.toLowerCase();
+		var originalSelector = selector.toLowerCase();
 
-		if(selector.indexOf(' ') !== -1 || selector.split(/[\.|#]/).length > 1) {
+		if( originalSelector.indexOf(' ') !== -1 ||
+			originalSelector.split(/[\.|#]/).length >= 3) {
 			return null;
 		}
 
+		var typeSelector, classSelector, idSelector, splitSelector;
+
 		var selectorType = (function() {
-			if(selector.indexOf('.') === 0) {
-				selector = selector.substr(1);
+			if(originalSelector.indexOf('.') === 0) {
+				classSelector = originalSelector.substr(1);
 				return 'class';
-			} else if(selector.indexOf('#') === 0) {
-				selector = selector.substr(1);
+			} else if(originalSelector.indexOf('#') === 0) {
+				idSelector = originalSelector.substr(1);
 				return 'id';
+			} else if(originalSelector.indexOf('.') > 0) {
+				splitSelector = originalSelector.split('.');
+				typeSelector = splitSelector[0];
+				classSelector = splitSelector[1];
+				return 'type-class';
+			} else if(originalSelector.indexOf('#') > 0) {
+				splitSelector = originalSelector.split('#');
+				typeSelector = splitSelector[0];
+				idSelector = splitSelector[1];
+				return 'type-id';
 			} else {
-				return 'tag';
+				return 'type';
 			}
 		}());
 
 		while(
 			element !== null &&
 			!(
-				(selectorType === 'tag' && element.tagName.toLowerCase() === selector) ||
-				(selectorType === 'class' && element.classList.contains(selector)) ||
-				(selectorType === 'id' && element.id === selector)
+				(selectorType === 'type' && element.tagName.toLowerCase() === typeSelector) ||
+				(selectorType === 'type-class' && element.tagName.toLowerCase() === typeSelector && element.classList.contains(classSelector)) ||
+				(selectorType === 'type-id' && element.tagName.toLowerCase() === typeSelector && element.id === idSelector)
+				(selectorType === 'class' && element.classList.contains(classSelector)) ||
+				(selectorType === 'id' && element.id === idSelector)
 			)
 		) {
 			element = element.parentElement;
@@ -1189,7 +1204,7 @@ STYLEV.RULES_EDITOR = {
 	RESIZE_INTERVAL_MILLISECOND: 1000,
 
 	resizeTextareaBasedOnLine: function() {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		if(that.resizeTimer) {
 			clearTimeout(that.resizeTimer);
 		}
@@ -1211,7 +1226,7 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	bindEvents2Textarea: function(textarea) {
-		var that = STYLEV.RULES_EDITOR;
+		var that = STYLEV.RULES;
 		textarea.addEventListener('keyup', that.adjustHeightOfTextarea, false);
 	},
 
@@ -1227,14 +1242,20 @@ STYLEV.RULES_EDITOR = {
 	},
 
 	each: function(elements, fn) {
-		var length = elements.length;
-		var isFunc = typeof fn === 'function';
-		for(var i = 0; i < length; i++) {
-			var element = elements[i];
-			isFunc && fn(element, i);
+
+		if(elements.hasChildNodes()) {
+			var length = elements.length;
+			var isFunc = typeof fn === 'function';
+			for(var i = 0; i < length; i++) {
+				var element = elements[i];
+				isFunc && fn(element, i);
+			}
+		} else {
+			console.error(elements + 'has not childNodes.');
 		}
+		
 	}
 
 };
 
-STYLEV.RULES_EDITOR.execute();
+STYLEV.RULES.execute();
