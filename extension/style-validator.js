@@ -1,7 +1,7 @@
 /*!
  Style Validator
  "Validation in the Browser". Validate computedStyle with track all events.
- https://style-validator.github.io/
+ https://style-validator.github.io/Style-Validator/
  by Igari Takeharu
  MIT License
  */
@@ -45,11 +45,15 @@ STYLEV.options = {
 	ENABLE_MUTATION_OBSERVER: true,
 	ENABLE_AUTO_EXECUTION: false,
 	ENABLE_ANIMATION: false,
-	TARGET_SELECTOR: false,
-	TARGET_SELECTOR_TEXT: '',
-	NOT_TARGET_SELECTOR: false,
-	NOT_TARGET_SELECTOR_TEXT: ''
+	SCOPE_SELECTORS: false,
+	SCOPE_SELECTORS_TEXT: '',
+	IGNORE_SELECTORS: false,
+	IGNORE_SELECTORS_TEXT: '',
+	URL_FILTER: '/Style-Validator/page/rules.html'
 };
+
+//URLフィルターにパスしたかどうか
+STYLEV.isPassedFilter = location.href.indexOf(STYLEV.options.URL_FILTER) === -1;
 
 //TODO: 再度テストする↓
 //監視用プロパティ 連続で同じ要素が変更される場合は、メモリ節約のため、無視する
@@ -115,7 +119,7 @@ STYLEV.VALIDATOR = {
 
 				//オプションを更新してから、検証実行
 				that.updateOptions().then(function() {
-					
+
 					//DOM監視をセットアップ
 					that.moManager = that.setupMutationObserver();
 
@@ -247,7 +251,8 @@ STYLEV.VALIDATOR = {
 
 			for(var i = 0 , pathesArrayLen = pathesArray.length; i < pathesArrayLen; i++) {
 				var path = pathesArray[i];
-				if(that.head.querySelectorAll('script[src="' + path + '"]').length) {
+				if(document.querySelectorAll('script[src="' + path + '"]').length) {
+					console.log('hoge')
 					continue;
 				}
 				promiseArray.push(that.getScriptFromURL(path, docFlag));
@@ -301,10 +306,11 @@ STYLEV.VALIDATOR = {
 							ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
 							ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
 							ENABLE_ANIMATION: message.options.enableAnimation,
-							TARGET_SELECTOR: message.options.targetSelector,
-							TARGET_SELECTOR_TEXT: message.options.targetSelectorText ? message.options.targetSelectorText.split(',') : '',
-							NOT_TARGET_SELECTOR: message.options.notTargetSelector,
-							NOT_TARGET_SELECTOR_TEXT: message.options.notTargetSelectorText ? message.options.notTargetSelectorText.split(',') : ''
+							SCOPE_SELECTORS: message.options.scopeSelectors,
+							SCOPE_SELECTORS_TEXT: message.options.scopeSelectorsText ? message.options.scopeSelectorsText.split(',') : '',
+							IGNORE_SELECTORS: message.options.ignoreSelectors,
+							IGNORE_SELECTORS_TEXT: message.options.ignoreSelectorsText ? message.options.ignoreSelectorsText.split(',') : '',
+							URL_FILTER: message.options.urlFilter
 						};
 					}
 
@@ -1550,10 +1556,12 @@ STYLEV.VALIDATOR = {
 		that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 	},
 
-	setStyleDataBySelectors: function(document) {
+	setStyleDataBySelectors: function(_document) {
 		var that = STYLEV.VALIDATOR;
 
-		var stylesheets = document.styleSheets;
+		var doc = _document || document;
+
+		var stylesheets = doc.styleSheets;
 
 		for(var i = 0, len = stylesheets.length; i < len; i++) {
 
@@ -1590,7 +1598,7 @@ STYLEV.VALIDATOR = {
 					var selectorOfCssRules = specificityObjectOfCssRules.selector;
 					var specificityOfCssRules = parseInt(specificityObjectOfCssRules.specificity.replace(/,/g, ''), 10);
 					try {
-						var targetsFromCssRules = document.querySelectorAll(selectorOfCssRules);
+						var targetsFromCssRules = doc.querySelectorAll(selectorOfCssRules);
 					} catch(e){
 						continue;
 					}
@@ -1716,7 +1724,7 @@ STYLEV.VALIDATOR = {
 			}
 		}
 
-		that.setStyleDataByElements(document);
+		that.setStyleDataByElements(doc);
 
 	},
 
@@ -1988,7 +1996,7 @@ if(STYLEV.isChromeExtension){
 }
 
 //ブックマークレット
-if(STYLEV.isBookmarklet) {
+if(STYLEV.isBookmarklet && STYLEV.isPassedFilter) {
 
 	//初期読込の場合
 	if(STYLEV.isLoaded) {

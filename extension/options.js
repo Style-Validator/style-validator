@@ -70,7 +70,7 @@ STYLEV.popup = {
 			}
 
 
-			if(id === 'targetSelector' || id === 'notTargetSelector') {
+			if(id === 'scopeSelectors' || id === 'ignoreSelectors') {
 
 				var defineBox = document.querySelector('#' + id + 'Text');
 				defineBox.disabled = !isChecked;

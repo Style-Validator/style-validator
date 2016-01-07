@@ -23,7 +23,7 @@ STYLEV.RULES = {
 				that.removeLoadingSpinner();
 				that.setParametersAfterAdding();
 				that.bindEvents();
-				that.setStyleDataOfWidthHeight();
+				STYLEV.VALIDATOR.setStyleDataBySelectors();
 				that.resizeTextareaBasedOnLine();
 				that.toggleReason();
 				that.toggleReferenceURL();
@@ -114,12 +114,12 @@ STYLEV.RULES = {
 		switch(displayMode) {
 			case 'column':
 				that.rulesList.classList.remove('rules-list-list');
-				break;
+				return false;
 			case 'list':
 				that.rulesList.classList.add('rules-list-list');
-				break;
+				return false;
 			default:
-				break;
+				return false;
 		}
 
 		localStorage.setItem(that.rulesList.id, displayMode);
@@ -141,27 +141,18 @@ STYLEV.RULES = {
 
 		if(inputValue) {
 
-			for(var i = 0; i < rulesListItemsLen; i++) {
-
-				var rulesListItem = rulesListItems[i];
+			that.each(rulesListItems, function(rulesListItem) {
 				var cssProperties = rulesListItem.querySelectorAll('.css-property');
-				var cssPropertiesLen = cssProperties.length;
 				var hasWord = false;
 
-				for(var j = 0; j < cssPropertiesLen; j++) {
-					var cssProperty = cssProperties[j];
+				that.each(cssProperties, function(cssProperty) {
 					var cssPropertyValue = cssProperty.value;
-
-					console.log('cssPropertyValue:' + cssPropertyValue);
-					console.log('inputValue:' + inputValue);
 
 					if(cssPropertyValue.indexOf(inputValue) !== -1) {
 						hasWord = true;
-						break;
+						return false;
 					}
-				}
-
-				console.log(inputValue);
+				});
 
 				if(hasWord) {
 					count++;
@@ -169,38 +160,34 @@ STYLEV.RULES = {
 				} else {
 					rulesListItem.classList.add('hidden');
 				}
-			}
+			});
 
 			that.searchedRulesCount.textContent = count;
 
 		} else {
-
-			for(var i = 0; i < rulesListItemsLen; i++) {
-				var rulesListItem = rulesListItems[i];
+			that.each(rulesListItems, function(rulesListItem) {
 				rulesListItem.classList.remove('hidden');
-			}
+			});
 
-			that.searchedRulesCount.textContent = rulesListItemsLen;
+			that.searchedRulesCount.textContent = rulesListItemsLen + '';
 		}
 	},
 
 	toggleReason: function(event) {
 		var that = STYLEV.RULES;
 		var reasons = that.rulesList.querySelectorAll('.reason');
-		for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
-			var reason = reasons[i];
+		that.each(reasons, function(reason) {
 			reason.hidden = !that.reasonCheckbox.checked;
-		}
+		});
 		localStorage.setItem(that.reasonCheckbox.id, that.reasonCheckbox.checked);
 	},
 
 	toggleReferenceURL: function(event) {
 		var that = STYLEV.RULES;
 		var referenceURLs = that.rulesList.querySelectorAll('.reference-url');
-		for(var i = 0, referenceURLsLen = referenceURLs.length; i < referenceURLsLen; i++) {
-			var referenceURL = referenceURLs[i];
+		that.each(referenceURLs, function(referenceURL) {
 			referenceURL.hidden = !that.referenceURLCheckbox.checked;
-		}
+		});
 		localStorage.setItem(that.referenceURLCheckbox.id, that.referenceURLCheckbox.checked);
 	},
 
@@ -220,13 +207,12 @@ STYLEV.RULES = {
 
 	bind2RuleBox: function() {
 		var that = STYLEV.RULES;
-		for(var i = 0, len = that.rulesListItems.length; i < len; i++) {
-			var rulesListItem = that.rulesListItems[i];
+		that.each(that.rulesListItems, function(rulesListItem) {
 			var editButton = rulesListItem.querySelector('.edit-button');
 			var removeButton = rulesListItem.querySelector('.remove-button');
 			editButton.addEventListener('click', that.toggleEditMode, false);
 			removeButton.addEventListener('click', that.removeTheRule, false);
-		}
+		});
 	},
 
 	toggleEditMode: function(event) {
@@ -264,62 +250,29 @@ STYLEV.RULES = {
 	modifyBasedOnCurrentData: function(rulesListItem) {
 		var that = STYLEV.RULES;
 
-		var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
+		var formPartsWrappers = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
 
-		for(var i = 0, len = dataElements.length; i < len; i++) {
-			var dataElement = dataElements[i];
+		that.each(formPartsWrappers, function(formPartsWrapper) {
 			var hasData = false;
 
-			if(dataElement.classList.contains('styles-list')) {
-				var inputLists = dataElement.querySelectorAll('input');
-				if(inputLists === null) {
-					hasData = false;
-					break;
-				}
-				for(var j = 0, inputListLen = inputLists.length; j < inputListLen; j++) {
-					var inputList = inputLists[j];
-					if(inputList.value) {
-						hasData = true;
-						break;
-					}
-				}
-//				hasData = dataElement.hasChildNodes();TODO: try after
+			var inputs = formPartsWrapper.querySelectorAll('input, select, textarea');
+			if(inputs === null) {
+				hasData = false;
+				return false;
 			}
-			if(dataElement.classList.contains('text-input')) {
-				var inputs = dataElement.querySelectorAll('input');
-				if(inputs === null) {
-					hasData = false;
-					break;
+			that.each(inputs, function(input) {
+				if(input.value) {
+					hasData = true;
+					return false;
 				}
-				for(var k = 0, inputLen = inputs.length; k < inputLen; k++) {
-					var input = inputs[k];
-					if(input.value) {
-						hasData = true;
-						break;
-					}
-				}
-			}
-			if(dataElement.classList.contains('type-select')) {
-				var selects = dataElement.querySelectorAll('select');
-				if(selects === null) {
-					hasData = false;
-					break;
-				}
-				for(var l = 0, selectsLen = selects.length; l < selectsLen; l++) {
-					var select = selects[l];
-					if(select.value) {
-						hasData = true;
-						break;
-					}
-				}
-			}
-			if(hasData) {
-				dataElement.classList.remove('hidden');
-			} else {
-				dataElement.classList.add('hidden');
-			}
-		}
+			});
 
+			if(hasData) {
+				formPartsWrapper.classList.remove('hidden');
+			} else {
+				formPartsWrapper.classList.add('hidden');
+			}
+		});
 	},
 
 	removeTheRule: function(event) {
@@ -339,10 +292,9 @@ STYLEV.RULES = {
 
 		that.stylesLists = targetstylesLists ? targetstylesLists : that.stylesLists;
 
-		for(var i = 0, len = that.stylesLists.length; i < len; i++) {
-			var stylesList = that.stylesLists[i];
+		that.each(that.stylesLists, function(stylesList) {
 			stylesList.addEventListener('focus', that.insertProperty, false);
-		}
+		});
 	},
 	addRule: function() {
 		var that = STYLEV.RULES;
@@ -437,13 +389,12 @@ STYLEV.RULES = {
 
 		appendedStylesListItem.addEventListener('click', that.stopPropagation, false);
 
-		for(var i = 0, inputsLen = inputs.length; i < inputsLen; i++) {
-			var input = inputs[i];
+		that.each(inputs, function(input) {
 			input.addEventListener('focus', that.selectOnFocus, false);
 			input.addEventListener('click', that.stopPropagation, false);
 			input.addEventListener('keyup', that.fireBlurEventByEscKey, false);
 			input.addEventListener('keyup', that.moveFocusByEnter, false);
-		}
+		});
 	},
 	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue) {
 		var that = STYLEV.RULES;
@@ -467,7 +418,7 @@ STYLEV.RULES = {
 
 		that.dummyElement4detectWidth.innerHTML = cssProperty.value;
 		cssProperty.style.setProperty('width', (that.dummyElement4detectWidth.offsetWidth * 1.05 + that.INPUT_ARROW_WIDTH) + 'px', 'important');
-		that.validateProperty(cssProperty, cssPropertyValue);
+		that.validateProperty(cssProperty);
 		that.validatePropertyValue(cssProperty, cssPropertyValue);
 
 		return false;
@@ -497,14 +448,12 @@ STYLEV.RULES = {
 		var enterKeyCode = 13;
 
 		if(event.keyCode === enterKeyCode) {
-			for(var i = 0, inputsLen = inputs.length; i < inputsLen; i++) {
-				var input = inputs[i];
+			that.each(inputs, function(input) {
 				var nextInput = inputs[i+1];
-
-				if(input.isEqualNode(event.currentTarget)) {
-					nextInput && nextInput.focus();
+				if(nextInput !== null && input.isEqualNode(event.currentTarget)) {
+					nextInput.focus();
 				}
-			}
+			});
 		}
 	},
 	insertPropertyByEnterKey: function(event) {
@@ -525,220 +474,22 @@ STYLEV.RULES = {
 			}
 		}
 	},
-	validateProperty: function(cssProperty, cssPropertyValue) {
+	validateProperty: function(cssProperty) {
 		var that = STYLEV.RULES;
 
-		var property = cssProperty.value;
-		var propertyValue = cssPropertyValue.value;
+		var _cssProperty = cssProperty.value;
 		var isValid = false;
 
-		for(var i = 0, len = that.allCSSProperties.length; i < len; i++) {
-
-			var propertyFromData = that.allCSSProperties[i];
-			if(property === propertyFromData) {
+		that.each(that.allCSSProperties, function(cssPropertyFromData) {
+			if(_cssProperty === cssPropertyFromData) {
 				isValid = true;
-				break;
+				return false;
 			}
-		}
+		});
 		cssProperty.dataset_isvalid = isValid ? 'true' : 'false';
 
 	},
-	setStyleDataOfWidthHeight: function() {
-		var that = STYLEV.RULES;
 
-		var stylesheets = document.styleSheets;
-
-		for(var i = 0, len = stylesheets.length; i < len; i++) {
-
-			var stylesheet = stylesheets[i];
-			var cssRules = stylesheet.cssRules;
-
-			if(cssRules === null) {
-				continue;
-			}
-
-			for(var j = 0, rulesLength = cssRules.length; j < rulesLength; j++) {
-
-				var cssRule = cssRules[j];
-
-				//TODO: support media query
-				if(cssRule.media || cssRule.style === undefined || cssRule.selectorText === undefined) {
-					continue;
-				}
-
-				var selectorsOfCssRules = cssRule.selectorText;
-				var styleOfCssRules = cssRule.style;
-				var widthOfCssRules = !!styleOfCssRules.width ? styleOfCssRules.width : 'auto';
-				var heightOfCssRules = !!styleOfCssRules.height ? styleOfCssRules.height : 'auto';
-
-				var importantOfWidthOfCssRules = styleOfCssRules.getPropertyPriority('width');
-				var importantOfHeightOfCssRules = styleOfCssRules.getPropertyPriority('height');
-				var specificityArrayOfCssRules = SPECIFICITY.calculate(selectorsOfCssRules);
-
-				//selectorの数分だけループ
-				for(var k = 0, specificityArrayOfCssRulesLength = specificityArrayOfCssRules.length; k < specificityArrayOfCssRulesLength; k++) {
-
-					var specificityObjectOfCssRules = specificityArrayOfCssRules[k];
-
-					var selectorOfCssRules = specificityObjectOfCssRules.selector;
-					var specificityOfCssRules = parseInt(specificityObjectOfCssRules.specificity.replace(/,/g, ''), 10);
-
-					var targetsFromCssRules = document.querySelectorAll(selectorOfCssRules);
-
-					for(var l = 0, targetsLength = targetsFromCssRules.length; l < targetsLength; l++) {
-
-						var target = targetsFromCssRules[l];
-						var styleOfStyleAttr = target.style;
-						var widthOfStyleAttr = !!styleOfStyleAttr.width ? styleOfStyleAttr.width : 'auto';
-						var heightOfStyleAttr = !!styleOfStyleAttr.height ? styleOfStyleAttr.height : 'auto';
-
-						var specificityOfWidth = widthOfStyleAttr ? 1000 : specificityOfCssRules;
-						var specificityOfHeight = heightOfStyleAttr ? 1000 : specificityOfCssRules;
-
-						var importantOfWidthOfStyleAttr = styleOfStyleAttr.getPropertyPriority('width');
-						var importantOfHeightOfStyleAttr = styleOfStyleAttr.getPropertyPriority('height');
-
-						//initialize
-						if(target.dataset_stylevwidthspecificity === undefined) {
-							target.dataset_stylevwidthspecificity = specificityOfWidth;
-						}
-						if(target.dataset_stylevheightspecificity === undefined) {
-							target.dataset_stylevheightspecificity = specificityOfHeight;
-						}
-						if(target.dataset_stylevwidthimportant === undefined) {
-							target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
-						}
-						if(target.dataset_stylevheightimportant === undefined) {
-							target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
-						}
-
-						//TODO: もう1パターン？
-						//CSS指定がありstyle属性がない
-						if(widthOfCssRules && !widthOfStyleAttr) {
-							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
-								importantOfWidthOfCssRules.length >= target.dataset_stylevwidthimportant.length
-							) {
-								target.dataset_stylevwidth = widthOfCssRules;
-								target.dataset_stylevwidthspecificity = specificityOfWidth;
-								target.dataset_stylevwidthimportant = importantOfWidthOfCssRules;
-							}
-						}
-						//importantのCSS指定とstyle属性
-						if(widthOfCssRules && importantOfWidthOfCssRules && !importantOfWidthOfStyleAttr) {
-
-							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
-								importantOfWidthOfCssRules.length >= target.dataset_stylevwidthimportant.length
-							) {
-								target.dataset_stylevwidth = widthOfCssRules;
-								target.dataset_stylevwidthspecificity = specificityOfWidth;
-								target.dataset_stylevwidthimportant = importantOfWidthOfCssRules;
-							}
-						}
-						//非importantのCSS指定とstyle属性
-						if(widthOfCssRules && !importantOfWidthOfCssRules && widthOfStyleAttr) {
-
-							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset_stylevwidthimportant.length
-							) {
-								target.dataset_stylevwidth = widthOfStyleAttr;
-								target.dataset_stylevwidthspecificity = specificityOfWidth;
-								target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
-							}
-						}
-						//style属性かつimportant
-						if(widthOfStyleAttr && importantOfWidthOfStyleAttr) {
-							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset_stylevwidthimportant.length
-							) {
-								target.dataset_stylevwidth = widthOfStyleAttr;
-								target.dataset_stylevwidthspecificity = specificityOfWidth;
-								target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
-							}
-						}
-
-
-						//CSS指定がありstyle属性がない
-						if(heightOfCssRules && !heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
-								target.dataset_stylevheight = heightOfCssRules;
-								target.dataset_stylevheightspecificity = specificityOfHeight;
-								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
-							}
-						}
-						//CSS指定がありimportantとstyle属性
-						if(heightOfCssRules && importantOfHeightOfCssRules && heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
-								target.dataset_stylevheight = heightOfCssRules;
-								target.dataset_stylevheightspecificity = specificityOfHeight;
-								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
-							}
-						}
-
-						//CSS指定があり非importantとstyle属性
-						if(heightOfCssRules && !importantOfHeightOfCssRules && heightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
-								target.dataset_stylevheight = heightOfStyleAttr;
-								target.dataset_stylevheightspecificity = specificityOfHeight;
-								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
-							}
-						}
-						//style属性かつimportant
-						if(heightOfStyleAttr && importantOfHeightOfStyleAttr) {
-							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
-								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
-								target.dataset_stylevheight = heightOfStyleAttr;
-								target.dataset_stylevheightspecificity = specificityOfHeight;
-								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
-							}
-						}
-
-					}
-				}
-
-			}
-		}
-	},
-	getUncomputedStyle: function(target, property, propertyValue) {
-		var that = STYLEV.RULES;
-		var culculatedValue;
-
-		if(
-			(property === 'width' || property === 'height') &&
-			propertyValue === 'auto'
-		) {
-
-			if(property === 'width') {
-
-				if(target.dataset_stylevwidth === 'auto') {
-					culculatedValue = target.dataset_stylevwidth;
-				} else {
-					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
-				}
-			}
-
-			if(property === 'height') {
-
-				if(target.dataset_stylevheight === 'auto') {
-					culculatedValue = target.dataset_stylevheight;
-				} else {
-					culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
-				}
-			}
-
-		} else {
-
-			culculatedValue = getComputedStyle(target, '').getPropertyValue(property);
-		}
-
-		return culculatedValue;
-	},
 	validatePropertyValue: function(cssProperty, cssPropertyValue) {
 
 		var that = STYLEV.RULES;
@@ -762,22 +513,20 @@ STYLEV.RULES = {
 			var separatedPropertyValues = propertyValue.split('|');
 			var isValidOfGroupValue = true;
 
-			for(var i = 0, len = separatedPropertyValues.length; i < len; i++) {
-				var separatedPropertyValue = separatedPropertyValues[i];
+			that.each(separatedPropertyValues, function(separatedPropertyValue) {
 
 				that.dummyElement4testStyle.style.setProperty(property, separatedPropertyValue, '');
 
-				var computedValue = that.getUncomputedStyle(that.dummyElement4testStyle, property, separatedPropertyValue);
+				var computedValue = STYLEV.VALIDATOR.getStyle(that.dummyElement4testStyle, property, separatedPropertyValue);
 				that.dummyElement4testStyle.style.setProperty(property, null, '');
 
 				var isValid = separatedPropertyValue === computedValue || regexOkOriginalKeyWords.test(' ' + separatedPropertyValue + ' ');
 
 				if(!isValid) {
 					isValidOfGroupValue = false;
-					break;
+					return false;
 				}
-
-			}
+			});
 
 			cssPropertyValue.dataset_isvalid = isValidOfGroupValue ? 'true' : 'false';
 
@@ -785,7 +534,7 @@ STYLEV.RULES = {
 
 			that.dummyElement4testStyle.style.setProperty(property, propertyValue, '');
 
-			var computedValue = that.getUncomputedStyle(that.dummyElement4testStyle, property, propertyValue);
+			var computedValue = STYLEV.VALIDATOR.getStyle(that.dummyElement4testStyle, property, propertyValue);
 			that.dummyElement4testStyle.style.setProperty(property, null, '');
 
 			var isValid = propertyValue === computedValue || regexOkOriginalKeyWords.test(' ' + propertyValue + ' ');
@@ -837,11 +586,10 @@ STYLEV.RULES = {
 	setCSSPropertyDataList: function() {
 		var that = STYLEV.RULES;
 		var df = document.createDocumentFragment();
-		for(var j = 0, propLen = that.allCSSProperties.length; j < propLen; j++) {
-			var prop = that.allCSSProperties[j];
-			var option = new Option(prop, prop);
+		that.each(that.allCSSProperties, function(cssProperty) {
+			var option = new Option(cssProperty, cssProperty);
 			df.appendChild(option);
-		}
+		});
 		that.datalistOfProperties.appendChild(df);
 	},
 	stopPropagation: function() {
@@ -864,26 +612,25 @@ STYLEV.RULES = {
 	},
 	getAllCSSProperties: function() {
 		var that = STYLEV.RULES;
-		var properties = document.documentElement.style;
+		var cssProperties = document.documentElement.style;
 
-		for(var property in properties) {
+		for(var cssProperty in cssProperties) {
 
-			if(properties.hasOwnProperty(property)) {
-				var propertyValue = properties[property];//TODO: remove?
+			if(cssProperties.hasOwnProperty(cssProperty)) {
 
-				if( property === 'cssFloat') {
-					property = 'float';
+				if( cssProperty === 'cssFloat') {
+					cssProperty = 'float';
 				}
 
-				if( property === 'cssText' ||
-					property === 'parentRule' ||
-					property === 'length' ||
-					property === '0' ||
-					property === 'all'
+				if( cssProperty === 'cssText' ||
+					cssProperty === 'parentRule' ||
+					cssProperty === 'length' ||
+					cssProperty === '0' ||
+					cssProperty === 'all'
 				) {
 					continue;
 				}
-				that.allCSSProperties.push(that.camel2Hyphen(property));
+				that.allCSSProperties.push(that.camel2Hyphen(cssProperty));
 			}
 		}
 	},
@@ -903,15 +650,14 @@ STYLEV.RULES = {
 
 		return new Promise(function(resolve, reject) {
 
-			that.getURL('../extension/data/rules.json')
+			that.getURL('/Style-Validator/extension/data/rules.json')
 				.then(JSON.parse)
 				.then(function(data) {
 
 					that.currentJSON = data;
 
-					for(var i = 0, len = that.currentJSON.length; i < len; i++) {
+					that.each(that.currentJSON, function(rule) {
 
-						var rule = that.currentJSON[i];
 						var ngStyles = rule['ng-styles'];
 
 						var clone = document.importNode(that.templateRule, true);
@@ -920,30 +666,25 @@ STYLEV.RULES = {
 						var stylesListsNg = clone.querySelectorAll('.styles-list-ng');
 						var textInputs = clone.querySelectorAll('.text-input');
 
-						for(var h = 0, typeSelectsLength = typeSelects.length; h < typeSelectsLength; h++) {
-							var typeSelect = typeSelects[h];
+						that.each(typeSelects, function(typeSelect) {
 							typeSelect.querySelector('select').tabIndex = 1;
 							that.addPropertyFromJSON2HTML(typeSelect, rule, typeSelect.dataset.id);
-						}
-						for(var j = 0, stylesListsBaseLength = stylesListsBase.length; j < stylesListsBaseLength; j++) {
-							var stylesListBase = stylesListsBase[j];
+						});
+						that.each(stylesListsBase, function(stylesListBase) {
 							stylesListBase.tabIndex = 1;
 							that.addPropertyFromJSON2HTML(stylesListBase, rule, stylesListBase.dataset.id);
-						}
-						for(var m = 0, stylesListsNgLength = stylesListsNg.length; m < stylesListsNgLength; m++) {
-							var stylesListNg = stylesListsNg[m];
+						});
+						that.each(stylesListsNg, function(stylesListNg) {
 							stylesListNg.tabIndex = 1;
 							that.addPropertyFromJSON2HTML(stylesListNg, ngStyles, stylesListNg.dataset.id);
-						}
-						for(var k = 0, textInputsLength = textInputs.length; k < textInputsLength; k++) {
-							var textInput = textInputs[k];
+						});
+						that.each(textInputs, function(textInput) {
 							textInput.querySelector('input').tabIndex = 1;
 							that.addPropertyFromJSON2HTML(textInput, rule, textInput.dataset.id);
-						}
+						});
 
 						df.appendChild(clone);
-
-					}
+					});
 
 					that.rulesList.appendChild(df);
 
@@ -1006,16 +747,14 @@ STYLEV.RULES = {
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
 
-		for(var r = 0, rulesListItemsLength = that.rulesListItems.length; r < rulesListItemsLength; r++) {
+		that.each(that.rulesListItems, function(rulesListItem) {
 
 			var rule = {};
 
-			var rulesListItem = that.rulesListItems[r];
 			var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
 
-			for(var i = 0, len = dataElements.length; i < len; i++) {
+			that.each(dataElements, function(dataElement) {
 
-				var dataElement = dataElements[i];
 				var id = dataElement.dataset.id;
 
 				if(dataElement.classList.contains('type-select')) {
@@ -1034,13 +773,12 @@ STYLEV.RULES = {
 					var stylesListItems = dataElement.querySelectorAll(':scope > li');
 
 					if(!stylesListItems.length) {
-						continue;
+						return true;
 					}
 					rule[id] = {};
 
-					for(var j = 0, stylesListItemsLength = stylesListItems.length; j < stylesListItemsLength; j++) {
+					that.each(stylesListItems, function(stylesListItem) {
 
-						var stylesListItem = stylesListItems[j];
 						var property = stylesListItem.querySelector('.css-property');
 						var propertyValue = stylesListItem.querySelector('.css-property-value');
 
@@ -1052,21 +790,20 @@ STYLEV.RULES = {
 
 						rule[id][property.value] = propertyValue.value;
 //						}
-					}
+					});
 				}
 				if(dataElement.classList.contains('styles-list-ng')) {
 
 					var stylesListItems = dataElement.querySelectorAll(':scope > li');
 
 					if(!stylesListItems.length) {
-						continue;
+						return true;
 					}
 					rule['ng-styles'] = rule['ng-styles'] || {};
 					rule['ng-styles'][id] = {};
 
-					for(var k = 0, stylesListItemsLength = stylesListItems.length; k < stylesListItemsLength; k++) {
+					that.each(stylesListItems, function(stylesListItem) {
 
-						var stylesListItem = stylesListItems[k];
 						var property = stylesListItem.querySelector('.css-property');
 						var propertyValue = stylesListItem.querySelector('.css-property-value');
 						var reason = stylesListItem.querySelector('.reason');
@@ -1076,7 +813,7 @@ STYLEV.RULES = {
 						rule['ng-styles'][id][property.value][0] = propertyValue.value;
 						rule['ng-styles'][id][property.value][1] = reason.value;
 						rule['ng-styles'][id][property.value][2] = referenceURL.value;
-					}
+					});
 				}
 
 				if(dataElement.classList.contains('text-input')) {
@@ -1089,18 +826,17 @@ STYLEV.RULES = {
 						rule[id] = textInputItem.value;
 					}
 				}
-
-
-			}
+			});
 
 			json.push(rule);
-		}
+		});
 
 		return json;
 	},
 	getURL: function(url) {
 
 		return new Promise(function (resolve, reject) {
+
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', url, true);
 			xhr.onload = function () {
@@ -1205,23 +941,21 @@ STYLEV.RULES = {
 
 	resizeTextareaBasedOnLine: function() {
 		var that = STYLEV.RULES;
+
 		if(that.resizeTimer) {
 			clearTimeout(that.resizeTimer);
 		}
 
-		var reasons = that.reasons;
-		if(!that.isShowedAllAtFirst) {
-			for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
-				var reason = reasons[i];
+		function resizeTextarea() {
+			that.each(that.reasons, function(reason) {
 				that.adjustHeightOfTextarea(null, reason);
-			}
+			});
+		}
+
+		if(!that.isShowedAllAtFirst) {
+			resizeTextarea();
 		} else {
-			that.resizeTimer = setTimeout(function() {
-				for(var i = 0, reasonsLen = reasons.length; i < reasonsLen; i++) {
-					var reason = reasons[i];
-					that.adjustHeightOfTextarea(null, reason);
-				}
-			}, that.RESIZE_INTERVAL_MILLISECOND);
+			that.resizeTimer = setTimeout(resizeTextarea, that.RESIZE_INTERVAL_MILLISECOND);
 		}
 	},
 
@@ -1241,19 +975,21 @@ STYLEV.RULES = {
 		loadingSpinner.parentElement.removeChild(loadingSpinner);
 	},
 
-	each: function(elements, fn) {
+	each: function(array, fn) {
 
-		if(elements.hasChildNodes()) {
-			var length = elements.length;
-			var isFunc = typeof fn === 'function';
+		var isFunc = typeof fn === 'function';
+		var length = array && array.length;
+
+		if(length && isFunc) {
+
 			for(var i = 0; i < length; i++) {
-				var element = elements[i];
-				isFunc && fn(element, i);
+				var data = array[i];
+				var returnedValue = fn(data, i);
+				if(returnedValue === false) {
+					break;
+				}
 			}
-		} else {
-			console.error(elements + 'has not childNodes.');
 		}
-		
 	}
 
 };
