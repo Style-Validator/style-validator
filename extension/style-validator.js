@@ -130,7 +130,6 @@ STYLEV.VALIDATOR = {
 				});
 			});
 
-		return false;
 	},
 
 	//インスタンス変数の定義
@@ -251,7 +250,7 @@ STYLEV.VALIDATOR = {
 
 			STYLEV.METHODS.each(pathesArray, function(path) {
 				if(document.querySelectorAll('script[src="' + path + '"]').length) {
-					return true;
+					return 'continue';
 				}
 				promiseArray.push(that.getScriptFromURL(path, docFlag));
 			});
@@ -403,21 +402,21 @@ STYLEV.VALIDATOR = {
 				//置換要素のルールに対応しない要素の場合はフィルターする
 				if(replaced === 'Replaced elements') {
 					if(!isReplacedElemTag) {
-						return true;
+						return 'continue';
 					}
 				}
 
 				//置換要素のルールに対応しない要素の場合はフィルターする
 				if(replaced === 'Non-replaced elements') {
 					if(isReplacedElemTag) {
-						return true;
+						return 'continue';
 					}
 				}
 
 				//空要素用のルールだった場合は、空要素でない場合はフィルターする
 				if(empty === 'Empty elements') {
 					if(!isEmptyElements) {
-						return true;
+						return 'continue';
 					}
 				}
 
@@ -434,10 +433,9 @@ STYLEV.VALIDATOR = {
 					//ベーススタイルを持っていない場合は、中止してループから抜け出す
 					if(!hasBaseStyle) {
 						hasAllBaseStyles = false;
-						return false;
+						return 'break';
 					}
 				});
-
 
 				//全てのベーススタイルに適合した場合 TODO: ORもオプションで指定できるようにするか検討
 				if(hasAllBaseStyles) {
@@ -735,7 +733,9 @@ STYLEV.VALIDATOR = {
 
 		//Auto判定のためにDOMカスタムプロパティを全要素に付与
 		that.setStyleDataBySelectors(document);
+		that.setStyleDataByElements(document);
 		that.setStyleDataBySelectors(that.iframeDocument);
+		that.setStyleDataByElements(that.iframeDocument);
 
 	},
 
@@ -907,7 +907,7 @@ STYLEV.VALIDATOR = {
 
 			connect: function() {
 				if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
-					return true;
+					return false;
 				}
 				if(!that.isObserving) {
 					//TODO: 属性回避ができれば、全要素を対象に変更
@@ -917,12 +917,11 @@ STYLEV.VALIDATOR = {
 					that.isObserving = true;
 					console.info('Mutation Observer has connected');
 				}
-				return false;
 			},
 
 			disconnect: function() {
 				if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
-					return true;
+					return false;
 				}
 				if(that.isObserving) {
 					clearTimeout(that.observationTimer);
@@ -931,7 +930,6 @@ STYLEV.VALIDATOR = {
 					that.isObserving = false;
 					console.info('Mutation Observer has disconnected');
 				}
-				return false;
 			}
 		}
 
@@ -985,7 +983,7 @@ STYLEV.VALIDATOR = {
 
 		var docFlag = document.createDocumentFragment();
 
-		STYLEV.METHODS.each(that.tagsAllData, function(tagName) {
+		STYLEV.METHODS.each(that.tagsAllData, function(tagName, i) {
 			docFlag.appendChild(document.createElement(tagName));
 		});
 
@@ -1023,13 +1021,11 @@ STYLEV.VALIDATOR = {
 		var that = STYLEV.VALIDATOR;
 
 		if(that.isUpdated) {
-			return true;
+			return false;
 		}
 		that.isUpdated = true;
 		that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_ACTIVE_PATH;
 		that.consoleRefreshButtonImage.classList.add('stylev-console-refresh-button-image-active');
-
-		return false;
 	},
 
 	insertStyle2ShadowDOM: function() {
@@ -1233,7 +1229,7 @@ STYLEV.VALIDATOR = {
 			STYLEV.METHODS.each(listItems, function(listItem) {
 				if(listItem.isEqualNode(STYLEV.selectedLineInConsole)) {
 					listItem.classList.add('stylev-trigger-selected');
-					return false;
+					return 'break';
 				}
 			});
 		}
@@ -1435,8 +1431,6 @@ STYLEV.VALIDATOR = {
 		STYLEV.METHODS.each(that.targets, function(target) {
 			target.addEventListener('click', that.markElementFromTargets, false);
 		});
-
-		return false;
 	},
 	//TODO: markElementFromConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
 	//TODO: あと結構やっつけ処理になっているので後で整理
@@ -1546,14 +1540,14 @@ STYLEV.VALIDATOR = {
 			var cssRules = stylesheet.cssRules;
 
 			if(cssRules === null) {
-				return true;
+				return 'continue';
 			}
 
 			STYLEV.METHODS.each(cssRules, function(cssRule) {
 
 				//TODO: support media query and keyframes and etc....
 				if(cssRule.media || cssRule.style === undefined || cssRule.selectorText === undefined) {
-					return true;
+					return 'continue';
 				}
 
 				var selectorsOfCssRules = cssRule.selectorText;
@@ -1573,7 +1567,7 @@ STYLEV.VALIDATOR = {
 					try {
 						var targetsFromCssRules = doc.querySelectorAll(selectorOfCssRules);
 					} catch(e){
-						return true;
+						return 'continue';
 					}
 
 					STYLEV.METHODS.each(targetsFromCssRules, function(target) {
@@ -1694,19 +1688,16 @@ STYLEV.VALIDATOR = {
 				});
 			});
 		});
-
-		that.setStyleDataByElements(doc);
-
 	},
 
-	setStyleDataByElements: function(document) {
+	setStyleDataByElements: function(_document) {
 
-		var elements = document.querySelectorAll('*');
+		var doc = _document || document;
+		var elements = doc.querySelectorAll('*:not(.stylev-ignore)');
 
-		STYLEV.METHODS.each(elements, function(element) {
+		STYLEV.METHODS.each(elements, function(element, i) {
 
 			if(element.dataset_stylevwidth === undefined) {
-
 
 				var widthValue = element.style.getPropertyValue('width');
 				if(widthValue) {
@@ -1813,8 +1804,8 @@ STYLEV.METHODS = {
 
 	each: function(target, fn) {
 
+		var isExist = !!target;
 		var isFunc = typeof fn === 'function';
-		var isExist = target !== null;
 		var returnedValue;
 		var i = 0;
 
@@ -1822,25 +1813,36 @@ STYLEV.METHODS = {
 			return false;
 		}
 
-		if(target instanceof NodeList || target instanceof Array) {
+		if('length' in target) {
 
-			var length = target.length;
+			var length = target.length || null;
 			for(; i < length; i++) {
+
 				var data = target[i];
+
 				returnedValue = fn(data, i);
-				if(returnedValue === false) {
+
+				if(returnedValue === 'continue') {
+					continue;
+				}
+				if(returnedValue === 'break') {
 					break;
 				}
 			}
 
-		} else if(typeof target === 'object') {
+		} else {
 
 			for(var key in target) {
 				if(target.hasOwnProperty(key)) {
+
 					var value = target[key];
 
 					returnedValue = fn(key, value, i++);
-					if(returnedValue === false) {
+
+					if(returnedValue === 'continue') {
+						continue;
+					}
+					if(returnedValue === 'break') {
 						break;
 					}
 				}
@@ -1878,8 +1880,6 @@ STYLEV.CHROME_DEVTOOLS = {
 		that.inspectOfConsoleAPI = inspectOfConsoleAPI;
 		that.setParameters();
 		that.bindEvents();
-
-		return false;
 	},
 
 	setParameters: function() {

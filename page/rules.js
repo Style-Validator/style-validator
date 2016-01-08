@@ -114,12 +114,12 @@ STYLEV.RULES = {
 		switch(displayMode) {
 			case 'column':
 				that.rulesList.classList.remove('rules-list-list');
-				return false;
+				break;
 			case 'list':
 				that.rulesList.classList.add('rules-list-list');
-				return false;
+				break;
 			default:
-				return false;
+				break;
 		}
 
 		localStorage.setItem(that.rulesList.id, displayMode);
@@ -150,7 +150,7 @@ STYLEV.RULES = {
 
 					if(cssPropertyValue.indexOf(inputValue) !== -1) {
 						hasWord = true;
-						return false;
+						return 'break';
 					}
 				});
 
@@ -258,12 +258,12 @@ STYLEV.RULES = {
 			var inputs = formPartsWrapper.querySelectorAll('input, select, textarea');
 			if(inputs === null) {
 				hasData = false;
-				return false;
+				return 'break';
 			}
 			that.each(inputs, function(input) {
 				if(input.value) {
 					hasData = true;
-					return false;
+					return 'break';
 				}
 			});
 
@@ -421,7 +421,6 @@ STYLEV.RULES = {
 		that.validateProperty(cssProperty);
 		that.validatePropertyValue(cssProperty, cssPropertyValue);
 
-		return false;
 	},
 	modifyCSSPropertyValue: function(event, stylesListItem) {
 		var that = STYLEV.RULES;
@@ -483,7 +482,7 @@ STYLEV.RULES = {
 		that.each(that.allCSSProperties, function(cssPropertyFromData) {
 			if(_cssProperty === cssPropertyFromData) {
 				isValid = true;
-				return false;
+				return 'break';
 			}
 		});
 		cssProperty.dataset_isvalid = isValid ? 'true' : 'false';
@@ -524,7 +523,7 @@ STYLEV.RULES = {
 
 				if(!isValid) {
 					isValidOfGroupValue = false;
-					return false;
+					return 'break';
 				}
 			});
 
@@ -626,7 +625,7 @@ STYLEV.RULES = {
 				cssProperty === '0' ||
 				cssProperty === 'all'
 				) {
-				return true;
+				return 'continue';
 			}
 			that.allCSSProperties.push(that.camel2Hyphen(cssProperty));
 		});
@@ -766,7 +765,7 @@ STYLEV.RULES = {
 					var stylesListItems = dataElement.querySelectorAll(':scope > li');
 
 					if(!stylesListItems.length) {
-						return true;
+						return 'continue';
 					}
 					rule[id] = {};
 
@@ -790,7 +789,7 @@ STYLEV.RULES = {
 					var stylesListItems = dataElement.querySelectorAll(':scope > li');
 
 					if(!stylesListItems.length) {
-						return true;
+						return 'continue';
 					}
 					rule['ng-styles'] = rule['ng-styles'] || {};
 					rule['ng-styles'][id] = {};
@@ -970,8 +969,8 @@ STYLEV.RULES = {
 
 	each: function(target, fn) {
 
+		var isExist = !!target;
 		var isFunc = typeof fn === 'function';
-		var isExist = target !== null;
 		var returnedValue;
 		var i = 0;
 
@@ -979,25 +978,36 @@ STYLEV.RULES = {
 			return false;
 		}
 
-		if(target instanceof NodeList || target instanceof Array) {
+		if('length' in target) {
 
-			var length = target.length;
+			var length = target.length || null;
 			for(; i < length; i++) {
+
 				var data = target[i];
+
 				returnedValue = fn(data, i);
-				if(returnedValue === false) {
+
+				if(returnedValue === 'continue') {
+					continue;
+				}
+				if(returnedValue === 'break') {
 					break;
 				}
 			}
 
-		} else if(typeof target === 'object') {
+		} else {
 
 			for(var key in target) {
 				if(target.hasOwnProperty(key)) {
+
 					var value = target[key];
 
 					returnedValue = fn(key, value, i++);
-					if(returnedValue === false) {
+
+					if(returnedValue === 'continue') {
+						continue;
+					}
+					if(returnedValue === 'break') {
 						break;
 					}
 				}
