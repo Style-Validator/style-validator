@@ -131,7 +131,7 @@ body {
 .rules-list {
 	-webkit-column-width: 300px;
 	-webkit-column-gap: 1em;
-	padding: 4%;
+	padding: 3%;
 	min-height: 100%;
 }
 .rules-list > li {

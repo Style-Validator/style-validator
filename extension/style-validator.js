@@ -249,15 +249,12 @@ STYLEV.VALIDATOR = {
 			var promiseArray = [];
 			var docFlag = document.createDocumentFragment();
 
-			for(var i = 0 , pathesArrayLen = pathesArray.length; i < pathesArrayLen; i++) {
-				var path = pathesArray[i];
+			STYLEV.METHODS.each(pathesArray, function(path) {
 				if(document.querySelectorAll('script[src="' + path + '"]').length) {
-					console.log('hoge')
-					continue;
+					return true;
 				}
 				promiseArray.push(that.getScriptFromURL(path, docFlag));
-				
-			}
+			});
 
 			/* append */
 			that.head.appendChild(docFlag);
@@ -390,13 +387,10 @@ STYLEV.VALIDATOR = {
 			}
 
 			//一つ一つの要素に対して、全てのNGルールの分だけ検査
-			for(var j = 0, len = that.rulesData.length; j < len; j++) {
+			STYLEV.METHODS.each(that.rulesData, function(rule) {
 
 				//全てのbaseStyleが指定されているか
 				var hasAllBaseStyles = true;
-
-				var rule = that.rulesData[j];
-
 				var baseStyles = rule['base-styles'];
 				var ngStyles = rule['ng-styles'];
 				var replaced = rule['replaced'];
@@ -409,67 +403,56 @@ STYLEV.VALIDATOR = {
 				//置換要素のルールに対応しない要素の場合はフィルターする
 				if(replaced === 'Replaced elements') {
 					if(!isReplacedElemTag) {
-						continue;
+						return true;
 					}
 				}
 
 				//置換要素のルールに対応しない要素の場合はフィルターする
 				if(replaced === 'Non-replaced elements') {
 					if(isReplacedElemTag) {
-						continue;
+						return true;
 					}
 				}
 
 				//空要素用のルールだった場合は、空要素でない場合はフィルターする
 				if(empty === 'Empty elements') {
 					if(!isEmptyElements) {
-						continue;
+						return true;
 					}
 				}
 
 				//全てのベーススタイルの分だけ検査
-				for(var baseStyleProp in baseStyles) {
-					if ( baseStyles.hasOwnProperty(baseStyleProp) ) {
+				STYLEV.METHODS.each(baseStyles, function(baseStyleProp, baseStylePropVal) {
 
-						var baseStylePropVal = baseStyles[baseStyleProp];
+					baseStylesText += baseStyleProp + ': ';
+					baseStylesText += baseStylePropVal + ';';
 
-						baseStylesText += baseStyleProp + ': ';
-						baseStylesText += baseStylePropVal + ';';
+					var targetElemBasePropVal = getComputedStyle(elemData.targetElem, '').getPropertyValue(baseStyleProp);
 
-						var targetElemBasePropVal = getComputedStyle(elemData.targetElem, '').getPropertyValue(baseStyleProp);
+					var hasBaseStyle = baseStylePropVal === targetElemBasePropVal;
 
-						var hasBaseStyle = baseStylePropVal === targetElemBasePropVal;
-
-						//ベーススタイルを持っていない場合は、中止してループから抜け出す
-						if(!hasBaseStyle) {
-							hasAllBaseStyles = false;
-							break;
-						}
+					//ベーススタイルを持っていない場合は、中止してループから抜け出す
+					if(!hasBaseStyle) {
+						hasAllBaseStyles = false;
+						return false;
 					}
-				}
+				});
 
 
 				//全てのベーススタイルに適合した場合 TODO: ORもオプションで指定できるようにするか検討
 				if(hasAllBaseStyles) {
 
-					for (var ngStyleType in ngStyles) {
-						if ( ngStyles.hasOwnProperty(ngStyleType) ) {
+					STYLEV.METHODS.each(ngStyles, function(ngStyleType, ngStyleProps) {
 
-							var ngStyleProps = ngStyles[ngStyleType];
+						STYLEV.METHODS.each(ngStyleProps, function(ngStyleProp, ngStylePropVal) {
 
-							for (var ngStyleProp in ngStyleProps) {
-								if ( ngStyleProps.hasOwnProperty(ngStyleProp) ) {
+							that.detectError(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData, baseStylesText);
 
-									var ngStylePropVal = ngStyleProps[ngStyleProp];
+						});
 
-									that.detectError(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData, baseStylesText);
-								}
-							}
-						}
-					}
-
+					});
 				}
-			}
+			});
 
 
 			//TODO: 共通化できるか？
@@ -1002,9 +985,9 @@ STYLEV.VALIDATOR = {
 
 		var docFlag = document.createDocumentFragment();
 
-		for(var i = 0, len = that.tagsAllData.length; i < len; i++) {
-			docFlag.appendChild(document.createElement(that.tagsAllData[i]));
-		}
+		STYLEV.METHODS.each(that.tagsAllData, function(tagName) {
+			docFlag.appendChild(document.createElement(tagName));
+		});
 
 		that.iframeBody.appendChild(docFlag);
 
@@ -1022,15 +1005,14 @@ STYLEV.VALIDATOR = {
 		var that = STYLEV.VALIDATOR;
 
 		//属性やclassNameを削除
-		for(var i = 0, len = that.allElemLength; i < len; i++) {
-			var elem = that.allElem[i];
+		STYLEV.METHODS.each(that.allElem, function(elem) {
 			elem.removeAttribute('data-stylevid');
 			elem.removeAttribute('data-stylevclass');
 			elem.classList.remove('stylev-target-error');
 			elem.classList.remove('stylev-target-warning');
 			elem.removeEventListener('click', STYLEV.CHROME_DEVTOOLS.inspectFromTargets);
 			elem.removeEventListener('click', that.markElementFromTargets);
-		}
+		});
 
 		if(that.html !== undefined) {
 			that.html.removeEventListener('keyup', that.destroyByEsc);
@@ -1247,12 +1229,13 @@ STYLEV.VALIDATOR = {
 		//選択した行があった場合、選択した行と現在のリストを比べて、同一のものに選択状態のclassを付与
 		if(STYLEV.selectedLineInConsole) {
 			var listItems = that.consoleList.querySelectorAll('li');
-			for(var i = 0, len = listItems.length; i < len; i++) {
-				if(listItems[i].innerHTML === STYLEV.selectedLineInConsole.innerHTML) {
-					listItems[i].classList.add('stylev-trigger-selected');
-					break;
+
+			STYLEV.METHODS.each(listItems, function(listItem) {
+				if(listItem.isEqualNode(STYLEV.selectedLineInConsole)) {
+					listItem.classList.add('stylev-trigger-selected');
+					return false;
 				}
-			}
+			});
 		}
 	},
 
@@ -1273,14 +1256,13 @@ STYLEV.VALIDATOR = {
 		} else {
 
 			//メッセージの数だけループ
-			for(var i = 0, len = that.resultArray.length; i < len; i++) {
-
+			STYLEV.METHODS.each(that.resultArray, function(result) {
+				
 				//ログの行を表示させるHTML要素を生成
 				var li = document.createElement('li');
 				var anchor = document.createElement('a');
 				var logID = document.createElement('span');
 				var reference = document.createElement('a');
-				var result = that.resultArray[i];
 
 				//属性を設定
 				anchor.href = 'javascript: void(0);';
@@ -1321,7 +1303,7 @@ STYLEV.VALIDATOR = {
 				logID.appendChild(reference);
 				li.appendChild(logID);
 				that.docFlag.appendChild(li);
-			}
+			});
 		}
 	},
 
@@ -1405,30 +1387,28 @@ STYLEV.VALIDATOR = {
 		var lines = wrapper.querySelectorAll('li');
 
 		//全ての行から選択状態を外す
-		for(var i = 0, linesLen = lines.length; i < linesLen; i++) {
-			lines[i].classList.remove('stylev-trigger-selected');
-		}
+		STYLEV.METHODS.each(lines, function(line) {
+			line.classList.remove('stylev-trigger-selected');
+		});
 
 		//クリックした行と同じidを持つ行に選択状態を付加
 		var triggers = wrapper.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
-		for(var j = 0, triggersLen = triggers.length; j < triggersLen; j++) {
-
-			var trigger = triggers[j];
+		STYLEV.METHODS.each(triggers, function(trigger) {
 			trigger.parentElement.classList.add('stylev-trigger-selected');
 			if(j === 0) {
 				STYLEV.selectedLineInConsole = trigger.parentElement;
 			}
-		}
+		});
 
 		//全ての対象要素から選択状態を外し、クリックした要素に選択状態を付加
-		for(var k = 0, allElemLen = that.allElem.length; k < allElemLen; k++) {
-			that.allElem[k].classList.remove('stylev-target-selected');
-		}
+		STYLEV.METHODS.each(that.allElem, function(elem) {
+			elem.classList.remove('stylev-target-selected');
+		});
 		var target = document.querySelector('[data-stylevid="' + result.idName + '"]');
 		target.classList.add('stylev-target-selected');
 
 		//対象の要素までスクロール
-		STYLEV.methods.smoothScroll.execute(target);
+		STYLEV.METHODS.smoothScroll.execute(target);
 
 		//監視を復活
 		that.moManager.connect();
@@ -1452,10 +1432,9 @@ STYLEV.VALIDATOR = {
 		that.consoleTriggers = that.consoleWrapperShadowRoot.querySelectorAll('li');
 		that.targets = document.querySelectorAll('.stylev-target-error, .stylev-target-warning');
 
-		for(var i = 0, len = that.targets.length; i < len; i++) {
-			var target = that.targets[i];
+		STYLEV.METHODS.each(that.targets, function(target) {
 			target.addEventListener('click', that.markElementFromTargets, false);
-		}
+		});
 
 		return false;
 	},
@@ -1475,25 +1454,24 @@ STYLEV.VALIDATOR = {
 		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
 
 		//コンソールの全ての行から選択状態を外し、クリックした行に選択状態を付加
-		for(var i = 0, consoleTriggersLen = that.consoleTriggers.length; i < consoleTriggersLen; i++) {
-			that.consoleTriggers[i].classList.remove('stylev-trigger-selected');
-		}
+		STYLEV.METHODS.each(that.consoleTriggers, function(consoleTrigger) {
+			consoleTrigger.classList.remove('stylev-trigger-selected');
+		});
 		var triggers = wrapper.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevid + '"]');
 
-		for(var i = 0, triggersLen = triggers.length; i < triggersLen; i++) {
-			var trigger = triggers[i];
+		STYLEV.METHODS.each(triggers, function(trigger, i) {
 			trigger.parentElement.classList.add('stylev-trigger-selected');
 
 			//選択した行として、複数ある内の最初の要素を記憶
 			if(i === 0) {
 				STYLEV.selectedLineInConsole = trigger.parentElement;
 			}
-		}
+		});
 
 		//全ての対象要素から選択状態を外し、クリックした要素に選択状態を付加
-		for(var j = 0, len = that.allElem.length; j < len; j++) {
-			that.allElem[j].classList.remove('stylev-target-selected');
-		}
+		STYLEV.METHODS.each(that.allElem, function(elem) {
+			elem.classList.remove('stylev-target-selected');
+		});
 		var target = document.querySelector('[data-stylevid="' + event.currentTarget.dataset.stylevid + '"]');
 		target.classList.add('stylev-target-selected');
 
@@ -1563,22 +1541,19 @@ STYLEV.VALIDATOR = {
 
 		var stylesheets = doc.styleSheets;
 
-		for(var i = 0, len = stylesheets.length; i < len; i++) {
+		STYLEV.METHODS.each(stylesheets, function(stylesheet) {
 
-			var stylesheet = stylesheets[i];
 			var cssRules = stylesheet.cssRules;
 
 			if(cssRules === null) {
-				continue;
+				return true;
 			}
 
-			for(var j = 0, rulesLength = cssRules.length; j < rulesLength; j++) {
-
-				var cssRule = cssRules[j];
+			STYLEV.METHODS.each(cssRules, function(cssRule) {
 
 				//TODO: support media query and keyframes and etc....
 				if(cssRule.media || cssRule.style === undefined || cssRule.selectorText === undefined) {
-					continue;
+					return true;
 				}
 
 				var selectorsOfCssRules = cssRule.selectorText;
@@ -1591,20 +1566,18 @@ STYLEV.VALIDATOR = {
 				var specificityArrayOfCssRules = SPECIFICITY.calculate(selectorsOfCssRules);
 
 				//selectorの数分だけループ
-				for(var k = 0, specificityArrayOfCssRulesLength = specificityArrayOfCssRules.length; k < specificityArrayOfCssRulesLength; k++) {
-
-					var specificityObjectOfCssRules = specificityArrayOfCssRules[k];
+				STYLEV.METHODS.each(specificityArrayOfCssRules, function(specificityObjectOfCssRules) {
 
 					var selectorOfCssRules = specificityObjectOfCssRules.selector;
 					var specificityOfCssRules = parseInt(specificityObjectOfCssRules.specificity.replace(/,/g, ''), 10);
 					try {
 						var targetsFromCssRules = doc.querySelectorAll(selectorOfCssRules);
 					} catch(e){
-						continue;
+						return true;
 					}
-					for(var l = 0, targetsLength = targetsFromCssRules.length; l < targetsLength; l++) {
 
-						var target = targetsFromCssRules[l];
+					STYLEV.METHODS.each(targetsFromCssRules, function(target) {
+
 						var styleOfStyleAttr = target.style;
 						var widthOfStyleAttr = !!styleOfStyleAttr.width ? styleOfStyleAttr.width : 'auto';
 						var heightOfStyleAttr = !!styleOfStyleAttr.height ? styleOfStyleAttr.height : 'auto';
@@ -1636,7 +1609,7 @@ STYLEV.VALIDATOR = {
 						if(widthOfCssRules && !widthOfStyleAttr) {
 							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
 								importantOfWidthOfCssRules.length >= target.dataset_stylevwidthimportant.length
-							) {
+								) {
 								target.dataset_stylevwidth = widthOfCssRules;
 								target.dataset_stylevwidthspecificity = specificityOfWidth;
 								target.dataset_stylevwidthimportant = importantOfWidthOfCssRules;
@@ -1647,7 +1620,7 @@ STYLEV.VALIDATOR = {
 
 							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
 								importantOfWidthOfCssRules.length >= target.dataset_stylevwidthimportant.length
-							) {
+								) {
 								target.dataset_stylevwidth = widthOfCssRules;
 								target.dataset_stylevwidthspecificity = specificityOfWidth;
 								target.dataset_stylevwidthimportant = importantOfWidthOfCssRules;
@@ -1658,7 +1631,7 @@ STYLEV.VALIDATOR = {
 
 							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset_stylevwidthimportant.length
-							) {
+								) {
 								target.dataset_stylevwidth = widthOfStyleAttr;
 								target.dataset_stylevwidthspecificity = specificityOfWidth;
 								target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
@@ -1668,7 +1641,7 @@ STYLEV.VALIDATOR = {
 						if(widthOfStyleAttr && importantOfWidthOfStyleAttr) {
 							if( specificityOfWidth >= parseInt(target.dataset_stylevwidthspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset_stylevwidthimportant.length
-							) {
+								) {
 								target.dataset_stylevwidth = widthOfStyleAttr;
 								target.dataset_stylevwidthspecificity = specificityOfWidth;
 								target.dataset_stylevwidthimportant = importantOfWidthOfStyleAttr;
@@ -1680,7 +1653,7 @@ STYLEV.VALIDATOR = {
 						if(heightOfCssRules && !heightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
+								) {
 								target.dataset_stylevheight = heightOfCssRules;
 								target.dataset_stylevheightspecificity = specificityOfHeight;
 								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
@@ -1690,7 +1663,7 @@ STYLEV.VALIDATOR = {
 						if(heightOfCssRules && importantOfHeightOfCssRules && heightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
+								) {
 								target.dataset_stylevheight = heightOfCssRules;
 								target.dataset_stylevheightspecificity = specificityOfHeight;
 								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
@@ -1701,7 +1674,7 @@ STYLEV.VALIDATOR = {
 						if(heightOfCssRules && !importantOfHeightOfCssRules && heightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
+								) {
 								target.dataset_stylevheight = heightOfStyleAttr;
 								target.dataset_stylevheightspecificity = specificityOfHeight;
 								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
@@ -1711,18 +1684,16 @@ STYLEV.VALIDATOR = {
 						if(heightOfStyleAttr && importantOfHeightOfStyleAttr) {
 							if( specificityOfHeight >= parseInt(target.dataset_stylevheightspecificity, 10) &&
 								importantOfWidthOfStyleAttr.length >= target.dataset_stylevheightimportant.length
-							) {
+								) {
 								target.dataset_stylevheight = heightOfStyleAttr;
 								target.dataset_stylevheightspecificity = specificityOfHeight;
 								target.dataset_stylevheightimportant = importantOfHeightOfStyleAttr;
 							}
 						}
-
-					}
-				}
-
-			}
-		}
+					});
+				});
+			});
+		});
 
 		that.setStyleDataByElements(doc);
 
@@ -1732,9 +1703,7 @@ STYLEV.VALIDATOR = {
 
 		var elements = document.querySelectorAll('*');
 
-		for(var g = 0, elementsLength = elements.length; g < elementsLength; g++) {
-
-			var element = elements[g];
+		STYLEV.METHODS.each(elements, function(element) {
 
 			if(element.dataset_stylevwidth === undefined) {
 
@@ -1756,8 +1725,7 @@ STYLEV.VALIDATOR = {
 					element.dataset_stylevheight = 'auto';
 				}
 			}
-
-		}
+		});
 	},
 
 	getStyle: function(target, property, pseudo) {
@@ -1787,7 +1755,7 @@ STYLEV.VALIDATOR = {
 };
 
 
-STYLEV.methods = {
+STYLEV.METHODS = {
 
 	//スムーススクロール TODO: 親要素を指定してインナースクロールにも対応させる
 	smoothScroll: {
@@ -1808,7 +1776,7 @@ STYLEV.methods = {
 		//対象要素の位置取得
 		getTargetPos: function(start, end, elapsed, duration) {
 
-			var that = STYLEV.methods.smoothScroll;
+			var that = STYLEV.METHODS.smoothScroll;
 
 			if (elapsed > duration) return end;
 			return start + (end - start) * that.easeInOutCubic(elapsed / duration); // <-- you can change the easing funtion there
@@ -1817,7 +1785,7 @@ STYLEV.methods = {
 		//実行
 		execute: function(target, duration) {
 
-			var that = STYLEV.methods.smoothScroll;
+			var that = STYLEV.METHODS.smoothScroll;
 
 			var duration = duration || 500;
 			var scrollTopY = window.pageYOffset;
@@ -1841,8 +1809,44 @@ STYLEV.methods = {
 			};
 			step();
 		}
-	}
+	},
 
+	each: function(target, fn) {
+
+		var isFunc = typeof fn === 'function';
+		var isExist = target !== null;
+		var returnedValue;
+		var i = 0;
+
+		if(!isExist || !isFunc) {
+			return false;
+		}
+
+		if(target instanceof NodeList || target instanceof Array) {
+
+			var length = target.length;
+			for(; i < length; i++) {
+				var data = target[i];
+				returnedValue = fn(data, i);
+				if(returnedValue === false) {
+					break;
+				}
+			}
+
+		} else if(typeof target === 'object') {
+
+			for(var key in target) {
+				if(target.hasOwnProperty(key)) {
+					var value = target[key];
+
+					returnedValue = fn(key, value, i++);
+					if(returnedValue === false) {
+						break;
+					}
+				}
+			}
+		}
+	}
 };
 
 //Chrome Extension
@@ -1892,13 +1896,12 @@ STYLEV.CHROME_DEVTOOLS = {
 	bindEvents: function() {
 		var that = STYLEV.CHROME_DEVTOOLS;
 
-		for(var i = 0, triggersLen = that.triggers.length; i < triggersLen; i++) {
-			that.triggers[i].addEventListener('click', that.inspectFromConsole, false);
-		}
-
-		for(var j = 0, targetsLen = that.targets.length; j < targetsLen; j++) {
-			that.targets[j].addEventListener('click', that.inspectFromTargets, false);
-		}
+		STYLEV.METHODS.each(that.triggers, function(trigger) {
+			trigger.addEventListener('click', that.inspectFromConsole, false);
+		});
+		STYLEV.METHODS.each(that.targets, function(target) {
+			target.addEventListener('click', that.inspectFromTargets, false);
+		});
 	},
 
 	//コンソールからインスペクト

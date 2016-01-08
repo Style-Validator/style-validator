@@ -614,25 +614,22 @@ STYLEV.RULES = {
 		var that = STYLEV.RULES;
 		var cssProperties = document.documentElement.style;
 
-		for(var cssProperty in cssProperties) {
+		that.each(cssProperties, function(cssProperty) {
 
-			if(cssProperties.hasOwnProperty(cssProperty)) {
-
-				if( cssProperty === 'cssFloat') {
-					cssProperty = 'float';
-				}
-
-				if( cssProperty === 'cssText' ||
-					cssProperty === 'parentRule' ||
-					cssProperty === 'length' ||
-					cssProperty === '0' ||
-					cssProperty === 'all'
-				) {
-					continue;
-				}
-				that.allCSSProperties.push(that.camel2Hyphen(cssProperty));
+			if( cssProperty === 'cssFloat') {
+				cssProperty = 'float';
 			}
-		}
+
+			if( cssProperty === 'cssText' ||
+				cssProperty === 'parentRule' ||
+				cssProperty === 'length' ||
+				cssProperty === '0' ||
+				cssProperty === 'all'
+				) {
+				return true;
+			}
+			that.allCSSProperties.push(that.camel2Hyphen(cssProperty));
+		});
 	},
 	camel2Hyphen: function(string) {
 		// for Unicode transforms, replace [A-Z] with \p{Lu} if available
@@ -708,25 +705,21 @@ STYLEV.RULES = {
 			}
 			if(target.classList.contains('styles-list')) {
 
-				for(var property in ruleStyles) {
-					if(ruleStyles.hasOwnProperty(property)) {
+				that.each(ruleStyles, function(cssProperty, cssPropertyValue) {
 
-
-						var propertyValue = ruleStyles[property];
-						var reason;
-						var referenceURL;
-						if(propertyValue instanceof Array) {
-							referenceURL = propertyValue[2];
-							reason = propertyValue[1];
-							propertyValue = propertyValue[0];
-						}
-
-						var stylesListItem = that.insertProperty(null, target, property, propertyValue, reason, referenceURL);
-						that.modifyCSSProperty(null, stylesListItem);
-						that.modifyCSSPropertyValue(null, stylesListItem);
-						that.applyValidationResult(null, stylesListItem);
+					var reason;
+					var referenceURL;
+					if(cssPropertyValue instanceof Array) {
+						referenceURL = cssPropertyValue[2];
+						reason = cssPropertyValue[1];
+						cssPropertyValue = cssPropertyValue[0];
 					}
-				}
+
+					var stylesListItem = that.insertProperty(null, target, cssProperty, cssPropertyValue, reason, referenceURL);
+					that.modifyCSSProperty(null, stylesListItem);
+					that.modifyCSSPropertyValue(null, stylesListItem);
+					that.applyValidationResult(null, stylesListItem);
+				});
 			}
 			if(target.classList.contains('text-input')) {
 				var input = target.querySelector('input');
@@ -975,18 +968,38 @@ STYLEV.RULES = {
 		loadingSpinner.parentElement.removeChild(loadingSpinner);
 	},
 
-	each: function(array, fn) {
+	each: function(target, fn) {
 
 		var isFunc = typeof fn === 'function';
-		var length = array && array.length;
+		var isExist = target !== null;
+		var returnedValue;
+		var i = 0;
 
-		if(length && isFunc) {
+		if(!isExist || !isFunc) {
+			return false;
+		}
 
-			for(var i = 0; i < length; i++) {
-				var data = array[i];
-				var returnedValue = fn(data, i);
+		if(target instanceof NodeList || target instanceof Array) {
+
+			var length = target.length;
+			for(; i < length; i++) {
+				var data = target[i];
+				returnedValue = fn(data, i);
 				if(returnedValue === false) {
 					break;
+				}
+			}
+
+		} else if(typeof target === 'object') {
+
+			for(var key in target) {
+				if(target.hasOwnProperty(key)) {
+					var value = target[key];
+
+					returnedValue = fn(key, value, i++);
+					if(returnedValue === false) {
+						break;
+					}
 				}
 			}
 		}
