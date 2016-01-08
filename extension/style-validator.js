@@ -1296,7 +1296,7 @@ STYLEV.VALIDATOR = {
 
 				//DocumentFlagmentにHTML要素を挿入
 				li.appendChild(anchor);
-				logID.appendChild(reference);
+				result.referenceURL && logID.appendChild(reference);
 				li.appendChild(logID);
 				that.docFlag.appendChild(li);
 			});
