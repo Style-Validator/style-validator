@@ -1863,9 +1863,7 @@ STYLEV.METHODS = {
 			return false;
 		}
 
-		if('length' in target) {
-
-			var length = target.length || null;
+		function loopArray(length) {
 			for(; i < length; i++) {
 
 				var data = target[i];
@@ -1879,9 +1877,9 @@ STYLEV.METHODS = {
 					break;
 				}
 			}
+		}
 
-		} else {
-
+		function loopObject() {
 			for(var key in target) {
 				if(target.hasOwnProperty(key)) {
 
@@ -1897,6 +1895,17 @@ STYLEV.METHODS = {
 					}
 				}
 			}
+		}
+
+		if('length' in target) {
+			var length = target.length || null;
+			if(length) {
+				loopArray(length);
+			} else {
+				loopObject();
+			}
+		} else {
+			loopObject();
 		}
 	}
 };
