@@ -452,16 +452,8 @@ STYLEV.VALIDATOR = {
 				}
 			});
 
-
-			//TODO: 共通化できるか？
-			if(
-				!(
-					elemData.targetElem.classList.contains('stylev-target-error') ||
-					elemData.targetElem.classList.contains('stylev-target-warning')
-				)
-			) {
-				elemData.targetElem.classList.remove('stylev-target-selected');
-			}
+			that.toggleSelectedClassBasedOnOwnClass(elemData);
+			
 		}
 
 		//デフォルトスタイル取得用のiframeを削除
@@ -470,8 +462,11 @@ STYLEV.VALIDATOR = {
 		//コンソールを表示
 		that.showConsole();
 
+		//コンソール内のDOMを取得
+		that.setParametersAfterShowingConsole();
+
 		//対象要素をクリックした時のイベントハンドラを登録
-		that.bind4targetElements();
+		that.bind2targetElements();
 
 		//バリデート完了時のcallbackが存在し関数だった場合実行
 		if(typeof callback === 'function') {
@@ -487,6 +482,19 @@ STYLEV.VALIDATOR = {
 		that.moManager.connect();
 
 		STYLEV.isValidated = true;
+	},
+	
+	toggleSelectedClassBasedOnOwnClass: function(elemData) {
+		//TODO: 共通化できるか？
+		//エラーも警告もない場合は選択状態を外す
+		if(
+			!(
+				elemData.targetElem.classList.contains('stylev-target-error') ||
+					elemData.targetElem.classList.contains('stylev-target-warning')
+				)
+			) {
+			elemData.targetElem.classList.remove('stylev-target-selected');
+		}
 	},
 
 	//エラーや警告を検知する
@@ -1303,6 +1311,14 @@ STYLEV.VALIDATOR = {
 		}
 	},
 
+	setParametersAfterShowingConsole: function() {
+		var that = STYLEV.VALIDATOR;
+
+		that.markedTargets = document.querySelectorAll('.stylev-target-error, .stylev-target-warning');
+		that.consoleListItems = that.consoleList.querySelectorAll(':scope > li');
+		that.consoleTriggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid]');
+	},
+
 	//コンソール関連のイベントを登録
 	bindEvents2Console: function() {
 		var that = STYLEV.VALIDATOR;
@@ -1378,7 +1394,7 @@ STYLEV.VALIDATOR = {
 		//監視を中断
 		that.moManager.disconnect();
 
-		var lines = that.consoleWrapperShadowRoot.querySelectorAll('li');
+		var lines = that.consoleList.querySelectorAll(':scope > li');
 
 		//全ての行から選択状態を外す
 		STYLEV.METHODS.each(lines, function(line) {
@@ -1386,7 +1402,7 @@ STYLEV.VALIDATOR = {
 		});
 
 		//クリックした行と同じidを持つ行に選択状態を付加
-		var triggers = that.consoleWrapperShadowRoot.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
+		var triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
 		STYLEV.METHODS.each(triggers, function(trigger, i) {
 			trigger.parentElement.classList.add('stylev-trigger-selected');
 			if(i === 0) {
@@ -1410,7 +1426,7 @@ STYLEV.VALIDATOR = {
 	},
 
 	//ページ内の要素に対する動作
-	bind4targetElements: function() {
+	bind2targetElements: function() {
 
 		var that = STYLEV.VALIDATOR;
 
@@ -1419,14 +1435,7 @@ STYLEV.VALIDATOR = {
 			return false;
 		}
 
-		//TODO: 全体的に、再取得と削除できないか調査
-		that.consoleWrapper = document.querySelector('#stylev-console-wrapper');
-		that.consoleWrapperShadowRoot = that.consoleWrapper.shadowRoot;
-		that.consoleTriggerWrapper = that.consoleWrapperShadowRoot.querySelector('ul');
-		that.consoleTriggers = that.consoleWrapperShadowRoot.querySelectorAll('li');
-		that.targets = document.querySelectorAll('.stylev-target-error, .stylev-target-warning');
-
-		STYLEV.METHODS.each(that.targets, function(target) {
+		STYLEV.METHODS.each(that.markedTargets, function(target) {
 			target.addEventListener('click', that.markElementFromTargets, false);
 		});
 	},
@@ -1442,14 +1451,12 @@ STYLEV.VALIDATOR = {
 		event.stopPropagation();
 		event.preventDefault();
 
-		//TODO: 全体的に、再取得と削除できないか調査
-		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
 
 		//コンソールの全ての行から選択状態を外し、クリックした行に選択状態を付加
-		STYLEV.METHODS.each(that.consoleTriggers, function(consoleTrigger) {
+		STYLEV.METHODS.each(that.consoleListItems, function(consoleTrigger) {
 			consoleTrigger.classList.remove('stylev-trigger-selected');
 		});
-		var triggers = wrapper.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevid + '"]');
+		var triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid="' + event.currentTarget.dataset.stylevid + '"]');
 
 		STYLEV.METHODS.each(triggers, function(trigger, i) {
 			trigger.parentElement.classList.add('stylev-trigger-selected');
@@ -1471,7 +1478,7 @@ STYLEV.VALIDATOR = {
 		var distance = triggers[0].offsetTop;
 
 		//コンソール内の対象要素の行を先頭に
-		that.consoleTriggerWrapper.scrollTop = distance;
+		that.consoleList.scrollTop = distance;
 
 		//監視を復活
 		that.moManager.connect();
@@ -1876,34 +1883,22 @@ STYLEV.CHROME_DEVTOOLS = {
 			return false;
 		}
 		that.inspectOfConsoleAPI = inspectOfConsoleAPI;
-		that.setParameters();
 		that.bindEvents();
-	},
-
-	setParameters: function() {
-		var that = STYLEV.CHROME_DEVTOOLS;
-
-		//TODO: 全体的に、再取得と削除できないか調査
-		that.consoleWrapper = document.querySelector('#stylev-console-wrapper');
-		that.consoleWrapperShadowRoot = that.consoleWrapper.shadowRoot;
-		that.consoleList = that.consoleWrapperShadowRoot.querySelector('#stylev-console-list');
-		that.triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid]');
-		that.targets = document.querySelectorAll('.stylev-target-error, .stylev-target-warning');
 	},
 
 	bindEvents: function() {
 		var that = STYLEV.CHROME_DEVTOOLS;
 
-		STYLEV.METHODS.each(that.triggers, function(trigger) {
+		STYLEV.METHODS.each(STYLEV.VALIDATOR.consoleTriggers, function(trigger) {
 			trigger.addEventListener('click', that.inspectFromConsole, false);
 		});
-		STYLEV.METHODS.each(that.targets, function(target) {
+		STYLEV.METHODS.each(STYLEV.VALIDATOR.markedTargets, function(target) {
 			target.addEventListener('click', that.inspectFromTargets, false);
 		});
 	},
 
 	//コンソールからインスペクト
-	inspectFromConsole: function(){
+	inspectFromConsole: function(event){
 
 		event.preventDefault();
 		event.stopPropagation();
@@ -1923,7 +1918,7 @@ STYLEV.CHROME_DEVTOOLS = {
 	},
 
 	//対象要素からインスペクトする
-	inspectFromTargets: function() {
+	inspectFromTargets: function(event) {
 
 		event.preventDefault();
 		event.stopPropagation();
