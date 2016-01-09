@@ -1378,9 +1378,7 @@ STYLEV.VALIDATOR = {
 		//監視を中断
 		that.moManager.disconnect();
 
-		//TODO: 全体的に、再取得と削除できないか調査
-		var wrapper = document.querySelector('#stylev-console-wrapper').shadowRoot;
-		var lines = wrapper.querySelectorAll('li');
+		var lines = that.consoleWrapperShadowRoot.querySelectorAll('li');
 
 		//全ての行から選択状態を外す
 		STYLEV.METHODS.each(lines, function(line) {
@@ -1388,7 +1386,7 @@ STYLEV.VALIDATOR = {
 		});
 
 		//クリックした行と同じidを持つ行に選択状態を付加
-		var triggers = wrapper.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
+		var triggers = that.consoleWrapperShadowRoot.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
 		STYLEV.METHODS.each(triggers, function(trigger, i) {
 			trigger.parentElement.classList.add('stylev-trigger-selected');
 			if(i === 0) {
@@ -1941,7 +1939,7 @@ STYLEV.CHROME_DEVTOOLS = {
 		}
 
 	}
-}
+};
 
 
 //Chrome Extensionの場合
