@@ -52,8 +52,7 @@ function toggleValidation() {
 				} else {
 					chrome.tabs.executeScript(tabId, {
 						code:
-							"console.info('Style Validator by Chrome Extension');" +
-							"console.info('Executed from Background Page');" +
+							"console.info('Style Validator: Executed by Chrome Extension from Background Page');" +
 							"STYLEV.VALIDATOR.execute();"
 					});
 				}
@@ -68,7 +67,7 @@ function toggleValidation() {
 				//コンソールを削除
 				chrome.tabs.executeScript(tabId, {
 					code:
-							"console.info('Removed from Background Page');" +
+							"console.info('Style Validator: Removed from Background Page');" +
 							"STYLEV.VALIDATOR.destroy();"
 				});
 
@@ -274,8 +273,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 								//Background Modeで実行
 								chrome.tabs.executeScript(tabId, {
 									code:
-										"console.info('Style Validator by Chrome Extension');" +
-										"console.info('Executed from Background Page');" +
+										"console.info('Style Validator: Executed by Chrome Extension from Background Page');" +
 										"STYLEV.VALIDATOR.execute();"
 								});
 
@@ -307,10 +305,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 		var tabId = sender.tab.id;
 
-		if(message.setBadgeText !== undefined) {
+		if(message.name === 'setBadgeText') {
 
 			//アイコンの数字を設定
-			totalNumber[tabId] = message.setBadgeText + '';
+			totalNumber[tabId] = message.badgeText + '';
 			chrome.browserAction.setBadgeText({ text: totalNumber[tabId] });
 		}
 
@@ -328,16 +326,15 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 				chrome.tabs.executeScript(tabId, {
 					code:
-						"console.info('Style Validator by Chrome Extension');" +
-						"console.info('Executed from Background Page');" +
+						"console.info('Style Validator: Executed by Chrome Extension from Background Page');" +
 						"STYLEV.VALIDATOR.execute();"
 				});
 			}
 		}
 
-		if(message.name === 'validatedStatus2False') {
+		if(message.name === 'syncStatusIsValidated') {
 
-			isValidated[tabId] = false;
+			isValidated[tabId] = message.isValidated;
 		}
 
 		if(message.name === 'switchMode') {

@@ -20,8 +20,7 @@ var executeWithInspect = function() {
 			"});" +
 		"};" +
 		"STYLEV.VALIDATOR.updateOptions().then(function() {" +
-			"console.info('Style Validator by Chrome Extension');" +
-			"console.info('Executed from DevTools Page');" +
+			"console.info('Style Validator: Executed by Chrome Extension from DevTools Page');" +
 			"STYLEV.VALIDATOR.execute(bindInspect);" +
 		"});"
 		,
@@ -67,7 +66,7 @@ chrome.devtools.inspectedWindow.onResourceContentCommitted.addListener(function(
 
 	if(isValidated) {
 		chrome.devtools.inspectedWindow.eval(
-			"STYLEV.informUpdating();"
+			"STYLEV.VALIDATOR.informModification();"
 		);
 //		executeWithInspect();
 
