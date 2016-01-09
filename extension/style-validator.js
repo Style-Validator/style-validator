@@ -1389,9 +1389,9 @@ STYLEV.VALIDATOR = {
 
 		//クリックした行と同じidを持つ行に選択状態を付加
 		var triggers = wrapper.querySelectorAll('[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
-		STYLEV.METHODS.each(triggers, function(trigger) {
+		STYLEV.METHODS.each(triggers, function(trigger, i) {
 			trigger.parentElement.classList.add('stylev-trigger-selected');
-			if(j === 0) {
+			if(i === 0) {
 				STYLEV.selectedLineInConsole = trigger.parentElement;
 			}
 		});
