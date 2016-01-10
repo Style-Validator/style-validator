@@ -16,6 +16,15 @@
 	line-height: 1.7;
 	color: #333333;
 }
+
+:host > *,
+:host > *:before,
+:host > *:after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
 :host {
 	position: fixed;
 	right: 0;
@@ -35,9 +44,9 @@
 	border-left-width: 0;
 	height: 30px;
 	line-height: 30px;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
 	cursor: ns-resize;
 }
 :host .stylev-console-header:active {
@@ -63,7 +72,7 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	bottom: 3px;
+	bottom: 0;
 	left: 0;
 	width: 20px;
 	height: 20px;
@@ -127,7 +136,7 @@
 
 :host .stylev-console-counter {
 	float: left;
-	/*padding: 0 10px;*/
+	font-size: 13px;
 }
 :host .stylev-console-buttons {
 	float: right;
@@ -201,7 +210,7 @@
 }
 :host .stylev-console-body {
 	position: absolute;
-	top: 30px;
+	top: 32px;
 	right: 0;
 	left: 0;
 	bottom: 0;
@@ -214,6 +223,7 @@
 	bottom: 0;
 	list-style: none;
 	overflow-y: auto;
+	line-height: 1.5;
 }
 :host .stylev-console-list > li {
 	display: flex;
