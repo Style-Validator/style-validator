@@ -1,3 +1,4 @@
+- MutationObserverのメッセージは、スクロールで過多なメッセージがでるため、間引くようにする
 - エラーマークした要素にツールチップで結果を表示　マウスオーバーで表示？
 - Media Queryに対応させる
 - display: flex; position: absolute;の場合flexが優先される
