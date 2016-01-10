@@ -147,29 +147,32 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//静的な設定値 TODO: 他にもsettingsにまとめられる値があるので後で精査
 		that.settings = {
 
-			CONSOLE_WRAPPER_ID: 'stylev-console-wrapper',
-			CONSOLE_LIST_ID: 'stylev-console-list',
-			STYLESHEET_ID: 'stylev-stylesheet',
+			OBSERVATION_INTERVAL: 3000,
+			IGNORING_ELEM_ARRAY_RESET_INTERVAL: 5000,
 
-			CONSOLE_WRAPPER_DEFAULT_HEIGHT: 200,
-			CONSOLE_HEADING_TEXT: 'Style Validator',
-			CONGRATULATION_MESSAGE_TEXT: 'It\'s Perfect!',
+			CONSOLE_WRAPPER_ID:	'stylev-console-wrapper',
+			CONSOLE_LIST_ID:	'stylev-console-list',
+			STYLESHEET_ID:		'stylev-stylesheet',
+
+			CONSOLE_WRAPPER_DEFAULT_HEIGHT:	200,
+			CONSOLE_HEADING_TEXT:			'Style Validator',
+			CONGRATULATION_MESSAGE_TEXT:	'It\'s Perfect!',
 
 			GA_PATH: that.RESOURCE_ROOT + 'google-analytics.js',
 
-			ICON_REFRESH_PATH: that.RESOURCE_ROOT + 'iconmonstr-refresh-3-icon.svg',
-			ICON_REFRESH_ACTIVE_PATH: that.RESOURCE_ROOT + 'iconmonstr-refresh-3-icon-active.svg',
-			ICON_CLOSE_PATH: that.RESOURCE_ROOT + 'iconmonstr-x-mark-icon.svg',
-			ICON_MINIMIZE_PATH: that.RESOURCE_ROOT + 'iconmonstr-minus-2-icon.svg',
-			ICON_NORMALIZE_PATH: that.RESOURCE_ROOT + 'iconmonstr-plus-2-icon.svg',
-			ICON_CONNECTED_PATH: that.RESOURCE_ROOT + 'iconmonstr-link-4-icon.svg',
-			ICON_DISCONNECTED_PATH: that.RESOURCE_ROOT + 'iconmonstr-link-5-icon.svg',
-			ICON_LOGO_PATH: that.RESOURCE_ROOT + 'style-validator.logo.black.svg',
+			ICON_REFRESH_PATH:			that.RESOURCE_ROOT + 'iconmonstr-refresh-3-icon.svg',
+			ICON_REFRESH_ACTIVE_PATH:	that.RESOURCE_ROOT + 'iconmonstr-refresh-3-icon-active.svg',
+			ICON_CLOSE_PATH:			that.RESOURCE_ROOT + 'iconmonstr-x-mark-icon.svg',
+			ICON_MINIMIZE_PATH:			that.RESOURCE_ROOT + 'iconmonstr-minus-2-icon.svg',
+			ICON_NORMALIZE_PATH:		that.RESOURCE_ROOT + 'iconmonstr-plus-2-icon.svg',
+			ICON_CONNECTED_PATH:		that.RESOURCE_ROOT + 'iconmonstr-link-4-icon.svg',
+			ICON_DISCONNECTED_PATH:		that.RESOURCE_ROOT + 'iconmonstr-link-5-icon.svg',
+			ICON_LOGO_PATH:				that.RESOURCE_ROOT + 'style-validator.logo.black.svg',
 
-			CONNECTED_2_DEVTOOLS_MESSAGE: 'Connected to DevTools',
-			DISCONNECTED_2_DEVTOOLS_MESSAGE: 'Disconnected to DevTools',
-			CONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-devtools-connected',
-			DISCONNECTED_2_DEVTOOLS_CLASS: 'stylev-console-mode-devtools-disconnected'
+			CONNECTED_2_DEVTOOLS_MESSAGE:		'Connected to DevTools',
+			DISCONNECTED_2_DEVTOOLS_MESSAGE:	'Disconnected to DevTools',
+			CONNECTED_2_DEVTOOLS_CLASS:			'stylev-console-mode-devtools-connected',
+			DISCONNECTED_2_DEVTOOLS_CLASS:		'stylev-console-mode-devtools-disconnected'
 		};
 
 		that.CSS_PATHES = [
@@ -204,7 +207,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	//Ajaxでデータを取得する関数
 	//promiseオブジェクトを返す
 	getDataFromURL: function(url) {
-		var that = STYLEV.VALIDATOR;
 
 		return new Promise(function (resolve, reject) {
 			var req = new XMLHttpRequest();
@@ -274,7 +276,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	insertGA: function() {
 		var that = STYLEV.VALIDATOR;
 
-		//既に挿入したGAがいれば取得して、削除
 		if(that.scriptTagGA !== undefined) {
 			that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
 		}
@@ -289,8 +290,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.head.appendChild(that.scriptTagGA);
 	},
 
-	//オプションを更新する
-	//promiseオブジェクトを返す
 	updateOptions: function() {
 		var that = STYLEV.VALIDATOR;
 
@@ -532,11 +531,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		var regexNgStyleRulesPropVal;
 
 		//値が配列の場合
-		var comment = '';
-		var referenceURL = null;
 		if(ngStylePropVal instanceof Array) {
-			result.comment = ngStylePropVal[1] || null;
-			result.referenceURL = ngStylePropVal[2] || null;
+			result.reason = ngStylePropVal[1] || '';
+			result.referenceURL = ngStylePropVal[2] || '';
 			ngStylePropVal = ngStylePropVal[0];
 		}
 
@@ -627,7 +624,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			/////////////////////////////
 			//is reverse
 			//
-			// 一致しない TODO: 実現できるか調査
+			// Without it TODO: Need to research that how it is possible
 //			(isReverse && !isNgStyle) ||
 
 			//0以外
@@ -661,28 +658,28 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//親要素を検査する場合
 			if(isParentCheking) {
+
 				result.text =
 					'[' + rule['title'] + ']' + ' ' +
 					'<' + elemData.targetElemTagName + '> ' +
-					baseStylesText + ' ' +
-					'parent element\'s style is ' +
-					ngStyleProp + ': ' + targetElemParentNgStyleVal + ';' + ' ' +
-					result.comment;
-//					'display property of parent element is incorrect.' +
-//					'(' + 'parent is ' + elemData.targetElemParentDisplayProp + ' element)';
+					'{' + baseStylesText + '}' + ' ' +
+					'Parent element\'s style is ' +
+					'{' + ngStyleProp + ': ' + targetElemParentNgStyleVal + ';}' + ' ' +
+					result.reason;
 
 			//通常時
 			} else {
+
 				result.text =
 					'[' + rule['title'] + ']' + ' '+
 					'<' + elemData.targetElemTagName + '>' + ' ' +
-					baseStylesText + ' ' +
-					ngStyleProp + ': ' + targetElemNgStyleVal + ';' + ' ' +
-					result.comment;
+					'{' + baseStylesText + '}' + ' ' +
+					'{' + ngStyleProp + ': ' + targetElemNgStyleVal + ';}' + ' ' +
+					result.reason;
 			}
 
 			//要素のID名
-			result.idName = elemData.targetElem.dataset.stylevid;
+			result.stylevid = elemData.targetElem.dataset.stylevid;
 
 			//エラーか警告かのタイプ
 			result.errorLevel = splitTypeArray[splitTypeArray.length - 2];
@@ -763,15 +760,24 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	setupMutationObserver: function() {
 		var that = STYLEV.VALIDATOR;
 
-		//監視対象の属性を指定
 		var targetAttributes = [
 			'style',
 			'class'
 		];
 
+		var observationConfig = {
+			attributes: true,
+			attributeFilter: targetAttributes,
+			childList: true,
+			subtree: true,
+			attributeOldValue: true,
+			characterDataOldValue: true
+		};
+
+
 		//監視する実行スパンをミリ秒で指定
-		var OBSERVE_INTERVAL = 3000;//TODO: settingsに移行し、optionで設定できるようにする
-		var IGNORING_ELEM_ARRAY_RESET_INTERVAL = 5000;//TODO: settingsに移行し、optionで設定できるようにする
+		var OBSERVATION_INTERVAL = that.settings.OBSERVATION_INTERVAL || 3000;
+		var IGNORING_ELEM_ARRAY_RESET_INTERVAL = that.settings.IGNORING_ELEM_ARRAY_RESET_INTERVAL || 5000;
 
 		//consoleに出すメッセージの配列
 		that.moMessageArray = [];
@@ -786,142 +792,140 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//監視対象毎に
 			mutationsLoop: for(var i = 0, mutationsLen = mutations.length; i < mutationsLen; i++) {
 
+				/*
+				* Initialize section
+				* */
 				var mutation = mutations[i];
+				var target = mutation.target;
+				var stylevid = target.dataset.stylevid || null;
 
-				//無視する要素のIDと一致した場合、処理を中止
-				var regexIgnoreElemsStylevId = new RegExp(' ' + STYLEV.ignoreElemsStylevId.join(' | ') + ' ');
-				if(regexIgnoreElemsStylevId.test(' ' + mutation.target.dataset.stylevid + ' ')) {
+				//Continue when ID of mutation.target is equal with ID of ignoring element
+				var regexIgnoreElemsStylevId = new RegExp(' ' + ignoreElemsStylevId.join(' | ') + ' ');
+				if(stylevid && regexIgnoreElemsStylevId.test(' ' + stylevid + ' ')) {
 					continue;
 				}
 
-				if(mutation.target.classList.contains('stylev-ignore')) {
+				if(target.classList.contains('stylev-ignore')) {
 					continue;
-				}
-
-				//TODO: 下部のaddedNodesと処理をまとめられるか？要確認
-				//変更された要素がscriptタグでかつ、GAのスクリプトの場合は処理を中断
-				for(var j = 0, addedNodes = mutation.addedNodes, addedNodesLen = addedNodes.length; j < addedNodesLen; j++) {
-					var addedNode = addedNodes[j];
-					if( addedNode.tagName.toLocaleLowerCase() === 'script' &&
-						addedNode.src.indexOf('analytics.js') !== -1) {
-						continue mutationsLoop;
-					}
-				}
-				for(var k = 0, removedNodes = mutation.removedNodes, removeNodesLen = removedNodes.length; k < removeNodesLen; k++) {
-					var removedNode = removedNodes[k];
-					if( removedNode.tagName.toLocaleLowerCase() === 'script' &&
-						removedNode.src.indexOf('analytics.js') !== -1) {
-						continue mutationsLoop;
-					}
 				}
 
 				//1つでも通過したら、無視しない
 				isIgnore = false;
 
-				//要素の記録が存在する場合
-				if(STYLEV.modifiedElemsStylevId.length) {
+				/*
+				 * Defining variables section
+				 * */
+				var type = mutation.type;
+				var tagName = target.tagName;
+				var attributes = target.attributes;
+				var attributesLen = attributes.length;
+				var addedNodes = mutation.addedNodes;
+				var addedNodesLen = addedNodes.length;
+				var removedNodes = mutation.removedNodes;
+				var removedNodesLen = removedNodes.length;
+				var modifiedElemsStylevId = STYLEV.modifiedElemsStylevId;
+				var modifiedElemsStylevIdLen = modifiedElemsStylevId.length;
+				var previousModifiedElemsStylevId = modifiedElemsStylevId[modifiedElemsStylevIdLen - 1];
+				var sameElemCount = STYLEV.sameElemCount;
+				var ignoreElemsStylevId = STYLEV.ignoreElemsStylevId;
+				var moMessageArray = that.moMessageArray;
 
-					//現在の要素と、1つ前の要素が同じ場合は、同一要素として数を数える※アニメーションなどで激しい属性変更が起きた場合に備える
-					if(mutation.target.dataset.stylevid === STYLEV.modifiedElemsStylevId[STYLEV.modifiedElemsStylevId.length - 1]) {
-						STYLEV.sameElemCount++;
+
+				//if record of element is exist
+				if(modifiedElemsStylevIdLen) {
+
+					//Count if current element is equal with previous element
+					if(stylevid === previousModifiedElemsStylevId) {
+						sameElemCount++;
 					} else {
-						STYLEV.sameElemCount = 0;
+						sameElemCount = 0;
 					}
 				}
 
 				//前回の要素と今回の要素が同じだった回数が5より少ない場合
-				if(STYLEV.sameElemCount < 5) {
+				if(sameElemCount < 5) {
 
 					//影響した要素のIDを保管
-					STYLEV.modifiedElemsStylevId.push(mutation.target.dataset.stylevid);
+					modifiedElemsStylevId.push(stylevid);
 
 				} else {
 
 					//初期化
-					STYLEV.modifiedElemsStylevId = [];
-					STYLEV.sameElemCount = 0;
-					STYLEV.ignoreElemsStylevId.push(mutation.target.dataset.stylevid);
+					modifiedElemsStylevId = [];
+					sameElemCount = 0;
+					ignoreElemsStylevId.push(stylevid);
 				}
 
-				if(mutation.target.tagName) {
-					var attrsArray=[];
-					for (var l = 0, attributes = mutation.target.attributes, attributesLen = attributes.length; l < attributesLen; l++){
+				if(tagName) {
+					var attrsArray = [];
+					for (var l = 0; l < attributesLen; l++){
 						var attribute = attributes[l];
 						attrsArray.push(' ' + attribute.nodeName + '="' + attribute.nodeValue + '"');
 					}
-					that.moMessageArray.push('<' + mutation.target.tagName.toLowerCase() + attrsArray.join(' ') + '>');
+					moMessageArray.push('<' + tagName.toLowerCase() + attrsArray.join(' ') + '>');
 				}
 
-				if(mutation.type === 'attributes') {
-					that.moMessageArray.push(mutation.attributeName + ' ' + mutation.type + ' of above is changed from "' + mutation.oldValue + '".');
+				if(type === 'attributes') {
+					moMessageArray.push(mutation.attributeName + ' ' + type + ' of above is changed from "' + mutation.oldValue + '".');
 				}
-				if(mutation.type === 'characterData') {
-					that.moMessageArray.push(mutation.characterData + ' ' + mutation.type + ' of above is changed from "' + mutation.oldValue + '".');
+				if(type === 'characterData') {
+					moMessageArray.push(mutation.characterData + ' ' + type + ' of above is changed from "' + mutation.oldValue + '".');
 				}
-				for(var m = 0, addedNodes = mutation.addedNodes, addedNodesLen = addedNodes.length; m < addedNodesLen; m++) {
+				for(var m = 0; m < addedNodesLen; m++) {
 					var addedNode = addedNodes[m];
-					that.moMessageArray.push(addedNode.outerHTML + ' is added.');
+					if( addedNode.tagName.toLocaleLowerCase() === 'script' &&
+						addedNode.src.indexOf('analytics.js') !== -1) {
+						continue mutationsLoop;
+					}
+					moMessageArray.push(addedNode.outerHTML + ' is added.');
 				}
-				for(var n = 0, removedNodes = mutation.removedNodes, removedNodesLen = removedNodes.length; n < removedNodesLen; n++) {
+				for(var n = 0; n < removedNodesLen; n++) {
 					var removedNode = removedNodes[n];
-					that.moMessageArray.push(removedNode.outerHTML + ' is removed.');
+					if( removedNode.tagName.toLocaleLowerCase() === 'script' &&
+						removedNode.src.indexOf('analytics.js') !== -1) {
+						continue mutationsLoop;
+					}
+					moMessageArray.push(removedNode.outerHTML + ' is removed.');
 				}
 
 				console.info('Style Validator: DOM modified...')
 
 			}
 
-			//監視タイマーがある場合は、クリア
+			//Clear Timer when timer is exist
 			if(that.observationTimer !== undefined) {
-
 				clearTimeout(that.observationTimer);
 			}
 
-			//監視タイマーの設定　※高速な連続反応に対応するため、実行を遅らせる
+			//Timer for avoiding executing many times and too fast
 			that.observationTimer = setTimeout(function() {
 
-				//無視しない場合
 				if(!isIgnore) {
 
-					//TODO: 共通化できないか調査
 					if(STYLEV.isChromeExtension) {
-
 						STYLEV.CHROME_EXTENSION.execute();
 					}
 					if(STYLEV.isBookmarklet) {
-
-						that.execute();
+						that.validate();
 					}
 
-					console.info(that.moMessageArray.join('\n\n'));
+					console.info(moMessageArray.join('\n\n'));
 
-					//consoleに出すメッセージの配列の初期化
-					that.moMessageArray = [];
+					//initialize array
+					moMessageArray = [];
 
-					//無視フラグの初期化
+					//initialize flag
 					isIgnore = true;
 
 				}
 
-			}, OBSERVE_INTERVAL);
+			}, OBSERVATION_INTERVAL);
 
-			//定期的にリセットする
+			//resetting regularly
 			that.resetTImer = setInterval(function() {
-				STYLEV.ignoreElemsStylevId = [];
+				ignoreElemsStylevId = [];
 			}, IGNORING_ELEM_ARRAY_RESET_INTERVAL);
 		});
-
-		//TODO: 属性の監視を止めて、スタイル情報を監視する形に変更するか検討
-		//対象要素の配下の全要素を監視し、ノードの追加・変更・削除と属性の追加・変更・削除を検知
-		var observationConfig = {
-			attributes: true,
-			attributeFilter: targetAttributes,
-			childList: true,
-			subtree: true,
-			attributeOldValue: true,
-			characterDataOldValue: true
-
-		};
 
 		return {
 
@@ -1309,11 +1313,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 				//テキスト情報を挿入
 				anchor.textContent = result.text;
-				logID.textContent = result.idName;
+				logID.textContent = result.stylevid;
 				reference.textContent = '?';
 
 				//属性を設定
-				anchor.dataset.stylevconsoleid = result.idName;
+				anchor.dataset.stylevconsoleid = result.stylevid;
 				anchor.classList.add('stylev-console-list-anchor');
 				logID.classList.add('stylev-console-list-logid');
 				reference.classList.add('stylev-console-list-reference');
@@ -1372,15 +1376,15 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	},
 
 	initConsoleHeader: function(event) {
-		var that = STYLEV.VALIDATOR;
 		event.stopPropagation();
+		var that = STYLEV.VALIDATOR;
 		that.isMouseDownConsoleHeader = true;
 		that.consoleStartPosY = event.pageY;
 	},
 
 	moveConsoleHeader: function(event) {
-		var that = STYLEV.VALIDATOR;
 		event.stopPropagation();
+		var that = STYLEV.VALIDATOR;
 		if(that.isMouseDownConsoleHeader) {
 			that.consoleCurrentPosY = event.pageY;
 			that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
@@ -1398,8 +1402,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	},
 
 	offConsoleHeader: function(event) {
-		var that = STYLEV.VALIDATOR;
 		event.stopPropagation();
+		var that = STYLEV.VALIDATOR;
 		if(that.isMouseDownConsoleHeader) {
 			that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
 		}
@@ -1471,18 +1475,16 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			target.addEventListener('click', that.markElementFromTargets, false);
 		});
 	},
-	//TODO: markElementFromConsole内の処理が似通っているため上手くまとめる。全要素をループしている最中に埋め込むか
-	//TODO: あと結構やっつけ処理になっているので後で整理
+	//TODO: Try to unit with method of markElementFromConsole
 	markElementFromTargets: function(event) {
+
+		event.stopPropagation();
+		event.preventDefault();
 
 		var that = STYLEV.VALIDATOR;
 
 		//監視を中断
 		that.moManager.disconnect();
-
-		event.stopPropagation();
-		event.preventDefault();
-
 
 		//コンソールの全ての行から選択状態を外し、クリックした行に選択状態を付加
 		STYLEV.METHODS.each(that.consoleListItems, function(consoleTrigger) {
