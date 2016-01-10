@@ -480,7 +480,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//GAタグを挿入
 		that.insertGA();
 
-		console.info('Style Validator: Validated and Console Displayed');
+		console.info('Style Validator: Validated and Console has been displayed');
 
 		//バリデータによるDOM変更が全て完了してから監視開始
 		that.moManager.connect();
@@ -650,11 +650,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				 	elemData.targetElem.classList.contains('stylev-target-warning')
 				)
 			) {
-				that.errorIndex++;
+				that.elemIndex++;
 			}
 
 			//エラーの発生した要素に、IDを振る
-			elemData.targetElem.dataset.stylevid = that.errorIndex;
+			elemData.targetElem.dataset.stylevid = that.elemIndex;
 
 			//親要素を検査する場合
 			if(isParentCheking) {
@@ -729,21 +729,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//initialize number of warning
 		that.warningNum = 0;
 
-		//エラー要素数のカウンター　※注意：エラーの数ではない
-		that.errorIndex = 0;
+		//initialize number of element's Index
+		that.elemIndex = 0;
 
-		//アクティブ状態を戻す
-		if(that.isModified) {
-			that.isModified = false;
-			that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_PATH;
-			that.consoleRefreshButtonImage.classList.remove('stylev-console-refresh-button-image-active');
-		}
-
-		//監視タイマーがある場合は、クリア
-		if(that.observationTimer !== undefined) {
-
-			clearTimeout(that.observationTimer);
-		}
+		that.clearObservationTimer();
+		that.resetRefreshButton();
+		that.showMessageFromObserver();
 
 		//デフォルトスタイル取得用iframeを挿入
 		that.insertIframe4getDefaultStyles();
@@ -766,11 +757,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		];
 
 		var observationConfig = {
-			attributes: true,
-			attributeFilter: targetAttributes,
 			childList: true,
 			subtree: true,
+			attributes: true,
+			attributeFilter: targetAttributes,
 			attributeOldValue: true,
+			characterData: true,
 			characterDataOldValue: true
 		};
 
@@ -781,13 +773,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		//consoleに出すメッセージの配列
 		that.moMessageArray = [];
+		that.addedOrRemovedMessageArray = [];
 
 		//反応したとき無視するかどうか
-		var isIgnore = true;
+		that.isIgnore = true;
 
 		that.observer = new MutationObserver(function (mutations) {
-
-			that.informModification();
 
 			//監視対象毎に
 			mutationsLoop: for(var i = 0, mutationsLen = mutations.length; i < mutationsLen; i++) {
@@ -800,6 +791,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				var stylevid = target.dataset.stylevid || null;
 				var ignoreElemsStylevId = STYLEV.ignoreElemsStylevId;
 
+				var addedNodes = mutation.addedNodes;
+				var addedNodesLen = addedNodes.length;
+				var removedNodes = mutation.removedNodes;
+				var removedNodesLen = removedNodes.length;
+
 				//Continue when ID of mutation.target is equal with ID of ignoring element
 				var regexIgnoreElemsStylevId = new RegExp(' ' + ignoreElemsStylevId.join(' | ') + ' ');
 				if(stylevid && regexIgnoreElemsStylevId.test(' ' + stylevid + ' ')) {
@@ -810,8 +806,29 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					continue;
 				}
 
+				for(var m = 0; m < addedNodesLen; m++) {
+					var addedNode = addedNodes[m];
+					if(addedNode.tagName.toLowerCase() === undefined) {
+						console.log(addedNode);
+						console.log(addedNode.tagName);
+					}
+					if( addedNode.tagName.toLowerCase() === 'script' &&
+						addedNode.src.indexOf('analytics.js') !== -1) {
+						continue mutationsLoop;
+					}
+					that.addedOrRemovedMessageArray.push(addedNode.outerHTML + ' is added.');
+				}
+				for(var n = 0; n < removedNodesLen; n++) {
+					var removedNode = removedNodes[n];
+					if( removedNode.tagName.toLowerCase() === 'script' &&
+						removedNode.src.indexOf('analytics.js') !== -1) {
+						continue mutationsLoop;
+					}
+					that.addedOrRemovedMessageArray.push(removedNode.outerHTML + ' is removed.');
+				}
+
 				//1つでも通過したら、無視しない
-				isIgnore = false;
+				that.isIgnore = false;
 
 				/*
 				 * Defining variables section
@@ -820,16 +837,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				var tagName = target.tagName;
 				var attributes = target.attributes;
 				var attributesLen = attributes.length;
-				var addedNodes = mutation.addedNodes;
-				var addedNodesLen = addedNodes.length;
-				var removedNodes = mutation.removedNodes;
-				var removedNodesLen = removedNodes.length;
 				var modifiedElemsStylevId = STYLEV.modifiedElemsStylevId;
 				var modifiedElemsStylevIdLen = modifiedElemsStylevId.length;
 				var previousModifiedElemsStylevId = modifiedElemsStylevId[modifiedElemsStylevIdLen - 1];
 				var sameElemCount = STYLEV.sameElemCount;
-				var moMessageArray = that.moMessageArray;
-
 
 				//if record of element is exist
 				if(modifiedElemsStylevIdLen) {
@@ -862,64 +873,33 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 						var attribute = attributes[l];
 						attrsArray.push(' ' + attribute.nodeName + '="' + attribute.nodeValue + '"');
 					}
-					moMessageArray.push('<' + tagName.toLowerCase() + attrsArray.join(' ') + '>');
+					that.moMessageArray.push('--------------------------------------------------\n' + '<' + tagName.toLowerCase() + attrsArray.join(' ') + '>');
 				}
 
 				if(type === 'attributes') {
-					moMessageArray.push(mutation.attributeName + ' ' + type + ' of above is changed from "' + mutation.oldValue + '".');
+					that.moMessageArray.push('\t changed from ' + mutation.attributeName + '="' + mutation.oldValue + '"');
 				}
 				if(type === 'characterData') {
-					moMessageArray.push(mutation.characterData + ' ' + type + ' of above is changed from "' + mutation.oldValue + '".');
+					that.moMessageArray.push(target.textContent + ' ' + type + ' of above is changed from "' + mutation.oldValue + '".');
 				}
-				for(var m = 0; m < addedNodesLen; m++) {
-					var addedNode = addedNodes[m];
-					if( addedNode.tagName.toLocaleLowerCase() === 'script' &&
-						addedNode.src.indexOf('analytics.js') !== -1) {
-						continue mutationsLoop;
-					}
-					moMessageArray.push(addedNode.outerHTML + ' is added.');
-				}
-				for(var n = 0; n < removedNodesLen; n++) {
-					var removedNode = removedNodes[n];
-					if( removedNode.tagName.toLocaleLowerCase() === 'script' &&
-						removedNode.src.indexOf('analytics.js') !== -1) {
-						continue mutationsLoop;
-					}
-					moMessageArray.push(removedNode.outerHTML + ' is removed.');
-				}
+
+				that.moMessageArray = that.moMessageArray.concat(that.addedOrRemovedMessageArray);
 
 				console.info('Style Validator: DOM modified...')
 
 			}
 
 			//Clear Timer when timer is exist
-			if(that.observationTimer !== undefined) {
-				clearTimeout(that.observationTimer);
+			that.clearObservationTimer();
+
+			//Caught by above detection
+			if(!that.isIgnore) {
+				
+				that.informModification();
+				
+				//Timer for avoiding executing many times and too fast
+				that.observationTimer = setTimeout(that.executeWithDetectingCE, OBSERVATION_INTERVAL);
 			}
-
-			//Timer for avoiding executing many times and too fast
-			that.observationTimer = setTimeout(function() {
-
-				if(!isIgnore) {
-
-					if(STYLEV.isChromeExtension) {
-						STYLEV.CHROME_EXTENSION.execute();
-					}
-					if(STYLEV.isBookmarklet) {
-						that.validate();
-					}
-
-					console.info(moMessageArray.join('\n\n'));
-
-					//initialize array
-					moMessageArray = [];
-
-					//initialize flag
-					isIgnore = true;
-
-				}
-
-			}, OBSERVATION_INTERVAL);
 
 			//resetting regularly
 			that.resetTImer = setInterval(function() {
@@ -957,6 +937,55 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 		}
 
+	},
+
+	executeWithDetectingCE: function() {
+		var that = STYLEV.VALIDATOR;
+		if(STYLEV.isChromeExtension) {
+			STYLEV.CHROME_EXTENSION.execute();
+		}
+		if(STYLEV.isBookmarklet) {
+			that.execute();
+		}
+	},
+
+	resetRefreshButton: function() {
+		var that = STYLEV.VALIDATOR;
+
+		//アクティブ状態を戻す
+		if(that.isModified) {
+			that.isModified = false;
+			that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_PATH;
+			that.consoleRefreshButtonImage.classList.remove('stylev-console-refresh-button-image-active');
+		}
+	},
+	
+	clearObservationTimer: function() {
+		var that = STYLEV.VALIDATOR;
+
+		//Clear Timer when timer is exist
+		if(that.observationTimer !== undefined) {
+			clearTimeout(that.observationTimer);
+		}
+	},
+
+	showMessageFromObserver: function() {
+		
+		var that = STYLEV.VALIDATOR;
+
+		if(that.moMessageArray.length) {
+			console.info(that.moMessageArray.concat(that.addedOrRemovedMessageArray).join('\n\n'));
+		}
+
+		//initialize array
+		that.moMessageArray = [];
+	
+		//initialize flag
+		that.isIgnore = true;
+		that.isModified = false;
+	
+		//Reset Timer
+		that.observationTimer = undefined;
 	},
 
 	//スタイルシート挿入
@@ -1120,6 +1149,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.consoleHeader.classList.add('stylev-console-header');
 		that.consoleHeading.classList.add('stylev-console-heading');
 		that.consoleHeadingLogo.classList.add('stylev-console-heading-logo');
+		that.consoleHeadingLogo.href = 'http://style-validator.github.io/Style-Validator/';
+		that.consoleHeadingLogo.target = '_blank';
 		that.consoleHeadingLogoImage.classList.add('stylev-console-heading-logo-image');
 		that.consoleHeadingLogoImage.src = that.settings.ICON_LOGO_PATH;
 		that.consoleMode.classList.add('stylev-console-mode');
@@ -1365,7 +1396,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.html.addEventListener('mousemove', that.moveConsoleHeader, false);
 		that.html.addEventListener('mouseup', that.offConsoleHeader, false);
 		that.consoleCloseButton.addEventListener('click', that.destroy, false);
-		that.consoleRefreshButton.addEventListener('click', that.validate, false);
+		that.consoleRefreshButton.addEventListener('click', that.executeWithDetectingCE, false);
 		that.consoleMinimizeButton.addEventListener('click', that.toggleConsole, false);
 		that.consoleNormalizeButton.addEventListener('click', that.toggleConsole, false);
 		that.html.addEventListener('keyup', that.destroyByEsc, false);
