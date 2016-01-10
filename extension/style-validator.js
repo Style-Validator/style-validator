@@ -967,6 +967,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		if(that.observationTimer !== undefined) {
 			clearTimeout(that.observationTimer);
 		}
+
+		if(that.consoleRefreshTimer !== undefined) {
+//			clearTimeout(that.consoleRefreshTimer);
+		}
 	},
 
 	showMessageFromObserver: function() {
@@ -986,6 +990,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 		//Reset Timer
 		that.observationTimer = undefined;
+		that.consoleRefreshTimer = undefined;
 	},
 
 	//スタイルシート挿入
@@ -1095,9 +1100,18 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		if(that.isModified) {
 			return false;
 		}
+		var dynamicSecond = +that.settings.OBSERVATION_INTERVAL / 1000;
 		that.isModified = true;
 		that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_ACTIVE_PATH;
 		that.consoleRefreshButtonImage.classList.add('stylev-console-refresh-button-image-active');
+		that.consoleRefreshCount.textContent = dynamicSecond;
+
+		that.consoleRefreshTimer = setInterval(function() {
+			that.consoleRefreshCount.textContent = dynamicSecond--;
+			if(dynamicSecond <= 0) {
+				clearInterval(that.consoleRefreshTimer);
+			}
+		}, 1000);
 	},
 
 	insertStyle2ShadowDOM: function() {
@@ -1123,6 +1137,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.consoleMode = document.createElement('p');
 		that.consoleButtons = document.createElement('div');
 		that.consoleRefreshButton = document.createElement('a');
+		that.consoleRefreshCount = document.createElement('output');
 		that.consoleRefreshButtonImage = document.createElement('img');
 		that.consoleCounter = document.createElement('div');
 		that.consoleBody = document.createElement('div');
@@ -1157,6 +1172,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.consoleButtons.classList.add('stylev-console-buttons');
 		that.consoleRefreshButton.href = 'javascript: void(0);';
 		that.consoleRefreshButton.classList.add('stylev-console-refresh-button');
+		that.consoleRefreshCount.classList.add('stylev-console-refresh-count');
 		that.consoleRefreshButtonImage.classList.add('stylev-console-refresh-button-image');
 		that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_PATH;
 		that.consoleCounter.classList.add('stylev-console-counter');
@@ -1195,6 +1211,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.consoleHeading.appendChild(that.consoleHeadingLogo);
 
 		//ボタンの中に画像を配置
+		that.consoleRefreshButton.appendChild(that.consoleRefreshCount);
 		that.consoleRefreshButton.appendChild(that.consoleRefreshButtonImage);
 		that.consoleNormalizeButton.appendChild(that.consoleNormalizeButtonImage);
 		that.consoleMinimizeButton.appendChild(that.consoleMinimizeButtonImage);

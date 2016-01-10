@@ -86,11 +86,6 @@
 					"!default",
 					"Needless. Defined property is no effective.",
 					""
-				],
-				"white-space": [
-					"!default",
-					"Needless. Defined property is no effective.",
-					""
 				]
 			}
 		}
