@@ -733,6 +733,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.elemIndex = 0;
 
 		that.clearObservationTimer();
+		that.clearConsoleRefreshTimer();
 		that.resetRefreshButton();
 		that.showMessageFromObserver();
 
@@ -808,11 +809,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 				for(var m = 0; m < addedNodesLen; m++) {
 					var addedNode = addedNodes[m];
-					if(addedNode.tagName.toLowerCase() === undefined) {
-						console.log(addedNode);
-						console.log(addedNode.tagName);
-					}
-					if( addedNode.tagName.toLowerCase() === 'script' &&
+
+					if( addedNode.nodeType === 1 &&
+						addedNode.tagName.toLowerCase() === 'script' &&
 						addedNode.src.indexOf('analytics.js') !== -1) {
 						continue mutationsLoop;
 					}
@@ -820,7 +819,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				}
 				for(var n = 0; n < removedNodesLen; n++) {
 					var removedNode = removedNodes[n];
-					if( removedNode.tagName.toLowerCase() === 'script' &&
+					if( removedNode.nodeType === 1 &&
+						removedNode.tagName.toLowerCase() === 'script' &&
 						removedNode.src.indexOf('analytics.js') !== -1) {
 						continue mutationsLoop;
 					}
@@ -891,12 +891,16 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//Clear Timer when timer is exist
 			that.clearObservationTimer();
+			that.clearConsoleRefreshTimer();
 
 			//Caught by above detection
 			if(!that.isIgnore) {
-				
+
 				that.informModification();
-				
+
+				//Timer for countdown
+				that.consoleRefreshTimer = setInterval(that.countDownConsoleRefreshCount, 1000);
+
 				//Timer for avoiding executing many times and too fast
 				that.observationTimer = setTimeout(that.executeWithDetectingCE, OBSERVATION_INTERVAL);
 			}
@@ -959,7 +963,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleRefreshButtonImage.classList.remove('stylev-console-refresh-button-image-active');
 		}
 	},
-	
+
 	clearObservationTimer: function() {
 		var that = STYLEV.VALIDATOR;
 
@@ -968,13 +972,18 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			clearTimeout(that.observationTimer);
 		}
 
+	},
+
+	clearConsoleRefreshTimer: function() {
+		var that = STYLEV.VALIDATOR;
+
 		if(that.consoleRefreshTimer !== undefined) {
-//			clearTimeout(that.consoleRefreshTimer);
+			clearTimeout(that.consoleRefreshTimer);
 		}
 	},
 
 	showMessageFromObserver: function() {
-		
+
 		var that = STYLEV.VALIDATOR;
 
 		if(that.moMessageArray.length) {
@@ -983,7 +992,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		//initialize array
 		that.moMessageArray = [];
-	
+
 		//initialize flag
 		that.isIgnore = true;
 		that.isModified = false;
@@ -1100,18 +1109,20 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		if(that.isModified) {
 			return false;
 		}
-		var dynamicSecond = +that.settings.OBSERVATION_INTERVAL / 1000;
+		that.dynamicSecond = +that.settings.OBSERVATION_INTERVAL / 1000;
 		that.isModified = true;
 		that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_ACTIVE_PATH;
 		that.consoleRefreshButtonImage.classList.add('stylev-console-refresh-button-image-active');
-		that.consoleRefreshCount.textContent = dynamicSecond;
+		that.consoleRefreshCount.textContent = that.dynamicSecond;
 
-		that.consoleRefreshTimer = setInterval(function() {
-			that.consoleRefreshCount.textContent = dynamicSecond--;
-			if(dynamicSecond <= 0) {
-				clearInterval(that.consoleRefreshTimer);
-			}
-		}, 1000);
+	},
+	
+	countDownConsoleRefreshCount: function() {
+		var that = STYLEV.VALIDATOR;
+		that.consoleRefreshCount.textContent = --that.dynamicSecond;
+		if(that.dynamicSecond <= 0) {
+			clearInterval(that.consoleRefreshTimer);
+		}
 	},
 
 	insertStyle2ShadowDOM: function() {
