@@ -798,6 +798,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				var mutation = mutations[i];
 				var target = mutation.target;
 				var stylevid = target.dataset.stylevid || null;
+				var ignoreElemsStylevId = STYLEV.ignoreElemsStylevId;
 
 				//Continue when ID of mutation.target is equal with ID of ignoring element
 				var regexIgnoreElemsStylevId = new RegExp(' ' + ignoreElemsStylevId.join(' | ') + ' ');
@@ -827,7 +828,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				var modifiedElemsStylevIdLen = modifiedElemsStylevId.length;
 				var previousModifiedElemsStylevId = modifiedElemsStylevId[modifiedElemsStylevIdLen - 1];
 				var sameElemCount = STYLEV.sameElemCount;
-				var ignoreElemsStylevId = STYLEV.ignoreElemsStylevId;
 				var moMessageArray = that.moMessageArray;
 
 
