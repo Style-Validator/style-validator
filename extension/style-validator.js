@@ -815,7 +815,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 						addedNode.src.indexOf('analytics.js') !== -1) {
 						continue mutationsLoop;
 					}
-					that.addedOrRemovedMessageArray.push(addedNode.outerHTML + ' is added.');
+					var addedNodeContent;
+					if(addedNode.nodeType === 1) {
+						addedNodeContent = addedNode.outerHTML;
+					}
+					if(addedNode.nodeType === 3) {
+						addedNodeContent = addedNode;
+					}
+					that.addedOrRemovedMessageArray.push(addedNodeContent + ' is added.');
 				}
 				for(var n = 0; n < removedNodesLen; n++) {
 					var removedNode = removedNodes[n];
@@ -824,7 +831,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 						removedNode.src.indexOf('analytics.js') !== -1) {
 						continue mutationsLoop;
 					}
-					that.addedOrRemovedMessageArray.push(removedNode.outerHTML + ' is removed.');
+					var removedNodeContent;
+					if(removedNode.nodeType === 1) {
+						removedNodeContent = removedNode.outerHTML;
+					}
+					if(removedNode.nodeType === 3) {
+						removedNodeContent = removedNode;
+					}
+					that.addedOrRemovedMessageArray.push(removedNodeContent + ' is removed.');
 				}
 
 				//1つでも通過したら、無視しない
@@ -873,7 +887,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 						var attribute = attributes[l];
 						attrsArray.push(' ' + attribute.nodeName + '="' + attribute.nodeValue + '"');
 					}
-					that.moMessageArray.push('--------------------------------------------------\n' + '<' + tagName.toLowerCase() + attrsArray.join(' ') + '>');
+					that.moMessageArray.push(
+						'--------------------------------------------------\n' +
+						'<' + tagName.toLowerCase() + attrsArray.join(' ') + '>'
+					);
 				}
 
 				if(type === 'attributes') {
@@ -883,7 +900,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					that.moMessageArray.push(target.textContent + ' ' + type + ' of above is changed from "' + mutation.oldValue + '".');
 				}
 
-				that.moMessageArray = that.moMessageArray.concat(that.addedOrRemovedMessageArray);
+				Array.prototype.push.apply(that.moMessageArray, that.addedOrRemovedMessageArray);
 
 				console.info('Style Validator: DOM modified...')
 
@@ -1046,7 +1063,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	removeConsole: function() {
 		var that = STYLEV.VALIDATOR;
 
-		that.consoleWrapper.parentElement.removeChild(that.consoleWrapper);
+		if(that.consoleWrapper !== undefined) {
+			that.consoleWrapper.parentElement.removeChild(that.consoleWrapper);
+		}
 
 		//ログ表示領域分の余白を初期化
 		that.html.style.setProperty('border-bottom-width', that.htmlDefaultBorderBottomWidth, '');
