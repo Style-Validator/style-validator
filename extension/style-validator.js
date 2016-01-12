@@ -667,7 +667,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//親要素を検査する場合
 			if(isParentCheking) {
 
-				result.text =
+				result.message =
 					'[' + rule['title'] + ']' + ' ' +
 					'<' + elemData.targetElemTagName + '> ' +
 					'{' + baseStylesText + '}' + ' ' +
@@ -678,7 +678,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//通常時
 			} else {
 
-				result.text =
+				result.message =
 					'[' + rule['title'] + ']' + ' '+
 					'<' + elemData.targetElemTagName + '>' + ' ' +
 					'{' + baseStylesText + '}' + ' ' +
@@ -1458,7 +1458,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				anchor.addEventListener('click', that.markElementFromConsole, false);
 
 				//テキスト情報を挿入
-				anchor.textContent = result.text;
+				anchor.textContent = result.message;
 				logID.textContent = result.stylevid;
 				reference.textContent = '?';
 
