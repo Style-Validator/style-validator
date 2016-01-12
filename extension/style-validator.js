@@ -1026,6 +1026,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//Clear Timer when timer is exist
 		if(that.observationTimer !== undefined) {
 			clearTimeout(that.observationTimer);
+
+			//Reset Timer
+			that.observationTimer = undefined;
 		}
 
 	},
@@ -1035,6 +1038,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		if(that.consoleRefreshTimer !== undefined) {
 			clearTimeout(that.consoleRefreshTimer);
+
+			//Reset Timer
+			that.consoleRefreshTimer = undefined;
 		}
 	},
 
@@ -1043,7 +1049,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		var that = STYLEV.VALIDATOR;
 
 		if(that.moMessageArray instanceof Array && that.moMessageArray.length) {
+			console.groupCollapsed('Style Validator: Modified Elements Data');
 			console.info(that.moMessageArray.join('\n\n'));
+			console.groupEnd();
 		}
 
 	},
@@ -1054,10 +1062,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//initialize flag
 		that.isIgnore = true;
 		that.isModified = false;
-
-		//Reset Timer
-		that.observationTimer = undefined;
-		that.consoleRefreshTimer = undefined;
 	},
 
 	//スタイルシート挿入
@@ -1108,9 +1112,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleWrapper.parentElement.removeChild(that.consoleWrapper);
 		}
 
-		//ログ表示領域分の余白を初期化
-		that.html.style.setProperty('border-bottom-width', that.htmlDefaultBorderBottomWidth, '');
-
+		if(that.html !== undefined) {
+			//ログ表示領域分の余白を初期化
+			that.html.style.setProperty('border-bottom-width', that.htmlDefaultBorderBottomWidth, '');
+		}
 	},
 
 	//デフォルトスタイルを取得するために、ダミーiframeを挿入
@@ -1665,6 +1670,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		}
 
 		console.info('Style Validator: Style Validator has removed.')
+//		console.groupEnd();
 	},
 	
 	toggleConsole: function(event) {
@@ -2213,13 +2219,13 @@ if(STYLEV.isBookmarklet && STYLEV.isPassedURLFilters) {
 	//初期読込の場合
 	if(STYLEV.isLoaded) {
 
-		console.info('Style Validator: Executed by Bookmarklet.');
+		console.groupEnd();console.group('Style Validator: Executed by Bookmarklet.');
 		STYLEV.VALIDATOR.execute();
 
 	//一度実行している場合は、validateのみを実行
 	} else if(STYLEV.isReLoaded) {
 
-		console.info('Style Validator: Executed by Bookmarklet (ReExecution)');
+		console.groupEnd();console.group('Style Validator: Executed by Bookmarklet (ReExecution)');
 		STYLEV.VALIDATOR.validate();
 	}
 

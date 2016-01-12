@@ -20,7 +20,7 @@ var executeWithInspect = function() {
 			"});" +
 		"};" +
 		"STYLEV.VALIDATOR.updateOptions().then(function() {" +
-			"console.info('Style Validator: Executed by Chrome Extension from DevTools Page');" +
+			"console.groupEnd();console.group('Style Validator: Executed by Chrome Extension from DevTools Page');" +
 			"STYLEV.VALIDATOR.execute(bindInspect);" +
 		"});"
 		,

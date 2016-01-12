@@ -52,7 +52,7 @@ function toggleValidation() {
 				} else {
 					chrome.tabs.executeScript(tabId, {
 						code:
-							"console.info('Style Validator: Executed by Chrome Extension from Background Page');" +
+							"console.groupEnd();console.group('Style Validator: Executed by Chrome Extension from Background Page');" +
 							"STYLEV.VALIDATOR.execute();"
 					});
 				}
@@ -273,7 +273,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 								//Background Modeで実行
 								chrome.tabs.executeScript(tabId, {
 									code:
-										"console.info('Style Validator: Executed by Chrome Extension from Background Page');" +
+										"console.groupEnd();console.group('Style Validator: Executed by Chrome Extension from Background Page');" +
 										"STYLEV.VALIDATOR.execute();"
 								});
 
@@ -326,7 +326,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 				chrome.tabs.executeScript(tabId, {
 					code:
-						"console.info('Style Validator: Executed by Chrome Extension from Background Page');" +
+						"console.groupEnd();console.group('Style Validator: Executed by Chrome Extension from Background Page');" +
 						"STYLEV.VALIDATOR.execute();"
 				});
 			}
