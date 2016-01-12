@@ -55,9 +55,10 @@ STYLEV.options = {
 
 //TODO: Need to test again the fallowing
 //Properties for Observing. Need to ignore elements that has been modified many times so fast for avoiding memory leak.
-STYLEV.modifiedElemsStylevId = STYLEV.modifiedElemsStylevId || [];
-STYLEV.ignoreElemsStylevId = STYLEV.ignoreElemsStylevId || [];
+STYLEV.modifiedTargetsArray = STYLEV.modifiedTargetsArray || [];
+STYLEV.ignoreTargetsArray = STYLEV.ignoreTargetsArray || [];
 STYLEV.sameElemCount = STYLEV.sameElemCount || 0;
+STYLEV.moid = STYLEV.moid || 0;
 
 //Keeping condition of console
 STYLEV.consoleWrapperDynamicHeight = STYLEV.consoleWrapperDynamicHeight || 0;
@@ -148,7 +149,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.settings = {
 
 			OBSERVATION_INTERVAL: 3000,
-			IGNORING_ELEM_ARRAY_RESET_INTERVAL: 5000,
+			IGNORING_ELEM_ARRAY_RESET_INTERVAL: 10000 * 10000,
 
 			CONSOLE_WRAPPER_ID:	'stylev-console-wrapper',
 			CONSOLE_LIST_ID:	'stylev-console-list',
@@ -339,7 +340,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.initializeBeforeValidation();
 
 		//全容要素を検査
-		for ( var i = 0; i < that.allElemLength; i++ ) {
+		for ( var i = 0; i < that.allElemLength; i = (i+1)|0 ) {
 
 			var elemData = {};
 
@@ -650,7 +651,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				 	elemData.targetElem.classList.contains('stylev-target-warning')
 				)
 			) {
-				that.elemIndex++;
+				that.elemIndex = (that.elemIndex+1)|0;
 			}
 
 			//エラーの発生した要素に、IDを振る
@@ -732,6 +733,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//initialize number of element's Index
 		that.elemIndex = 0;
 
+		//initialize observation
+		that.initializeVariables4observer();
 		that.clearObservationTimer();
 		that.clearConsoleRefreshTimer();
 		that.resetRefreshButton();
@@ -748,14 +751,21 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 	},
 
+	getOpenTag: function(target) {
+		return target ? target.outerHTML.match(/<[a-zA-Z]+(>|.*?[^?]>)/g)[0] : '';
+	},
+
+	isEqualWithOpenTag: function(elem1, elem2) {
+		var that = STYLEV.VALIDATOR;
+		return that.getOpenTag(elem1) === that.getOpenTag(elem2);
+	},
+
 	//監視開始
 	setupMutationObserver: function() {
+
 		var that = STYLEV.VALIDATOR;
 
-		var targetAttributes = [
-			'style',
-			'class'
-		];
+		var targetAttributes = ['style', 'class'];
 
 		var observationConfig = {
 			childList: true,
@@ -766,143 +776,156 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			characterData: true,
 			characterDataOldValue: true
 		};
+		var previousTarget = null;
 
+		var mutationCallback = function (mutations) {
 
-		//監視する実行スパンをミリ秒で指定
-		var OBSERVATION_INTERVAL = that.settings.OBSERVATION_INTERVAL || 3000;
-		var IGNORING_ELEM_ARRAY_RESET_INTERVAL = that.settings.IGNORING_ELEM_ARRAY_RESET_INTERVAL || 5000;
+			var mutationsLen = mutations.length;
+			var eachMessageArray = [];
 
-		//consoleに出すメッセージの配列
-		that.moMessageArray = [];
-		that.addedOrRemovedMessageArray = [];
-
-		//反応したとき無視するかどうか
-		that.isIgnore = true;
-
-		that.observer = new MutationObserver(function (mutations) {
+			//TODO: Need to refactor above
 
 			//監視対象毎に
-			mutationsLoop: for(var i = 0, mutationsLen = mutations.length; i < mutationsLen; i++) {
+			mutationsLoop: for(var i = 0; i < mutationsLen; i = (i+1)|0) {
 
-				/*
-				* Initialize section
-				* */
 				var mutation = mutations[i];
 				var target = mutation.target;
-				var stylevid = target.dataset.stylevid || null;
-				var ignoreElemsStylevId = STYLEV.ignoreElemsStylevId;
-
+				var tagName = target.tagName.toLowerCase();
+				var tag = '<' + tagName + '>';
+				var openTag = that.getOpenTag(target);
+				var type = mutation.type;
 				var addedNodes = mutation.addedNodes;
 				var addedNodesLen = addedNodes.length;
 				var removedNodes = mutation.removedNodes;
 				var removedNodesLen = removedNodes.length;
 
-				//Continue when ID of mutation.target is equal with ID of ignoring element
-				var regexIgnoreElemsStylevId = new RegExp(' ' + ignoreElemsStylevId.join(' | ') + ' ');
-				if(stylevid && regexIgnoreElemsStylevId.test(' ' + stylevid + ' ')) {
-					continue;
+				var ignoreTargetsArray = STYLEV.ignoreTargetsArray;
+				var ignoreTargetsArrayLen = ignoreTargetsArray.length;
+
+				/***************************************************************
+				 * Judgement section
+				 ****************************************************************/
+
+				//Continue when current target is equal with ignoring element
+				for(var x = 0; x < ignoreTargetsArrayLen; x = (x+1)|0) {
+					var ignoreTarget = ignoreTargetsArray[x];
+					var isEqualWithIgnoringTarget = that.isEqualWithOpenTag(target, ignoreTarget);
+					if(isEqualWithIgnoringTarget) {
+						continue mutationsLoop;
+					}
 				}
 
 				if(target.classList.contains('stylev-ignore')) {
 					continue;
 				}
 
-				for(var m = 0; m < addedNodesLen; m++) {
-					var addedNode = addedNodes[m];
+				if(type === 'attributes') {
+					var attributeName = mutation.attributeName;
+					var newValueOfAttr = target.getAttribute(attributeName);
+					if(mutation.oldValue === newValueOfAttr) {
+						continue;
+					}
 
-					if( addedNode.nodeType === 1 &&
-						addedNode.tagName.toLowerCase() === 'script' &&
-						addedNode.src.indexOf('analytics.js') !== -1) {
-						continue mutationsLoop;
-					}
-					var addedNodeContent;
-					if(addedNode.nodeType === 1) {
-						addedNodeContent = addedNode.outerHTML;
-					}
-					if(addedNode.nodeType === 3) {
-						addedNodeContent = addedNode;
-					}
-					that.addedOrRemovedMessageArray.push(addedNodeContent + ' is added.');
+					eachMessageArray.push('******** Attributes has been changed ********\nOld:\t' + attributeName + '="' + mutation.oldValue + '"\nNew:\t' + attributeName + '="' + newValueOfAttr + '"');
 				}
-				for(var n = 0; n < removedNodesLen; n++) {
-					var removedNode = removedNodes[n];
-					if( removedNode.nodeType === 1 &&
-						removedNode.tagName.toLowerCase() === 'script' &&
-						removedNode.src.indexOf('analytics.js') !== -1) {
-						continue mutationsLoop;
+				if(type === 'characterData') {
+					var newValueOfText = target.textContent;
+					if(mutation.oldValue === newValueOfText) {
+						continue;
 					}
-					var removedNodeContent;
-					if(removedNode.nodeType === 1) {
-						removedNodeContent = removedNode.outerHTML;
-					}
-					if(removedNode.nodeType === 3) {
-						removedNodeContent = removedNode;
-					}
-					that.addedOrRemovedMessageArray.push(removedNodeContent + ' is removed.');
+					eachMessageArray.push('******** CharacterData has been changed ********\nOld:\t' + mutation.oldValue + '\nNew:\t' + newValueOfText);
 				}
+
+				if(type === 'childList') {
+
+					for(var n = 0; n < removedNodesLen; n = (n+1)|0) {
+						var removedNode = removedNodes[n];
+						var isTagRemovedNode = removedNode.nodeType === 1;
+						var isTextRemovedNode = removedNode.nodeType === 3;
+						var removedNodeContent;
+
+						if( isTagRemovedNode &&
+							removedNode.tagName.toLowerCase() === 'script' &&
+							removedNode.src.indexOf('analytics.js') !== -1) {
+							continue mutationsLoop;
+						}
+						if(isTagRemovedNode) {
+							removedNodeContent = removedNode.outerHTML;
+						}
+						if(isTextRemovedNode) {
+							removedNodeContent = removedNode.wholeText;
+						}
+						eachMessageArray.push('******** Removed from ' + tag + ' ********\n' + removedNodeContent);
+					}
+					for(var m = 0; m < addedNodesLen; m = (m+1)|0) {
+						var addedNode = addedNodes[m];
+						var isTagAddedNode = addedNode.nodeType === 1;
+						var isTextAddedNode = addedNode.nodeType === 3;
+						var addedNodeContent;
+
+						if( isTagAddedNode &&
+							addedNode.tagName.toLowerCase() === 'script' &&
+							addedNode.src.indexOf('analytics.js') !== -1) {
+							continue mutationsLoop;
+						}
+						if(isTagAddedNode) {
+							addedNodeContent = addedNode.outerHTML;
+						}
+						if(isTextAddedNode) {
+							addedNodeContent = addedNode.wholeText;
+						}
+						eachMessageArray.push('******** Added into ' + tag + ' ********\n' + addedNodeContent);
+					}
+
+				}
+
+				/***************************************************************
+				 * Record Section
+				 ****************************************************************/
 
 				//1つでも通過したら、無視しない
 				that.isIgnore = false;
 
-				/*
-				 * Defining variables section
-				 * */
-				var type = mutation.type;
-				var tagName = target.tagName;
-				var attributes = target.attributes;
-				var attributesLen = attributes.length;
-				var modifiedElemsStylevId = STYLEV.modifiedElemsStylevId;
-				var modifiedElemsStylevIdLen = modifiedElemsStylevId.length;
-				var previousModifiedElemsStylevId = modifiedElemsStylevId[modifiedElemsStylevIdLen - 1];
-				var sameElemCount = STYLEV.sameElemCount;
+				if(target.dataset_moid === undefined) {
+					target.dataset_moid = ++STYLEV.moid;
+				}
+				var isSameIDWithPreviousTarget = previousTarget && previousTarget.dataset_moid ? target.dataset_moid === previousTarget.dataset_moid : false;
+				var isEqualElemWithPreviousTarget = previousTarget ? that.isEqualWithOpenTag(target, previousTarget) : false;
 
-				//if record of element is exist
-				if(modifiedElemsStylevIdLen) {
+				if(!isSameIDWithPreviousTarget) {
 
-					//Count if current element is equal with previous element
-					if(stylevid === previousModifiedElemsStylevId) {
-						sameElemCount++;
-					} else {
-						sameElemCount = 0;
-					}
+					eachMessageArray.unshift(
+						'==================================================\n' + openTag
+					);
+
+					//Merge array
+					that.moMessageArray.push.apply(that.moMessageArray, eachMessageArray);
+
+					//Initialize array
+					eachMessageArray = [];
+				}
+
+				if(isSameIDWithPreviousTarget || isEqualElemWithPreviousTarget) {
+					STYLEV.sameElemCount = (STYLEV.sameElemCount+1)|0;
+				} else {
+					STYLEV.sameElemCount = 0;
 				}
 
 				//前回の要素と今回の要素が同じだった回数が5より少ない場合
-				if(sameElemCount < 5) {
+				if(STYLEV.sameElemCount > 5) {
 
-					//影響した要素のIDを保管
-					modifiedElemsStylevId.push(stylevid);
+					//Initialization
+					STYLEV.sameElemCount = 0;
+					console.info('Style Validator: Ignored the following element\n' + openTag)
 
-				} else {
-
-					//初期化
-					modifiedElemsStylevId = [];
-					sameElemCount = 0;
-					ignoreElemsStylevId.push(stylevid);
+					//Ingore Target
+					ignoreTargetsArray.push(target);
 				}
 
-				if(tagName) {
-					var attrsArray = [];
-					for (var l = 0; l < attributesLen; l++){
-						var attribute = attributes[l];
-						attrsArray.push(' ' + attribute.nodeName + '="' + attribute.nodeValue + '"');
-					}
-					that.moMessageArray.push(
-						'--------------------------------------------------\n' +
-						'<' + tagName.toLowerCase() + attrsArray.join(' ') + '>'
-					);
-				}
+				//keep previous target
+				previousTarget = target;
 
-				if(type === 'attributes') {
-					that.moMessageArray.push('\t changed from ' + mutation.attributeName + '="' + mutation.oldValue + '"');
-				}
-				if(type === 'characterData') {
-					that.moMessageArray.push(target.textContent + ' ' + type + ' of above is changed from "' + mutation.oldValue + '".');
-				}
-
-				Array.prototype.push.apply(that.moMessageArray, that.addedOrRemovedMessageArray);
-
-				console.info('Style Validator: DOM modified...')
+				console.info('Style Validator: DOM has been modified...')
 
 			}
 
@@ -915,18 +938,34 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 				that.informModification();
 
+				//initialize countdown second
+				that.countdownDynamicSecond = that.COUNTDOWN_DEFAULT_SECOND;
+				that.consoleRefreshCount.textContent = that.COUNTDOWN_DEFAULT_SECOND;
+
 				//Timer for countdown
 				that.consoleRefreshTimer = setInterval(that.countDownConsoleRefreshCount, 1000);
 
 				//Timer for avoiding executing many times and too fast
-				that.observationTimer = setTimeout(that.executeWithDetectingCE, OBSERVATION_INTERVAL);
+				that.observationTimer = setTimeout(that.executeWithDetectingCE, that.settings.OBSERVATION_INTERVAL);
 			}
 
 			//resetting regularly
-			that.resetTImer = setInterval(function() {
-				ignoreElemsStylevId = [];
-			}, IGNORING_ELEM_ARRAY_RESET_INTERVAL);
-		});
+//			that.resetTImer = setInterval(function() {
+//				ignoreTargetsArray = [];
+//			}, that.settings.IGNORING_ELEM_ARRAY_RESET_INTERVAL);
+		};
+
+		//Define countdown default second
+		that.COUNTDOWN_DEFAULT_SECOND = +that.settings.OBSERVATION_INTERVAL / 1000;
+
+		//consoleに出すメッセージの配列
+		that.moMessageArray = [];
+
+		//反応したとき無視するかどうか
+		that.isIgnore = true;
+
+		//Create MutationObserver and define callback
+		that.observer = new MutationObserver(mutationCallback);
 
 		return {
 
@@ -1003,17 +1042,19 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		var that = STYLEV.VALIDATOR;
 
-		if(that.moMessageArray.length) {
-			console.info(that.moMessageArray.concat(that.addedOrRemovedMessageArray).join('\n\n'));
+		if(that.moMessageArray instanceof Array && that.moMessageArray.length) {
+			console.info(that.moMessageArray.join('\n\n'));
 		}
 
-		//initialize array
-		that.moMessageArray = [];
+	},
+
+	initializeVariables4observer: function() {
+		var that = STYLEV.VALIDATOR;
 
 		//initialize flag
 		that.isIgnore = true;
 		that.isModified = false;
-	
+
 		//Reset Timer
 		that.observationTimer = undefined;
 		that.consoleRefreshTimer = undefined;
@@ -1128,18 +1169,17 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		if(that.isModified) {
 			return false;
 		}
-		that.dynamicSecond = +that.settings.OBSERVATION_INTERVAL / 1000;
+		that.countdownDynamicSecond = that.COUNTDOWN_DEFAULT_SECOND;
 		that.isModified = true;
 		that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_ACTIVE_PATH;
 		that.consoleRefreshButtonImage.classList.add('stylev-console-refresh-button-image-active');
-		that.consoleRefreshCount.textContent = that.dynamicSecond;
 
 	},
 	
 	countDownConsoleRefreshCount: function() {
 		var that = STYLEV.VALIDATOR;
-		that.consoleRefreshCount.textContent = --that.dynamicSecond;
-		if(that.dynamicSecond <= 0) {
+		that.consoleRefreshCount.textContent = --that.countdownDynamicSecond;
+		if(that.countdownDynamicSecond <= 0) {
 			clearInterval(that.consoleRefreshTimer);
 		}
 	},
@@ -1406,7 +1446,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 					//エラーか警告のタイプのクラス名を設定
 					li.classList.add('stylev-trigger-error');
-					that.errorNum++;
+					that.errorNum = (that.errorNum+1)|0;
 				}
 
 				//警告数をカウント
@@ -1414,7 +1454,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 					//エラーか警告のタイプのクラス名を設定
 					li.classList.add('stylev-trigger-warning');
-					that.warningNum++;
+					that.warningNum = (that.warningNum+1)|0;
 				}
 
 				//DocumentFlagmentにHTML要素を挿入
@@ -1934,6 +1974,8 @@ STYLEV.METHODS = {
 
 	each: function(target, fn) {
 
+		var that = STYLEV.METHODS;
+
 		var isExist = !!target;
 		var isFunc = typeof fn === 'function';
 		var returnedValue;
@@ -1944,7 +1986,7 @@ STYLEV.METHODS = {
 		}
 
 		function loopArray(length) {
-			for(; i < length; i++) {
+			for(; i < length; i = (i+1)|0) {
 
 				var data = target[i];
 
@@ -1965,7 +2007,7 @@ STYLEV.METHODS = {
 
 					var value = target[key];
 
-					returnedValue = fn(key, value, i++);
+					returnedValue = fn(key, value, i = (i+1)|0);
 
 					if(returnedValue === 'continue') {
 						continue;
@@ -1987,6 +2029,28 @@ STYLEV.METHODS = {
 		} else {
 			loopObject();
 		}
+	},
+
+	findHEX: function(string) {
+		var that = STYLEV.METHODS;
+
+		var resultArray = string.match(/#(?:[0-9a-f]{3}){1,2}/ig);
+
+		that.each(resultArray, function(hex) {
+			string = string.replace(hex, that.hex2rgb(hex));
+		});
+
+		return string;
+	},
+
+	hex2rgb: function (hex) {
+		// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+		var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+		hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+			return r + r + g + g + b + b;
+		});
+		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result && 'rgb(' + parseInt(result[1], 16) + ' ,' + parseInt(result[2], 16) + ' ,' + parseInt(result[3], 16) + ')';
 	}
 };
 

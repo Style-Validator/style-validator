@@ -155,7 +155,7 @@ STYLEV.RULES = {
 				});
 
 				if(hasWord) {
-					count++;
+					count = (count+1)|0;
 					rulesListItem.classList.remove('hidden');
 				} else {
 					rulesListItem.classList.add('hidden');
@@ -979,7 +979,7 @@ STYLEV.RULES = {
 		}
 
 		function loopArray(length) {
-			for(; i < length; i++) {
+			for(; i < length; i = (i+1)|0) {
 
 				var data = target[i];
 
@@ -1000,7 +1000,7 @@ STYLEV.RULES = {
 
 					var value = target[key];
 
-					returnedValue = fn(key, value, i++);
+					returnedValue = fn(key, value, i = (i+1)|0);
 
 					if(returnedValue === 'continue') {
 						continue;
