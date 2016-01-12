@@ -464,6 +464,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//デフォルトスタイル取得用のiframeを削除
 		that.removeIframe4getDefaultStyles();
 
+		//Generate Error Data for sending to database on remote server
+		that.generateResultData();
+
+		if(that.isSameWithPreviousData()) {
+			return false;
+		}
+
 		//コンソールを表示
 		that.showConsole();
 
@@ -683,19 +690,19 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			result.stylevid = elemData.targetElem.dataset.stylevid;
 
 			//エラーか警告かのタイプ
-			result.errorLevel = splitTypeArray[splitTypeArray.length - 2];
+			result.riskLevel = splitTypeArray[splitTypeArray.length - 2];
 
 			//メッセージ配列に挿入
 			that.resultArray.push(result);
 
 			//エラー
-			if(result.errorLevel === 'error') {
+			if(result.riskLevel === 'error') {
 
 				elemData.targetElem.classList.add('stylev-target-error');
 			}
 
 			//警告
-			if(result.errorLevel === 'warning') {
+			if(result.riskLevel === 'warning') {
 
 				elemData.targetElem.classList.add('stylev-target-warning');
 			}
@@ -1062,6 +1069,22 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//initialize flag
 		that.isIgnore = true;
 		that.isModified = false;
+	},
+	
+	generateResultData: function() {
+		var that = STYLEV.VALIDATOR;
+
+		var resultArray = that.resultArray;
+
+		console.dir(resultArray);
+
+	},
+
+	isSameWithPreviousData: function() {
+
+		var that = STYLEV.VALIDATOR;
+
+		return false;
 	},
 
 	//スタイルシート挿入
@@ -1447,7 +1470,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				reference.href = result.referenceURL;
 
 				//エラー数をカウント
-				if(result.errorLevel === 'error') {
+				if(result.riskLevel === 'error') {
 
 					//エラーか警告のタイプのクラス名を設定
 					li.classList.add('stylev-trigger-error');
@@ -1455,7 +1478,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				}
 
 				//警告数をカウント
-				if(result.errorLevel === 'warning') {
+				if(result.riskLevel === 'warning') {
 
 					//エラーか警告のタイプのクラス名を設定
 					li.classList.add('stylev-trigger-warning');
