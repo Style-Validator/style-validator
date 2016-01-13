@@ -18,6 +18,8 @@ STYLEV.RULES = {
 	initializeRuleArea: function() {
 		var that = STYLEV.RULES;
 
+		that.rulesList.innerHTML = '';
+
 		that.json2html()
 			.then(function() {
 				that.removeLoadingSpinner();
