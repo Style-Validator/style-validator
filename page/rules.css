@@ -473,13 +473,13 @@ body {
 	overflow: hidden;
 }
 .rules-list-list .styles-list > li + li:before {
-	top: 1em;
+	top: 0.5em;
 }
 .rules-list-list .styles-list > li:only-child {
 	flex-basis: 100%;
 }
 .rules-list-list .text-input input[type="text"] {
-	padding: 1.5% 1.5%;
+	padding: 1% 1.5%;
 }
 .rules-list-list .rules-list-body {
 	padding: 0;
@@ -489,6 +489,13 @@ body {
 }
 .rules-list-list .rules-list-body > *:not(.hidden) ~ *:not(.hidden) {
 	margin-top: 0;
+}
+.rules-list-list .styles-list:before {
+	padding: 0.5% 1% 0.5%;
+	font-size: 13px;
+}
+.rules-list-list .styles-list:after {
+	padding: 0.4% 2%;
 }
 @media (max-width: 900px) {
 	.aside {
