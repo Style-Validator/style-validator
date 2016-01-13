@@ -1,5 +1,6 @@
 [
 	{
+		"rule-id": 1,
 		"title": "Absoluted(Fixed) Element",
 		"base-styles": {
 			"position": "[absolute|fixed]"
@@ -20,6 +21,7 @@
 		}
 	},
 	{
+		"rule-id": 2,
 		"title": "Inline Elements (Non-replaced)",
 		"replaced": "Non-replaced elements",
 		"base-styles": {
@@ -91,6 +93,7 @@
 		}
 	},
 	{
+		"rule-id": 3,
 		"title": "Inline Elements (Replaced)",
 		"replaced": "Replaced elements",
 		"base-styles": {
@@ -117,6 +120,7 @@
 		}
 	},
 	{
+		"rule-id": 4,
 		"title": "Block Element",
 		"base-styles": {
 			"display": "block"
@@ -139,6 +143,7 @@
 		}
 	},
 	{
+		"rule-id": 5,
 		"title": "Inline Block Element",
 		"base-styles": {
 			"display": "inline-block"
@@ -154,6 +159,7 @@
 		}
 	},
 	{
+		"rule-id": 6,
 		"title": "List Item Element",
 		"base-styles": {
 			"display": "list-item"
@@ -169,6 +175,7 @@
 		}
 	},
 	{
+		"rule-id": 7,
 		"title": "Inline Table Element",
 		"base-styles": {
 			"display": "inline-table"
@@ -184,6 +191,7 @@
 		}
 	},
 	{
+		"rule-id": 8,
 		"title": "Table Element",
 		"base-styles": {
 			"display": "table"
@@ -199,6 +207,7 @@
 		}
 	},
 	{
+		"rule-id": 9,
 		"title": "Collapsed Table Element",
 		"base-styles": {
 			"display": "table",
@@ -215,6 +224,7 @@
 		}
 	},
 	{
+		"rule-id": 10,
 		"title": "Table Cell Element",
 		"base-styles": {
 			"display": "table-cell"
@@ -230,6 +240,7 @@
 		}
 	},
 	{
+		"rule-id": 11,
 		"title": "Table Row Element",
 		"base-styles": {
 			"display": "table-row"
@@ -245,6 +256,7 @@
 		}
 	},
 	{
+		"rule-id": 12,
 		"title": "Table Row Group Element",
 		"base-styles": {
 			"display": "table-row-group"
@@ -260,6 +272,7 @@
 		}
 	},
 	{
+		"rule-id": 13,
 		"title": "Table Header Group Element",
 		"base-styles": {
 			"display": "table-header-group"
@@ -275,6 +288,7 @@
 		}
 	},
 	{
+		"rule-id": 14,
 		"title": "Table Footer Element",
 		"base-styles": {
 			"display": "table-footer-group"
@@ -290,6 +304,7 @@
 		}
 	},
 	{
+		"rule-id": 15,
 		"title": "Table Column Element",
 		"base-styles": {
 			"display": "table-column"
@@ -305,6 +320,7 @@
 		}
 	},
 	{
+		"rule-id": 16,
 		"title": "Table Column Element",
 		"base-styles": {
 			"display": "table-column-group"
@@ -320,6 +336,7 @@
 		}
 	},
 	{
+		"rule-id": 17,
 		"title": "Table Caption Element",
 		"base-styles": {
 			"display": "table-caption"
@@ -335,18 +352,21 @@
 		}
 	},
 	{
+		"rule-id": 18,
 		"title": "Flex Element",
 		"base-styles": {
 			"display": "flex"
 		}
 	},
 	{
+		"rule-id": 19,
 		"title": "Inline Flex Element",
 		"base-styles": {
 			"display": "inline-flex"
 		}
 	},
 	{
+		"rule-id": 20,
 		"title": "Float Element",
 		"base-styles": {
 			"float": "!default"
@@ -362,6 +382,7 @@
 		}
 	},
 	{
+		"rule-id": 21,
 		"title": "Negative Z-Index",
 		"ng-styles": {
 			"warning-styles": {
@@ -374,6 +395,7 @@
 		}
 	},
 	{
+		"rule-id": 22,
 		"title": "Empty Elements",
 		"empty": "Empty elements",
 		"ng-styles": {

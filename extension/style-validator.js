@@ -25,10 +25,10 @@ STYLEV.isChromeExtension = (function() {
 STYLEV.isBookmarklet = !STYLEV.isChromeExtension;
 
 //Detecting if has been reloaded
-STYLEV.isReLoaded = STYLEV.VALIDATOR !== undefined;
+STYLEV.isReloaded = STYLEV.VALIDATOR !== undefined;
 
 //Detecting if has been loaded at first
-STYLEV.isLoaded = !STYLEV.isReLoaded;
+STYLEV.isLoaded = !STYLEV.isReloaded;
 
 //Detecting if has been Executed at first
 STYLEV.isFirstExecuted = true;
@@ -428,6 +428,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				//全てのベーススタイルの分だけ検査
 				STYLEV.METHODS.each(baseStyles, function(baseStyleProp, baseStylePropVal) {
 
+					if(baseStylesText !== '') {
+						baseStylesText += ' ';
+					}
 					baseStylesText += baseStyleProp + ': ';
 					baseStylesText += baseStylePropVal + ';';
 
@@ -661,13 +664,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.elemIndex = (that.elemIndex+1)|0;
 			}
 
-			//エラーの発生した要素に、IDを振る
+			//Set index of data attribute
 			elemData.targetElem.dataset.stylevid = that.elemIndex;
 
-			//親要素を検査する場合
+			//If need to check parent element
 			if(isParentCheking) {
 
-				result.message =
+				result.messageText =
 					'[' + rule['title'] + ']' + ' ' +
 					'<' + elemData.targetElemTagName + '> ' +
 					'{' + baseStylesText + '}' + ' ' +
@@ -675,10 +678,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					'{' + ngStyleProp + ': ' + targetElemParentNgStyleVal + ';}' + ' ' +
 					result.reason;
 
-			//通常時
+			//Check the element itself
 			} else {
 
-				result.message =
+				result.messageText =
 					'[' + rule['title'] + ']' + ' '+
 					'<' + elemData.targetElemTagName + '>' + ' ' +
 					'{' + baseStylesText + '}' + ' ' +
@@ -686,10 +689,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					result.reason;
 			}
 
-			//要素のID名
-			result.stylevid = elemData.targetElem.dataset.stylevid;
+			//For generating data
+			result.rule = rule;
+			result.tagType = elemData.targetElemTagName;
+			result.ua = navigator.userAgent;
 
-			//エラーか警告かのタイプ
+			//For generating data and for other function
+			result.stylevid = elemData.targetElem.dataset.stylevid;
 			result.riskLevel = splitTypeArray[splitTypeArray.length - 2];
 
 			//メッセージ配列に挿入
@@ -1458,7 +1464,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				anchor.addEventListener('click', that.markElementFromConsole, false);
 
 				//テキスト情報を挿入
-				anchor.textContent = result.message;
+				anchor.textContent = result.messageText;
 				logID.textContent = result.stylevid;
 				reference.textContent = '?';
 
@@ -2003,15 +2009,16 @@ STYLEV.METHODS = {
 
 	each: function(target, fn) {
 
-		var that = STYLEV.METHODS;
-
-		var isExist = !!target;
-		var isFunc = typeof fn === 'function';
+		var isCorrectParameters = target && typeof target === 'object' && typeof fn === 'function';
 		var returnedValue;
 		var i = 0;
 
-		if(!isExist || !isFunc) {
-			return false;
+		if(!isCorrectParameters) {
+			try {
+				throw new Error("Bad Parameter!");
+			} catch (e) {
+				alert(e.name + ": " + e.message);
+			}
 		}
 
 		function loopArray(length) {
@@ -2052,11 +2059,15 @@ STYLEV.METHODS = {
 			var length = target.length || null;
 			if(length) {
 				loopArray(length);
-			} else {
+			} else if(!(target instanceof Array)) {
 				loopObject();
+			} else {
+				return null;
 			}
-		} else {
+		} else if(!(target instanceof Array)) {
 			loopObject();
+		} else {
+			return null;
 		}
 	},
 
@@ -2226,7 +2237,6 @@ if(STYLEV.isChromeExtension){
 	});
 }
 
-
 STYLEV.isPassedURLFilters = true;
 STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
 	if(url === location.href) {
@@ -2234,7 +2244,6 @@ STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
 		return 'break';
 	}
 });
-
 
 //ブックマークレット
 if(STYLEV.isBookmarklet && STYLEV.isPassedURLFilters) {
@@ -2246,7 +2255,7 @@ if(STYLEV.isBookmarklet && STYLEV.isPassedURLFilters) {
 		STYLEV.VALIDATOR.execute();
 
 	//一度実行している場合は、validateのみを実行
-	} else if(STYLEV.isReLoaded) {
+	} else if(STYLEV.isReloaded) {
 
 		console.groupEnd();console.group('Style Validator: Executed by Bookmarklet (ReExecution)');
 		STYLEV.VALIDATOR.validate();

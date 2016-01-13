@@ -18,7 +18,7 @@ STYLEV.RULES = {
 	initializeRuleArea: function() {
 		var that = STYLEV.RULES;
 
-		that.showCurrentJSON()
+		that.json2html()
 			.then(function() {
 				that.removeLoadingSpinner();
 				that.setParametersAfterAdding();
@@ -102,14 +102,15 @@ STYLEV.RULES = {
 		that.displayListMode.addEventListener('change', that.toggleDisplayMode, false);
 		that.displayColumnMode.addEventListener('change', that.toggleDisplayMode, false);
 
-		that.bind2RuleBox();
+		that.bind2RuleListItem();
 		that.bind2StylesList();
 	},
 
 	toggleDisplayMode: function(event) {
 		var that = STYLEV.RULES;
 		var valueFromEvent = event && event.currentTarget.value;
-		var displayMode = valueFromEvent || localStorage.getItem(that.rulesList.id);
+		var valueFromLS = localStorage.getItem(that.rulesList.id);
+		var displayMode = valueFromEvent || valueFromLS;
 
 		switch(displayMode) {
 			case 'column':
@@ -122,9 +123,12 @@ STYLEV.RULES = {
 				break;
 		}
 
-		localStorage.setItem(that.rulesList.id, displayMode);
+		if(valueFromEvent) {
+			localStorage.setItem(that.rulesList.id, displayMode);
+		}
 
-		if(!valueFromEvent) {
+		//init
+		if(!valueFromEvent && valueFromLS) {
 			that.displayListMode.checked = displayMode === 'list';
 			that.displayColumnMode.checked = displayMode === 'column';
 		}
@@ -205,14 +209,22 @@ STYLEV.RULES = {
 		alert('Download and replace file which named rules.json without rename the file');
 	},
 
-	bind2RuleBox: function() {
+	bind2RuleListItem: function(rulesListItem) {
 		var that = STYLEV.RULES;
-		that.each(that.rulesListItems, function(rulesListItem) {
+		
+		function findAndBind(rulesListItem) {
 			var editButton = rulesListItem.querySelector('.edit-button');
 			var removeButton = rulesListItem.querySelector('.remove-button');
 			editButton.addEventListener('click', that.toggleEditMode, false);
 			removeButton.addEventListener('click', that.removeTheRule, false);
-		});
+		}
+
+		if(rulesListItem) {
+			findAndBind(rulesListItem);
+
+		} else {
+			that.each(that.rulesListItems, findAndBind);
+		}
 	},
 
 	toggleEditMode: function(event) {
@@ -221,7 +233,8 @@ STYLEV.RULES = {
 		event.stopPropagation();
 		event.preventDefault();
 
-		var rulesListItem = that.closest(event.currentTarget, 'li');
+		var target = event.currentTarget || event.target;
+		var rulesListItem = that.closest(target, 'li[data-ruleid]');
 		var isEditMode = rulesListItem.classList.contains('edit-mode');
 
 		function reset() {
@@ -287,10 +300,10 @@ STYLEV.RULES = {
 		}
 	},
 
-	bind2StylesList: function(targetstylesLists) {
+	bind2StylesList: function(stylesLists) {
 		var that = STYLEV.RULES;
 
-		that.stylesLists = targetstylesLists ? targetstylesLists : that.stylesLists;
+		that.stylesLists = stylesLists ? stylesLists : that.stylesLists;
 
 		that.each(that.stylesLists, function(stylesList) {
 			stylesList.addEventListener('focus', that.insertProperty, false);
@@ -299,13 +312,14 @@ STYLEV.RULES = {
 	addRule: function() {
 		var that = STYLEV.RULES;
 		var clone = document.importNode(that.templateRule, true);
+		var ruleListItem = clone.querySelector('li');
 		var stylesLists = clone.querySelectorAll('.styles-list');
-
+		ruleListItem.classList.add('edit-mode');
+		that.bind2RuleListItem(ruleListItem);
 		that.bind2StylesList(stylesLists);
-		that.rulesList.insertBefore(clone, that.rulesList.firstChild);
+		that.rulesList.insertBefore(clone, that.rulesList.querySelector(':scope > li'));
+		that.rulesList.querySelector(':scope > li').querySelector('input').focus();
 		that.setParametersAfterAdding();
-		that.bind2RuleBox();
-		that.rulesList.querySelector('.text-input').querySelector('input').focus();
 	},
 	insertDummyElements: function() {
 		var that = STYLEV.RULES;
@@ -640,7 +654,7 @@ STYLEV.RULES = {
 				return '-'+letter.toLowerCase();
 			});
 	},
-	showCurrentJSON: function() {
+	json2html: function() {
 		var that = STYLEV.RULES;
 		var df = document.createDocumentFragment();
 
@@ -648,35 +662,39 @@ STYLEV.RULES = {
 
 			that.getURL('/Style-Validator/extension/data/rules.json')
 				.then(JSON.parse)
-				.then(function(data) {
+				.then(function(jsonArray) {
 
-					that.currentJSON = data;
-
-					that.each(that.currentJSON, function(rule) {
+					that.each(jsonArray, function(rule) {
 
 						var ngStyles = rule['ng-styles'];
 
 						var clone = document.importNode(that.templateRule, true);
+						var ruleListItem = clone.querySelector('li');
 						var typeSelects = clone.querySelectorAll('.type-select');
+						var stylesLists = clone.querySelectorAll('.styles-list');
 						var stylesListsBase = clone.querySelectorAll('.styles-list-base');
 						var stylesListsNg = clone.querySelectorAll('.styles-list-ng');
 						var textInputs = clone.querySelectorAll('.text-input');
 
+						if(rule['rule-id'] !== undefined) {
+							ruleListItem.dataset.ruleid = rule['rule-id'];
+						}
+
 						that.each(typeSelects, function(typeSelect) {
 							typeSelect.querySelector('select').tabIndex = 1;
-							that.addPropertyFromJSON2HTML(typeSelect, rule, typeSelect.dataset.id);
+							that.applyData2HTML(typeSelect, rule, typeSelect.dataset.id);
 						});
 						that.each(stylesListsBase, function(stylesListBase) {
 							stylesListBase.tabIndex = 1;
-							that.addPropertyFromJSON2HTML(stylesListBase, rule, stylesListBase.dataset.id);
+							that.applyData2HTML(stylesListBase, rule, stylesListBase.dataset.id);
 						});
 						that.each(stylesListsNg, function(stylesListNg) {
 							stylesListNg.tabIndex = 1;
-							that.addPropertyFromJSON2HTML(stylesListNg, ngStyles, stylesListNg.dataset.id);
+							that.applyData2HTML(stylesListNg, ngStyles, stylesListNg.dataset.id);
 						});
 						that.each(textInputs, function(textInput) {
 							textInput.querySelector('input').tabIndex = 1;
-							that.addPropertyFromJSON2HTML(textInput, rule, textInput.dataset.id);
+							that.applyData2HTML(textInput, rule, textInput.dataset.id);
 						});
 
 						df.appendChild(clone);
@@ -690,7 +708,7 @@ STYLEV.RULES = {
 		});
 	},
 
-	addPropertyFromJSON2HTML: function(target, rule, id) {
+	applyData2HTML: function(target, rule, id) {
 		var that = STYLEV.RULES;
 		var ruleStyles = rule && rule[id];
 
@@ -735,19 +753,38 @@ STYLEV.RULES = {
 
 	generateJSON: function() {
 		var that = STYLEV.RULES;
-		var json = [];
+		var jsonArray = [];
+		
+		//TODO: Need to receive `lastRuleID` from database on server
+		var localLastRuleID = localStorage.getItem('lastRuleID');
+		that.lastRuleID = (localLastRuleID && parseInt(localLastRuleID, 10)) || 0;
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
 
-		that.each(that.rulesListItems, function(rulesListItem) {
+		that.each(that.rulesListItems, function(rulesListItem, i) {
 
 			var rule = {};
+
+			var ruleIDFromElem = rulesListItem.dataset.ruleid;
+
+			if(ruleIDFromElem === undefined) {
+
+				that.lastRuleID = (that.lastRuleID+1)|0;
+
+				rule['rule-id'] = that.lastRuleID;
+				rulesListItem.dataset.ruleid = that.lastRuleID;
+
+			} else {
+
+				rule['rule-id'] = ruleIDFromElem;
+				that.lastRuleID = parseInt(ruleIDFromElem, 10);
+			}
 
 			var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
 
 			that.each(dataElements, function(dataElement) {
 
-				var id = dataElement.dataset.id;
+				var ruleType = dataElement.dataset.id;
 
 				if(dataElement.classList.contains('type-select')) {
 
@@ -756,7 +793,7 @@ STYLEV.RULES = {
 					var typeSelectItem = typeSelect.querySelector('select');
 
 					if(typeSelectItem.value) {
-						rule[id] = typeSelectItem.value;
+						rule[ruleType] = typeSelectItem.value;
 					}
 				}
 
@@ -767,7 +804,7 @@ STYLEV.RULES = {
 					if(!stylesListItems.length) {
 						return 'continue';
 					}
-					rule[id] = {};
+					rule[ruleType] = {};
 
 					that.each(stylesListItems, function(stylesListItem) {
 
@@ -780,7 +817,7 @@ STYLEV.RULES = {
 //							propertyValue.dataset_isvalid === 'true'
 //						) {
 
-						rule[id][property.value] = propertyValue.value;
+						rule[ruleType][property.value] = propertyValue.value;
 //						}
 					});
 				}
@@ -792,7 +829,7 @@ STYLEV.RULES = {
 						return 'continue';
 					}
 					rule['ng-styles'] = rule['ng-styles'] || {};
-					rule['ng-styles'][id] = {};
+					rule['ng-styles'][ruleType] = {};
 
 					that.each(stylesListItems, function(stylesListItem) {
 
@@ -801,10 +838,10 @@ STYLEV.RULES = {
 						var reason = stylesListItem.querySelector('.reason');
 						var referenceURL = stylesListItem.querySelector('.reference-url');
 
-						rule['ng-styles'][id][property.value] = [];
-						rule['ng-styles'][id][property.value][0] = propertyValue.value;
-						rule['ng-styles'][id][property.value][1] = reason.value;
-						rule['ng-styles'][id][property.value][2] = referenceURL.value;
+						rule['ng-styles'][ruleType][property.value] = [];
+						rule['ng-styles'][ruleType][property.value][0] = propertyValue.value;
+						rule['ng-styles'][ruleType][property.value][1] = reason.value;
+						rule['ng-styles'][ruleType][property.value][2] = referenceURL.value;
 					});
 				}
 
@@ -815,15 +852,20 @@ STYLEV.RULES = {
 					var textInputItem = textInput.querySelector('input');
 
 					if(textInputItem.value) {
-						rule[id] = textInputItem.value;
+						rule[ruleType] = textInputItem.value;
 					}
 				}
 			});
 
-			json.push(rule);
+			jsonArray.push(rule);
 		});
 
-		return json;
+		//TODO: Need to send `lastRuleID` to server 
+		//do ajax
+		
+		localStorage.setItem('lastRuleID', that.lastRuleID);
+		
+		return jsonArray;
 	},
 	getURL: function(url) {
 
@@ -880,48 +922,97 @@ STYLEV.RULES = {
 		alert('It could not connect to api server. Connect to api server, or click download button.')
 	},
 
-	closest: function(element, selector) {
-		var originalSelector = selector.toLowerCase();
+	parseSelector: function (selector) {
 
-		if( originalSelector.indexOf(' ') !== -1 ||
-			originalSelector.split(/[\.|#]/).length >= 3) {
-			return null;
+		var isCorrectParameters = typeof selector === 'string';
+
+		if(!isCorrectParameters) {
+			try {
+				throw new Error('Bad Parameter!');
+			} catch (e) {
+				alert(e.name + ": " + e.message);
+			}
 		}
 
-		var typeSelector, classSelector, idSelector, splitSelector;
-
-		var selectorType = (function() {
-			if(originalSelector.indexOf('.') === 0) {
-				classSelector = originalSelector.substr(1);
-				return 'class';
-			} else if(originalSelector.indexOf('#') === 0) {
-				idSelector = originalSelector.substr(1);
-				return 'id';
-			} else if(originalSelector.indexOf('.') > 0) {
-				splitSelector = originalSelector.split('.');
-				typeSelector = splitSelector[0];
-				classSelector = splitSelector[1];
-				return 'type-class';
-			} else if(originalSelector.indexOf('#') > 0) {
-				splitSelector = originalSelector.split('#');
-				typeSelector = splitSelector[0];
-				idSelector = splitSelector[1];
-				return 'type-id';
-			} else {
-				return 'type';
+		var parsedSelectorObj = {
+			tags: [],
+			ids: [],
+			classes: [],
+			attributes: []
+		};
+		selector.split(/(?=\.)|(?=#)|(?=\[)/).forEach(function(token){
+			switch (token[0]) {
+				case '#':
+					parsedSelectorObj.ids.push(token.slice(1));
+					break;
+				case '.':
+					parsedSelectorObj.classes.push(token.slice(1));
+					break;
+				case '[':
+					parsedSelectorObj.attributes.push(token.slice(1,-1).split('='));
+					break;
+				default :
+					parsedSelectorObj.tags.push(token);
+					break;
 			}
-		}());
+		});
+		return parsedSelectorObj;
+	},
 
-		while(
-			element !== null &&
-			!(
-				(selectorType === 'type' && element.tagName.toLowerCase() === typeSelector) ||
-				(selectorType === 'type-class' && element.tagName.toLowerCase() === typeSelector && element.classList.contains(classSelector)) ||
-				(selectorType === 'type-id' && element.tagName.toLowerCase() === typeSelector && element.id === idSelector)
-				(selectorType === 'class' && element.classList.contains(classSelector)) ||
-				(selectorType === 'id' && element.id === idSelector)
-			)
-		) {
+	closest: function(element, selector) {
+
+		var that = STYLEV.RULES;
+		var isCorrectParameters = element && element.nodeType === 1 && selector && typeof selector === 'string';
+		if(!isCorrectParameters) {
+			return null;
+		}
+		var parsedSelectorObj = that.parseSelector(selector);
+
+		function isMatchedSelector(targetElement) {
+
+			var isMatchedWithTags = true;
+			var isMatchedWithIDs = true;
+			var isMatchedWithClasses = true;
+			var isMatchedWithAttributes = true;
+
+			that.each(parsedSelectorObj.tags, function(value) {
+				if(targetElement.tagName.toLowerCase() !== value) {
+					isMatchedWithTags = false;
+				}
+			});
+
+			that.each(parsedSelectorObj.ids, function(value) {
+				if(targetElement.id !== value) {
+					isMatchedWithIDs = false;
+				}
+			});
+
+			that.each(parsedSelectorObj.classes, function(value) {
+				if(!targetElement.classList.contains(value)) {
+					isMatchedWithClasses = false;
+				}
+			});
+
+			that.each(parsedSelectorObj.attributes, function(value) {
+				var hasAttributeNameOnly = value.length === 1;
+				var attributeName = value[0];
+				if(hasAttributeNameOnly) {
+					if(!targetElement.hasAttribute(attributeName)) {
+						isMatchedWithAttributes = false;
+					}
+				} else {
+					var attributeValue = value[1];
+					if(targetElement.getAttribute(attributeName) !== attributeValue) {
+						isMatchedWithAttributes = false;
+					}
+				}
+			});
+			return isMatchedWithTags && isMatchedWithIDs && isMatchedWithClasses && isMatchedWithAttributes;
+		}
+
+		element = element.parentElement;
+
+		while(element && !isMatchedSelector(element)) {
 			element = element.parentElement;
 		}
 
@@ -969,13 +1060,16 @@ STYLEV.RULES = {
 
 	each: function(target, fn) {
 
-		var isExist = !!target;
-		var isFunc = typeof fn === 'function';
+		var isCorrectParameters = target && typeof target === 'object' && typeof fn === 'function';
 		var returnedValue;
 		var i = 0;
 
-		if(!isExist || !isFunc) {
-			return false;
+		if(!isCorrectParameters) {
+			try {
+				throw new Error("Bad Parameter!");
+			} catch (e) {
+				alert(e.name + ": " + e.message);
+			}
 		}
 
 		function loopArray(length) {
@@ -1016,11 +1110,15 @@ STYLEV.RULES = {
 			var length = target.length || null;
 			if(length) {
 				loopArray(length);
-			} else {
+			} else if(!(target instanceof Array)) {
 				loopObject();
+			} else {
+				return null;
 			}
-		} else {
+		} else if(!(target instanceof Array)) {
 			loopObject();
+		} else {
+			return null;
 		}
 	}
 

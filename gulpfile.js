@@ -17,7 +17,6 @@ gulp.task('generate', function () {
   gulp.src('extension/style-validator.js')
     .pipe(gulpJshint())
     .pipe(gulpUglify())
-    .pipe(gulpConcat('style-validator.js'))//TODO: needless?
     .pipe(map(function (file, cb) {
       file.contents = buffer.Buffer.concat([header, file.contents]);
       cb(null, file);
@@ -25,7 +24,7 @@ gulp.task('generate', function () {
     .pipe(gulp.dest('bookmarklet'));
 });
 
-gulp.task('clean', del.bind(null, 'bookmarklet'));
+gulp.task('clean', del.bind(null, 'generate'));
 
 gulp.task('watch', function () {
 	var watcher = gulp.watch('extension/style-validator.js', ['generate']);
