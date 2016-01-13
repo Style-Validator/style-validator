@@ -25,12 +25,12 @@ STYLEV.RULES = {
 				that.removeLoadingSpinner();
 				that.setParametersAfterAdding();
 				that.bindEvents();
-				STYLEV.VALIDATOR.setStyleDataBySelectors();
 				that.resizeTextareaBasedOnLine();
 				that.toggleReason();
 				that.toggleReferenceURL();
 				that.toggleDisplayMode();
 				that.searchProperty();
+				STYLEV.VALIDATOR.setStyleDataBySelectors();
 				that.isShowedAllAtFirst = true;
 			});
 	},
@@ -223,7 +223,6 @@ STYLEV.RULES = {
 
 		if(rulesListItem) {
 			findAndBind(rulesListItem);
-
 		} else {
 			that.each(that.rulesListItems, findAndBind);
 		}
@@ -1057,7 +1056,7 @@ STYLEV.RULES = {
 
 	removeLoadingSpinner: function() {
 		var loadingSpinner = document.querySelector('#loadingSpinner');
-		loadingSpinner.parentElement.removeChild(loadingSpinner);
+		loadingSpinner && loadingSpinner.parentElement.removeChild(loadingSpinner);
 	},
 
 	each: function(target, fn) {
