@@ -1,10 +1,11 @@
 {
   "name": "stylev",
   "version": "0.0.0",
-  "license" : "MIT",
+  "license": "MIT",
   "dependencies": {
     "del": "^2.0.1",
-    "devtools-detect": "^2.0.0"
+    "devtools-detect": "^2.0.0",
+    "mongodb": "^2.1.4"
   },
   "devDependencies": {
     "browser-sync": "^2.9.11",

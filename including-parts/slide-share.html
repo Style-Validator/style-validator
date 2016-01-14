@@ -6,7 +6,7 @@
 		is: "slide-share",
 		// add a callback to the element's prototype
 		ready: function() {
-			if(location.href.indexOf('stylev') !== -1 || myip === '202.162.158.226') {
+			if(location.href.indexOf('stylev') !== -1 || myip === '202.162.158.226' || myip === '119.104.9.15') {
 				this.textContent = 'If local then this is hidden. Because view count increments meaningless.';
 			} else {
 				this.innerHTML = '<iframe src="//www.slideshare.net/slideshow/embed_code/key/lMxVcs5tLhMySU" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/TakeharuIgari/style-validator-at-breakout-session-of-tpac2015" title="Style Validator at breakout session of TPAC2015" target="_blank">Style Validator at breakout session of TPAC2015</a> </strong> from <strong><a href="//www.slideshare.net/TakeharuIgari" target="_blank">Takeharu Igari</a></strong> </div>';
