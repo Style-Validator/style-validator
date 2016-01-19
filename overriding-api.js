@@ -44,7 +44,7 @@ function request(request, response){
 					var testData = db.collection('testData');
 					var parsedStore = JSON.parse(store);
 					testData.insert(parsedStore, {}, function(err, testData) {
-						console.log('Inserted completely to Database');
+						console.log('Inserted data completely to Database');
 						db.close();
 					});
 				});
