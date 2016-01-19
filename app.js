@@ -2,11 +2,11 @@ var http = require('http');
 var fs = require('fs');
 var assert = require('assert');
 var url = require('url');
-var port = 8001;
+var port = process.env.PORT || 8001;
 var server = http.createServer();
 var MongoClient = require('mongodb').MongoClient;
 var dbname = 'validation_log';
-var dburl = 'mongodb://localhost:27017/' + dbname;
+var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
 
 server.on('request', request);
 server.listen(port, function() {
