@@ -1,6 +1,6 @@
 {
-  "name": "stylev",
-  "version": "0.0.0",
+  "name": "Style Validator",
+  "version": "0.3.0.4",
   "license": "MIT",
   "dependencies": {
     "del": "^2.0.1",
