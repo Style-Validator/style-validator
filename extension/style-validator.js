@@ -333,7 +333,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	validate: function(callback) {
 
 		console.info('Style Validator: Validator is starting...');
-		console.time('Style Validator Validator execute');
+		console.time('Style Validator Execution');
 
 		var that = STYLEV.VALIDATOR;
 
@@ -493,7 +493,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.insertGA();
 
 		console.info('Style Validator: Validated and Console has been displayed');
-		console.timeEnd('Style Validator Validator execute');
+		console.timeEnd('Style Validator Execution');
 
 		//バリデータによるDOM変更が全て完了してから監視開始
 		that.moManager.connect();
