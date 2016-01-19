@@ -152,34 +152,36 @@
 
 <template id="template-rule">
 	<li>
-		<header class="rules-list-header text-input" data-id="title">
-			<input type="text" tabindex="1" />
-			<a href="javascript: void(0);" class="remove-button">Remove</a>
-			<a href="javascript: void(0);" class="edit-button">Edit</a>
-		</header>
-		<div class="rules-list-body">
-			<section class="type-select" data-id="replaced">
-				<select tabindex="1">
-					<option value="" selected="selected">------------</option>
-					<option value="Non-replaced elements">Non-replaced elements</option>
-					<option value="Replaced elements">Replaced elements</option>
-				</select>
-			</section>
-			<section class="type-select" data-id="empty">
-				<select>
-					<option value="" selected="selected">------------</option>
-					<option value="Empty elements">Empty elements</option>
-				</select>
-			</section>
-			<ul class="styles-list styles-list-base" data-id="base-styles" tabindex="1"></ul>
-			<ul class="styles-list styles-list-ng" data-id="error-styles" tabindex="1"></ul>
-			<ul class="styles-list styles-list-ng" data-id="warning-styles" tabindex="1"></ul>
-			<ul class="styles-list styles-list-ng" data-id="parent-error-styles" tabindex="1"></ul>
-			<ul class="styles-list styles-list-ng" data-id="parent-warning-styles" tabindex="1"></ul>
-			<!--<ul class="styles-list-ng" data-id="pseudo-before-error-styles"></ul>-->
-			<!--<ul class="styles-list-ng" data-id="pseudo-before-warning-styles"></ul>-->
-			<!--<ul class="styles-list-ng" data-id="pseudo-after-error-styles"></ul>-->
-			<!--<ul class="styles-list-ng" data-id="pseudo-after-warning-styles"></ul>-->
+		<div class="rules-list-wrapper">
+			<header class="rules-list-header text-input" data-id="title">
+				<input type="text" tabindex="1" />
+				<a href="javascript: void(0);" class="remove-button">Remove</a>
+				<a href="javascript: void(0);" class="edit-button">Edit</a>
+			</header>
+			<div class="rules-list-body">
+				<section class="type-select" data-id="replaced">
+					<select tabindex="1">
+						<option value="" selected="selected">------------</option>
+						<option value="Non-replaced elements">Non-replaced elements</option>
+						<option value="Replaced elements">Replaced elements</option>
+					</select>
+				</section>
+				<section class="type-select" data-id="empty">
+					<select>
+						<option value="" selected="selected">------------</option>
+						<option value="Empty elements">Empty elements</option>
+					</select>
+				</section>
+				<ul class="styles-list styles-list-base" data-id="base-styles" tabindex="1"></ul>
+				<ul class="styles-list styles-list-ng" data-id="error-styles" tabindex="1"></ul>
+				<ul class="styles-list styles-list-ng" data-id="warning-styles" tabindex="1"></ul>
+				<ul class="styles-list styles-list-ng" data-id="parent-error-styles" tabindex="1"></ul>
+				<ul class="styles-list styles-list-ng" data-id="parent-warning-styles" tabindex="1"></ul>
+				<!--<ul class="styles-list-ng" data-id="pseudo-before-error-styles"></ul>-->
+				<!--<ul class="styles-list-ng" data-id="pseudo-before-warning-styles"></ul>-->
+				<!--<ul class="styles-list-ng" data-id="pseudo-after-error-styles"></ul>-->
+				<!--<ul class="styles-list-ng" data-id="pseudo-after-warning-styles"></ul>-->
+			</div>
 		</div>
 	</li>
 </template>

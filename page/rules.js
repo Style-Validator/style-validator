@@ -66,6 +66,8 @@ STYLEV.RULES = {
 
 		that.allCSSProperties = [];
 		that.INPUT_ARROW_WIDTH = 22;
+
+		that.each = STYLEV.VALIDATOR.each;
 	},
 	applyFromLocalStorage: function() {
 		var that = STYLEV.RULES;
@@ -777,8 +779,7 @@ STYLEV.RULES = {
 
 			} else {
 
-				rule['rule-id'] = ruleIDFromElem;
-				that.lastRuleID = parseInt(ruleIDFromElem, 10);
+				rule['rule-id'] = that.lastRuleID = parseInt(ruleIDFromElem, 10);
 			}
 
 			var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
@@ -898,7 +899,6 @@ STYLEV.RULES = {
 
 		xhr.open(method, apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
 		xhr.addEventListener('load', function () {
 			if (xhr.status === 200) {
 				that.showSuccessMsg();
@@ -906,13 +906,11 @@ STYLEV.RULES = {
 				that.showErrorMsg();
 			}
 		}, false);
-		xhr.onerror = function () {
-			that.showErrorMsg();
-		};
-		//TODO: add handling of response
-		//TODO: not server connected, alert error
+		xhr.addEventListener('error', that.showErrorMsg);
 
-		if (xhr.readyState == 4) return;
+		if (xhr.readyState == 4) {
+			return;
+		}
 
 		xhr.send(data4send);
 	},
@@ -920,7 +918,7 @@ STYLEV.RULES = {
 		alert('Saving of rules was successful! Let\'s send Pull Request!');
 	},
 	showErrorMsg: function() {
-		alert('It could not connect to api server. Connect to api server, or click download button.')
+		alert('Could not connect to api server. Connect to api server, or click download button.');
 	},
 
 	parseSelector: function (selector) {
@@ -1057,70 +1055,6 @@ STYLEV.RULES = {
 	removeLoadingSpinner: function() {
 		var loadingSpinner = document.querySelector('#loadingSpinner');
 		loadingSpinner && loadingSpinner.parentElement.removeChild(loadingSpinner);
-	},
-
-	each: function(target, fn) {
-
-		var isCorrectParameters = target && typeof target === 'object' && typeof fn === 'function';
-		var returnedValue;
-		var i = 0;
-
-		if(!isCorrectParameters) {
-			try {
-				throw new Error("Bad Parameter!");
-			} catch (e) {
-				alert(e.name + ": " + e.message);
-			}
-		}
-
-		function loopArray(length) {
-			for(; i < length; i = (i+1)|0) {
-
-				var data = target[i];
-
-				returnedValue = fn(data, i);
-
-				if(returnedValue === 'continue') {
-					continue;
-				}
-				if(returnedValue === 'break') {
-					break;
-				}
-			}
-		}
-
-		function loopObject() {
-			for(var key in target) {
-				if(target.hasOwnProperty(key)) {
-
-					var value = target[key];
-
-					returnedValue = fn(key, value, i = (i+1)|0);
-
-					if(returnedValue === 'continue') {
-						continue;
-					}
-					if(returnedValue === 'break') {
-						break;
-					}
-				}
-			}
-		}
-
-		if('length' in target) {
-			var length = target.length || null;
-			if(length) {
-				loopArray(length);
-			} else if(!(target instanceof Array)) {
-				loopObject();
-			} else {
-				return null;
-			}
-		} else if(!(target instanceof Array)) {
-			loopObject();
-		} else {
-			return null;
-		}
 	}
 
 };

@@ -1,4 +1,0 @@
-Header set Access-Control-Allow-Origin "*"
-
-AddType application/x-httpd-php .htm .html
-

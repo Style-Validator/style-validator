@@ -1,3 +1,6 @@
+- スタイル情報取得の参考に
+-- http://stackoverflow.com/questions/9430659/how-to-get-all-the-applied-styles-of-an-element-by-just-giving-its-id
+-- https://davidwalsh.name/element-matches-selector
 - onerror で画面上ダメージを受けたような表現　別のExtensionをつくる
 - それぞれのルールにユニークなIDを振る　ルールJSONへ補完
 - それぞれのルールの存在期間を保存、表示する

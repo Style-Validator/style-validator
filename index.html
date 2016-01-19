@@ -69,13 +69,14 @@
 				<li><a href="/Style-Validator/page/demo-simple.html" target="_blank"><img src="/Style-Validator/img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Simple Demo</a></li>
 				<li><a href="/Style-Validator/page/demo.html" target="_blank"><img src="/Style-Validator/img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Demo</a></li>
 				<li><a href="/Style-Validator/page/references.html" target="_blank"><img src="/Style-Validator/img/iconmonstr-note-19.svg" width="32" alt="" />Docs</a></li>
+				<li><a href="/Style-Validator/page/analytics.html" target="_blank"><img src="/Style-Validator/img/iconmonstr-chart-19.svg" width="32" alt="" />Analytics</a></li>
 				<li><a href="/Style-Validator/page/rules.html" target="_blank"><img src="/Style-Validator/img/iconmonstr-edit-8-icon.svg" width="32" alt="" />Rules</a></li>
 			</ul>
 		</nav>
 	</header>
 	<main class="main">
 		<figure class="kv content-width">
-			<div class="kv-logo"><img src="./img/style-validator.logo.nopadding.svg" class="kv-logo-image"/></div>
+			<div class="kv-logo" id="vivus-kv-logo"><!--<img src="/Style-Validator/img/style-validator.logo.nopadding.svg" class="kv-logo-image"/>--></div>
 			<figcaption class="kv-caption">
 				<div class="kv-header">
 					<h2 class="kv-heading">Validation in the Browser</h2>
@@ -150,7 +151,9 @@
 				<div class="slide-header">
 					<h3 class="slide-heading">Keynote</h3>
 				</div>
-				<div class="slide-body"><slide-share></slide-share></div>
+				<div class="slide-body">
+					<slide-share>If local then this is hidden. Because view count increments meaningless.</slide-share>
+				</div>
 			</div>
 		</section>
 		<footer class="footer">
@@ -158,7 +161,15 @@
 		</footer>
 	</main>
 </div>
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="./page/jquery-2.1.4.min.js"></script>
+<script src="./page/vivus.min.js"></script>
+<script>
+	new Vivus('vivus-kv-logo', {
+		duration: 200,
+		file: '/Style-Validator/img/style-validator.logo.nopadding.svg',
+		type: 'async'
+	});
+</script>
 <script>
 	(function() {
 		$.ajax({

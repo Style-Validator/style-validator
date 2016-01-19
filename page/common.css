@@ -20,7 +20,7 @@ h1, h2, h3, h4, h5, h6 {
 nav.main-header-nav-display-mode {
 	list-style: none;
 }
-img, input, select, textarea, button, svg, canvas {
+img, input, select, textarea, button, svg, canvas, object {
 	vertical-align: middle;
 }
 input, select, textarea, button {
@@ -65,12 +65,20 @@ a:active {
 	left: 0;
 	background: #F9F9F9;
 	z-index: 1000;
+	align-items: center;
 }
 .header-heading {
 	margin: 0;
 	font-size: 26px;
 	font-weight: normal;
 	flex-shrink: 0;
+	padding-right: 20px;
+}
+.header-heading img {
+	position: relative;
+	top: -2px;
+	margin-right: 8px;
+	width: 46px;
 }
 .header-nav {
 	margin-top: auto;
@@ -79,15 +87,14 @@ a:active {
 .header-nav-list {
 	margin: 0;
 	display: flex;
+	flex-wrap: wrap;
 }
 .header-nav-list > li {
 	flex-shrink: 0;
 }
-.header-nav-list > li + li {
-	margin-left: 20px;
-}
 .header-nav-list > li a {
 	display: block;
+	padding-right: 20px;
 }
 .header-nav img {
 	margin-right: 6px;

@@ -333,6 +333,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	validate: function(callback) {
 
 		console.info('Style Validator: Validator is starting...');
+		console.time('Style Validator Validator execute');
 
 		var that = STYLEV.VALIDATOR;
 
@@ -467,8 +468,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//デフォルトスタイル取得用のiframeを削除
 		that.removeIframe4getDefaultStyles();
 
-		//Generate Error Data for sending to database on remote server
-		that.generateResultData();
+		//send result data to database
+		that.send2db();
 
 		if(that.isSameWithPreviousData()) {
 			return false;
@@ -492,6 +493,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.insertGA();
 
 		console.info('Style Validator: Validated and Console has been displayed');
+		console.timeEnd('Style Validator Validator execute');
 
 		//バリデータによるDOM変更が全て完了してから監視開始
 		that.moManager.connect();
@@ -524,13 +526,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//メッセージ管理するオブジェクト
 		var result = {};
 
-		var splitTypeArray = ngStyleType.split('-');
+		var splitedNgStyleTypeArray = ngStyleType.split('-');
 
 		//親要素をチェックする
-		var isParentCheking = elemData.targetParentElem && splitTypeArray[0] === 'parent';
+		var isCheckingParent = elemData.targetParentElem && splitedNgStyleTypeArray[0] === 'parent';
 
 		//擬似セレクター
-		var pseudoSelector = splitTypeArray[0] === 'pseudo' ? splitTypeArray[1] : null;
+		var pseudoSelector = splitedNgStyleTypeArray[0] === 'pseudo' ? splitedNgStyleTypeArray[1] : null;
 
 		//対象要素のNGスタイルのデフォルト値
 		var targetElemNgStyleDefaultVal = that.getStyle(elemData.targetElemDefault, ngStyleProp, pseudoSelector);
@@ -541,10 +543,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//NGスタイルのプロパティ値を検索するための正規表現
 		var regexNgStyleRulesPropVal;
 
+		var reason;
+		var referenceURL;
+
 		//値が配列の場合
 		if(ngStylePropVal instanceof Array) {
-			result.reason = ngStylePropVal[1] || '';
-			result.referenceURL = ngStylePropVal[2] || '';
+			reason = ngStylePropVal[1] || '';
+			referenceURL = ngStylePropVal[2] || '';
 			ngStylePropVal = ngStylePropVal[0];
 		}
 
@@ -606,55 +611,53 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//TODO: 0.00001とかの場合を考慮して、parseIntの10進数も考える
 		//違反スタイルを検知してエラーもしくは警告をだす
 		if(
+			// Normal Pattern
 
-			/////////////////////////////
-			//is normal
-			//
-			// 一致
+			// Equal with NG Style
 			(!isReverse && isNgStyle) ||
 
-			//0以上
+			// Granter than 0
 			(!isReverse && ngStylePropVal === 'over-0' && isZeroOver) ||
 
-			//0以下
+			// Less than 0
 			(!isReverse && ngStylePropVal === 'under-0' && isZeroUnder) ||
 
-			//デフォルト値の場合
+			// Default Value
 			(!isReverse && ngStylePropVal === 'default' && isDefault) ||
 
-			//継承スタイルの場合（line-height）
+			// Inherit Style（in case of line-height）
 			(!isReverse && ngStylePropVal === 'inherit' && ngStyleProp === 'line-height' && isInheritWithLineHeight) ||
 
-			//継承スタイルの場合（通常：line-height以外）
+			// Inherit Style（in case of NOT line-height）
 			(!isReverse && ngStylePropVal === 'inherit' && isInherit) ||
 
-			//反転でない場合かつ、親要素がエラースタイルの場合
-			(!isReverse && isParentCheking && isParentNgStyle) ||
+			// Parent element has NG Style
+			(!isReverse && isCheckingParent && isParentNgStyle) ||
 
 
-			/////////////////////////////
-			//is reverse
-			//
+			// Reverse Pattern
+
 			// Without it TODO: Need to research that how it is possible
 //			(isReverse && !isNgStyle) ||
 
-			//0以外
+			// Not 0
 			(isReverse && ngStylePropVal === '0' && !isZero) ||
 
-			//デフォルト値以外
+			// Not Detault
 			(isReverse && ngStylePropVal === 'default' && !isDefault) ||
 
-			//継承スタイル以外（line-height）
+			// Not Inherit Style（in case of line-height）
 			(isReverse && ngStylePropVal === 'inherit' && ngStyleProp === 'line-height' && !isInheritWithLineHeight) ||
 
-			//継承スタイル以外（通常：line-height以外）
+			// Not Inherit Style（in case of NOT line-height）
 			(isReverse && ngStylePropVal === 'inherit' && !isInherit) ||
 
-			//反転の場合かつ、親要素のOKスタイル以外に適合したら
-			(isReverse && isParentCheking && !isParentNgStyle)
+			// Parent element dose not have NG Style
+			(isReverse && isCheckingParent && !isParentNgStyle)
 
 		){
 
+			//Set Index
 			if(
 				!(
 					elemData.targetElem.classList.contains('stylev-target-error') ||
@@ -664,19 +667,19 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.elemIndex = (that.elemIndex+1)|0;
 			}
 
-			//Set index of data attribute
+			//Set Index to Data Attribute
 			elemData.targetElem.dataset.stylevid = that.elemIndex;
 
 			//If need to check parent element
-			if(isParentCheking) {
+			if(isCheckingParent) {
 
 				result.messageText =
 					'[' + rule['title'] + ']' + ' ' +
 					'<' + elemData.targetElemTagName + '> ' +
-					'{' + baseStylesText + '}' + ' ' +
+					baseStylesText && ('{' + baseStylesText + '}' + ' ') +
 					'Parent element\'s style is ' +
 					'{' + ngStyleProp + ': ' + targetElemParentNgStyleVal + ';}' + ' ' +
-					result.reason;
+					reason;
 
 			//Check the element itself
 			} else {
@@ -684,30 +687,42 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				result.messageText =
 					'[' + rule['title'] + ']' + ' '+
 					'<' + elemData.targetElemTagName + '>' + ' ' +
-					'{' + baseStylesText + '}' + ' ' +
+					baseStylesText && ('{' + baseStylesText + '}' + ' ') +
 					'{' + ngStyleProp + ': ' + targetElemNgStyleVal + ';}' + ' ' +
-					result.reason;
+					reason;
+
 			}
 
 			//For generating data
+			result.ruleID = rule['rule-id'];
 			result.rule = rule;
-			result.tagType = elemData.targetElemTagName;
-			result.ua = navigator.userAgent;
+			result.ngStyle = {};
+			result.ngStyle[ngStyleProp] = ngStylePropVal;
+			result.tagName = elemData.targetElemTagName;
+			if(rule['base-styles']) {
+				result.baseStyle = rule['base-styles'];
+			}
+			result.targetStyle = {};
+			result.targetStyle[ngStyleProp] = targetElemNgStyleVal;
+			if(isCheckingParent) {
+				result.targetParentStyle = {};
+				result.targetParentStyle[ngStyleProp] = targetElemParentNgStyleVal;
+			}
+			result.reason = reason;
+			result.referenceURL = referenceURL;
 
 			//For generating data and for other function
-			result.stylevid = elemData.targetElem.dataset.stylevid;
-			result.riskLevel = splitTypeArray[splitTypeArray.length - 2];
+//			result.stylevid = elemData.targetElem.dataset.stylevid;
+			result.riskLevel = splitedNgStyleTypeArray[splitedNgStyleTypeArray.length - 2];
 
-			//メッセージ配列に挿入
+			//Generate Result Data
 			that.resultArray.push(result);
 
-			//エラー
 			if(result.riskLevel === 'error') {
 
 				elemData.targetElem.classList.add('stylev-target-error');
 			}
 
-			//警告
 			if(result.riskLevel === 'warning') {
 
 				elemData.targetElem.classList.add('stylev-target-warning');
@@ -715,7 +730,45 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		}
 	},
 
-	//バリデーション実行直前の初期化処理
+	send2db: function() {
+		var that = STYLEV.VALIDATOR;
+
+		var xhr = new XMLHttpRequest();
+		var apiURI = 'http://localhost:8001/send2db';
+		var method = 'POST';
+		var data = {};
+		data.time = new Date().getTime();
+		data.ua = navigator.userAgent;
+		data.result = that.resultArray;
+
+		var data4send = JSON.stringify(data, null, '\t');
+		console.dir(data);
+
+		xhr.open(method, apiURI, true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.addEventListener('load', function () {
+			if (xhr.status === 200) {
+				that.showSuccessMsg();
+			} else {
+				that.showErrorMsg();
+			}
+		}, false);
+		xhr.addEventListener('error', that.showErrorMsg);
+
+		if (xhr.readyState == 4) {
+			return;
+		}
+
+		xhr.send(data4send);
+	},
+	showSuccessMsg: function() {
+		console.info('Style Validator: Sent result to database successfully');
+	},
+
+	showErrorMsg: function(e) {
+		console.error(e);
+	},
+
 	initializeBeforeValidation: function() {
 
 		var that = STYLEV.VALIDATOR;
@@ -1075,15 +1128,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//initialize flag
 		that.isIgnore = true;
 		that.isModified = false;
-	},
-	
-	generateResultData: function() {
-		var that = STYLEV.VALIDATOR;
-
-		var resultArray = that.resultArray;
-
-		console.dir(resultArray);
-
 	},
 
 	isSameWithPreviousData: function() {
@@ -2014,11 +2058,7 @@ STYLEV.METHODS = {
 		var i = 0;
 
 		if(!isCorrectParameters) {
-			try {
-				throw new Error("Bad Parameter!");
-			} catch (e) {
-				alert(e.name + ": " + e.message);
-			}
+			return;
 		}
 
 		function loopArray(length) {
@@ -2061,13 +2101,10 @@ STYLEV.METHODS = {
 				loopArray(length);
 			} else if(!(target instanceof Array)) {
 				loopObject();
-			} else {
-				return null;
 			}
+
 		} else if(!(target instanceof Array)) {
 			loopObject();
-		} else {
-			return null;
 		}
 	},
 

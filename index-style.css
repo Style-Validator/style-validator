@@ -20,6 +20,8 @@
 	flex-basis: 33.3%;
 	margin-top: auto;
 	margin-bottom: auto;
+	-webkit-box-reflect: below 30px
+	-webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.3) 0%, transparent 30%, transparent 100%);
 }
 .kv-logo-image {
 	width: 100%;
@@ -133,18 +135,10 @@ hr {
 	border-color: #000;
 	border-width: 1px 0 0 0;
 }
-.header-heading img {
-	position: relative;
-	top: -2px;
-	margin-right: 8px;
-	width: 46px;
-}
 .main-capture {
 	/* float: right; */
 	max-width: 100%;
 	/* margin-top: 20px; */
-	-webkit-box-reflect: below 40px
-	-webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%);
 }
 .main-body {
 	/* float: left; */

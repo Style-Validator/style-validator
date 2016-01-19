@@ -4,7 +4,6 @@ var buffer = require('buffer');
 var del = require('del');
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
-var gulpConcat = require('gulp-concat');
 var gulpJshint = require('gulp-jshint');
 var gulpUglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
@@ -24,7 +23,7 @@ gulp.task('generate', function () {
     .pipe(gulp.dest('bookmarklet'));
 });
 
-gulp.task('clean', del.bind(null, 'generate'));
+gulp.task('clean', del.bind(null, './bookmarklet'));
 
 gulp.task('watch', function () {
 	var watcher = gulp.watch('extension/style-validator.js', ['generate']);
@@ -36,7 +35,7 @@ gulp.task('watch', function () {
 gulp.task('api-start', function () {
 	nodemon({
 		script: 'overriding-api.js',
-		ext: 'html css js'
+		ext: 'html js'
 	})
 });
 

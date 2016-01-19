@@ -5,6 +5,7 @@
   "dependencies": {
     "del": "^2.0.1",
     "devtools-detect": "^2.0.0",
+    "kerberos": "0.0.17",
     "mongodb": "^2.1.4"
   },
   "devDependencies": {
