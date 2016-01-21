@@ -10,7 +10,7 @@ var gulpJshint = require('gulp-jshint');
 var gulpUglify = require('gulp-uglify');
 
 //generate bookmark
-gulp.task('generate-bookmarklet', function () {
+gulp.task('generate', function () {
 
 	var header = new Buffer('javascript:');
 
@@ -27,7 +27,7 @@ gulp.task('generate-bookmarklet', function () {
 gulp.task('clean', del.bind(null, 'bookmarklet'));
 
 gulp.task('watch', function () {
-	var watcher = gulp.watch('extension/style-validator.js', ['generate-bookmarklet']);
+	var watcher = gulp.watch('extension/style-validator.js', ['generate']);
 	watcher.on('change', function(event) {
 		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
 	});
@@ -40,4 +40,4 @@ gulp.task('start-server', function () {
 		ext: 'html js'
 	})
 });
-gulp.task('default', ['clean', 'generate-bookmarklet', 'watch', 'start-server']);
+gulp.task('default', ['clean', 'generate', 'watch', 'start-server']);
