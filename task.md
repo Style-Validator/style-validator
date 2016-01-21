@@ -1,3 +1,7 @@
+- Server sent eventsを試す　バージョン情報の染み出しなどに使えるかも
+- Github PagesのURIを見直す　ルートをディレクトリ
+- HerokuとGithub連携で自動デプロイを実現させる
+- ヴァージョン情報をmanifestのバージョン変えたら、他のgulpfileとかpackage.jsonとかあたりに連動して修正されるようにする
 - スタイル情報取得の参考に
 -- http://stackoverflow.com/questions/9430659/how-to-get-all-the-applied-styles-of-an-element-by-just-giving-its-id
 -- https://davidwalsh.name/element-matches-selector
