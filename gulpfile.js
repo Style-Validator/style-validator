@@ -8,7 +8,6 @@ var gulp = require('gulp');
 var gulpNodemon = require('gulp-nodemon');
 var gulpJshint = require('gulp-jshint');
 var gulpUglify = require('gulp-uglify');
-var gulpWebserver = require('gulp-webserver');
 
 //generate bookmark
 gulp.task('generate-bookmarklet', function () {
@@ -35,23 +34,10 @@ gulp.task('watch', function () {
 });
 
 //start server
-gulp.task('start-node-server', function () {
+gulp.task('start-server', function () {
 	gulpNodemon({
 		script: 'app.js',
 		ext: 'html js'
 	})
 });
-
-//open browser
-gulp.task('open-browser', function () {
-	gulp
-		.src('../')
-		.pipe(
-			gulpWebserver({
-				livereload: false,
-				open: 'http://localhost:8000/Style-Validator/page/rules.html'
-			})
-		);
-});
-
-gulp.task('default', ['clean', 'generate-bookmarklet', 'watch', 'start-node-server', 'open-browser']);
+gulp.task('default', ['clean', 'generate-bookmarklet', 'watch', 'start-server']);
