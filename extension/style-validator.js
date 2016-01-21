@@ -49,7 +49,10 @@ STYLEV.options = {
 	URL_FILTERS: [
 		'http://stylev/Style-Validator/page/rules.html',
 		'http://localhost:8000/Style-Validator/page/rules.html',
-		'http://style-validator.gihub.io/Style-Validator/page/rules.html'
+		'http://style-validator.gihub.io/Style-Validator/page/rules.html',
+		'http://style-validator.gihub.io/page/rules.html',
+		'http://localhost:8001/page/rules.html',
+		'https://style-validator.herokuapp.com/page/rules.html'
 	]
 };
 
@@ -734,8 +737,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		var that = STYLEV.VALIDATOR;
 
 		var xhr = new XMLHttpRequest();
+//		var apiURI = 'https://style-validator.herokuapp.com/send2db';
 		var apiURI = 'http://localhost:8001/send2db';
-		var method = 'POST';
+		var methodType = 'POST';
 		var data = {};
 		data.time = new Date().getTime();
 		data.ua = navigator.userAgent;
@@ -744,7 +748,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		var data4send = JSON.stringify(data, null, '\t');
 		console.dir(data);
 
-		xhr.open(method, apiURI, true);
+		xhr.open(methodType, apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.addEventListener('load', function () {
 			if (xhr.status === 200) {
@@ -2274,6 +2278,7 @@ if(STYLEV.isChromeExtension){
 	});
 }
 
+//TODO: confirm this function
 STYLEV.isPassedURLFilters = true;
 STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
 	if(url === location.href) {
@@ -2282,20 +2287,23 @@ STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
 	}
 });
 
-//ブックマークレット
-if(STYLEV.isBookmarklet && STYLEV.isPassedURLFilters) {
+if(STYLEV.isBookmarklet) {
 
-	//初期読込の場合
-	if(STYLEV.isLoaded) {
+	if(STYLEV.isPassedURLFilters) {
 
-		console.groupEnd();console.group('Style Validator: Executed by Bookmarklet.');
-		STYLEV.VALIDATOR.execute();
+		if(STYLEV.isLoaded) {
 
-	//一度実行している場合は、validateのみを実行
-	} else if(STYLEV.isReloaded) {
+			console.groupEnd();console.group('Style Validator: Executed by Bookmarklet.');
+			STYLEV.VALIDATOR.execute();
 
-		console.groupEnd();console.group('Style Validator: Executed by Bookmarklet (ReExecution)');
-		STYLEV.VALIDATOR.validate();
+		} else if(STYLEV.isReloaded) {
+
+			console.groupEnd();console.group('Style Validator: Executed by Bookmarklet (Replay)');
+			STYLEV.VALIDATOR.validate();
+		}
+
+	} else {
+		STYLEV.isPassedURLFilters = true;
 	}
 
 }
