@@ -663,7 +663,7 @@ STYLEV.RULES = {
 
 		return new Promise(function(resolve, reject) {
 
-			that.getURL('/Style-Validator/extension/data/rules.json')
+			that.getURL('../extension/data/rules.json')
 				.then(JSON.parse)
 				.then(function(jsonArray) {
 

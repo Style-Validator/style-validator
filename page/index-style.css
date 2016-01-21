@@ -1,11 +1,33 @@
 @charset "utf-8";
 
 .wrapper {
-	/*max-width: 1200px;*/
-	/*min-width: 1000px; */
 	margin: 0 auto;
-	padding-top: 86px;
+	padding-top: 0;
+	transition: padding-top 1s ease;
 }
+
+.main {
+	opacity: 0;
+	transition: opacity 1.5s ease;
+}
+.main.fadeIn {
+	opacity: 1;
+}
+
+.installation {
+	background: #8FFFCB;
+	padding: 7% 2%;
+}
+.installation-heading {
+	font-size: 35px;
+	text-align: center;
+	margin-bottom: 5%;
+}
+.buttons {
+	display: flex;
+	justify-content: center;
+}
+
 
 .kv {
 	display: flex;
@@ -13,19 +35,17 @@
 	max-width: 1000px;
 	margin-right: auto;
 	margin-left: auto;
-	padding: 4% 2% 9%;
+	padding: 4% 4% 9%;
 }
 .kv-logo {
 	/* margin-right: 2%; */
 	flex-basis: 33.3%;
 	margin-top: auto;
 	margin-bottom: auto;
+}
+.kv-logo > * {
 	-webkit-box-reflect: below 30px
 	-webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.3) 0%, transparent 30%, transparent 100%);
-}
-.kv-logo-image {
-	width: 100%;
-	height: auto;
 }
 .kv-caption {
 	margin-top: auto;
@@ -47,7 +67,11 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#355431', endColorstr='#45853C',GradientType=1 );/* IE6-9 *//* if we can clip, do it */
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	margin-bottom: 4%;
+	margin-bottom: 5%;
+	line-height: 1.1;
+}
+.kv-heading span {
+	white-space: nowrap;
 }
 .kv-body {
 	font-size: 15px;
@@ -56,13 +80,15 @@
 .kv-buttons-list {
 	display: flex;
 	justify-content: space-between;
-	margin-top: 4%;
+	margin-top: 6%;
+	flex-wrap: wrap;
+	margin-left: -10px;
 }
 .kv-buttons-list > li {
 	flex: 1 1 50%;
 	display: flex;
 }
-.kv-buttons-list > li + li {
+.kv-buttons-list > li {
 	padding-left: 10px;
 }
 .kv-buttons-list a {
@@ -107,26 +133,6 @@
 .kv-buttons-caption {
 
 }
-
-.main {
-	/* overflow: hidden; */
-	/* margin-top: 20px; */
-}
-.installation {
-	background: #8FFFCB;
-	padding: 7% 2%;
-}
-.installation-heading {
-	font-size: 35px;
-	text-align: center;
-	margin-bottom: 5%;
-}
-.buttons {
-	display: flex;
-	justify-content: center;
-}
-
-
 .note-list > li + li {
 	margin-top: 10px;
 }
@@ -149,6 +155,7 @@ hr {
 .browser-support {
 	display: flex;
 	justify-content: flex-end;
+	flex-wrap: wrap;
 }
 .browser-support > li.disabled {
 	-webkit-filter: grayscale(1);
@@ -192,7 +199,7 @@ hr {
 .explanation-inner {
 	display: flex;
 	justify-content: center;
-	padding: 6% 2%;
+	padding: 6% 4%;
 }
 .explanation-section {
 	flex-basis: 33.3%;
@@ -201,6 +208,7 @@ hr {
 	margin-top: 0;
 	font-size: 22px;
 	margin-bottom: 20px;
+	font-weight: normal;
 }
 .explanation-section-body {
 	font-size: 16px;
@@ -223,4 +231,34 @@ hr {
 }
 .slide-body {
 	text-align: center;
+}
+@media (max-width: 640px) {
+
+	.kv {
+		flex-direction: column;
+	}
+	.kv-logo {
+		height: 200px;
+		padding: 5% 5% 15%;
+		/* max-height: 150px; */
+	}
+	.kv-caption {
+		padding-left: 0;
+	}
+	/*.kv-buttons-list {
+		flex-direction: column;
+	}
+	.kv-buttons-list > li + li {
+		padding-top: 10px;
+	}
+	.kv-buttons-list > li + li {
+		padding-left: 0;
+	}*/
+	.explanation-inner {
+		flex-direction: column;
+	}
+	.explanation-image {
+		padding-left: 0;
+		margin-top: 6%;
+	}
 }

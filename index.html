@@ -65,7 +65,7 @@
 		<h1 class="header-heading"><img src="./extension/style-validator.logo.svg" width="60" />Style Validator</h1>
 		<nav class="header-nav">
 			<ul class="header-nav-list">
-				<li><a href="https://github.com/style-validator" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Github Link', 3);"><img src="./img/GitHub-Mark-32px-lightgreen.png" />Github</a></li>
+				<li><a href="https://github.com/style-validator" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Github Link', 3);"><img src="./img/GitHub-Mark-32px-lightgreen.svg" />Github</a></li>
 				<li><a href="./page/demo-simple.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Simple Demo</a></li>
 				<li><a href="./page/demo.html" target="_blank"><img src="./img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Demo</a></li>
 				<li><a href="./page/references.html" target="_blank"><img src="./img/iconmonstr-note-19.svg" width="32" alt="" />Docs</a></li>
@@ -79,7 +79,7 @@
 			<div class="kv-logo" id="vivus-kv-logo"><!--<img src="./img/style-validator.logo.nopadding.svg" class="kv-logo-image"/>--></div>
 			<figcaption class="kv-caption">
 				<div class="kv-header">
-					<h2 class="kv-heading">Validation in the Browser</h2>
+					<h2 class="kv-heading">Validation <span>in the Browser</span></h2>
 				</div>
 				<div class="kv-body">
 					<p class="kv-body-p">
@@ -171,7 +171,7 @@
 	});
 </script>
 <script>
-	(function() {
+	$(function() {
 		$.ajax({
 			url: './bookmarklet/style-validator.js',
 			dataType: 'text',
@@ -180,7 +180,18 @@
 			}
 		});
 
-	}());
+		var $wrapper = $('.wrapper');
+		var $header = $('.header');
+		var $main = $('.main');
+
+		adjustPosition();
+		$(window).on('resize', adjustPosition);
+
+		function adjustPosition() {
+			$wrapper.css('padding-top', $header.outerHeight());
+			$main.addClass('fadeIn');
+		}
+	});
 </script>
 <script type="application/ld+json">
 	{
