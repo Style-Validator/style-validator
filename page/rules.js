@@ -67,7 +67,7 @@ STYLEV.RULES = {
 		that.allCSSProperties = [];
 		that.INPUT_ARROW_WIDTH = 22;
 
-		that.each = STYLEV.VALIDATOR.each;
+		that.each = STYLEV.METHODS.each;
 	},
 	applyFromLocalStorage: function() {
 		var that = STYLEV.RULES;
