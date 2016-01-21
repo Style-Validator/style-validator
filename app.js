@@ -7,10 +7,12 @@
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
+var os = require('os');
 var url = require('url');
 var assert = require('assert');
 var mongodb = require('mongodb');
-var dns = require('dns');
+var open = require('open');
+
 /*
  * variables
  * */
@@ -41,6 +43,15 @@ var dirSpacesBeforeSize = 9;
 var dirMonths = 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',');
 //TODO: confirm.end
 
+var osPlatform = os.platform();
+var isLinux = osPlatform === 'linux';
+var isMacintosh = osPlatform === 'darwin';
+var isWindows = osPlatform === 'win32';
+var browser = isLinux ? 'google-chrome' : (
+	isMacintosh ? 'google chrome' : (
+	isWindows ? 'chrome' : null)
+);
+
 /*
  * execution
  * */
@@ -57,11 +68,15 @@ server.listen(port, callbackAfterServerListening);
 
 function callbackAfterServerListening() {
 	var serverAddress = server.address();
-	var address = serverAddress.address;
-	var host = address ===  '::' ? 'localhost' : address;
+	var ipAddress = serverAddress.address;
+	var host = ipAddress ===  '::' ? 'localhost' : ipAddress;
 	var port = serverAddress.port;
-	console.log("Server is runnnig at %s:%s", host, port);
+	console.log("Server is runnnig at http://%s:%s", host, port);
+	if(browser) {
+		open('http://' + host + ':' + port, browser);
+	}
 }
+
 
 /*
  * functions - web server
@@ -69,17 +84,9 @@ function callbackAfterServerListening() {
 
 function requestHandler(req, res){
 
-	console.log('response will start...');
-
 	var parsedURL = url.parse(req.url);
 	var path = parsedURL.pathname;
 	var requestMethod = req.method;
-
-	console.log(req.url);
-	console.log(parsedURL);
-	console.log(parsedURL.pathname);
-	console.log(path);
-	console.log(requestMethod);
 
 	if(requestMethod === 'POST') {
 
@@ -319,7 +326,7 @@ function sendDirectoryIndex(req, res, path, files) {
 function dbHandler(store) {
 	return function(err, db) {
 
-		assert.equal(null, err, 'Unable to connect to the mongoDB server. Error');
+		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
 		console.log("Connected correctly to MongoDB");
 
 		var collection = db.collection('testData');
