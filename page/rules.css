@@ -241,11 +241,11 @@ body {
 	padding-left: 1.5em;
 }
 .styles-list-meta-data-reason {
-	background: url(../img/iconmonstr-help-3-icon.svg) no-repeat left 0.1em;
+	background: url(/img/iconmonstr-help-3-icon.svg) no-repeat left 0.1em;
 	background-size: 1.2em auto;
 }
 .styles-list-meta-data-reference-url {
-	background: url(../img/iconmonstr-link-icon-gray.svg) no-repeat left 0.2em;
+	background: url(/img/iconmonstr-link-icon-gray.svg) no-repeat left 0.2em;
 	background-size: 1.2em auto;
 }
 .styles-list > li input[type="text"],
@@ -381,13 +381,13 @@ body {
 	background-size: 18px auto;
 }
 .edit-button {
-	background-image: url(../img/iconmonstr-edit-8-icon.svg);
+	background-image: url(/img/iconmonstr-edit-8-icon.svg);
 }
 .remove-button {
-	background-image: url(../img/iconmonstr-x-mark-3-icon.svg);
+	background-image: url(/img/iconmonstr-x-mark-3-icon.svg);
 }
 .edit-mode .edit-button {
-	background-image: url(../img/iconmonstr-save-5-icon.svg);
+	background-image: url(/img/iconmonstr-save-5-icon.svg);
 	background-size: 20px auto;
 }
 .edit-mode .remove-button {

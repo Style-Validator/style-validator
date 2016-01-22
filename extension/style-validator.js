@@ -1,7 +1,7 @@
 /*!
  Style Validator
  "Validation in the Browser". Validate computedStyle with track all events.
- https://style-validator.github.io/Style-Validator/
+ https://style-validator.github.io/
  by Igari Takeharu
  MIT License
  */
@@ -47,9 +47,7 @@ STYLEV.options = {
 	IGNORE_SELECTORS: false,
 	IGNORE_SELECTORS_TEXT: '',
 	URL_FILTERS: [
-		'http://stylev/Style-Validator/page/rules.html',
-		'http://localhost:8000/Style-Validator/page/rules.html',
-		'http://style-validator.gihub.io/Style-Validator/page/rules.html',
+		'http://stylev/page/rules.html',
 		'http://style-validator.gihub.io/page/rules.html',
 		'http://localhost:8001/page/rules.html',
 		'https://style-validator.herokuapp.com/page/rules.html'
@@ -140,7 +138,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.htmlDefaultBorderBottomWidth = that.html.style.borderBottomWidth === '' ? null : that.html.style.borderBottomWidth;
 
 		//リソースルートを設定
-		that.RESOURCE_ROOT = that.RESOURCE_ROOT || 'https://style-validator.github.io/Style-Validator/extension/';
+		that.RESOURCE_ROOT = that.RESOURCE_ROOT || 'https://style-validator.github.io/extension/';
 
 		//監視フラグの初期化
 		that.isObserving = false;
@@ -1316,7 +1314,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.consoleHeader.classList.add('stylev-console-header');
 		that.consoleHeading.classList.add('stylev-console-heading');
 		that.consoleHeadingLogo.classList.add('stylev-console-heading-logo');
-		that.consoleHeadingLogo.href = 'http://style-validator.github.io/Style-Validator/';
+		that.consoleHeadingLogo.href = 'http://style-validator.github.io/';
 		that.consoleHeadingLogo.target = '_blank';
 		that.consoleHeadingLogoImage.classList.add('stylev-console-heading-logo-image');
 		that.consoleHeadingLogoImage.src = that.settings.ICON_LOGO_PATH;
