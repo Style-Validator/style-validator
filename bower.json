@@ -5,7 +5,7 @@
 	"authors": [
 		"Igari Takeharu"
 	],
-	"description": "A new CSS Validator that detect risky CSS that might break the layout. NOT syntax error. Current Web Site & Application need validation in the browser. Style Validator can detect error that occurred after JavaScript has executed. And also, it can validate matching of style and style.",
+	"description": "Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax.",
 	"main": "style-validator.js",
 	"moduleType": [],
 	"keywords": [
