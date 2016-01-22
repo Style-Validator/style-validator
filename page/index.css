@@ -57,7 +57,7 @@
 	margin-bottom: 5%;
 }
 .kv-heading {
-	font-size: 34px;
+	font-size: calc(0.5vw + 28px);
 	font-weight: normal;
 	color: #45853C;
 	background: -webkit-linear-gradient(left,  #355431 0%,#45853C 100%);

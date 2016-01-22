@@ -106,6 +106,8 @@ a:active {
 	margin-right: 6px;
 	height: 25px;
 	width: auto;
+	position: relative;
+	top: -2px;
 }
 
 .footer {
