@@ -1,40 +1,42 @@
 {
-	"name": "Style-Validator",
-	"description": "Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax.",
-	"keywords": [
-		"CSS",
-		"Validator",
-		"CSS Validator"
-	],
-	"author": "Igari Takeharu",
-	"contributors": [
-		"Igari Takeharu"
-	],
-	"version": "0.3.1",
-	"license": "MIT",
-	"repository": "https://github.com/Style-Validator/Style-Validator.git",
-	"dependencies": {
-		"del": "^2.0.1",
-		"devtools-detect": "^2.0.0",
-		"kerberos": "0.0.17",
-		"mongodb": "^2.1.4"
-	},
-	"devDependencies": {
-		"browser-sync": "^2.9.11",
-		"del": "^1.1.1",
-		"gulp": "^3.9.0",
-		"gulp-concat": "^2.1.6",
-		"gulp-jshint": "^1.3.4",
-		"gulp-nodemon": "^2.0.4",
-		"gulp-uglify": "^1.0.0",
-		"gulp-util": "^3.0.0",
-		"gulp-webserver": "^0.9.1",
-		"jshint-stylish": "^0.1.4",
-		"map-stream": "^0.1.0"
-	},
-	"engines": {
-		"node": "5.4.1",
-		"npm": "3.3.12"
-	},
-	"homepage": "http://style-validator.github.io/"
+  "name": "Style-Validator",
+  "description": "Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax.",
+  "keywords": [
+    "CSS",
+    "Validator",
+    "CSS Validator"
+  ],
+  "author": "Igari Takeharu",
+  "contributors": [
+    "Igari Takeharu"
+  ],
+  "version": "0.3.1",
+  "license": "MIT",
+  "repository": "https://github.com/Style-Validator/Style-Validator.git",
+  "dependencies": {
+    "del": "^2.0.1",
+    "devtools-detect": "^2.0.0",
+    "kerberos": "0.0.17",
+    "mongodb": "^2.1.4",
+    "open": "0.0.5"
+
+  },
+  "devDependencies": {
+    "browser-sync": "^2.9.11",
+    "del": "^1.1.1",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.1.6",
+    "gulp-jshint": "^1.3.4",
+    "gulp-nodemon": "^2.0.4",
+    "gulp-uglify": "^1.0.0",
+    "gulp-util": "^3.0.0",
+    "gulp-webserver": "^0.9.1",
+    "jshint-stylish": "^0.1.4",
+    "map-stream": "^0.1.0"
+  },
+  "engines": {
+    "node": "5.4.1",
+    "npm": "3.3.12"
+  },
+  "homepage": "http://style-validator.github.io/"
 }
