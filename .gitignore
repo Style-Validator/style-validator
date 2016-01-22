@@ -4,3 +4,5 @@ node_modules
 *.key
 .DS_Store
 .bower.json
+task.md
+zip.command
