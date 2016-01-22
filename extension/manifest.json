@@ -1,10 +1,10 @@
 {
 
 	"manifest_version": 2,
-	"name": "Style Validator",
-	"version": "0.3.0.4",
+	"name": "Style-Validator",
+	"version": "0.3.1",
 
-	"description": "Style Validator is a new CSS Validator that detect CSS problem for each HTML elements in conjunction with Chrome DevTools.",
+	"description": "A new CSS Validator that detect risky CSS that might break the layout. NOT syntax error. Current Web Site & Application need validation in the browser. Style Validator can detect error that occurred after JavaScript has executed. And also, it can validate matching of style and style.",
 	"icons": {
 
 		"16": "./style-validator.logo_16x16.png",

@@ -1,27 +1,28 @@
 {
-  "name": "Style Validator",
-  "version": "0.3.0.4",
-  "homepage": "https://github.com/Style-Validator/Style-Validator",
-  "authors": [
-    "Igari Takeharu"
-  ],
-  "description": "A new CSS Validator that detect risky CSS that might break the layout. NOT syntax error. Current Web Site & Application need validation in the browser. Style Validator can detect error that occurred after JavaScript has executed. And also, it can validate matching of style and style.",
-  "main": "style-validator.js",
-  "moduleType": [],
-  "keywords": [
-    "css",
-    "validator"
-  ],
-  "license": "MIT",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.0"
-  }
+	"name": "Style-Validator",
+	"version": "0.3.1",
+	"homepage": "https://github.com/Style-Validator/Style-Validator",
+	"authors": [
+		"Igari Takeharu"
+	],
+	"description": "A new CSS Validator that detect risky CSS that might break the layout. NOT syntax error. Current Web Site & Application need validation in the browser. Style Validator can detect error that occurred after JavaScript has executed. And also, it can validate matching of style and style.",
+	"main": "style-validator.js",
+	"moduleType": [],
+	"keywords": [
+		"CSS",
+		"Validator",
+		"CSS Validator"
+	],
+	"license": "MIT",
+	"private": true,
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"polymer": "Polymer/polymer#^1.2.0"
+	}
 }
