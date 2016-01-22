@@ -154,6 +154,9 @@ button,
 	.header {
 		flex-direction: column;
 	}
+	.header > * {
+		flex-basis: auto;
+	}
 	.header-nav {
 		padding-left: 0;
 		margin-top: 4%;

@@ -28,7 +28,6 @@
 	justify-content: center;
 }
 
-
 .kv {
 	display: flex;
 	justify-content: center;
@@ -237,25 +236,21 @@ hr {
 	.kv {
 		flex-direction: column;
 	}
+	.kv > * {
+		flex-basis: auto;
+	}
 	.kv-logo {
 		height: 200px;
 		padding: 5% 5% 15%;
-		/* max-height: 150px; */
 	}
 	.kv-caption {
 		padding-left: 0;
 	}
-	/*.kv-buttons-list {
-		flex-direction: column;
-	}
-	.kv-buttons-list > li + li {
-		padding-top: 10px;
-	}
-	.kv-buttons-list > li + li {
-		padding-left: 0;
-	}*/
 	.explanation-inner {
 		flex-direction: column;
+	}
+	.explanation-inner > * {
+		flex-basis: auto;
 	}
 	.explanation-image {
 		padding-left: 0;

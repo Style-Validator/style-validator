@@ -40,6 +40,7 @@
 <meta name="msapplication-TileColor" content="#F0F8FF">
 <meta name="msapplication-TileImage" content="/img/ms-style-validator.logo.png">
 <meta name="theme-color" content="#52B050">
+
 <!-- ***** styles***** -->
 <link rel="stylesheet" href="/page/common.css">
 <link rel="stylesheet" href="/page/index-style.css">
@@ -184,7 +185,8 @@
 		var $header = $('.header');
 		var $main = $('.main');
 
-		adjustPosition();
+
+		setTimeout(adjustPosition, 0);
 		$(window).on('resize', adjustPosition);
 
 		function adjustPosition() {
