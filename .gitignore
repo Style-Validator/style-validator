@@ -6,3 +6,5 @@ node_modules
 .bower.json
 task.md
 zip.command
+.idea
+Thumbs.db
