@@ -97,7 +97,7 @@
 	background-color: white;
 	color: #359C62 !important;
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-	flex-basis: 100%;
+	flex: 1 0 100%;
 }
 .kv-buttons-list a:hover {
 	border-color: rgb(49, 194, 92);

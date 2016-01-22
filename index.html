@@ -1,80 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<!-- ***** charset ***** -->
+	<meta charset="utf-8" />
 
-<!-- ***** charset ***** -->
-<meta charset="utf-8" />
+	<!-- ***** robots ***** -->
+	<meta name="robots" content="noydir" />
+	<meta name="robots" content="noodp" />
+	<meta name="robots" content="index,follow" />
 
-<!-- ***** robots ***** -->
-<meta name="robots" content="noydir" />
-<meta name="robots" content="noodp" />
-<meta name="robots" content="index,follow" />
+	<!-- ***** viewport ***** -->
+	<meta name="viewport" content="width=device-width" />
 
-<!-- ***** viewport ***** -->
-<meta name="viewport" content="width=device-width" />
+	<!-- ***** format-detection ***** -->
+	<meta name="format-detection" content="telephone=no, email=no, address=no" />
+	<title>Style Validator | Reduce Meaningless Patches for Cross Browser</title>
+	<!-- ***** data ***** -->
+	<meta name="description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax." />
+	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon" />
 
-<!-- ***** format-detection ***** -->
-<meta name="format-detection" content="telephone=no, email=no, address=no" />
-<title>Style Validator | Reduce Meaningless Patches for Cross Browser</title>
-<!-- ***** data ***** -->
-<meta name="description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax." />
-<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon" />
+	<!-- ***** ogp ***** -->
+	<meta property="og:site_name" content="Style Validator" />
+	<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://style-validator.github.io/" />
+	<meta property="og:description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax." />
+	<meta property="og:image" content="https://style-validator.github.io/img/style-validator.logo.png" />
+	<!-- ***** favicon ***** -->
+	<link rel="icon" type="image/x-icon" href="/favicon.ico?v=1">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1">
 
-<!-- ***** ogp ***** -->
-<meta property="og:site_name" content="Style Validator" />
-<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://style-validator.github.io/" />
-<meta property="og:description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax." />
-<meta property="og:image" content="https://style-validator.github.io/img/style-validator.logo.png" />
-<!-- ***** favicon ***** -->
-<link rel="icon" type="image/x-icon" href="/favicon.ico?v=1">
-<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1">
+	<!-- ***** app icon ***** -->
+	<link rel="apple-touch-icon" href="/img/style-validator.logo.png">
+	<meta name="apple-mobile-web-app-title" content="Style Validator">
+	<meta name="application-name" content="Style Validator">
 
-<!-- ***** app icon ***** -->
-<link rel="apple-touch-icon" href="/img/style-validator.logo.png">
-<meta name="apple-mobile-web-app-title" content="Style Validator">
-<meta name="application-name" content="Style Validator">
+	<!-- ***** app icon (for ms app)***** -->
+	<meta name="msapplication-TileColor" content="#F0F8FF">
+	<meta name="msapplication-TileImage" content="/img/ms-style-validator.logo.png">
+	<meta name="theme-color" content="#52B050">
 
-<!-- ***** app icon (for ms app)***** -->
-<meta name="msapplication-TileColor" content="#F0F8FF">
-<meta name="msapplication-TileImage" content="/img/ms-style-validator.logo.png">
-<meta name="theme-color" content="#52B050">
+	<!-- ***** styles***** -->
+	<link rel="stylesheet" href="/page/common.css">
+	<link rel="stylesheet" href="/page/index.css">
 
-<!-- ***** styles***** -->
-<link rel="stylesheet" href="/page/common.css">
-<link rel="stylesheet" href="/page/index-style.css">
-<!-- ***** imports***** -->
-<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-<link rel="import" href="/including-parts/slide-share.html">
+	<!-- ***** imports***** -->
+	<link rel="import" href="/html_imports/common.html">
+	<link rel="import" href="/html_imports/slide-share.html">
 
-<!-- ***** scripts***** -->
-<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<!-- ***** scripts***** -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-	ga('create', 'UA-53227157-3', 'auto');
-	ga('send', 'pageview');
+		ga('create', 'UA-53227157-3', 'auto');
+		ga('send', 'pageview');
 
-</script>
+	</script>
 </head>
 <body>
 <div class="wrapper">
-	<header class="header">
-		<h1 class="header-heading"><img src="/extension/style-validator.logo.svg" width="60" />Style Validator</h1>
-		<nav class="header-nav">
-			<ul class="header-nav-list">
-				<li><a href="https://github.com/style-validator" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Github Link', 3);"><img src="/img/GitHub-Mark-32px-lightgreen.svg" />Github</a></li>
-				<li><a href="/page/demo-simple.html" target="_blank"><img src="/img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Simple Demo</a></li>
-				<li><a href="/page/demo.html" target="_blank"><img src="/img/iconmonstr-flask-7-icon.svg" width="32" alt="" />Demo</a></li>
-				<li><a href="/page/references.html" target="_blank"><img src="/img/iconmonstr-note-19.svg" width="32" alt="" />Docs</a></li>
-				<li><a href="/page/analytics.html" target="_blank"><img src="/img/iconmonstr-chart-19.svg" width="32" alt="" />Analytics</a></li>
-				<li><a href="/page/rules.html" target="_blank"><img src="/img/iconmonstr-edit-8-icon.svg" width="32" alt="" />Rules</a></li>
-			</ul>
-		</nav>
-	</header>
+	<common-header></common-header>
 	<main class="main">
 		<figure class="kv content-width">
 			<div class="kv-logo" id="vivus-kv-logo"><!--<img src="/img/style-validator.logo.nopadding.svg" class="kv-logo-image"/>--></div>
@@ -84,7 +72,7 @@
 				</div>
 				<div class="kv-body">
 					<p class="kv-body-p">
-						A new <em>CSS Validator</em> that detect risky CSS that might break the layout. NOT syntax error. Current Web Site & Application need validation in the browser. Style Validator can detect error that occurred after JavaScript has executed. And also, it can validate matching of style and style.<br />
+						A new <em>CSS Validator</em> that detect risky CSS that might break layout. NOT syntax error. Current Web Site & Application need validation in the browser. Style Validator can detect error that occurred after JavaScript has executed. And also, it can validate matching of style and style.<br />
 					</p>
 					<ul class="kv-buttons-list">
 						<li>
@@ -157,12 +145,11 @@
 				</div>
 			</div>
 		</section>
-		<footer class="footer">
-			<p><small>Copyright &copy; <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
-		</footer>
+		<common-footer></common-footer>
 	</main>
 </div>
 <script src="/page/jquery-2.1.4.min.js"></script>
+<script src="/page/common.js"></script>
 <script src="/page/vivus.min.js"></script>
 <script>
 	new Vivus('vivus-kv-logo', {
@@ -173,6 +160,10 @@
 </script>
 <script>
 	$(function() {
+		var $wrapper = $('.wrapper');
+		var $header = $('.header');
+		var $main = $('.main');
+
 		$.ajax({
 			url: '/bookmarklet/style-validator.js',
 			dataType: 'text',
@@ -180,20 +171,19 @@
 				$('#bookmarklet').attr('href', data);
 			}
 		});
+		$(window).on('load', function() {
 
-		var $wrapper = $('.wrapper');
-		var $header = $('.header');
-		var $main = $('.main');
+			setTimeout(function() {
+				$main.addClass('fadeIn');
+			}, 100);
+			setTimeout(adjustPosition, 0);
+			$(window).on('resize', adjustPosition);
 
-
-		setTimeout(adjustPosition, 0);
-		$(window).on('resize', adjustPosition);
-
-		function adjustPosition() {
-			$wrapper.css('padding-top', $header.outerHeight());
-			$main.addClass('fadeIn');
-		}
-	});
+			function adjustPosition() {
+				$wrapper.css('padding-top', $header.outerHeight());
+			}
+		});
+	})
 </script>
 <script type="application/ld+json">
 	{
