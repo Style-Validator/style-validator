@@ -54,19 +54,15 @@
 }
 .kv-header {
 	display: flex;
+	margin-bottom: 5%;
 }
 .kv-heading {
 	font-size: 34px;
 	font-weight: normal;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#355431+0,7db9e8+100 */
-	background: #355431;/* Old browsers */
-	background: -moz-linear-gradient(left,  #355431 0%, #45853C 100%);/* FF3.6-15 */
-	background: -webkit-linear-gradient(left,  #355431 0%,#45853C 100%);/* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to right,  #355431 0%,#45853C 100%);/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#355431', endColorstr='#45853C',GradientType=1 );/* IE6-9 *//* if we can clip, do it */
+	color: #45853C;
+	background: -webkit-linear-gradient(left,  #355431 0%,#45853C 100%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	margin-bottom: 5%;
 	line-height: 1.1;
 }
 .kv-heading span {
@@ -80,19 +76,17 @@
 	display: flex;
 	justify-content: space-between;
 	margin-top: 6%;
-	flex-wrap: wrap;
 	margin-left: -10px;
 }
 .kv-buttons-list > li {
-	flex: 1 1 50%;
+	flex-basis: 50%;
 	display: flex;
-}
-.kv-buttons-list > li {
+	flex-direction: column;
 	padding-left: 10px;
 }
-.kv-buttons-list a {
+.kv-buttons-list > li > a {
 	display: flex;
-	padding: 3% 5%;
+	padding: 6px 12px;
 	border: 1px solid transparent;
 	text-decoration: none !important;
 	-webkit-transition: 0.2s ease;
@@ -102,8 +96,8 @@
 	transition: 0.2s ease;
 	background-color: white;
 	color: #359C62 !important;
-	flex: 1 1 auto;
-	box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+	flex-basis: 100%;
 }
 .kv-buttons-list a:hover {
 	border-color: rgb(49, 194, 92);
@@ -117,9 +111,9 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	flex: 1 1 auto;
 }
 .kv-buttons-wrapper > * {
+	flex: 1 0 auto;
 }
 .kv-buttons-heading {
 	margin-bottom: 5px;
@@ -127,6 +121,7 @@
 }
 .kv-buttons-image-wrapper img {
 	max-width: 100%;
+	width: 100%;
 	height: auto;
 }
 .kv-buttons-caption {
@@ -141,13 +136,10 @@ hr {
 	border-width: 1px 0 0 0;
 }
 .main-capture {
-	/* float: right; */
-	max-width: 100%;
-	/* margin-top: 20px; */
+	width: 100%;
+	height: auto;
 }
 .main-body {
-	/* float: left; */
-	/* width: 40%; */
 	padding-right: 30px;
 	box-sizing: border-box;
 }
@@ -197,8 +189,11 @@ hr {
 }
 .explanation-inner {
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	padding: 6% 4%;
+}
+.explanation-inner > * {
+	flex-shrink: 0;
 }
 .explanation-section {
 	flex-basis: 33.3%;
@@ -241,7 +236,7 @@ hr {
 	}
 	.kv-logo {
 		height: 200px;
-		padding: 5% 5% 15%;
+		padding: 20px 5% 60px;
 	}
 	.kv-caption {
 		padding-left: 0;
@@ -254,6 +249,6 @@ hr {
 	}
 	.explanation-image {
 		padding-left: 0;
-		margin-top: 6%;
+		margin-top: 15px;
 	}
 }
