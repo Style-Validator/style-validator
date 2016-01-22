@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Style Validator</title>
+	<title>Redirecting... | Style Validator</title>
 	<style>
 		.message,
 		#loadingSpinner {
@@ -18,8 +18,12 @@
 			text-align: center;
 			color: #45853C;
 			top: 130px;
-			font-size: 13px;
+			font-size: 15px;
 			font-family: 'Noto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		}
+		.message span {
+			font-size: 13px;
+			color: #4e6654;
 		}
 		#loadingSpinner {
 			font-size: 8px;
@@ -77,7 +81,7 @@
 	</script>
 </head>
 <body>
-<div class="message">Redirecting...</div>
+<div class="message">Redirecting...<br /><br/><span>If cannot jump to new URL, please click <a href="http://style-validator.github.io/">this link</a>.</span></div>
 <div id="loadingSpinner"></div>
 <script>
 	setTimeout(function() {
