@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Style Validator</title>
+	<style>
+		.message,
+		#loadingSpinner {
+			position: fixed;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			margin: auto;
+		}
+		.message {
+			height: 1em;
+			line-height: 1;
+			text-align: center;
+			color: #45853C;
+			top: 130px;
+			font-size: 13px;
+			font-family: 'Noto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		}
+		#loadingSpinner {
+			font-size: 8px;
+			text-indent: -9999em;
+			border-top: 0.6em solid rgba(69, 133, 60, 0.2);
+			border-right: 0.6em solid rgba(69, 133, 60, 0.2);
+			border-bottom: 0.6em solid rgba(69, 133, 60, 0.2);
+			border-left: 0.6em solid #45853C;
+			-webkit-transform: translateZ(0);
+			-ms-transform: translateZ(0);
+			transform: translateZ(0);
+			-webkit-animation: load8 1.1s infinite linear;
+			animation: load8 1.1s infinite linear;
+		}
+		#loadingSpinner:before {
+			content: 'Redirecting...'
+		}
+		#loadingSpinner,
+		#loadingSpinner:after {
+			border-radius: 50%;
+			width: 10em;
+			height: 10em;
+		}
+		@-webkit-keyframes load8 {
+			0% {
+				-webkit-transform: rotate(0deg);
+				transform: rotate(0deg);
+			}
+			100% {
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+		}
+		@keyframes load8 {
+			0% {
+				-webkit-transform: rotate(0deg);
+				transform: rotate(0deg);
+			}
+			100% {
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+		}
+
+	</style>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-53227157-3', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</head>
+<body>
+<div class="message">Redirecting...</div>
+<div id="loadingSpinner"></div>
+<script>
+	setTimeout(function() {
+		location.href = 'http://style-validator.github.io/';
+	}, 2000);
+</script>
+</body>
+</html>
