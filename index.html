@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 	<!-- ***** charset ***** -->
 	<meta charset="utf-8" />
 
@@ -10,11 +11,11 @@
 	<meta name="robots" content="index,follow" />
 
 	<!-- ***** viewport ***** -->
-	<meta name="viewport" content="width=device-width" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<!-- ***** format-detection ***** -->
 	<meta name="format-detection" content="telephone=no, email=no, address=no" />
-	<title>Style Validator | Reduce Meaningless Patches for Cross Browser</title>
+	<title>Style Validator - Reduce Meaningless Patches for Cross Browser - </title>
 	<!-- ***** data ***** -->
 	<meta name="description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax." />
 	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon" />
@@ -40,15 +41,19 @@
 	<meta name="msapplication-TileImage" content="/img/ms-style-validator.logo.png">
 	<meta name="theme-color" content="#52B050">
 
-	<!-- ***** styles***** -->
+	<!-- ***** styles ***** -->
 	<link rel="stylesheet" href="/page/common.css">
 	<link rel="stylesheet" href="/page/index.css">
 
-	<!-- ***** imports***** -->
-	<link rel="import" href="/html_imports/common.html">
+	<!-- ***** imports ***** -->
+	<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+	<link rel="import" href="/html_imports/header.html">
+	<link rel="import" href="/html_imports/footer.html">
 	<link rel="import" href="/html_imports/slide-share.html">
+	<link rel="import" href="/html_imports/common-bottom-scripts.html">
+	<link rel="import" href="/html_imports/common-jsonld.html">
 
-	<!-- ***** scripts***** -->
+	<!-- ***** scripts ***** -->
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -151,53 +156,7 @@
 <script src="/page/jquery-2.1.4.min.js"></script>
 <script src="/page/common.js"></script>
 <script src="/page/vivus.min.js"></script>
-<script>
-	new Vivus('vivus-kv-logo', {
-		duration: 200,
-		file: '/img/style-validator.logo.nopadding.svg',
-		type: 'async'
-	});
-</script>
-<script>
-	$(function() {
-		var $wrapper = $('.wrapper');
-		var $header = $('.header');
-		var $main = $('.main');
-
-		$.ajax({
-			url: '/bookmarklet/style-validator.js',
-			dataType: 'text',
-			success: function(data) {
-				$('#bookmarklet').attr('href', data);
-			}
-		});
-		$(window).on('load', function() {
-
-			setTimeout(function() {
-				$main.addClass('fadeIn');
-			}, 100);
-			setTimeout(adjustPosition, 0);
-			$(window).on('resize', adjustPosition);
-
-			function adjustPosition() {
-				$wrapper.css('padding-top', $header.outerHeight());
-			}
-		});
-	})
-</script>
-<script type="application/ld+json">
-	{
-	"@context" : "http://schema.org",
-	"@type" : "SoftwareApplication",
-	"name" : "Style Validator",
-	"image" : "http://www.google.com/img/style-validator.logo.nopadding.svg",
-	"author" : {
-	"@type" : "Person",
-	"name" : "igari"
-	},
-	"downloadUrl" : "https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod",
-	"screenshot" : "http://www.google.com/img/screenshot.gif"
-	}
-</script>
+<script src="/page/index.js"></script>
+<common-jsonld></common-jsonld>
 </body>
 </html>

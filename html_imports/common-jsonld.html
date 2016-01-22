@@ -1,0 +1,22 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<dom-module id="common-jsonld">
+	<template>
+		<script type="application/ld+json">
+			{
+			"@context" : "http://schema.org",
+			"@type" : "SoftwareApplication",
+			"name" : "Style Validator",
+			"image" : "http://www.google.com/img/style-validator.logo.nopadding.svg",
+			"author" : {
+			"@type" : "Person",
+			"name" : "Igari Takeharu"
+			},
+			"downloadUrl" : "https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod",
+			"screenshot" : "http://www.google.com/img/screenshot.gif"
+			}
+		</script>
+	</template>
+	<script>
+		Polymer({is: "common-jsonld"});
+	</script>
+</dom-module>
