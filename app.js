@@ -67,11 +67,14 @@ server.listen(port, callbackAfterServerListening);
 * */
 
 function callbackAfterServerListening() {
+
 	var serverAddress = server.address();
 	var ipAddress = serverAddress.address;
 	var host = ipAddress ===  '::' ? 'localhost' : ipAddress;
 	var port = serverAddress.port;
+
 	console.log("Server is runnnig at http://%s:%s", host, port);
+
 	if(browser) {
 		open('http://' + host + ':' + port, browser);
 	}
@@ -88,21 +91,18 @@ function requestHandler(req, res){
 	var path = parsedURL.pathname;
 	var requestMethod = req.method;
 
-	if(requestMethod === 'POST') {
-
-		serveData(req, res, path);
-
-	} else if(requestMethod === 'GET') {
-
-		serveFiles(req, res, path);
-
-	} else {
-
-		res.writeHead(200, {'Content-Type': 'text/plain'});
-		res.end(requestMethod + ' request');
-
+	switch(requestMethod) {
+		case 'POST':
+			serveData(req, res, path);
+			break;
+		case 'GET':
+			serveFiles(req, res, path);
+			break;
+		default:
+			res.writeHead(200, {'Content-Type': 'text/plain'});
+			res.end(requestMethod + ' request');
+			break;
 	}
-
 }
 
 function serveData(req, res, path) {
@@ -138,6 +138,10 @@ function serveData(req, res, path) {
 function serveFiles(req, res, path) {
 
 	path = ('./' + path).replace('//', '/');
+
+	if(req.headers.host === 'style-validator.herokuapp.com') {
+		return sendNotFound(req, res, path);
+	}
 
 	fs.stat(path, function(err, stats){
 
