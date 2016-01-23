@@ -1,7 +1,7 @@
 /*!
  Style Validator
  "Validation in the Browser". Validate computedStyle with track all events.
- https://style-validator.github.io/
+ http://style-validator.github.io/
  by Igari Takeharu
  MIT License
  */
@@ -138,7 +138,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.htmlDefaultBorderBottomWidth = that.html.style.borderBottomWidth === '' ? null : that.html.style.borderBottomWidth;
 
 		//リソースルートを設定
-		that.RESOURCE_ROOT = that.RESOURCE_ROOT || 'https://style-validator.github.io/extension/';
+		that.RESOURCE_ROOT = that.RESOURCE_ROOT || 'http://style-validator.github.io/extension/';
 
 		//監視フラグの初期化
 		that.isObserving = false;

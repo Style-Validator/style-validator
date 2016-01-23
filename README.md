@@ -190,7 +190,7 @@ Install From the following page.
 
 Bookmark from the following page.
 
-- https://style-validator.github.io/
+- http://style-validator.github.io/
 
 
 # Function

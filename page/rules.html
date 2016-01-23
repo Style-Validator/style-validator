@@ -3,30 +3,33 @@
 <head>
 
 	<!-- ***** charset ***** -->
-	<meta charset="utf-8" />
+	<meta charset="utf-8">
 
 	<!-- ***** robots ***** -->
-	<meta name="robots" content="noydir" />
-	<meta name="robots" content="noodp" />
-	<meta name="robots" content="index,follow" />
+	<meta name="robots" content="noydir">
+	<meta name="robots" content="noodp">
+	<meta name="robots" content="index,follow">
+	<link rel="canonical" href="http://style-validator.github.io/rules.html">
 
 	<!-- ***** viewport ***** -->
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 
 	<!-- ***** format-detection ***** -->
-	<meta name="format-detection" content="telephone=no, email=no, address=no" />
-	<title>Rules | Style Validator</title>
+	<meta name="format-detection" content="telephone=no, email=no, address=no">
+
 	<!-- ***** data ***** -->
-	<meta name="description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax." />
-	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon" />
+	<title>Rules | Style Validator</title>
+	<meta name="description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax.">
+	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon">
 
 	<!-- ***** ogp ***** -->
-	<meta property="og:site_name" content="Style Validator" />
-	<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser" />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://style-validator.github.io/" />
-	<meta property="og:description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax." />
-	<meta property="og:image" content="https://style-validator.github.io/img/style-validator.logo.png" />
+	<meta property="og:site_name" content="Style Validator">
+	<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="http://style-validator.github.io/rules.html">
+	<meta property="og:description" content="Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax.">
+	<meta property="og:image" content="http://style-validator.github.io/img/style-validator.logo.png">
+
 	<!-- ***** favicon ***** -->
 	<link rel="icon" type="image/x-icon" href="/favicon.ico?v=1">
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1">
@@ -41,16 +44,16 @@
 	<meta name="msapplication-TileImage" content="/img/ms-style-validator.logo.png">
 	<meta name="theme-color" content="#52B050">
 
-	<!-- ***** styles***** -->
+	<!-- ***** styles ***** -->
 	<link rel="stylesheet" href="/page/common.css">
 	<link rel="stylesheet" href="/page/rules.css">
 
-	<!-- ***** imports***** -->
+	<!-- ***** imports ***** -->
 	<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-	<link rel="import" href="/html_imports/footer.html">
-	<link rel="import" href="/html_imports/common-jsonld.html">
+	<link rel="import" href="/dom_modules/footer.html">
+	<link rel="import" href="/dom_modules/common-jsonld.html">
 
-	<!-- ***** scripts***** -->
+	<!-- ***** scripts ***** -->
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -66,7 +69,7 @@
 <div class="wrapper">
 	<header class="aside">
 		<div class="aside-header">
-			<h1 class="aside-heading"><a href="/"><img src="/img/style-validator.logo.svg" width="40" height="40" /> Rules</a></h1>
+			<h1 class="aside-heading"><a href="/"><img src="/img/style-validator.logo.svg" width="40" height="40"> Rules</a></h1>
 		</div>
 		<div class="aside-body" hidden="true">
 			<section class="aside-section">
@@ -120,11 +123,11 @@
 	</header>
 	<main class="main">
 		<header class="main-header">
-			<h1 class="main-heading"><a href="/"><img src="/img/style-validator.logo.svg" width="40" height="40" /> Rules</a></h1>
+			<h1 class="main-heading"><a href="/"><img src="/img/style-validator.logo.svg" width="40" height="40"> Rules</a></h1>
 			<nav class="main-header-nav-search">
 				<label class="main-header-nav-search-label">
-					<img src="/img/iconmonstr-magnifier-6.svg" />
-					<input type="search" placeholder="Search Property" class="main-header-nav-search-input" id="search-property-input" />
+					<img src="/img/iconmonstr-magnifier-6.svg">
+					<input type="search" placeholder="Search Property" class="main-header-nav-search-input" id="search-property-input">
 				</label>
 				<div class="main-header-nav-search-count">
 					<output id="searched-rules-count"></output> / <output id="total-rules-count"></output>
@@ -132,21 +135,21 @@
 			</nav>
 			<nav class="main-header-nav-display-mode">
 				<ul class="main-header-nav-display-mode-list">
-					<li><label><input type="checkbox" checked="checked" id="reason-checkbox" /><img src="/img/iconmonstr-help-3-icon.svg" alt="Reason" /></label></li>
-					<li><label><input type="checkbox" checked="checked" id="reference-url-checkbox" /><img src="/img/iconmonstr-link-icon-gray.svg" alt="Reference URL" /></label></li>
+					<li><label><input type="checkbox" checked="checked" id="reason-checkbox"><img src="/img/iconmonstr-help-3-icon.svg" alt="Reason"></label></li>
+					<li><label><input type="checkbox" checked="checked" id="reference-url-checkbox"><img src="/img/iconmonstr-link-icon-gray.svg" alt="Reference URL"></label></li>
 				</ul>
 			</nav>
 			<nav class="main-header-nav-display-mode">
 				<ul class="main-header-nav-display-mode-list">
-					<li><label><input type="radio" name="display-mode-list" value="column" id="display-column-mode" checked="checked" /><img src="/img/iconmonstr-view-6.svg" alt="Column Mode" /></label></li>
-					<li><label><input type="radio" name="display-mode-list" value="list" id="display-list-mode" /><img src="/img/iconmonstr-menu-2.svg" alt="List Mode" /></label></li>
+					<li><label><input type="radio" name="display-mode-list" value="column" id="display-column-mode" checked="checked"><img src="/img/iconmonstr-view-6.svg" alt="Column Mode"></label></li>
+					<li><label><input type="radio" name="display-mode-list" value="list" id="display-list-mode"><img src="/img/iconmonstr-menu-2.svg" alt="List Mode"></label></li>
 				</ul>
 			</nav>
 			<nav class="main-header-nav">
-				<button id="reset-button" type="reset"><img src="/img/iconmonstr-undo-4-icon.svg" width="20" height="20" />Reset</button>
-				<button id="add-button"><img src="/img/iconmonstr-selection-10-icon.svg" width="20" height="20" />Add</button>
-				<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a local file and Let's pull request:)"><img src="/img/iconmonstr-download-2-icon.svg" width="20" height="20" />DL</a>
-				<button id="save-button" title="Override a local file and Let's pull request:)"><img src="/img/iconmonstr-save-icon.svg" width="20" height="20" />Save</button>
+				<button id="reset-button" type="reset"><img src="/img/iconmonstr-undo-4-icon.svg" width="20" height="20">Reset</button>
+				<button id="add-button"><img src="/img/iconmonstr-selection-10-icon.svg" width="20" height="20">Add</button>
+				<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a local file and Let's pull request:)"><img src="/img/iconmonstr-download-2-icon.svg" width="20" height="20">DL</a>
+				<button id="save-button" title="Override a local file and Let's pull request:)"><img src="/img/iconmonstr-save-icon.svg" width="20" height="20">Save</button>
 			</nav>
 		</header>
 		<div id="loadingSpinner">Loading...</div>
@@ -159,7 +162,7 @@
 	<li>
 		<div class="rules-list-wrapper">
 			<header class="rules-list-header text-input" data-id="title">
-				<input type="text" tabindex="1" />
+				<input type="text" tabindex="1">
 				<a href="javascript: void(0);" class="remove-button">Remove</a>
 				<a href="javascript: void(0);" class="edit-button">Edit</a>
 			</header>
@@ -192,17 +195,17 @@
 </template>
 <template id="template-property-base">
 	<li>
-		<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="css-properties-value" /> ;
+		<input type="text" class="css-property" list="all-css-properties"> : <input type="text" class="css-property-value" list="css-properties-value"> ;
 	</li>
 </template>
 <template id="template-property-ng">
 	<li>
 		<section>
-			<input type="text" class="css-property" list="all-css-properties" /> : <input type="text" class="css-property-value" list="css-properties-value" /> ;
+			<input type="text" class="css-property" list="all-css-properties"> : <input type="text" class="css-property-value" list="css-properties-value"> ;
 		</section>
 		<section class="styles-list-meta-data">
 			<label class="styles-list-meta-data-reason"><textarea placeholder="Input Reason" class="reason"></textarea></label>
-			<label class="styles-list-meta-data-reference-url"><input type="text" placeholder="Input Reference URL" class="reference-url" /></label>
+			<label class="styles-list-meta-data-reference-url"><input type="text" placeholder="Input Reference URL" class="reference-url"></label>
 		</section>
 	</li>
 </template>
