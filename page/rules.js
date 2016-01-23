@@ -205,7 +205,7 @@ STYLEV.RULES = {
 
 	removeSaveButtonWhenNotLocal: function() {
 		var that = STYLEV.RULES;
-		if(location.hostname === 'style-validator.io') {
+		if(location.hostname !== 'localhost') {
 			that.saveButton.hidden = true;
 		}
 	},
@@ -896,7 +896,7 @@ STYLEV.RULES = {
 		var that = STYLEV.RULES;
 
 		var xhr = new XMLHttpRequest();
-		var apiURI = 'http://localhost:8001/saveJSON';
+		var apiURI = '/saveJSON';
 		var method = 'POST';
 		var json = that.generateJSON();
 		var data4send = JSON.stringify(json, null, '\t');
