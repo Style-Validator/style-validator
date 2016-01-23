@@ -38,6 +38,6 @@ gulp.task('start-server', function () {
 	gulpNodemon({
 		script: 'app.js',
 		ext: 'html js'
-	})
+	});
 });
 gulp.task('default', ['clean', 'generate', 'watch', 'start-server']);
