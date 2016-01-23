@@ -70,9 +70,10 @@ body {
 .main-header > * {
 	flex: 1 0 auto;
 	align-self: stretch;
-	padding: 9px 10px;
+	padding: 5px 10px;
 	display: flex;
 	border-top: 1px solid #DDD;
+	height: 56px;
 }
 .main-heading {
 	display: none;
@@ -80,8 +81,6 @@ body {
 .main-header-nav {
 	display: flex;
 	justify-content: flex-end;
-	padding-top: 5px;
-	padding-bottom: 5px;
 }
 .main-header-nav > * + * {
 	margin-left: 10px;
@@ -129,7 +128,8 @@ body {
 	border: 0;
 }
 .main-header-nav-search-count {
-	padding-left: 0.5em;
+	margin-left: 0.5em;
+	min-width: 3em;
 }
 
 /* styles-list */
