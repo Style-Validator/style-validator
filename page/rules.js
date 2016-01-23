@@ -14,6 +14,7 @@ STYLEV.RULES = {
 		that.setCSSPropertyDataList();
 		that.removeSaveButtonWhenNotLocal();
 		that.initializeRuleArea();
+		that.adjustPosition();
 	},
 	initializeRuleArea: function() {
 		var that = STYLEV.RULES;

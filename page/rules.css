@@ -49,7 +49,7 @@ body {
 /* main */
 .main {
 	height: 100%;
-	border-top: 64px solid transparent;
+	/*border-top: 64px solid transparent;*/
 	position: relative;
 }
 .main-header {
@@ -71,6 +71,7 @@ body {
 	align-self: stretch;
 	padding: 9px 10px;
 	display: flex;
+	border-top: 1px solid #DDD;
 }
 .main-heading {
 	display: none;
@@ -78,15 +79,14 @@ body {
 .main-header-nav {
 	display: flex;
 	justify-content: flex-end;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 .main-header-nav > * + * {
 	margin-left: 10px;
 }
 .main-header-nav button,
 .main-header-nav .button {
-	/* line-height: 1.1; */
-	/* flex-basis: 100px; */
-	/* display: block; */
 	white-space: nowrap;
 	min-width: 52px;
 }
