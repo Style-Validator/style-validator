@@ -9,9 +9,12 @@ var https = require('https');
 var fs = require('fs');
 var os = require('os');
 var url = require('url');
+var querystring = require('querystring');
 var assert = require('assert');
+
 var mongodb = require('mongodb');
 var open = require('open');
+var requestIp = require('request-ip');
 
 /*
  * variables
@@ -52,6 +55,9 @@ var browser = isLinux ? 'google-chrome' : (
 	isWindows ? 'chrome' : null)
 );
 
+var parsedURL;
+var parsedQueryString;
+
 /*
  * execution
  * */
@@ -87,7 +93,7 @@ function callbackAfterServerListening() {
 
 function requestHandler(req, res){
 
-	var parsedURL = url.parse(req.url);
+	parsedURL = url.parse(req.url);
 	var path = parsedURL.pathname;
 	var requestMethod = req.method;
 
@@ -139,8 +145,14 @@ function serveFiles(req, res, path) {
 
 	path = ('./' + path).replace('//', '/');
 
+	//Deny if hostname is style-validator.herokuapp.com
+	//Because, style-validator.github.io is exist already
 	if(req.headers.host === 'style-validator.herokuapp.com') {
 		return sendNotFound(req, res, path);
+	}
+
+	if(path === './getMyIP.js') {
+		return sendClientIP(req, res, path);
 	}
 
 	fs.stat(path, function(err, stats){
@@ -175,6 +187,16 @@ function serveFiles(req, res, path) {
 
 		}
 	});
+}
+
+function sendClientIP(req, res, path) {
+
+	parsedQueryString = querystring.parse(parsedURL.query);
+	var variable = parsedQueryString['var'];
+	var clientIp = requestIp.getClientIp(req);
+
+	res.writeHead(200, {'Content-Type': mimeTypes['js']});
+	res.end('var ' + variable + ' = \'' + clientIp + '\';');
 }
 
 function escapeHtml(value) {
@@ -347,6 +369,10 @@ function dbHandler(store) {
  * */
 
 function saveJSON(store) {
-	fs.writeFile("./extension/data/rules.json", store);
-	console.log('JSON file written successfully!');
+
+	fs.writeFile("./extension/data/rules.json", store, function(err) {
+
+		assert.equal(null, err, 'Failed! JSON file has not written...');
+		console.log('JSON file written successfully!');
+	});
 }

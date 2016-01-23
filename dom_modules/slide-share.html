@@ -1,18 +1,31 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<script src="//l2.io/ip.js?var=myip" async></script>
+<script src="/getMyIP.js?var=myip" async defer id="get-my-ip-script"></script>
 <dom-module id="slide-share">
 	<template>
 		<iframe src="//www.slideshare.net/slideshow/embed_code/key/lMxVcs5tLhMySU" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/TakeharuIgari/style-validator-at-breakout-session-of-tpac2015" title="Style Validator at breakout session of TPAC2015" target="_blank">Style Validator at breakout session of TPAC2015</a> </strong> from <strong><a href="//www.slideshare.net/TakeharuIgari" target="_blank">Takeharu Igari</a></strong> </div>
 	</template>
 	<script>
-		var isMyLocal =
-				location.href.indexOf('stylev') !== -1 ||
-				location.href.indexOf('127.0.0.1') !== -1 ||
-				location.href.indexOf('localhost') !== -1 ||
-				myip === '202.162.158.226'||
-				myip.infexOf('119.104.') !== -1;
-		if(!isMyLocal) {
-			Polymer({is: "slide-share"});
+
+		var ownerDocument = document.currentScript.ownerDocument;
+
+		function controlShowing() {
+
+			var hostname = location.hostname;
+			var isLocal =
+					hostname.indexOf('stylev') === 0 ||
+					hostname.indexOf('127.0.0.1') === 0 ||
+					hostname.indexOf('localhost') === 0 ||
+					myip === '202.162.158.226'||
+					myip.indexOf('119.104.') === 0 ||
+					false;
+
+			if(!isLocal) {
+				Polymer({is: "slide-share"});
+			}
 		}
+
+		ownerDocument.addEventListener('load', controlShowing)
+
+
 	</script>
 </dom-module>
