@@ -104,7 +104,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.tagsTableChildren = dataArray[4];
 
 				//HTMLタグを判定する用の正規表現
-				that.regexAllHTMLTag = new RegExp(' ' + that.tagsAllData.join(' | ') + ' ');
+				that.regexAllHTMLTag = new RegExp('^( ' + that.tagsAllData.join(' | ') + ' )');
 				that.regexEmptyElem = new RegExp('^( ' + that.tagsEmptyData.join(' | ') + ' )');
 				that.regexReplacedElem = new RegExp('^( ' + that.tagsReplacedElementData.join(' | ') + ' )');
 				that.regexTableChildElem = new RegExp('^( ' + that.tagsTableChildren.join(' | ') + ' )');
