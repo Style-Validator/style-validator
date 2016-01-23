@@ -22,7 +22,8 @@ body {
 .aside-heading {
 	/* align-items: center; */
 	display: flex;
-	padding: 12px 25px;
+	padding: 0 25px;
+	height: 56px;
 }
 .aside-heading a {
 	display: flex;
