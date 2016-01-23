@@ -237,10 +237,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			script.classList.add('stylev-ignore');
 			script.addEventListener('load', function() {
 				resolve();
-			}, false);
+			});
 			script.addEventListener('error', function(event) {
 				reject(new URIError("The script " + event.target.src + " is not accessible."));
-			}, false);
+			});
 
 			if(docFlag) {
 				docFlag.appendChild(script);
@@ -754,7 +754,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			} else {
 				that.showErrorMsg();
 			}
-		}, false);
+		});
 		xhr.addEventListener('error', that.showErrorMsg);
 
 		if (xhr.readyState == 4) {
@@ -1507,7 +1507,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				anchor.href = 'javascript: void(0);';
 
 				//クリックイベントを設定
-				anchor.addEventListener('click', that.markElementFromConsole, false);
+				anchor.addEventListener('click', that.markElementFromConsole);
 
 				//テキスト情報を挿入
 				anchor.textContent = result.messageText;
@@ -1558,15 +1558,15 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	bindEvents2Console: function() {
 		var that = STYLEV.VALIDATOR;
 
-		that.consoleWrapper.addEventListener('click', that.stopPropagation, false);
-		that.consoleHeader.addEventListener('mousedown', that.initConsoleHeader, false);
-		that.html.addEventListener('mousemove', that.moveConsoleHeader, false);
-		that.html.addEventListener('mouseup', that.offConsoleHeader, false);
-		that.consoleCloseButton.addEventListener('click', that.destroy, false);
-		that.consoleRefreshButton.addEventListener('click', that.executeWithDetectingCE, false);
-		that.consoleMinimizeButton.addEventListener('click', that.toggleConsole, false);
-		that.consoleNormalizeButton.addEventListener('click', that.toggleConsole, false);
-		that.html.addEventListener('keyup', that.destroyByEsc, false);
+		that.consoleWrapper.addEventListener('click', that.stopPropagation);
+		that.consoleHeader.addEventListener('mousedown', that.initConsoleHeader);
+		that.html.addEventListener('mousemove', that.moveConsoleHeader);
+		that.html.addEventListener('mouseup', that.offConsoleHeader);
+		that.consoleCloseButton.addEventListener('click', that.destroy);
+		that.consoleRefreshButton.addEventListener('click', that.executeWithDetectingCE);
+		that.consoleMinimizeButton.addEventListener('click', that.toggleConsole);
+		that.consoleNormalizeButton.addEventListener('click', that.toggleConsole);
+		that.html.addEventListener('keyup', that.destroyByEsc);
 	},
 
 	stopPropagation: function(event) {
@@ -1670,7 +1670,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		}
 
 		STYLEV.METHODS.each(that.markedTargets, function(target) {
-			target.addEventListener('click', that.markElementFromTargets, false);
+			target.addEventListener('click', that.markElementFromTargets);
 		});
 	},
 	//TODO: Try to unit with method of markElementFromConsole
@@ -2175,10 +2175,10 @@ STYLEV.CHROME_DEVTOOLS = {
 		var that = STYLEV.CHROME_DEVTOOLS;
 
 		STYLEV.METHODS.each(STYLEV.VALIDATOR.consoleTriggers, function(trigger) {
-			trigger.addEventListener('click', that.inspectFromConsole, false);
+			trigger.addEventListener('click', that.inspectFromConsole);
 		});
 		STYLEV.METHODS.each(STYLEV.VALIDATOR.markedTargets, function(target) {
-			target.addEventListener('click', that.inspectFromTargets, false);
+			target.addEventListener('click', that.inspectFromTargets);
 		});
 	},
 

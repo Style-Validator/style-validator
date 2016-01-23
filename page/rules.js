@@ -37,6 +37,8 @@ STYLEV.RULES = {
 	setParameters: function() {
 		var that = STYLEV.RULES;
 
+		that.wrapper = document.querySelector('.wrapper');
+		that.mainHeader = document.querySelector('.main-header');
 		that.isShowedAllAtFirst = false;
 		that.resetButton = document.querySelector('#reset-button');
 		that.addButton = document.querySelector('#add-button');
@@ -95,16 +97,17 @@ STYLEV.RULES = {
 	bindEvents: function() {
 		var that = STYLEV.RULES;
 
-		that.resetButton.addEventListener('click', that.initializeRuleArea, false);
-		that.addButton.addEventListener('click', that.addRule, false);
-		that.saveButton.addEventListener('click', that.saveJSON, false);
-		that.downloadButton.addEventListener('mousedown', that.setDownloadButton, false);
-		that.reasonCheckbox.addEventListener('change', that.toggleReason, false);
-		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL, false);
-		window.addEventListener('resize', that.resizeTextareaBasedOnLine, false);
-		that.searchPropertyInput.addEventListener('keyup', that.searchProperty, false);
-		that.displayListMode.addEventListener('change', that.toggleDisplayMode, false);
-		that.displayColumnMode.addEventListener('change', that.toggleDisplayMode, false);
+		that.resetButton.addEventListener('click', that.initializeRuleArea);
+		that.addButton.addEventListener('click', that.addRule);
+		that.saveButton.addEventListener('click', that.saveJSON);
+		that.downloadButton.addEventListener('mousedown', that.setDownloadButton);
+		that.reasonCheckbox.addEventListener('change', that.toggleReason);
+		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL);
+		window.addEventListener('resize', that.resizeTextareaBasedOnLine);
+		window.addEventListener('resize', that.adjustPosition);
+		that.searchPropertyInput.addEventListener('keyup', that.searchProperty);
+		that.displayListMode.addEventListener('change', that.toggleDisplayMode);
+		that.displayColumnMode.addEventListener('change', that.toggleDisplayMode);
 
 		that.bind2RuleListItem();
 		that.bind2StylesList();
@@ -219,8 +222,8 @@ STYLEV.RULES = {
 		function findAndBind(rulesListItem) {
 			var editButton = rulesListItem.querySelector('.edit-button');
 			var removeButton = rulesListItem.querySelector('.remove-button');
-			editButton.addEventListener('click', that.toggleEditMode, false);
-			removeButton.addEventListener('click', that.removeTheRule, false);
+			editButton.addEventListener('click', that.toggleEditMode);
+			removeButton.addEventListener('click', that.removeTheRule);
 		}
 
 		if(rulesListItem) {
@@ -309,7 +312,7 @@ STYLEV.RULES = {
 		that.stylesLists = stylesLists ? stylesLists : that.stylesLists;
 
 		that.each(that.stylesLists, function(stylesList) {
-			stylesList.addEventListener('focus', that.insertProperty, false);
+			stylesList.addEventListener('focus', that.insertProperty);
 		});
 	},
 	addRule: function() {
@@ -396,33 +399,33 @@ STYLEV.RULES = {
 	},
 	bindEvents2ReferenceURL: function(referenceURL) {
 		var that = STYLEV.RULES;
-		referenceURL.addEventListener('dblclick', that.jump2urlOfValue, false);
-		referenceURL.addEventListener('keyup', that.insertPropertyByEnterKey, false);
+		referenceURL.addEventListener('dblclick', that.jump2urlOfValue);
+		referenceURL.addEventListener('keyup', that.insertPropertyByEnterKey);
 	},
 
 	bindEvents2ListItem: function(appendedStylesListItem) {
 		var that = STYLEV.RULES;
 		var inputs = appendedStylesListItem.querySelectorAll('input, textarea');
 
-		appendedStylesListItem.addEventListener('click', that.stopPropagation, false);
+		appendedStylesListItem.addEventListener('click', that.stopPropagation);
 
 		that.each(inputs, function(input) {
-			input.addEventListener('focus', that.selectOnFocus, false);
-			input.addEventListener('click', that.stopPropagation, false);
-			input.addEventListener('keyup', that.fireBlurEventByEscKey, false);
-			input.addEventListener('keyup', that.moveFocusByEnter, false);
+			input.addEventListener('focus', that.selectOnFocus);
+			input.addEventListener('click', that.stopPropagation);
+			input.addEventListener('keyup', that.fireBlurEventByEscKey);
+			input.addEventListener('keyup', that.moveFocusByEnter);
 		});
 	},
 	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue) {
 		var that = STYLEV.RULES;
 
-		cssProperty.addEventListener('input', that.modifyCSSProperty, false);
-		cssProperty.addEventListener('focus', that.applySameStyles2dummyElem, false);
-		cssProperty.addEventListener('blur', that.applyValidationResult, false);
+		cssProperty.addEventListener('input', that.modifyCSSProperty);
+		cssProperty.addEventListener('focus', that.applySameStyles2dummyElem);
+		cssProperty.addEventListener('blur', that.applyValidationResult);
 
-		cssPropertyValue.addEventListener('input', that.modifyCSSPropertyValue, false);
-		cssPropertyValue.addEventListener('focus', that.applySameStyles2dummyElem, false);
-		cssPropertyValue.addEventListener('blur', that.applyValidationResult, false);
+		cssPropertyValue.addEventListener('input', that.modifyCSSPropertyValue);
+		cssPropertyValue.addEventListener('focus', that.applySameStyles2dummyElem);
+		cssPropertyValue.addEventListener('blur', that.applyValidationResult);
 
 
 	},
@@ -905,7 +908,7 @@ STYLEV.RULES = {
 			} else {
 				that.showErrorMsg();
 			}
-		}, false);
+		});
 		xhr.addEventListener('error', that.showErrorMsg);
 
 		if (xhr.readyState == 4) {
@@ -1043,7 +1046,7 @@ STYLEV.RULES = {
 
 	bindEvents2Textarea: function(textarea) {
 		var that = STYLEV.RULES;
-		textarea.addEventListener('keyup', that.adjustHeightOfTextarea, false);
+		textarea.addEventListener('keyup', that.adjustHeightOfTextarea);
 	},
 
 	adjustHeightOfTextarea: function(event, target) {
@@ -1055,6 +1058,11 @@ STYLEV.RULES = {
 	removeLoadingSpinner: function() {
 		var loadingSpinner = document.querySelector('#loadingSpinner');
 		loadingSpinner && loadingSpinner.parentElement.removeChild(loadingSpinner);
+	},
+
+	adjustPosition: function() {
+		var that = STYLEV.RULES;
+		that.wrapper.style.setProperty('padding-top', that.mainHeader.offsetHeight + 'px', '');
 	}
 
 };

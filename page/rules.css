@@ -58,6 +58,7 @@ body {
 	left: 230px;
 	right: 0;
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: stretch;
 	border-bottom: 1px solid #EEE;

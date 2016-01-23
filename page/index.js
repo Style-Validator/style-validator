@@ -44,7 +44,6 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 
 	adjustPosition: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-
 		that.wrapper.style.setProperty('padding-top', that.header.offsetHeight + 'px', '');
 	},
 
