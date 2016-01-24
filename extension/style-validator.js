@@ -47,9 +47,9 @@ STYLEV.options = {
 	IGNORE_SELECTORS: false,
 	IGNORE_SELECTORS_TEXT: '',
 	URL_FILTERS: [
-		'//stylev/page/rules.html',
-		'//style-validator.github.io/page/rules.html',
-		'//localhost:8001/page/rules.html'
+		'http://stylev/page/rules.html',
+		'http://style-validator.github.io/page/rules.html',
+		'http://localhost:8001/page/rules.html'
 	]
 };
 
