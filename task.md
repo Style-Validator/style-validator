@@ -1,6 +1,7 @@
 - Media Queryに対応させる
 - DBのログ実装を完了させる
 
+- ルールページでResize処理が必要ないようにcontenteditable属性を使ってうまいことやる
 - capture画像での崩れが確認できないか？
 ― Local StorageにユーザIDを保存する仕組みを取る
 - Server sent eventsを試す　バージョン情報の染み出しなどに使えるかも

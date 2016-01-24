@@ -129,6 +129,45 @@ body,
 	min-width: 3em;
 }
 
+/* syntax-explanation */
+.syntax-explanation {
+	padding: 12px 3%;
+	border-bottom: 1px solid #DDD;
+}
+.syntax-explanation table,
+.syntax-explanation table > * {
+	display: flex;
+	flex-direction: column;
+}
+.syntax-explanation table > * > tr {
+	display: flex;
+	flex-wrap: wrap;
+}
+.syntax-explanation table > * > tr > th {
+	flex: 1 0 120px;
+}
+.syntax-explanation table > * > tr > td {
+	flex: 3 1 auto;
+	width: 66.666%;
+}
+.syntax-explanation-table > tbody > tr {
+	padding: 10px;
+}
+.syntax-explanation-table > tbody > tr + tr {
+	border-top: 1px dashed #999;
+}
+.syntax-explanation-table > tbody > tr > th,
+.syntax-explanation-inner-table > tbody > tr > th {
+	text-align: left;
+}
+.syntax-explanation-inner-table {
+	margin-top: 10px;
+	background: #EEEEEE;
+}
+.syntax-explanation-inner-table > tbody > tr {
+	padding: 0.5em 1em;
+}
+
 /* styles-list */
 .rules-list {
 	-webkit-columns: 3 300px;
@@ -218,7 +257,7 @@ body,
 	display: block;
 	float: none;
 	color: white;
-	padding: 5px 10px;
+	padding: 5px;
 	font-size: 13px;
 }
 .styles-list[data-id*="base-styles"]		{ border-left: 3px solid #999999; }
@@ -400,6 +439,7 @@ body,
 .rules-list > li.edit-mode [data-id="title"] a {
 	display: flex;
 }
+
 #loadingSpinner {
 	position: relative;
 	height: 100%;

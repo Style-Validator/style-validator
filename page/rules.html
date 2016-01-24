@@ -157,6 +157,64 @@
 			</nav>
 		</header>
 		<div id="loadingSpinner"></div>
+		<details class="syntax-explanation">
+			<summary>See Explanation</summary>
+			<table class="syntax-explanation-table">
+				<tbody>
+				<tr>
+					<th>Base Styles</th>
+					<td>Property that is defined on `base` when defining the errors or warning. If multiple properties, `AND` search is used.</td>
+				</tr>
+				<tr>
+					<th>Error Styles</th>
+					<td>Property that is defined as `error`. If multiple properties, `OR` search is used.</td>
+				</tr>
+				<tr>
+					<th>Warning Styles</th>
+					<td>Property that is defined as `warning`. If multiple properties, `OR` search is used.</td>
+				</tr>
+				<tr>
+					<th>Property Value</th>
+					<td>
+						Value could be used special keywords. <br />
+						<table class="syntax-explanation-inner-table">
+							<tbody>
+							<tr>
+								<th>default</th>
+								<td>Default value that each elements have.<br />(It's equal with value of User Agent Stylesheet)<br />e.g. {display: block;} in &lt;div&gt;</td>
+							</tr>
+							<tr>
+								<th>over-0</th>
+								<td>over 0, not 0.</td>
+							</tr>
+							<tr>
+								<th>under-0</th>
+								<td>under 0, not 0.</td>
+							</tr>
+							<tr>
+								<th>OR operator</th>
+								<td>[value1|value2|...]</td>
+							</tr>
+							<tr>
+								<th>Reverse operator</th>
+								<td>
+									!value<br />
+									(Single Property)<br />
+									<br />
+									![value1|value2|...]<br />
+									(Multiple Properties)<br />
+									<br />
+									!keyword<br />
+									e.g. !default, !over-0, !under-0<br />
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</details>
 		<ul id="rules-list" class="rules-list"></ul>
 		<common-footer></common-footer>
 	</main>
