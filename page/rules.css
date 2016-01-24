@@ -1,12 +1,13 @@
 @charset "utf-8";
 
 html,
-body {
+body,
+.wrapper,
+.main {
 	height: 100%;
 }
 .wrapper {
 	padding-left: 230px;
-	height: 100%;
 }
 /* aside */
 .aside {
@@ -49,7 +50,6 @@ body {
 }
 /* main */
 .main {
-	/*height: 100%;*/
 }
 .main-header {
 	position: fixed;
@@ -139,7 +139,6 @@ body {
 	-moz-column-gap: 1em;
 	column-gap: 1em;
 	padding: 3%;
-	/*min-height: 100%;*/
 }
 .rules-list > li {
 	display: inline-block;
@@ -403,7 +402,12 @@ body {
 	display: flex;
 }
 #loadingSpinner {
-	position: fixed;
+	position: relative;
+	height: 100%;
+}
+#loadingSpinner:before {
+	content: '';
+	position: absolute;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -421,8 +425,20 @@ body {
 	-webkit-animation: load8 1.1s infinite linear;
 	animation: load8 1.1s infinite linear;
 }
-#loadingSpinner,
 #loadingSpinner:after {
+	content: 'Loading...';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 230px;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #5f9153;
+}
+#loadingSpinner:before {
 	border-radius: 50%;
 	width: 10em;
 	height: 10em;
@@ -510,7 +526,8 @@ body {
 		left: 0;
 	}
 
-	#loadingSpinner {
+	#loadingSpinner:before,
+	#loadingSpinner:after {
 		left: 0;
 	}
 	.main-heading {
