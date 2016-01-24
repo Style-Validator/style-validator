@@ -50,7 +50,6 @@ body {
 /* main */
 .main {
 	height: 100%;
-	overflow: hidden;
 }
 .main-header {
 	position: fixed;
