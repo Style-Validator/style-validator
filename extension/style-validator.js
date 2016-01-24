@@ -49,6 +49,7 @@ STYLEV.options = {
 	URL_FILTERS: [
 		'http://stylev/page/rules.html',
 		'http://style-validator.github.io/page/rules.html',
+		'https://style-validator.github.io/page/rules.html',
 		'http://localhost:8001/page/rules.html'
 	]
 };
@@ -670,12 +671,15 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//Set Index to Data Attribute
 			elemData.targetElem.dataset.stylevid = that.elemIndex;
 
+			//For generating data
+			result.ruleID = rule['rule-id'];
+
 			//If need to check parent element
 			if(isCheckingParent) {
 
 				result.messageText =
 					'[' + rule['title'] + ']' + ' ' +
-					'<' + elemData.targetElemTagName + '> ' +
+					'&lt;' + elemData.targetElemTagName + '&gt; ' +
 					baseStylesText && ('{' + baseStylesText + '}' + ' ') +
 					'Parent element\'s style is ' +
 					'{' + ngStyleProp + ': ' + targetElemParentNgStyleVal + ';}' + ' ' +
@@ -694,16 +698,16 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 
 			//For generating data
-			result.ruleID = rule['rule-id'];
-			result.rule = rule;
+//			result.rule = rule;
+			result.tagName = elemData.targetElemTagName;
+			result.targetStyle = {};
+			result.targetStyle[ngStyleProp] = targetElemNgStyleVal;
+
 			result.ngStyle = {};
 			result.ngStyle[ngStyleProp] = ngStylePropVal;
-			result.tagName = elemData.targetElemTagName;
 			if(rule['base-styles']) {
 				result.baseStyle = rule['base-styles'];
 			}
-			result.targetStyle = {};
-			result.targetStyle[ngStyleProp] = targetElemNgStyleVal;
 			if(isCheckingParent) {
 				result.targetParentStyle = {};
 				result.targetParentStyle[ngStyleProp] = targetElemParentNgStyleVal;
@@ -738,13 +742,15 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		var apiURI = 'http://localhost:8001/send2db';
 		var methodType = 'POST';
 		var data = {};
-		data.time = new Date().getTime();
-		data.ua = navigator.userAgent;
-		data.result = that.resultArray;
+
+		data.data = {};
+		data.data.date = new Date();
+		data.data.ua = navigator.userAgent;
+		data.data.result = that.resultArray;
 
 		var data4send = JSON.stringify(data, null, '\t');
-		console.dir(data);
 
+		console.log(data4send)
 		xhr.open(methodType, apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.addEventListener('load', function () {
@@ -1374,9 +1380,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		//コンソール内に挿入するHTML要素を挿入 TODO: 同じ記述をまとめる
 		that.consoleHeader.appendChild(that.consoleHeading);
-		that.consoleHeader.appendChild(that.consoleButtons);
 		that.consoleHeader.appendChild(that.consoleCounter);
 		that.consoleHeader.appendChild(that.consoleMode);
+		that.consoleHeader.appendChild(that.consoleButtons);
 		that.consoleWrapperShadowRoot.appendChild(that.consoleHeader);
 		that.consoleWrapperShadowRoot.appendChild(that.consoleBody);
 		that.consoleList.appendChild(that.docFlag);

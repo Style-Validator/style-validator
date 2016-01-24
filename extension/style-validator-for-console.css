@@ -36,64 +36,48 @@
 }
 
 :host .stylev-console-header {
-	position: relative;
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
 	background-color: #EEE;
 	border-top: 1px solid #A3A3A3;
 	border-bottom: 1px solid #CCC;
 	border-right-width: 0;
 	border-left-width: 0;
 	height: 30px;
-	line-height: 30px;
-	-webkit-box-sizing: content-box;
-	-moz-box-sizing: content-box;
-	box-sizing: content-box;
 	cursor: ns-resize;
 }
 :host .stylev-console-header:active {
 	border-style: dashed;
 }
+:host .stylev-console-header > * {
+	display: flex;
+	align-self: stretch;
+	align-items: center;
+	flex: 0 0 auto;
+}
 :host .stylev-console-heading {
-	/*display: none;*/
-	font-size: 12px;
-	font-weight: normal;
-	width: auto;
-	text-align: left;
-	float: left;
-	/*padding: 0 10px;*/
-	height: inherit;
+	justify-content: center;
+	flex-basis: 35px;
 }
 :host .stylev-console-heading-logo {
-	position: relative;
-	display: block;
-	width: 35px;
-	height: inherit;
+	display: flex;
 }
 :host .stylev-console-heading-logo-image {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
 	width: 20px;
 	height: 20px;
 	margin: auto;
 }
-
-@media (max-width: 460px) {
-
-	:host .stylev-console-heading {
-		display: none;
-	}
-}
 :host .stylev-console-mode {
-	clear: none;
-	float: right;
 	padding-left: 10px;
 	padding-right: 10px;
 	background-position: 5px center;
 	background-repeat: no-repeat;
 	background-size: 20px auto;
 	color: white;
+	line-height: 1.1;
+	flex-shrink: 0;
 }
 :host .stylev-console-mode-image {
 	width: 18px;
@@ -107,12 +91,6 @@
 :host .stylev-console-mode-devtools-disconnected {
 	background-color: red;
 }
-@media (max-width: 600px) {
-	:host .stylev-console-heading {
-		display: none;
-	}
-}
-
 @media (max-width: 450px) {
 	:host .stylev-console-mode {
 		position: relative;
@@ -135,16 +113,14 @@
 }
 
 :host .stylev-console-counter {
-	float: left;
-	font-size: 13px;
+	flex-grow: 1;
+	padding-right: 10px;
 }
 :host .stylev-console-buttons {
-	float: right;
 	border-left: 1px solid #CCC;
 }
 :host .stylev-console-buttons > a {
 	position: relative;
-	float: left;
 	width: 30px;
 	height: 30px;
 	line-height: 30px;
@@ -219,7 +195,7 @@
 }
 :host .stylev-console-body {
 	position: absolute;
-	top: 32px;
+	top: 30px;
 	right: 0;
 	left: 0;
 	bottom: 0;

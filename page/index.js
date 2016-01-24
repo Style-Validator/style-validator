@@ -27,6 +27,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		that.bindEvents();
 		that.startAnimation();
 		that.animateSVG();
+		that.getBookmarklet();
 	},
 
 	bindEvents: function() {
@@ -61,6 +62,21 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 			file: '/img/style-validator.logo.nopadding.svg',
 			type: 'async'
 		});
+	},
+
+	getBookmarklet: function() {
+		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+
+		$.ajax({
+			url: '/bookmarklet/style-validator.js',
+			dataType: 'text',
+			success: that.setBookmarklet
+		});
+	},
+
+	setBookmarklet: function(data) {
+		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+		$('#bookmarklet').attr('href', data);
 	}
 
 };
