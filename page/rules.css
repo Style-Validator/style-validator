@@ -133,17 +133,12 @@ body {
 
 /* styles-list */
 .rules-list {
-
 	-webkit-columns: 3 300px;
 	-moz-columns: 3 300px;
 	columns: 3 300px;
 	-webkit-column-gap: 1em;
 	-moz-column-gap: 1em;
 	column-gap: 1em;
-/*
-	-moz-column-fill: auto;
-	column-fill: auto;
-*/
 	padding: 3%;
 	min-height: 100%;
 }
@@ -151,6 +146,9 @@ body {
 	display: inline-block;
 	width: 100%;
 	margin-bottom: 20px;
+	-webkit-column-break-inside: avoid;
+	page-break-inside: avoid;
+	break-inside: avoid;
 }
 .rules-list > li[data-ruleid]:before {
 	display: block;

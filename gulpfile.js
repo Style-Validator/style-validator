@@ -27,17 +27,15 @@ gulp.task('generate', function () {
 gulp.task('clean', del.bind(null, 'bookmarklet'));
 
 gulp.task('watch', function () {
-	var watcher = gulp.watch('extension/style-validator.js', ['generate']);
-	watcher.on('change', function(event) {
-		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-	});
+	gulp.watch('extension/style-validator.js', ['generate']);
 });
 
 //start server
 gulp.task('start-server', function () {
 	gulpNodemon({
 		script: 'app.js',
-		ext: 'html js'
+		ext: 'html css js'
 	});
 });
+
 gulp.task('default', ['clean', 'generate', 'watch', 'start-server']);
