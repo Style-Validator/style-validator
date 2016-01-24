@@ -146,9 +146,6 @@ body {
 	display: inline-block;
 	width: 100%;
 	margin-bottom: 20px;
-	-webkit-column-break-inside: avoid;
-	page-break-inside: avoid;
-	break-inside: avoid;
 }
 .rules-list > li[data-ruleid]:before {
 	display: block;
