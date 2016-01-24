@@ -546,4 +546,7 @@ body,
 		height: 35px;
 		margin-right: 0.3em;
 	}
+	.main-header-nav-search {
+		display: none;
+	}
 }
