@@ -712,7 +712,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			result.referenceURL = referenceURL;
 
 			//For generating data and for other function
-//			result.stylevid = elemData.targetElem.dataset.stylevid;
+			result.stylevid = elemData.targetElem.dataset.stylevid;
 			result.riskLevel = splitedNgStyleTypeArray[splitedNgStyleTypeArray.length - 2];
 
 			//Generate Result Data
@@ -1672,7 +1672,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			target.addEventListener('click', that.markElementFromTargets);
 		});
 	},
-	//TODO: Try to unit with method of markElementFromConsole
+	//TODO: Try to unite with method of markElementFromConsole
 	markElementFromTargets: function(event) {
 
 		event.stopPropagation();
