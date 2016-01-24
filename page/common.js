@@ -26,7 +26,7 @@ STYLEV.COMMON = {
 	showWelcomeMsg: function() {
 		var that = STYLEV.COMMON;
 
-		console.info('%cWelcome to Style Validator!', 'font-size: 18px; color: #1F9E0D; line-height: 2;');
+		console.info('%cWelcome to Style Validator!', 'font-size: 18px; color: #1F9E0D; line-height: 1.7;');
 	}
 };
 
