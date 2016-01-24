@@ -7,13 +7,11 @@
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
-var os = require('os');
 var url = require('url');
 var querystring = require('querystring');
 var assert = require('assert');
 
 var mongodb = require('mongodb');
-var open = require('open');
 var requestIp = require('request-ip');
 
 /*
@@ -46,15 +44,6 @@ var dirSpacesBeforeSize = 9;
 var dirMonths = 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',');
 //TODO: confirm.end
 
-var osPlatform = os.platform();
-var isLinux = osPlatform === 'linux';
-var isMacintosh = osPlatform === 'darwin';
-var isWindows = osPlatform === 'win32';
-var browser = isLinux ? 'google-chrome' : (
-	isMacintosh ? 'google chrome' : (
-	isWindows ? 'chrome' : null)
-);
-
 var parsedURL;
 var parsedQueryString;
 
@@ -80,10 +69,6 @@ function callbackAfterServerListening() {
 	var port = serverAddress.port;
 
 	console.log("Server is runnnig at http://%s:%s", host, port);
-//
-//	if(browser) {
-//		open('http://' + host + ':' + port, browser);
-//	}
 }
 
 
