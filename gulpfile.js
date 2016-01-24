@@ -8,6 +8,7 @@ var gulp = require('gulp');
 var gulpNodemon = require('gulp-nodemon');
 var gulpJshint = require('gulp-jshint');
 var gulpUglify = require('gulp-uglify');
+var gulpWebserver = require('gulp-webserver');
 
 //generate bookmark
 gulp.task('generate', function () {
@@ -35,7 +36,15 @@ gulp.task('start-server', function () {
 	gulpNodemon({
 		script: 'app.js',
 		ext: 'html css js'
+	}).on('start', function() {
+		gulp
+			.src('./')
+			.pipe(gulpWebserver({
+				livereload: true,
+				open: true
+			}));
 	});
 });
+
 
 gulp.task('default', ['clean', 'generate', 'watch', 'start-server']);

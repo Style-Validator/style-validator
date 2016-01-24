@@ -80,10 +80,10 @@ function callbackAfterServerListening() {
 	var port = serverAddress.port;
 
 	console.log("Server is runnnig at http://%s:%s", host, port);
-
-	if(browser) {
-		open('http://' + host + ':' + port, browser);
-	}
+//
+//	if(browser) {
+//		open('http://' + host + ':' + port, browser);
+//	}
 }
 
 
