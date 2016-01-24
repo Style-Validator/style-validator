@@ -47,10 +47,9 @@ STYLEV.options = {
 	IGNORE_SELECTORS: false,
 	IGNORE_SELECTORS_TEXT: '',
 	URL_FILTERS: [
-		'http://stylev/page/rules.html',
-		'http://style-validator.gihub.io/page/rules.html',
-		'http://localhost:8001/page/rules.html',
-		'https://style-validator.herokuapp.com/page/rules.html'
+		'//stylev/page/rules.html',
+		'//style-validator.github.io/page/rules.html',
+		'//localhost:8001/page/rules.html'
 	]
 };
 
