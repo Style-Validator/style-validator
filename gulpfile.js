@@ -41,7 +41,11 @@ gulp.task('start-server', function () {
 			.src('./')
 			.pipe(gulpWebserver({
 				livereload: true,
-				open: true
+				open: true,
+				proxies: [{
+					source: '/',
+					target: 'http://localhost:8001/'
+				}]
 			}));
 	});
 });
