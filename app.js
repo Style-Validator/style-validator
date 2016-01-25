@@ -356,7 +356,7 @@ function dbHandler(store) {
 
 
 		results.insert(json, {}, function(err, records) {
-			console.log("Record added as "+records[0]._id);
+			console.log('Inserted data completely to Database');
 			db.close();
 		});
 	}
