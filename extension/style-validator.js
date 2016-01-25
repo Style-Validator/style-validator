@@ -674,30 +674,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//For generating data
 			result.ruleID = rule['rule-id'];
 
-			//If need to check parent element
-			if(isCheckingParent) {
+			result.messageText =
+				'[' + rule['title'] + ']' + ' '+
+				'<' + elemData.targetElemTagName + '>' + ' ' +
+				(baseStylesText && ('{' + baseStylesText + '}' + ' ')) +
+				(isCheckingParent && 'This parent element\'s style is ') +
+				'{' + ngStyleProp + ': ' + targetElemParentNgStyleVal + ';}' + ' ' +
+				reason;
 
-				result.messageText =
-					'[' + rule['title'] + ']' + ' ' +
-					'&lt;' + elemData.targetElemTagName + '&gt; ' +
-					baseStylesText && ('{' + baseStylesText + '}' + ' ') +
-					'Parent element\'s style is ' +
-					'{' + ngStyleProp + ': ' + targetElemParentNgStyleVal + ';}' + ' ' +
-					reason;
-
-			//Check the element itself
-			} else {
-
-				result.messageText =
-					'[' + rule['title'] + ']' + ' '+
-					'<' + elemData.targetElemTagName + '>' + ' ' +
-					baseStylesText && ('{' + baseStylesText + '}' + ' ') +
-					'{' + ngStyleProp + ': ' + targetElemNgStyleVal + ';}' + ' ' +
-					reason;
-
-			}
-
-			//For generating data
 //			result.rule = rule;
 			result.tagName = elemData.targetElemTagName;
 			result.targetStyle = {};
@@ -740,7 +724,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		var xhr = new XMLHttpRequest();
 //		var apiURI = 'https://style-validator.herokuapp.com/send2db';
 		var apiURI = 'http://localhost:8001/send2db';
-		var methodType = 'POST';
 		var data = {};
 
 		data.data = {};
@@ -750,8 +733,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		var data4send = JSON.stringify(data, null, '\t');
 
-		console.log(data4send)
-		xhr.open(methodType, apiURI, true);
+		xhr.open('POST', apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.addEventListener('load', function () {
 			if (xhr.status === 200) {
@@ -759,6 +741,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			} else {
 				that.showErrorMsg();
 			}
+			console.timeEnd('Style Validation Sending Data');
 		});
 		xhr.addEventListener('error', that.showErrorMsg);
 
@@ -766,6 +749,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			return;
 		}
 
+		console.time('Style Validation Sending Data');
 		xhr.send(data4send);
 	},
 	showSuccessMsg: function() {
@@ -773,7 +757,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	},
 
 	showErrorMsg: function(e) {
-		console.error(e);
+		throw new Error('Request is failed!');
 	},
 
 	initializeBeforeValidation: function() {
