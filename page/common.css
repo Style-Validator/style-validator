@@ -58,7 +58,7 @@ a:active {
 .header {
 	display: flex;
 	justify-content: space-between;
-	padding: calc(2% + 12px) 4%;
+	padding: calc(2% + 8px) 4%;
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -160,7 +160,7 @@ button,
 	}
 	.header-nav {
 		padding-left: 0;
-		margin-top: 14px;
+		margin-top: 10px;
 	}
 	.header-nav-list {
 		justify-content: center;
