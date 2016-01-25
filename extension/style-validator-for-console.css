@@ -144,8 +144,8 @@
 :host .stylev-console-refresh-button {
 }
 :host .stylev-console-refresh-button-image {
-	width: 24px;
-	height: 24px;
+	width: 23px;
+	height: 23px;
 }
 :host .stylev-console-refresh-button-image-active {
 	-webkit-animation: active-refresh-button 1s infinite;
