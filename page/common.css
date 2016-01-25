@@ -17,9 +17,6 @@ ul, ol {
 h1, h2, h3, h4, h5, h6 {
 	font-size: inherit;
 }
-nav.main-header-nav-display-mode {
-	list-style: none;
-}
 img, input, select, textarea, button, svg, canvas, object {
 	vertical-align: middle;
 }
@@ -66,6 +63,16 @@ a:active {
 	background: #F9F9F9;
 	z-index: 1000;
 	align-items: center;
+	-webkit-transition: 0.2s ease;
+	-moz-transition: 0.2s ease;
+	-ms-transition: 0.2s ease;
+	-o-transition: 0.2s ease;
+	transition: 0.2s ease;
+}
+.header-with-shadow {
+	-webkit-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
 }
 .header-heading {
 	display: flex;
