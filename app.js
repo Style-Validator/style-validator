@@ -340,10 +340,23 @@ function dbHandler(store) {
 		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
 		console.log("Connected correctly to MongoDB");
 
-		var collection = db.collection('testData');
+		var results = db.collection('testData');
+		var users = db.collection('users');
 		var json = JSON.parse(store);
-		collection.insert(json, {}, function() {
-			console.log('Inserted data completely to Database');
+
+//		users.findAndModify({id: "user_id"}, [], { $inc: { seq: 1 } }, { new: true }, function(err, result){
+//			// auto_incrementされたuser_idが取得できた
+//			var newUserId = result.value.seq;
+//			// ユーザーを追加
+//			usersColl.insert({
+//				id: newUserId,
+//				name: "Taro"+newUserId
+//			});
+//		});
+
+
+		results.insert(json, {}, function(err, records) {
+			console.log("Record added as "+records[0]._id);
 			db.close();
 		});
 	}
