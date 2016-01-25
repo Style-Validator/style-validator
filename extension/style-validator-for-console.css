@@ -40,7 +40,7 @@
 
 :host .stylev-console-header {
 	display: flex;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
 	background-color: #EEE;
@@ -49,7 +49,6 @@
 	border-right-width: 0;
 	border-left-width: 0;
 	flex: 1 1 auto;
-	min-height: 30px;
 	cursor: ns-resize;
 }
 :host .stylev-console-header:active {
@@ -59,7 +58,7 @@
 	display: flex;
 	align-self: stretch;
 	align-items: center;
-	flex: 0 0 auto;
+	flex: 0 0 30px;
 }
 :host .stylev-console-heading {
 	justify-content: center;
@@ -74,7 +73,7 @@
 	margin: auto;
 }
 :host .stylev-console-mode {
-	padding-left: 10px;
+	padding-left: 6px;
 	padding-right: 10px;
 	background-position: 5px center;
 	background-repeat: no-repeat;
@@ -82,7 +81,6 @@
 	color: white;
 	line-height: 1.1;
 	flex-shrink: 0;
-	margin: -1px 0;
 }
 :host .stylev-console-mode-image {
 	width: 18px;
@@ -96,7 +94,7 @@
 :host .stylev-console-mode-devtools-disconnected {
 	background-color: red;
 }
-@media (max-width: 450px) {
+@media (max-width: 640px) {
 	:host .stylev-console-mode {
 		position: relative;
 		width: 30px;
@@ -120,6 +118,7 @@
 :host .stylev-console-counter {
 	flex-grow: 1;
 	padding-right: 10px;
+	line-height: 1.2;
 }
 :host .stylev-console-buttons {
 	/* border-left: 1px solid #CCC; */
