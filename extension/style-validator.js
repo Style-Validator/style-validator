@@ -50,6 +50,7 @@ STYLEV.options = {
 		'http://stylev/page/rules.html',
 		'http://style-validator.github.io/page/rules.html',
 		'https://style-validator.github.io/page/rules.html',
+		'http://localhost:8000/page/rules.html',
 		'http://localhost:8001/page/rules.html'
 	]
 };
@@ -158,7 +159,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			CONSOLE_WRAPPER_DEFAULT_HEIGHT:	200,
 			CONSOLE_HEADING_TEXT:			'Style Validator',
-			CONGRATULATION_MESSAGE_TEXT:	'It\'s Perfect!',
+			CONGRATULATION_MESSAGE_TEXT:	'Perfect!',
 
 			GA_PATH: that.RESOURCE_ROOT + 'google-analytics.js',
 
@@ -749,7 +750,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			return;
 		}
 
-		console.time('Style Validation Sending Data');
+		console.info('Style Validator: Sending data is starting...');
+		console.time('Style Validation Sending data');
 		xhr.send(data4send);
 	},
 	showSuccessMsg: function() {

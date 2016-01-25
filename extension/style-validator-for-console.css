@@ -32,7 +32,7 @@
 	left: 0;
 	z-index: 10000000000;
 	background: rgba(255, 255, 255, 0.8);
-	min-height: 30px;
+	min-height: 26px;
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
@@ -40,7 +40,7 @@
 
 :host .stylev-console-header {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	justify-content: space-between;
 	align-items: center;
 	background-color: #EEE;
@@ -59,7 +59,7 @@
 	align-self: stretch;
 	align-items: center;
 	flex: 0 0 auto;
-	height: 30px;
+	min-height: 26px;
 }
 :host .stylev-console-heading {
 	justify-content: center;
@@ -127,8 +127,6 @@
 :host .stylev-console-buttons > a {
 	position: relative;
 	width: 30px;
-	height: 30px;
-	line-height: 30px;
 	color: inherit;
 	text-align: center;
 	text-decoration: none;
@@ -209,13 +207,15 @@
 :host .stylev-console-list > li {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+	padding: 3px 0 2px;
 }
 :host .stylev-console-list > li + li {
 	border-top: 1px solid #EEE;
 }
 :host .stylev-console-list-anchor {
-	display: block;
-	padding: 2px 5px;
+	flex-grow: 1;
+	padding: 0 5px;
 	color: inherit !important;
 	text-decoration: none !important;
 	cursor: pointer;
@@ -230,7 +230,7 @@
 	text-decoration: underline;
 }
 :host .stylev-console-list-logid {
-	padding: 2px 5px;
+	padding: 0 5px;
 }
 :host .stylev-console-list > li.stylev-trigger-error {
 	border-color: #FFD8D7;
