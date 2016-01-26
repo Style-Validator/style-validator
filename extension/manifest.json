@@ -4,7 +4,7 @@
 	"name": "Style-Validator",
 	"version": "0.3.1",
 
-	"description": "Style Validator is CSS Validator that can detect `RISKY CSS STYLES` might break layout, NOT syntax.",
+	"description": "Style Validator is CSS Validator that can detect `Risky Style CSS` might break layout, NOT syntax. In addition, it can validate after DOM Modifying (e.g. by AJAX or ANY EVENT CALLBACK).",
 	"icons": {
 
 		"16": "./style-validator.logo_16x16.png",
