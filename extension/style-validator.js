@@ -1301,6 +1301,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//属性を設定
 		that.consoleWrapper.id = that.settings.CONSOLE_WRAPPER_ID;
 		that.consoleWrapper.classList.add('stylev-ignore');
+		that.consoleWrapper.style.setProperty('opacity', '0', '');
 		that.consoleList.id = that.settings.CONSOLE_LIST_ID;
 		that.consoleHeader.classList.add('stylev-console-header');
 		that.consoleHeading.classList.add('stylev-console-heading');
@@ -1384,8 +1385,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		setTimeout(function() {
 
-//			that.consoleWrapper.style.setProperty('height', (STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT) + 'px', '');
-			that.toggleConsole();
+			that.normalizeConsole();
+			that.consoleWrapper.style.setProperty('opacity', null, '');
 
 			//コンソールの包括要素のデフォルトの高さを計算し記憶しておく
 			that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
