@@ -17,14 +17,14 @@ So, Cross Browser CSS is too difficult
 1. Can not validate CSS after JavaScript and Media Queries
 2. Can not validate Computed Style, it is only possible for syntax.
 3. Can not validate Adaptability of between CSS properties and HTML tags
-Â
+
 ## Risky CSS Property cause...
 
 1. REALLY MANY BUGS :(
 2. REALLY MANY LAZY PATCHES :(
 3. REALLY MANY TIME & MONEY :(
 
-And...
+and...
 
 These is not creative works.
 These is interrupt creative thinking.
