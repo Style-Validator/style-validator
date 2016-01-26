@@ -31,7 +31,7 @@ So, Cross Browser CSS is too difficult
 ## Problems of Current CSS Validator
 
 1. Can not validate CSS after JavaScript and Media Queries
-2. Can not validate Computed Style, it is only possible for syntax.
+2. Can not validate Computed Style (It can validate only syntax)
 3. Can not validate Adaptability of between CSS properties and HTML tags
 
 ## Risky CSS Property cause...
