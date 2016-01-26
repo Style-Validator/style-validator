@@ -8,10 +8,11 @@ Style Validator is CSS Validator that can detect `Risky Style` might break layou
 
 ##### Chrome Extension
 https://chrome.google.com/webstore/detail/style-validator-to-reduce/aaeahhnjkelemfcdmkcpaggdhfaffeod?authuser=1
-(In case of the above, it works in conjunction with Chrome DevTools)
+(In conjunction with Chrome DevTools)
 
 ##### JavaScript Bookmarklet
 http://style-validator.github.io/
+(Currently, supported only Google Chrome and Opera)
 
 # Function
 
@@ -62,6 +63,9 @@ Becoming HELP of Web Engineers(=> Web)
 # Introduction of a part of the Risky Style
 
 The Risky Style will cause unintended behavior in the browser such as layout breaking. But we have no way to detect it. So, Cross Browser HTML/CSS is too difficult)
+
+If you want to view them all, see the references page
+http://style-validator.github.io/page/references.html
 
 ## No parent table-cell
 
@@ -190,18 +194,20 @@ parent.appendChild(newChild);
 
 Dear Web Engineers,
 
-Please feel free to send me any feedback and pull requests.
+Please feel free to send me any feedback and Pull requests.
 If you need, check it out the document for developer.
 
-## Edit rules only
+## Edit rules
 
 From web page (Needless to clone)
 http://style-validator.github.io/page/rules.html
 
 ## Brush up Style Validator
 
-1. Clone repository
+Step1: Clone repository
+
 ```
 git clone https://github.com/Style-Validator/style-validator.github.io.git
 ```
-2. Send pull request
+
+Step2: Send me Pull requests
