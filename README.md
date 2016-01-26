@@ -4,10 +4,24 @@ Style Validator
 
 Style Validator is CSS Validator that can detect `Risky Style` might break layout, NOT syntax. In addition, it can validate after DOM Modifying (e.g. by AJAX or ANY EVENT CALLBACK).
 
+# Installation
+
+Chrome Extension
+https://chrome.google.com/webstore/detail/style-validator-to-reduce/aaeahhnjkelemfcdmkcpaggdhfaffeod?authuser=1
+
+JavaScript Bookmarklet
+http://style-validator.github.io/
+
+# Function
+
+- Detecting problems between of CSS properties and HTML tags
+- Realtime Validation that can check after JavaScript and Media Queries
+- Validation in conjunction with Chrome DevTools.(Chrome Extension only)
+
 # Why we need to detect `Risky Style`?
 
-1. More than 300 CSS properties
-2. More than 10,000 Browser types
+1. Over 300 CSS properties
+2. Over 10,000 Browser types
 3. Other Front-end technology has evolved too much
 
 So, Cross Browser CSS is too difficult
@@ -42,22 +56,6 @@ CAUTION: Validation Rules is not based on the official specifications.
 ## Goal
 
 Becoming HELP of Web Engineers(=> Web)
-
-
-# Installation
-
-Chrome Extension
-https://chrome.google.com/webstore/detail/style-validator-to-reduce/aaeahhnjkelemfcdmkcpaggdhfaffeod?authuser=1
-
-JavaScript Bookmarklet
-http://style-validator.github.io/
-
-# Function
-
-- Detecting problems between HTML and CSS
-- Realtime Validation that can track DOM modification
-- That observe DOM changed, for example, in case of inserted DOM by AJAX or User Action etc...
-- Validation in conjunction with Chrome DevTools.(Chrome Extension only)
 
 
 # Introduction of a part of the Risky Style
