@@ -550,8 +550,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		//値が配列の場合
 		if(ngStylePropVal instanceof Array) {
-			reason = ngStylePropVal[1] || '';
-			referenceURL = ngStylePropVal[2] || '';
+			reason = ngStylePropVal[1];
+			referenceURL = ngStylePropVal[2];
 			ngStylePropVal = ngStylePropVal[0];
 		}
 
@@ -677,11 +677,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			result.messageText =
 				'[' + rule['title'] + ']' + ' '+
-				'<' + elemData.targetElemTagName + '>' + ' ' +
-				(baseStylesText && ('{' + baseStylesText + '}' + ' ')) +
-				(isCheckingParent && 'This parent element\'s style is ') +
-				'{' + ngStyleProp + ': ' + targetElemParentNgStyleVal + ';}' + ' ' +
-				reason;
+				'<' + elemData.targetElemTagName + '> ' +
+				(baseStylesText ? '{' + baseStylesText + '} ' : '') +
+				(isCheckingParent ? 'This parent element' : '') + ' is defined ' +
+				'{' + ngStyleProp + ': ' + (isCheckingParent ? targetElemParentNgStyleVal : targetElemNgStyleVal) + ';}' + ' ' +
+				(reason ? reason : '');
 
 //			result.rule = rule;
 			result.tagName = elemData.targetElemTagName;
