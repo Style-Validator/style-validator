@@ -57,7 +57,7 @@
 	align-self: stretch;
 	align-items: center;
 	flex: 0 0 auto;
-	min-height: 26px;
+	min-height: 28px;
 }
 :host .stylev-console-heading {
 	justify-content: center;
@@ -132,6 +132,7 @@
 	text-decoration: none;
 	font-size: 20px;
 	align-items: center;
+	align-self: stretch;
 }
 :host .stylev-console-buttons > a > img {
 	/*position: absolute;*/
