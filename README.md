@@ -6,11 +6,11 @@ Style Validator is CSS Validator that can detect `Risky Style` might break layou
 
 # Installation
 
-Chrome Extension
+##### Chrome Extension
 https://chrome.google.com/webstore/detail/style-validator-to-reduce/aaeahhnjkelemfcdmkcpaggdhfaffeod?authuser=1
 (In case of the above, it works in conjunction with Chrome DevTools)
 
-JavaScript Bookmarklet
+##### JavaScript Bookmarklet
 http://style-validator.github.io/
 
 # Function
