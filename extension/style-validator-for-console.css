@@ -57,7 +57,7 @@
 	align-self: stretch;
 	align-items: center;
 	flex: 0 0 auto;
-	min-height: 28px;
+	min-height: 26px;
 }
 :host .stylev-console-heading {
 	justify-content: center;
@@ -144,8 +144,8 @@
 :host .stylev-console-refresh-button {
 }
 :host .stylev-console-refresh-button-image {
-	width: 26px;
-	height: 26px;
+	width: 22px;
+	height: 22px;
 }
 :host .stylev-console-refresh-button-image-active {
 	-webkit-animation: active-refresh-button 1s infinite;

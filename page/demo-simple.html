@@ -60,7 +60,7 @@
 			padding: 60px;
 			font-size: 20px;
 		}
-		h1 {
+		h2 {
 			font-size: inherit;
 		}
 		textarea {
@@ -76,6 +76,15 @@
 		}
 		button {
 			font-size: inherit;
+		}
+		h1 {
+			float: left;
+		}
+		ol {
+			overflow: hidden;
+		}
+		header {
+			overflow: hidden;
 		}
 	</style>
 
@@ -99,20 +108,23 @@
 	</script>
 </head>
 <body>
-<ol>
-	<li>Get <a href="/">Style Validator (Chrome Extension)</a></li>
-	<li>Click Bookmark Icon to start Style Validator</li>
-	<li>Click the below Button</li>
-</ol>
 
+<header>
+	<h1><img src="/img/style-validator.logo.nopadding.svg" width="70" /></h1>
+	<ol>
+		<li>Get <a href="/">Style Validator (Chrome Extension)</a></li>
+		<li>Click Bookmark Icon to start Style Validator</li>
+		<li>Click the below Button</li>
+	</ol>
+</header>
 <hr />
 
-<h1>Style Validator can detect Risky Style</h1>
+<h2>Style Validator can detect Risky Style</h2>
 
 <span style="display: table-row; margin-top: 30px;">table-row with margin-top</span>
 <br />
 <hr />
-<h1>Style Validator can detect Risky Style by JavaScript</h1>
+<h2>Style Validator can detect Risky Style by JavaScript</h2>
 <div style="display: table; height: 100px; background-color: #EEE;">
 	<p style="display: table-cell; vertical-align: middle">table-cell has parent</p>
 </div>
