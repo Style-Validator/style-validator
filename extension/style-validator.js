@@ -1328,7 +1328,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.consoleMinimizeButtonImage.classList.add('stylev-console-minimize-button-image');
 		that.consoleMinimizeButtonImage.src = that.settings.ICON_MINIMIZE_PATH;
 		that.consoleNormalizeButton.href = 'javascript: void(0);';
-		that.consoleNormalizeButton.hidden = true;
+		that.consoleNormalizeButton.style.setProperty('display', 'none', 'important');
 		that.consoleNormalizeButton.classList.add('stylev-console-normalize-button');
 		that.consoleNormalizeButtonImage.classList.add('stylev-console-normalize-button-image');
 		that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
@@ -1364,7 +1364,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		that.consoleButtons.appendChild(that.consoleNormalizeButton);
 		that.consoleButtons.appendChild(that.consoleCloseButton);
 
-		//コンソール内に挿入するHTML要素を挿入 TODO: 同じ記述をまとめる
+		//コンソール内に挿入するHTML要素を挿入 TODO: 同じ記述をまとめる あっているか？
 		that.consoleHeader.appendChild(that.consoleHeading);
 		that.consoleHeader.appendChild(that.consoleCounter);
 		that.consoleHeader.appendChild(that.consoleMode);
@@ -1487,7 +1487,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//メッセージの数だけループ
 			STYLEV.METHODS.each(that.resultArray, function(result) {
-				
+
 				//ログの行を表示させるHTML要素を生成
 				var li = document.createElement('li');
 				var anchor = document.createElement('a');
@@ -1581,11 +1581,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
 
 			if(that.consoleWrapper.offsetHeight === 30) {
-				that.consoleNormalizeButton.hidden = false;
-				that.consoleMinimizeButton.hidden = true;
+				that.consoleNormalizeButton.style.setProperty('display', null, '');
+				that.consoleMinimizeButton.style.setProperty('display', 'none', 'important');
 			} else if(that.consoleWrapper.offsetHeight > 30) {
-				that.consoleNormalizeButton.hidden = true;
-				that.consoleMinimizeButton.hidden = false;
+				that.consoleNormalizeButton.style.setProperty('display', 'none', 'important');
+				that.consoleMinimizeButton.style.setProperty('display', null, '');
 			}
 		}
 	},
@@ -1738,7 +1738,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		console.info('Style Validator: Style Validator has removed.')
 //		console.groupEnd();
 	},
-	
+
 	toggleConsole: function(event) {
 		var that = STYLEV.VALIDATOR;
 		var scaleMode = STYLEV.scaleMode;
@@ -1754,17 +1754,17 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 	minimizeConsole: function() {
 		var that = STYLEV.VALIDATOR;
-		that.consoleMinimizeButton.hidden = true;
-		that.consoleNormalizeButton.hidden = false;
-		that.consoleWrapper.style.setProperty('height', that.consoleHeader.style.getPropertyValue('height'), '');
+		that.consoleMinimizeButton.style.setProperty('display', 'none', 'important');
+		that.consoleNormalizeButton.style.setProperty('display', null, '');
+		that.consoleWrapper.style.setProperty('height', that.consoleHeader.offsetHeight + 'px', '');
 		that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 		STYLEV.scaleMode = 'minimum';
 	},
 
 	normalizeConsole: function() {
 		var that = STYLEV.VALIDATOR;
-		that.consoleMinimizeButton.hidden = false;
-		that.consoleNormalizeButton.hidden = true;
+		that.consoleMinimizeButton.style.setProperty('display', null, '');
+		that.consoleNormalizeButton.style.setProperty('display', 'none', 'important');
 		that.consoleWrapper.style.setProperty('height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
 		that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 		STYLEV.scaleMode = 'normal';
