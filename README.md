@@ -8,15 +8,16 @@ Style Validator is CSS Validator that can detect `Risky Style` might break layou
 
 Chrome Extension
 https://chrome.google.com/webstore/detail/style-validator-to-reduce/aaeahhnjkelemfcdmkcpaggdhfaffeod?authuser=1
+(In case of the above, it works in conjunction with Chrome DevTools)
 
 JavaScript Bookmarklet
 http://style-validator.github.io/
 
 # Function
 
-- Detecting problems between of CSS properties and HTML tags
-- Realtime Validation that can check after JavaScript and Media Queries
-- Validation in conjunction with Chrome DevTools.(Chrome Extension only)
+- Validation that can detect problems of between CSS properties and HTML tags
+- Validation that can detect the problems after JavaScript and Media Queries
+- Validation that can detect the problems of Computed Style
 
 # Why we need to detect `Risky Style`?
 
