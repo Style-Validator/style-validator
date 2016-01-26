@@ -38,19 +38,15 @@ But we have no way to detect it. So, **Cross Browser CSS is too difficult**.
 - Can not validate Computed Style (It can validate only syntax)
 - Can not validate Adaptability of between CSS properties and HTML tags
 
+
 ## Risky CSS Property cause...
 
-- Really Many BUGS&amp;MEANINGLESS PATCHES :(
+- Really Many Bugs&amp;Meaningless Patches :(
 - Interrupting creative ideas :(
 - Loss of valuable engineer’s life :(
 
-and...
-
-These is not creative works.
-These is interrupt creative thinking.
-
-
 Style Validator is solution that resolves these problems.
+
 
 ## Style Validator gives you...
 
@@ -58,7 +54,8 @@ Style Validator is solution that resolves these problems.
 - Keeping Engineer Creative Thinking
 - Education of safety HTML/CSS
 
-CAUTION: Validation Rules is not based on the official specifications.
+**CAUTION: Validation Rules is not based on the official specifications**
+
 
 ## Goal
 
