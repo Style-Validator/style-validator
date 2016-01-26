@@ -2,54 +2,61 @@
 Style Validator
 ============================
 
-Style Validator is CSS Validator that can detect `Risky Style` might break layout, NOT syntax. In addition, it can validate after DOM Modifying (e.g. by AJAX or ANY EVENT CALLBACK).
+Style Validator is CSS Validator that can detect `Risky Style` might break layout, NOT syntax.
+
+In addition, it can validate after DOM Modifying (e.g. by AJAX or ANY EVENT CALLBACK).
 
 <img src="http://style-validator.github.io/img/screenshot.gif" alt="screenshot" width="480" />
 
 
 # Installation
 
-1. **[Chrome Extension](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod)** (In conjunction with Chrome DevTools)
-2. **[JavaScript Bookmarklet](http://style-validator.github.io/)** (Currently, supported only Google Chrome and Opera)
+- **[Chrome Extension](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod)** (In conjunction with Chrome DevTools)
+- **[JavaScript Bookmarklet](http://style-validator.github.io/)** (Currently, supported only Google Chrome and Opera)
 
 # Function
 
 - Validation that can detect problems of between CSS properties and HTML tags
-- Validation that can detect the problems after JavaScript and Media Queries
-- Validation that can detect the problems of Computed Style
+- Validation that can detect problems after JavaScript and Media Queries
+- Validation that can detect problems of Computed Style
 
 # Why we need to detect `Risky Style`?
 
-1. Over 300 CSS properties
-2. Over 10,000 Browser types
-3. Other Front-end technology has evolved too much
+- Over 300 CSS properties
+- Over 10,000 Browser types
+- Other Front-end technology has evolved too much
 
-So, Cross Browser CSS is too difficult
+
+The Risky Style will cause **Unintended Behavior** in the browser such as layout breaking.
+
+But we have no way to detect it. So, **Cross Browser CSS is too difficult**.
+
 
 ## Problems of Current CSS Validator
 
-1. Can not validate CSS after JavaScript and Media Queries
-2. Can not validate Computed Style (It can validate only syntax)
-3. Can not validate Adaptability of between CSS properties and HTML tags
+- Can not validate CSS after JavaScript and Media Queries
+- Can not validate Computed Style (It can validate only syntax)
+- Can not validate Adaptability of between CSS properties and HTML tags
 
 ## Risky CSS Property cause...
 
-1. REALLY MANY BUGS :(
-2. REALLY MANY LAZY PATCHES :(
-3. REALLY MANY TIME & MONEY :(
+- Really Many BUGS&amp;MEANINGLESS PATCHES :(
+- Interrupting creative ideas :(
+- Loss of valuable engineer’s life :(
 
 and...
 
 These is not creative works.
 These is interrupt creative thinking.
 
-"Style Validator" is solution that resolves these problems.
+
+Style Validator is solution that resolves these problems.
 
 ## Style Validator gives you...
 
-1. Reducing `tests`, `patches` and `costs`
-2. Keeping Engineer Creative Thinking
-3. Education of safety HTML/CSS
+- Reducing `tests`, `patches` and `costs`
+- Keeping Engineer Creative Thinking
+- Education of safety HTML/CSS
 
 CAUTION: Validation Rules is not based on the official specifications.
 
@@ -60,28 +67,28 @@ Becoming HELP of Web Engineers(=> Web)
 
 # Introduction of a part of the Risky Style
 
-The Risky Style will cause unintended behavior in the browser such as layout breaking. But we have no way to detect it. So, Cross Browser HTML/CSS is too difficult)
-
 If you want to view them all, see the [references page](http://style-validator.github.io/page/references.html)
 
 
 ## No parent table-cell
 
-NG
+** &#10007; NG **
 ```html
 <div>
   <p style="display: table-cell;"></p>
 </div>
 ```
-OK
+---
+** &#10003; OK **
 ```html
 <div style="display: table;">
   <p style="display: table-cell;"></p>
 </div>
 ```
+
 ## Non effect styles
 
-NG
+** &#10007; NG **
 ```html
 <span style="width: 300px;">this is inline element.</span>
 ```
@@ -89,7 +96,10 @@ NG
 var span = document.querySelector('span');
 getComputedStyle(span).getPropertyValue('width');// auto
 ```
-This value is auto. So, width should be removed, or should change display property like the following.
+This value is auto. So, width should be removed,
+
+or should change display property like the following.
+
 
 ```css
 span { display: block };
@@ -112,7 +122,7 @@ span {
 
 ## Pseudo element into empty element
 
-NG
+** &#10007; NG **
 ```html
 <img src="hoge.jpg" />
 ```
@@ -124,7 +134,7 @@ img::after {
 
 ## Mistake in Media Query
 
-NG
+** &#10007; NG **
 ```html
 <div class="parent">
   <p class="child"></p>
@@ -139,7 +149,7 @@ NG
 }
 ```
 
-OK
+** &#10003; OK **
 ```css
 @media (max-width: 640px) {
   .parent { display: block; }
@@ -160,7 +170,7 @@ Here is base code
 .child  { display: table-cell; }
 ```
 
-NG
+** &#10007; NG **
 ```js
 var parent = document.querySelector('.parent');
 var newChild = document.createelement('div');
@@ -174,7 +184,7 @@ parent.appendChild(newChild);
 </div>
 ```
 
-OK
+** &#10003; OK **
 ```js
 var parent = document.querySelector('.parent');
 var newChild = document.createelement('div');
