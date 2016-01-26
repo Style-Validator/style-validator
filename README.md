@@ -41,7 +41,8 @@ CAUTION: Validation Rules is not based on the official specifications.
 
 ## Goal
 
-- Becoming HELP of Web Engineers(=> Web)
+Becoming HELP of Web Engineers(=> Web)
+
 
 # Installation
 
