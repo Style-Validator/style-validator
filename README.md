@@ -4,15 +4,13 @@ Style Validator
 
 Style Validator is CSS Validator that can detect `Risky Style` might break layout, NOT syntax. In addition, it can validate after DOM Modifying (e.g. by AJAX or ANY EVENT CALLBACK).
 
+<img src="http://style-validator.github.io/img/screenshot.gif" alt="screenshot" width="480" />
+
+
 # Installation
 
-##### Chrome Extension
-https://chrome.google.com/webstore/detail/style-validator-to-reduce/aaeahhnjkelemfcdmkcpaggdhfaffeod?authuser=1
-(In conjunction with Chrome DevTools)
-
-##### JavaScript Bookmarklet
-http://style-validator.github.io/
-(Currently, supported only Google Chrome and Opera)
+1. **[Chrome Extension](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod)** (In conjunction with Chrome DevTools)
+2. **[JavaScript Bookmarklet](http://style-validator.github.io/)** (Currently, supported only Google Chrome and Opera)
 
 # Function
 
@@ -64,8 +62,8 @@ Becoming HELP of Web Engineers(=> Web)
 
 The Risky Style will cause unintended behavior in the browser such as layout breaking. But we have no way to detect it. So, Cross Browser HTML/CSS is too difficult)
 
-If you want to view them all, see the references page
-http://style-validator.github.io/page/references.html
+If you want to view them all, see the [references page](http://style-validator.github.io/page/references.html)
+
 
 ## No parent table-cell
 
