@@ -8,6 +8,7 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var url = require('url');
+var path = require('path');
 var querystring = require('querystring');
 var assert = require('assert');
 
@@ -36,7 +37,10 @@ var mimeTypes = {
 	"js":   "application/javascript",
 	"json": "application/json",
 	"xml":  "application/xml",
-	"svg":  "image/svg+xml"
+	"svg":  "image/svg+xml",
+	"mp4": "video/mp4",
+	"m4v": "video/mp4",
+	"webm": "video/webm"
 };
 
 var dirSpacesBeforeDate = 51;
@@ -46,6 +50,7 @@ var dirMonths = 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',');
 
 var parsedURL;
 var parsedQueryString;
+var mp4, webm;
 
 /*
  * execution
@@ -130,10 +135,16 @@ function serveFiles(req, res, path) {
 
 	path = ('./' + path).replace('//', '/');
 
+	var extension = path.split('.').pop();
+
 	//Deny if hostname is style-validator.herokuapp.com
 	//Because, style-validator.github.io is exist already
 	if(req.headers.host === 'style-validator.herokuapp.com') {
 		return sendNotFound(req, res, path);
+	}
+
+	if(/^mp4|m4v|webm/.test(extension)) {
+		return sendVideo(req, res, path, extension);
 	}
 
 	if(path === './getMyIP.js') {
@@ -174,12 +185,45 @@ function serveFiles(req, res, path) {
 	});
 }
 
+function sendVideo(req, res, path, extension) {
+
+	fs.readFile(path, function (err, data) {
+
+		if (err) {
+			throw err;
+		}
+
+		var total = data.length;
+
+		var range = req.headers.range;
+
+		var positions = range.replace(/bytes=/, "").split("-");
+		var start = parseInt(positions[0], 10);
+		// if last byte position is not present then it is the last byte of the video file.
+		var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+		var chunksize = (end-start)+1;
+
+		res.writeHead(206, {
+				"Content-Range": "bytes " + start + "-" + end + "/" + total,
+				"Accept-Ranges": "bytes",
+				"Content-Length": chunksize,
+				"Content-Type": mimeTypes[extension]
+			}
+		);
+
+		res.end(data.slice(start, end+1), "binary");
+
+	});
+}
+
 function sendClientIP(req, res, path) {
 
 	parsedQueryString = querystring.parse(parsedURL.query);
 	var variable = parsedQueryString['var'];
 	var clientIp = requestIp.getClientIp(req);
 
+	res.setHeader("Content-Type", "text/plain");
+	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.writeHead(200, {'Content-Type': mimeTypes['js']});
 	res.end('var ' + variable + ' = \'' + clientIp + '\';');
 }

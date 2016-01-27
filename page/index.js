@@ -8,7 +8,11 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 
 	execute: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-		document.addEventListener('WebComponentsReady', that.firstExecution);
+		that.setParameter();
+		that.bindEvents();
+		that.startAnimation();
+		that.animateSVG();
+		that.getBookmarklet();
 	},
 
 	setParameter: function() {
@@ -18,16 +22,6 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		that.main = document.querySelector('.main');
 		that.header = document.querySelector('.header');
 
-	},
-	
-	firstExecution: function() {
-		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-
-		that.setParameter();
-		that.bindEvents();
-		that.startAnimation();
-		that.animateSVG();
-		that.getBookmarklet();
 	},
 
 	bindEvents: function() {
@@ -92,4 +86,4 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 
 };
 
-STYLEV.TOPPAGE.FIRST_ANIMATION.execute();
+document.addEventListener('WebComponentsReady', STYLEV.TOPPAGE.FIRST_ANIMATION.execute);

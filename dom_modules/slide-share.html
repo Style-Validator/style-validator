@@ -1,5 +1,17 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<script src="/getMyIP.js?var=myip" async defer id="get-my-ip-script"></script>
+<script>
+
+	var STYLEV = STYLEV || {};
+
+	STYLEV.TOPPAGE = STYLEV.TOPPAGE || {};
+
+	var ownerDocument = document.currentScript.ownerDocument;
+	ownerDocument.addEventListener('DOMContentLoaded', function() {
+		var getMyIP = ownerDocument.querySelector('#get-my-ip-script');
+		getMyIP.addEventListener('load', STYLEV.TOPPAGE.showSlideshare);
+	})
+</script>
+<script src="https://style-validator.herokuapp.com/getMyIP.js?var=myip" async defer id="get-my-ip-script"></script>
 <dom-module id="slide-share">
 	<template>
 		<style>
@@ -11,9 +23,11 @@
 	</template>
 	<script>
 
-		var ownerDocument = document.currentScript.ownerDocument;
+		STYLEV.TOPPAGE.showSlideshare = function() {
 
-		function controlShowing() {
+			if(myip) {
+				console.log(myip);
+			}
 
 			var hostname = location.hostname;
 			var isLocal =
@@ -28,9 +42,6 @@
 				Polymer({is: "slide-share"});
 			}
 		}
-
-		ownerDocument.addEventListener('load', controlShowing)
-
 
 	</script>
 </dom-module>

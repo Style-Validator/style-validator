@@ -2,17 +2,15 @@
 Style Validator
 ============================
 
-Style Validator is CSS Validator that can detect `Risky Style` might break layout, NOT syntax.
+Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).
 
-In addition, it can validate after DOM Modifying (e.g. by AJAX or ANY EVENT CALLBACK).
-
-<img src="http://style-validator.github.io/img/screenshot.gif" alt="screenshot" width="480" />
+[demo](http://style-validator.github.io/gif_animations/demo.gif)
 
 
 # Installation
 
-- **[Chrome Extension](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod)** (In conjunction with Chrome DevTools)
-- **[JavaScript Bookmarklet](http://style-validator.github.io/)** (Currently, supported only Google Chrome and Opera)
+- **[Chrome Extension](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod)**(In conjunction with Chrome DevTools)
+- **[JavaScript Bookmarklet](http://style-validator.github.io/)**(Currently, supported only Google Chrome and Opera)
 
 # Function
 
@@ -27,9 +25,9 @@ In addition, it can validate after DOM Modifying (e.g. by AJAX or ANY EVENT CALL
 - Other Front-end technology has evolved too much
 
 
-The Risky Style will cause **Unintended Behavior** in the browser such as layout breaking.
+The Risky Style will cause**Unintended Behavior**in the browser such as layout breaking.
 
-But we have no way to detect it. So, **Cross Browser CSS is too difficult**.
+But we have no way to detect it. So,**Cross Browser CSS is too difficult**.
 
 
 ## Problems of Current CSS Validator
@@ -59,7 +57,7 @@ Style Validator is solution that resolves these problems.
 
 ## Goal
 
-Becoming HELP of Web Engineers(=> Web)
+Becoming Help for Web
 
 
 # Introduction of a part of the Risky Style
@@ -69,88 +67,101 @@ If you want to view them all, see the [references page](http://style-validator.g
 
 ## No parent table-cell
 
-** &#10007; NG **
+* **&#10007; NG**
 ```html
 <div>
-  <p style="display: table-cell;"></p>
+	<p style="display: table-cell;"></p>
 </div>
 ```
----
-** &#10003; OK **
+
+* **&#10003; OK**
 ```html
 <div style="display: table;">
-  <p style="display: table-cell;"></p>
+	<p style="display: table-cell;"></p>
 </div>
 ```
 
-## Non effect styles
+## No effect styles
 
-** &#10007; NG **
-```html
-<span style="width: 300px;">this is inline element.</span>
-```
-```js
-var span = document.querySelector('span');
-getComputedStyle(span).getPropertyValue('width');// auto
-```
-This value is auto. So, width should be removed,
+### inline with size and margin
 
-or should change display property like the following.
-
-
+* **&#10007; NG**
 ```css
-span { display: block };
-```
-
-### Another patterns
-
-```css
-tr {
-  margin-top: 30px; /*Risky for display: table-row;*/
-}
-div {
-  display: table;
-  padding: 30px; /*Risky for display: table;*/
-}
 span {
-  margin-bottom: 30px; /*Risky for display: inline;*/
+	width: 300px;/* no effect */
+	height: 300px;/* no effect */
+	margin-top: 30px; /* no effect */
+	margin-bottom: 30px; /* no effect */
 }
 ```
 
-## Pseudo element into empty element
+* **&#10003; OK**
+```css
+span {
+	margin-right: 30px; /* effect */
+	margin-left: 30px; /* effect */
+}
+```
 
-** &#10007; NG **
+### table-row &amp; table-*-group with margin(padding)
+
+* **&#10007; NG**
+```css
+thead,
+tbody,
+tfoot,
+tr {
+	margin: 30px; /* no effect */
+	padding: 20px; /* no effect */
+}
+```
+
+### table with padding
+
+* **&#10007; NG**
+```css
+div {
+	display: table;
+	border-collapse: collapse;
+	padding: 30px; /* no effect if collapse */
+}
+```
+
+## pseudo element into empty element
+
+* **&#10007; NG**
 ```html
 <img src="hoge.jpg" />
 ```
 ```css
 img::after {
-  content: url(fuga.jpg);
+	content: url(fuga.jpg); /* no effect but risky */
 }
 ```
 
 ## Mistake in Media Query
 
-** &#10007; NG **
+Here is base code
 ```html
 <div class="parent">
-  <p class="child"></p>
+	<p class="child"></p>
 </div>
 ```
 ```css
-.parent { display: table; }
-.child  { display: table-cell; }
-
-@media (max-width: 640px) {
-  .parent { display: block; }
-}
+.parent	{ display: table; }
+.child	{ display: table-cell; }
 ```
-
-** &#10003; OK **
+* **&#10007; NG**
 ```css
 @media (max-width: 640px) {
-  .parent { display: block; }
-  .child  { display: block; }
+	.parent { display: block; } /* .child is no parent table-cell */
+}
+```
+* **&#10003; OK**
+```css
+@media (max-width: 640px) {
+	.parent	{ display: block; }
+	.child	{ display: block; }
 }
 ```
 
@@ -159,15 +170,15 @@ img::after {
 Here is base code
 ```html
 <div class="parent">
-  <p class="child"></p>
+	<p class="child"></p>
 </div>
 ```
 ```css
-.parent { display: table; }
-.child  { display: table-cell; }
+.parent	{ display: table; }
+.child	{ display: table-cell; }
 ```
 
-** &#10007; NG **
+* **&#10007; NG**
 ```js
 var parent = document.querySelector('.parent');
 var newChild = document.createelement('div');
@@ -176,12 +187,12 @@ parent.appendChild(newChild);
 ```
 ```html
 <div class="parent">
-  <p class="child"></p>
-  <div style="display: inline;"></div><!-- mistake -->
+	<p class="child"></p>
+	<div style="display: inline;"></div><!-- mistake -->
 </div>
 ```
 
-** &#10003; OK **
+* **&#10003; OK**
 ```js
 var parent = document.querySelector('.parent');
 var newChild = document.createelement('div');
@@ -190,8 +201,8 @@ parent.appendChild(newChild);
 ```
 ```html
 <div class="parent">
-  <p class="child"></p>
-  <div style="display: table-cell;"></div><!-- correct -->
+	<p class="child"></p>
+	<div style="display: table-cell;"></div><!-- correct -->
 </div>
 ```
 
@@ -202,17 +213,14 @@ Dear Web Engineers,
 Please feel free to send me any feedback and Pull requests.
 If you need, check it out the document for developer.
 
-## Edit rules
+## Edit Validation Rules
 
-From web page (Needless to clone)
-http://style-validator.github.io/page/rules.html
+You can edit from [web page](http://style-validator.github.io/page/rules.html)
 
 ## Brush up Style Validator
 
-Step1: Clone repository
-
+1. Clone git repository
 ```
 git clone https://github.com/Style-Validator/style-validator.github.io.git
 ```
-
-Step2: Send me Pull requests
+2. Send me Pull requests
