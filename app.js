@@ -50,7 +50,6 @@ var dirMonths = 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',');
 
 var parsedURL;
 var parsedQueryString;
-var mp4, webm;
 
 /*
  * execution
