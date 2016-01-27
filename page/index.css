@@ -231,5 +231,9 @@ hr {
 	}
 	.kv-caption {
 		padding-left: 0;
+		text-align: center;
+	}
+	.kv-header {
+		justify-content: center;
 	}
 }
