@@ -132,10 +132,14 @@ function serveData(req, res, path) {
 
 function serveFiles(req, res, path) {
 
+	var extension = path.split('.').pop();
+
 	//override
 	path = ('./' + path).replace('//', '/');
 
-	var extension = path.split('.').pop();
+	if(path === './getMyIP.js') {
+		return sendClientIP(req, res, path);
+	}
 
 	//Deny if hostname is style-validator.herokuapp.com
 	//Because, style-validator.github.io is exist already
@@ -143,12 +147,9 @@ function serveFiles(req, res, path) {
 		return sendNotFound(req, res, path);
 	}
 
+	//video
 	if(/^mp4|m4v|webm/.test(extension)) {
 		return sendVideo(req, res, path, extension);
-	}
-
-	if(path === './getMyIP.js') {
-		return sendClientIP(req, res, path);
 	}
 
 	fs.stat(path, function(err, stats){
