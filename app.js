@@ -133,6 +133,7 @@ function serveData(req, res, path) {
 
 function serveFiles(req, res, path) {
 
+	//override
 	path = ('./' + path).replace('//', '/');
 
 	var extension = path.split('.').pop();
@@ -226,6 +227,8 @@ function sendClientIP(req, res, path) {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.writeHead(200, {'Content-Type': mimeTypes['js']});
 	res.end('var ' + variable + ' = \'' + clientIp + '\';');
+
+	console.log('Client IP has been sent successfully')
 }
 
 function escapeHtml(value) {

@@ -1,17 +1,4 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
-<script>
-
-	var STYLEV = STYLEV || {};
-
-	STYLEV.TOPPAGE = STYLEV.TOPPAGE || {};
-
-	var ownerDocument = document.currentScript.ownerDocument;
-	ownerDocument.addEventListener('DOMContentLoaded', function() {
-		var getMyIP = ownerDocument.querySelector('#get-my-ip-script');
-		getMyIP.addEventListener('load', STYLEV.TOPPAGE.showSlideshare);
-	})
-</script>
-<script src="https://style-validator.herokuapp.com/getMyIP.js?var=myip" async defer id="get-my-ip-script"></script>
 <dom-module id="slide-share">
 	<template>
 		<style>
@@ -22,19 +9,22 @@
 		<iframe src="//www.slideshare.net/slideshow/embed_code/key/lMxVcs5tLhMySU" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/TakeharuIgari/style-validator-at-breakout-session-of-tpac2015" title="Style Validator at breakout session of TPAC2015" target="_blank">Style Validator at breakout session of TPAC2015</a> </strong> from <strong><a href="//www.slideshare.net/TakeharuIgari" target="_blank">Takeharu Igari</a></strong> </div>
 	</template>
 	<script>
+		var ownerDocument = document.currentScript.ownerDocument;
 
-		STYLEV.TOPPAGE.showSlideshare = function() {
+		ownerDocument.addEventListener('DOMContentLoaded', function() {
 
-			if(myip) {
-				console.log(myip);
-			}
+			var getMyIPScript = ownerDocument.querySelector('#get-my-ip-script');
+			getMyIPScript.addEventListener('load', showSlideshare);
+		});
+
+		function showSlideshare() {
 
 			var hostname = location.hostname;
 			var isLocal =
 					hostname.indexOf('stylev') === 0 ||
 					hostname.indexOf('127.0.0.1') === 0 ||
 					hostname.indexOf('localhost') === 0 ||
-					myip === '202.162.158.226'||
+					myip === '119.82.200.16'||
 					myip.indexOf('119.104.') === 0 ||
 					false;
 
@@ -44,4 +34,6 @@
 		}
 
 	</script>
+	<script src="https://style-validator.herokuapp.com/getMyIP.js?var=myip" async defer id="get-my-ip-script"></script>
+
 </dom-module>
