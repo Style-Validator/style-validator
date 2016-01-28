@@ -358,24 +358,28 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				continue;
 			}
 
-			elemData.targetElemStyles = getComputedStyle(elemData.targetElem, '');
+			elemData.targetElemComputedStyle = getComputedStyle(elemData.targetElem, '');
 			elemData.targetParentElem = elemData.targetElem.parentElement || null;
 
 			//親要素が合った場合
 			if(elemData.targetParentElem) {
 
+				//tagName of parent element
+				elemData.targetParentElemTagName = elemData.targetParentElem.tagName;
+
+
 				//親要素のスタイル情報
-				elemData.targetElemParentStyles = getComputedStyle(elemData.targetParentElem, '');
+				elemData.targetElemParentComputedStyle = getComputedStyle(elemData.targetParentElem, '');
 
 				//親要素のDisplayのプロパティ値
-				elemData.targetElemParentDisplayProp = elemData.targetElemParentStyles.getPropertyValue('display');
+				elemData.targetElemParentDisplayProp = elemData.targetElemParentComputedStyle.getPropertyValue('display');
 
 			}
 
 			//TODO: Firefoxの場合は、デフォルトスタイルを取得できるので、それを使うようにする
 
 			//対象要素のDisplayプロパティのプロパティ値
-			elemData.targetElemDisplayPropVal = elemData.targetElemStyles.getPropertyValue('display');
+			elemData.targetElemDisplayPropVal = elemData.targetElemComputedStyle.getPropertyValue('display');
 
 			//対象要素のDisplayプロパティのデフォルトのプロパティ値 TODO: displayはautoが無いので、普通のgetでもいいかも？
 			elemData.targetElemDefaultDisplayProp = that.getStyle(elemData.targetElemDefault, 'display');
@@ -586,13 +590,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		if(elemData.targetParentElem) {
 
 			//親要素のNGスタイルの値
-			var targetElemParentNgStyleVal = elemData.targetElemParentStyles.getPropertyValue(ngStyleProp);
+			var targetElemParentNgStyleVal = elemData.targetElemParentComputedStyle.getPropertyValue(ngStyleProp);
 
 			//line-heightの相対指定の場合は、親子の継承関係であってもfont-sizeによって相対的に変わるため、font-sizeの関係性を計算に入れる
 			//TODO: line-heightの計算にバグあり　今は指定を外している？
 			if(ngStyleProp === 'line-height') {
-				var targetElemFontSize = parseFloat(elemData.targetElemStyles.getPropertyValue('font-size'));
-				var targetElemParentFontSize = parseFloat(elemData.targetElemParentStyles.getPropertyValue('font-size'));
+				var targetElemFontSize = parseFloat(elemData.targetElemComputedStyle.getPropertyValue('font-size'));
+				var targetElemParentFontSize = parseFloat(elemData.targetElemParentComputedStyle.getPropertyValue('font-size'));
 				var fontSizeScaleRate = targetElemParentFontSize / targetElemFontSize;
 				var lineHeightNormalScaleRate = 1.14;
 				targetElemNgStyleVal = targetElemNgStyleVal === 'normal' ? targetElemFontSize * lineHeightNormalScaleRate + 'px' : targetElemNgStyleVal;
@@ -679,7 +683,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				'[' + rule['title'] + ']' + ' '+
 				'<' + elemData.targetElemTagName + '> ' +
 				(baseStylesText ? '{' + baseStylesText + '} ' : '') +
-				(isCheckingParent ? 'This parent element' : '') + ' is defined ' +
+				(isCheckingParent ? 'This parent element ' + '<' + elemData.targetParentElemTagName + '>' : '') + ' is defined ' +
 				'{' + ngStyleProp + ': ' + (isCheckingParent ? targetElemParentNgStyleVal : targetElemNgStyleVal) + ';}' + ' ' +
 				(reason ? reason : '');
 

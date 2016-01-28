@@ -14,9 +14,9 @@ Style Validator is CSS Validator that can detect `Risky Style` that might break 
 
 # Function
 
-- Validation that can detect problems of between CSS properties and HTML tags
-- Validation that can detect problems after JavaScript and Media Queries
-- Validation that can detect problems of Computed Style
+- Detecting problems of between CSS properties and HTML tags
+- Detecting problems after JavaScript and Media Queries
+- Detecting problems of Computed Style
 
 # Why we need to detect `Risky Style`?
 
