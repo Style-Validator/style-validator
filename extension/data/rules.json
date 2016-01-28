@@ -175,9 +175,6 @@
 				"vertical-align": "!default"
 			},
 			"parent-error-styles": {
-				"display": "![none|block|inline-block|flex]"
-			},
-			"parent-error-styles": {
 				"display": [
 					"![none|block|inline-block|flex]",
 					"Needless Style",
