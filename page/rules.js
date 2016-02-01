@@ -11,34 +11,52 @@ STYLEV.RULES = {
 		that.applyFromLocalStorage();
 		that.insertDummyElements();
 		that.getAllCSSProperties();
-		that.setCSSPropertyDataList();
+		that.setCSSProperty2DataList();
+		that.setHTMLTags2DataList();
 		that.removeSaveButtonWhenNotLocal();
 		that.initializeRuleArea();
-		that.adjustPosition();
+		that.adjustWrapperPosition();
+
 	},
 	initializeRuleArea: function() {
 		var that = STYLEV.RULES;
 
 		that.rulesList.innerHTML = '';
 
+
 		that.json2html()
 			.then(function() {
+
 				that.removeLoadingSpinner();
 				that.setParametersAfterAdding();
 				that.bindEvents();
-				that.resizeTextareaBasedOnLine();
 				that.toggleReason();
 				that.toggleReferenceURL();
-				that.toggleDisplayMode();
 				that.searchProperty();
+
+				//TODO: refactor
+				that.each(that.riskLevelSelects, function(riskLevelSelect) {
+					that.closest(riskLevelSelect, '.styles-list-item').classList.add(riskLevelSelect.value);
+					riskLevelSelect.addEventListener('change', function(event) {
+						var target = that.closest(event.target, '.styles-list-item');
+						var options = riskLevelSelect.querySelectorAll('option');
+						that.each(options, function(option) {
+							target.classList.remove(option.value);
+						});
+						target.classList.add(event.target.value);
+					})
+				});
+
 				STYLEV.VALIDATOR.setStyleDataBySelectors();
 				that.isShowedAllAtFirst = true;
+
 			});
 	},
 	setParameters: function() {
 		var that = STYLEV.RULES;
 
 		that.wrapper = document.querySelector('.wrapper');
+		that.main = document.querySelector('.main');
 		that.mainHeader = document.querySelector('.main-header');
 		that.isShowedAllAtFirst = false;
 		that.resetButton = document.querySelector('#reset-button');
@@ -46,6 +64,7 @@ STYLEV.RULES = {
 		that.saveButton = document.querySelector('#save-button');
 		that.downloadButton = document.querySelector('#download-button');
 		that.datalistOfProperties = document.querySelector('#all-css-properties');
+		that.datalistOfTags = document.querySelector('#all-html-tags');
 		that.rulesList = document.querySelector('#rules-list');
 		that.templatePropertyBase = document.querySelector('#template-property-base').content;
 		that.templatePropertyNg = document.querySelector('#template-property-ng').content;
@@ -66,9 +85,16 @@ STYLEV.RULES = {
 		that.displayModeLList = document.querySelector('#display-mode-list');
 		that.displayListMode = document.querySelector('#display-list-mode');
 		that.displayColumnMode = document.querySelector('#display-column-mode');
+		that.mainHeaderOffsetHeight = that.mainHeader.offsetHeight;
+		that.windowInnerHeight = window.innerHeight;
+		that.parsedJSON = null;
+		that.generatedJSON = null;
 
 		that.allCSSProperties = [];
-		that.INPUT_ARROW_WIDTH = 22;
+		that.INPUT_ARROW_WIDTH = 22;//input with list attr
+
+		that.escKeyCode = 27;
+		that.enterKeyCode = 13;
 
 		that.each = STYLEV.METHODS.each;
 	},
@@ -83,18 +109,23 @@ STYLEV.RULES = {
 		var that = STYLEV.RULES;
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
-		that.typeSelects = that.rulesList.querySelectorAll('.type-select');
+		that.elementType = that.rulesList.querySelectorAll('.element-type');
 		that.stylesLists = that.rulesList.querySelectorAll('.styles-list');
-		that.textInputs = that.rulesList.querySelectorAll('.text-input');
+		that.textInputs = that.rulesList.querySelectorAll('.rule-title');
 
 		that.reasons = that.rulesList.querySelectorAll('.reason');
 		that.cssProperties = that.rulesList.querySelectorAll('.css-property');
+
+		that.riskLevelSelects = document.querySelectorAll('[data-id="risk-level"]');
+		that.fixInScrollingTargets = document.querySelectorAll('.fix-in-scrolling');
+
 	},
 	setParametersAfterToggledProperty: function() {
 		var that = STYLEV.RULES;
 
 		that.reasons = that.rulesList.querySelectorAll('.reasons');
 	},
+
 	bindEvents: function() {
 		var that = STYLEV.RULES;
 
@@ -104,46 +135,48 @@ STYLEV.RULES = {
 		that.downloadButton.addEventListener('mousedown', that.setDownloadButton);
 		that.reasonCheckbox.addEventListener('change', that.toggleReason);
 		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL);
-		window.addEventListener('resize', that.resizeTextareaBasedOnLine);
-		window.addEventListener('resize', that.adjustPosition);
 		that.searchPropertyInput.addEventListener('keyup', that.searchProperty);
-		that.displayListMode.addEventListener('change', that.toggleDisplayMode);
-		that.displayColumnMode.addEventListener('change', that.toggleDisplayMode);
+		document.documentElement.addEventListener('keydown', that.saveJSONByShortcutKey)
+		window.addEventListener('resize', that.adjustWrapperPosition);
+		window.addEventListener('resize', that.getEachHeight);
+		window.addEventListener('load', that.getEachHeight);
+		window.addEventListener('resize', that.fixInScrolling);
 
-		that.bind2RuleListItem();
-		that.bind2StylesList();
+		that.bindEvent2FormParts();
+		that.bindEvents2AddButton();
+		that.bindEvents2RuleListItem();
+		that.bindEvents2StylesList();
+
+		that.fixInScrolling();//TODO: here?
 	},
-
-	toggleDisplayMode: function(event) {
+	
+	bindEvent2FormParts: function() {
 		var that = STYLEV.RULES;
-		var valueFromEvent = event && event.currentTarget.value;
-		var valueFromLS = localStorage.getItem(that.rulesList.id);
-		var displayMode = valueFromEvent || valueFromLS;
+		var formParts = that.rulesList.querySelectorAll('input, select, textarea');
+		that.each(formParts, function(formPart) {
+			formPart.addEventListener('change', function() {
 
-		switch(displayMode) {
-			case 'column':
-				that.rulesList.classList.remove('rules-list-list');
-				break;
-			case 'list':
-				that.rulesList.classList.add('rules-list-list');
-				break;
-			default:
-				break;
-		}
+				that.generatedJSON = that.generateJSON();
 
-		if(valueFromEvent) {
-			localStorage.setItem(that.rulesList.id, displayMode);
-		}
+				var generatedJSONString = JSON.stringify(that.generatedJSON);
+				var currentJSONString = JSON.stringify(that.parsedJSON);
+				var isModified = generatedJSONString !== currentJSONString;
 
-		//init
-		if(!valueFromEvent && valueFromLS) {
-			that.displayListMode.checked = displayMode === 'list';
-			that.displayColumnMode.checked = displayMode === 'column';
-		}
-
+				if(isModified) {
+					console.log('change')
+					that.saveButton.classList.add('is-modified');
+				} else {
+					console.log('no change')
+					that.saveButton.classList.remove('is-modified');
+				}
+			});
+		});
 	},
 
 	searchProperty: function(event) {
+
+		event && event.stopPropagation();
+
 		var that = STYLEV.RULES;
 		var rulesListItems = that.rulesListItems;
 		var rulesListItemsLen = rulesListItems.length;
@@ -187,19 +220,21 @@ STYLEV.RULES = {
 
 	toggleReason: function(event) {
 		var that = STYLEV.RULES;
-		var reasons = that.rulesList.querySelectorAll('.reason');
-		that.each(reasons, function(reason) {
-			reason.hidden = !that.reasonCheckbox.checked;
-		});
+		if(!that.reasonCheckbox.checked) {
+			that.rulesList.classList.add('hide-reason');
+		} else {
+			that.rulesList.classList.remove('hide-reason');
+		}
 		localStorage.setItem(that.reasonCheckbox.id, that.reasonCheckbox.checked);
 	},
 
 	toggleReferenceURL: function(event) {
 		var that = STYLEV.RULES;
-		var referenceURLs = that.rulesList.querySelectorAll('.reference-url');
-		that.each(referenceURLs, function(referenceURL) {
-			referenceURL.hidden = !that.referenceURLCheckbox.checked;
-		});
+		if(!that.referenceURLCheckbox.checked) {
+			that.rulesList.classList.add('hide-reference-url');
+		} else {
+			that.rulesList.classList.remove('hide-reference-url');
+		}
 		localStorage.setItem(that.referenceURLCheckbox.id, that.referenceURLCheckbox.checked);
 	},
 
@@ -212,28 +247,10 @@ STYLEV.RULES = {
 	
 	setDownloadButton: function() {
 		var that = STYLEV.RULES;
-		var json = that.generateJSON();
-		this.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json, null, '\t'));
+		var json = that.generatedJSON;
+		this.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
 		alert('Download and replace file which named rules.json without rename the file');
 	},
-
-	bind2RuleListItem: function(rulesListItem) {
-		var that = STYLEV.RULES;
-		
-		function findAndBind(rulesListItem) {
-			var editButton = rulesListItem.querySelector('.edit-button');
-			var removeButton = rulesListItem.querySelector('.remove-button');
-			editButton.addEventListener('click', that.toggleEditMode);
-			removeButton.addEventListener('click', that.removeTheRule);
-		}
-
-		if(rulesListItem) {
-			findAndBind(rulesListItem);
-		} else {
-			that.each(that.rulesListItems, findAndBind);
-		}
-	},
-
 	toggleEditMode: function(event) {
 		var that = STYLEV.RULES;
 
@@ -270,18 +287,22 @@ STYLEV.RULES = {
 	modifyBasedOnCurrentData: function(rulesListItem) {
 		var that = STYLEV.RULES;
 
-		var formPartsWrappers = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
+		var formPartsWrappers = rulesListItem.querySelectorAll('.styles-list, .rule-title, .element-type');
 
 		that.each(formPartsWrappers, function(formPartsWrapper) {
 			var hasData = false;
 
-			var inputs = formPartsWrapper.querySelectorAll('input, select, textarea');
+			var inputs = formPartsWrapper.querySelectorAll('input, textarea');
 			if(inputs === null) {
 				hasData = false;
 				return 'break';
 			}
 			that.each(inputs, function(input) {
-				if(input.value) {
+				if(input.type === 'text' && input.value) {
+					hasData = true;
+					return 'break';
+				}
+				if(input.type === 'checkbox' && input.checked) {
 					hasData = true;
 					return 'break';
 				}
@@ -307,27 +328,74 @@ STYLEV.RULES = {
 		}
 	},
 
-	bind2StylesList: function(stylesLists) {
+	bindEvents2StylesList: function(template) {
 		var that = STYLEV.RULES;
 
-		that.stylesLists = stylesLists ? stylesLists : that.stylesLists;
+		var doc = (template && template.nodeType === 11) || that.rulesList;
+		var stylesLists = doc.querySelectorAll('.styles-list');
 
-		that.each(that.stylesLists, function(stylesList) {
+		that.each(stylesLists, function(stylesList) {
 			stylesList.addEventListener('focus', that.insertProperty);
 		});
 	},
 	addRule: function() {
 		var that = STYLEV.RULES;
-		var clone = document.importNode(that.templateRule, true);
-		var ruleListItem = clone.querySelector('li');
-		var stylesLists = clone.querySelectorAll('.styles-list');
-		ruleListItem.classList.add('edit-mode');
-		that.bind2RuleListItem(ruleListItem);
-		that.bind2StylesList(stylesLists);
-		that.rulesList.insertBefore(clone, that.rulesList.querySelector(':scope > li'));
-		that.rulesList.querySelector(':scope > li').querySelector('input').focus();
+		var template = document.importNode(that.templateRule, true);
+		var rulesListItem = that.rulesList.querySelector('li');
+
+		rulesListItem.classList.add('edit-mode');
+
+		that.bindEvents2RuleListItem(template);
+		that.bindEvents2AddButton(template);
+		that.bindEvents2StylesList(template);
+
+		that.rulesList.insertBefore(template, rulesListItem);
+		that.rulesList.querySelector('li').querySelector('input').focus();
 		that.setParametersAfterAdding();
 	},
+
+	setHandler2AddButton: function(stylesList) {
+		var that = STYLEV.RULES;
+		
+		return function(event) {
+			that.insertProperty(event, stylesList);
+		}
+	},
+
+	bindEvents2AddButton: function(template) {
+		var that = STYLEV.RULES;
+
+		var doc = (template && template.nodeType === 11) || that.rulesList;
+
+		var addPropertyButtons = doc.querySelectorAll('.add-property-button');
+		var stylesLists = doc.querySelectorAll('.styles-list');
+
+		function bindEvent(addPropertyButton, i) {
+			var stylesList = stylesLists[i];
+			addPropertyButton.addEventListener('click', that.setHandler2AddButton(stylesList));
+		}
+
+		that.each(addPropertyButtons, bindEvent);
+	},
+
+
+	bindEvents2RuleListItem: function(template) {
+		var that = STYLEV.RULES;
+
+		var doc = (template && template.nodeType === 11) || that.rulesList;
+		var rulesListItems = doc.querySelectorAll(':scope > li');
+
+		function findAndBindEvent(rulesListItem) {
+			var editButton = rulesListItem.querySelector('.rules-box-edit-button');
+			var removeButton = rulesListItem.querySelector('.rules-box-remove-button');
+			editButton.addEventListener('click', that.toggleEditMode);
+			removeButton.addEventListener('click', that.removeTheRule);
+		}
+
+		that.each(rulesListItems, findAndBindEvent);
+	},
+
+
 	insertDummyElements: function() {
 		var that = STYLEV.RULES;
 
@@ -335,37 +403,33 @@ STYLEV.RULES = {
 		that.dummyElementWrapper.appendChild(that.dummyElement4detectWidth);
 		that.dummyElementWrapper.appendChild(that.dummyElement4testStyle);
 	},
-	insertProperty: function(event, stylesList, property, propertyValue, reason, referenceURL) {
+	
+	insertProperty: function(event, target, property, propertyValueObj) {
 
 		var that = STYLEV.RULES;
-		var stylesList = stylesList || event.currentTarget || event.target;
+		var stylesList = target || event.currentTarget || event.target;
 		var isBaseStyles = stylesList.dataset.id === 'base-styles';
 
-		var clone = null;
+		var template;
 
 		if(isBaseStyles) {
-			clone = document.importNode(that.templatePropertyBase, true);
+			template = document.importNode(that.templatePropertyBase, true);
 		} else {
-			clone = document.importNode(that.templatePropertyNg, true);
+			template = document.importNode(that.templatePropertyNg, true);
 		}
 
 		if(property) {
-			clone.querySelector('.css-property').value = property;
-		}
-		if(propertyValue) {
-			clone.querySelector('.css-property-value').value = propertyValue;
+			template.querySelector('[data-id="key"]').value = property;
 		}
 
-		if(!isBaseStyles) {
-			if(reason) {
-				clone.querySelector('.reason').value = reason;
+		that.each(propertyValueObj, function(key, value) {
+			if(value) {
+				var target = template.querySelector('[data-id="' + key + '"]');
+				that.setValue(target, value);
 			}
-			if(referenceURL) {
-				clone.querySelector('.reference-url').value = referenceURL;
-			}
-		}
+		});
 
-		stylesList.appendChild(clone);
+		stylesList.appendChild(template);
 
 		var appendedStylesListItem = stylesList.querySelector(':scope > li:last-child');
 		that.doAfterInsertingProperty(appendedStylesListItem, isBaseStyles);
@@ -406,15 +470,25 @@ STYLEV.RULES = {
 
 	bindEvents2ListItem: function(appendedStylesListItem) {
 		var that = STYLEV.RULES;
-		var inputs = appendedStylesListItem.querySelectorAll('input, textarea');
+		var inputs = appendedStylesListItem.querySelectorAll('input');
+		var textareas = appendedStylesListItem.querySelectorAll('textarea');
+		var selects = appendedStylesListItem.querySelectorAll('select');
 
 		appendedStylesListItem.addEventListener('click', that.stopPropagation);
 
 		that.each(inputs, function(input) {
-			input.addEventListener('focus', that.selectOnFocus);
 			input.addEventListener('click', that.stopPropagation);
 			input.addEventListener('keyup', that.fireBlurEventByEscKey);
 			input.addEventListener('keyup', that.moveFocusByEnter);
+			input.addEventListener('focus', that.selectOnFocus);
+		});
+		that.each(textareas, function(textarea) {
+			textarea.addEventListener('click', that.stopPropagation);
+			textarea.addEventListener('keyup', that.fireBlurEventByEscKey);
+		});
+		that.each(selects, function(select) {
+			select.addEventListener('click', that.stopPropagation);
+			select.addEventListener('keyup', that.fireBlurEventByEscKey);
 		});
 	},
 	bindEvents2CSSPropertyAndValue: function(cssProperty, cssPropertyValue) {
@@ -455,23 +529,31 @@ STYLEV.RULES = {
 		that.validatePropertyValue(cssProperty, cssPropertyValue);
 	},
 	fireBlurEventByEscKey: function(event) {
-		var escKeyCode = 27;
+		event.stopPropagation();
+		var that = STYLEV.RULES;
 
-		if(event.keyCode === escKeyCode) {
+		if(event.keyCode === that.escKeyCode) {
 			event.currentTarget.blur();
 		}
 	},
 	moveFocusByEnter: function(event) {
+
+		event.stopPropagation();
+
+		//TODO: need to test
 		var that = STYLEV.RULES;
 		var stylesListItem = that.closest(event.currentTarget, 'li');
-		var inputs = stylesListItem.querySelectorAll('input, textarea');
-		var enterKeyCode = 13;
+		var inputs = stylesListItem.querySelectorAll('input, textarea, select');
+		var inputsLastIndex = inputs.length - 1;
 
-		if(event.keyCode === enterKeyCode) {
-			that.each(inputs, function(input) {
-				var nextInput = inputs[i+1];
-				if(nextInput !== null && input.isEqualNode(event.currentTarget)) {
-					nextInput.focus();
+		if(event.keyCode === that.enterKeyCode) {
+			that.each(inputs, function(input, i) {
+
+				if(i < inputsLastIndex) {
+					var nextInput = inputs[i+1];
+					if(nextInput !== null && input.isEqualNode(event.currentTarget)) {
+						nextInput.focus();
+					}
 				}
 			});
 		}
@@ -479,13 +561,14 @@ STYLEV.RULES = {
 	insertPropertyByEnterKey: function(event) {
 		var that = STYLEV.RULES;
 
+		event.stopPropagation();
+
 		var stylesListItem = that.closest(event.currentTarget, 'li');
 		var stylesList = stylesListItem.parentElement;
 		var cssProperty = stylesListItem.querySelector('.css-property');
 		var cssPropertyValue = stylesListItem.querySelector('.css-property-value');
-		var enterKeyCode = 13;
 
-		if(event.keyCode === enterKeyCode) {
+		if(event.keyCode === that.enterKeyCode) {
 
 			if(!cssProperty.value || !cssPropertyValue.value) {
 				that.removeProperty(stylesList, stylesListItem);
@@ -603,7 +686,7 @@ STYLEV.RULES = {
 			}
 		}
 	},
-	setCSSPropertyDataList: function() {
+	setCSSProperty2DataList: function() {
 		var that = STYLEV.RULES;
 		var df = document.createDocumentFragment();
 		that.each(that.allCSSProperties, function(cssProperty) {
@@ -611,6 +694,18 @@ STYLEV.RULES = {
 			df.appendChild(option);
 		});
 		that.datalistOfProperties.appendChild(df);
+	},
+	setHTMLTags2DataList: function() {
+		var that = STYLEV.RULES;
+		var df = document.createDocumentFragment();
+
+		that.getURL('/extension/data/tags-all.json').then(JSON.parse).then(function(data) {
+			that.each(data, function(tagName) {
+				var option = new Option(tagName, tagName);
+				df.appendChild(option);
+			});
+			that.datalistOfTags.appendChild(df);
+		});
 	},
 	stopPropagation: function() {
 		event.stopPropagation();
@@ -667,44 +762,33 @@ STYLEV.RULES = {
 
 		return new Promise(function(resolve, reject) {
 
-			that.getURL('../extension/data/rules.json')
+			that.getURL('/extension/data/rules.json')
 				.then(JSON.parse)
-				.then(function(jsonArray) {
+				.then(function(parsedJSON) {
 
-					that.each(jsonArray, function(rule) {
+					that.parsedJSON = parsedJSON;
 
-						var ngStyles = rule['ng-styles'];
+					that.each(parsedJSON, function(rule) {
 
-						var clone = document.importNode(that.templateRule, true);
-						var ruleListItem = clone.querySelector('li');
-						var typeSelects = clone.querySelectorAll('.type-select');
-						var stylesLists = clone.querySelectorAll('.styles-list');
-						var stylesListsBase = clone.querySelectorAll('.styles-list-base');
-						var stylesListsNg = clone.querySelectorAll('.styles-list-ng');
-						var textInputs = clone.querySelectorAll('.text-input');
+						var template = document.importNode(that.templateRule, true);
 
-						if(rule['rule-id'] !== undefined) {
-							ruleListItem.dataset.ruleid = rule['rule-id'];
-						}
+						var rulesListItem = template.querySelector('li');
+						rulesListItem.dataset.ruleid = rule['rule-id'];
 
-						that.each(typeSelects, function(typeSelect) {
-							typeSelect.querySelector('select').tabIndex = 1;
-							that.applyData2HTML(typeSelect, rule, typeSelect.dataset.id);
-						});
-						that.each(stylesListsBase, function(stylesListBase) {
-							stylesListBase.tabIndex = 1;
-							that.applyData2HTML(stylesListBase, rule, stylesListBase.dataset.id);
-						});
-						that.each(stylesListsNg, function(stylesListNg) {
-							stylesListNg.tabIndex = 1;
-							that.applyData2HTML(stylesListNg, ngStyles, stylesListNg.dataset.id);
-						});
-						that.each(textInputs, function(textInput) {
-							textInput.querySelector('input').tabIndex = 1;
-							that.applyData2HTML(textInput, rule, textInput.dataset.id);
+						that.each(rule['rule-data'], function(ruleKey, ruleVal) {
+
+							var target = template.querySelector('[data-id="' + ruleKey + '"]');
+
+							if(ruleKey === 'base-styles' || ruleKey === 'ng-styles') {
+								that.applyStylesData2HTML(target, template, ruleKey, ruleVal);
+								return 'continue;'
+							}
+
+							that.applyData2HTML(target, template, ruleKey, ruleVal);
+
 						});
 
-						df.appendChild(clone);
+						df.appendChild(template);
 					});
 
 					that.rulesList.appendChild(df);
@@ -715,46 +799,51 @@ STYLEV.RULES = {
 		});
 	},
 
-	applyData2HTML: function(target, rule, id) {
+	applyData2HTML: function (target, template, ruleKey, ruleVal) {
 		var that = STYLEV.RULES;
-		var ruleStyles = rule && rule[id];
 
-		if(ruleStyles) {
+		if(ruleVal) {
 
-			if(target.classList.contains('type-select')) {
+			that.setValue(target, ruleVal);
 
-				var select = target.querySelector('select');
-				select.value = ruleStyles;
+		} else {
+			
+//			target.classList.add('hidden');
+		}
+	},
 
-			}
-			if(target.classList.contains('styles-list')) {
+	applyStylesData2HTML: function(target, template, ruleKey, ruleVal) {
+		var that = STYLEV.RULES;
 
-				that.each(ruleStyles, function(cssProperty, cssPropertyValue) {
+		if(ruleVal) {
 
-					var reason;
-					var referenceURL;
-					if(cssPropertyValue instanceof Array) {
-						referenceURL = cssPropertyValue[2];
-						reason = cssPropertyValue[1];
-						cssPropertyValue = cssPropertyValue[0];
-					}
+			if(ruleVal instanceof Array) {
 
-					var stylesListItem = that.insertProperty(null, target, cssProperty, cssPropertyValue, reason, referenceURL);
+				that.each(ruleVal, function(style) {
+
+					that.each(style, function(property, propertyValueObj) {
+						var stylesListItem = that.insertProperty(null, target, property, propertyValueObj);
+						that.modifyCSSProperty(null, stylesListItem);
+						that.modifyCSSPropertyValue(null, stylesListItem);
+						that.applyValidationResult(null, stylesListItem);
+					});
+				});
+
+			} else {
+
+				that.each(ruleVal, function(property, propertyValueObj) {
+
+					var stylesListItem = that.insertProperty(null, target, property, propertyValueObj);
 					that.modifyCSSProperty(null, stylesListItem);
 					that.modifyCSSPropertyValue(null, stylesListItem);
 					that.applyValidationResult(null, stylesListItem);
 				});
 			}
-			if(target.classList.contains('text-input')) {
-				var input = target.querySelector('input');
-				input.value = ruleStyles;
-
-			}
 
 
 		} else {
 
-			target.classList.add('hidden');
+//			target.classList.add('hidden');
 		}
 	},
 
@@ -768,12 +857,13 @@ STYLEV.RULES = {
 
 		that.rulesListItems = that.rulesList.querySelectorAll(':scope > li');
 
-		that.each(that.rulesListItems, function(rulesListItem, i) {
+		that.each(that.rulesListItems, function(rulesListItem) {
 
 			var rule = {};
 
 			var ruleIDFromElem = rulesListItem.dataset.ruleid;
 
+			//Rule ID
 			if(ruleIDFromElem === undefined) {
 
 				that.lastRuleID = (that.lastRuleID+1)|0;
@@ -786,81 +876,74 @@ STYLEV.RULES = {
 				rule['rule-id'] = that.lastRuleID = parseInt(ruleIDFromElem, 10);
 			}
 
-			var dataElements = rulesListItem.querySelectorAll('.styles-list, .text-input, .type-select');
+			//Rule Data
+			rule['rule-data'] = {};
 
-			that.each(dataElements, function(dataElement) {
+			var singleDataWrappers = rulesListItem.querySelectorAll('.rules-box-header, .element-type-list');
+			var multiDataWrappers = rulesListItem.querySelectorAll('.styles-list');
 
-				var ruleType = dataElement.dataset.id;
+			that.each(singleDataWrappers, function(singleDataWrapper) {
 
-				if(dataElement.classList.contains('type-select')) {
+				var targets = singleDataWrapper.querySelectorAll('[data-id]');
 
-					var typeSelect = dataElement;
+				that.each(targets, function(target) {
+					var key = target.dataset.id;
+					rule['rule-data'][key] = that.getValue(target);
+				});
 
-					var typeSelectItem = typeSelect.querySelector('select');
+			});
 
-					if(typeSelectItem.value) {
-						rule[ruleType] = typeSelectItem.value;
-					}
-				}
+			that.each(multiDataWrappers, function(multiDataWrapper) {
 
-				if(dataElement.classList.contains('styles-list-base')) {
+				var xStyles = multiDataWrapper.dataset.id;
 
-					var stylesListItems = dataElement.querySelectorAll(':scope > li');
+				if(xStyles === 'base-styles') {
 
-					if(!stylesListItems.length) {
-						return 'continue';
-					}
-					rule[ruleType] = {};
+					var targets = multiDataWrapper.querySelectorAll('[data-id]');
+					var baseKey;
 
-					that.each(stylesListItems, function(stylesListItem) {
+					rule['rule-data'][xStyles] = {};
 
-						var property = stylesListItem.querySelector('.css-property');
-						var propertyValue = stylesListItem.querySelector('.css-property-value');
+					that.each(targets, function(target) {
+						var key = target.dataset.id;
 
-						//TODO: 検証が通っていないものも入れるようにしているが、後々ベストな振る舞いについて考える
-//						if (
-//							property.dataset_isvalid === 'true' &&
-//							propertyValue.dataset_isvalid === 'true'
-//						) {
-
-						rule[ruleType][property.value] = propertyValue.value;
-//						}
-					});
-				}
-				if(dataElement.classList.contains('styles-list-ng')) {
-
-					var stylesListItems = dataElement.querySelectorAll(':scope > li');
-
-					if(!stylesListItems.length) {
-						return 'continue';
-					}
-					rule['ng-styles'] = rule['ng-styles'] || {};
-					rule['ng-styles'][ruleType] = {};
-
-					that.each(stylesListItems, function(stylesListItem) {
-
-						var property = stylesListItem.querySelector('.css-property');
-						var propertyValue = stylesListItem.querySelector('.css-property-value');
-						var reason = stylesListItem.querySelector('.reason');
-						var referenceURL = stylesListItem.querySelector('.reference-url');
-
-						rule['ng-styles'][ruleType][property.value] = [];
-						rule['ng-styles'][ruleType][property.value][0] = propertyValue.value;
-						rule['ng-styles'][ruleType][property.value][1] = reason.value;
-						rule['ng-styles'][ruleType][property.value][2] = referenceURL.value;
+						if(key === 'key') {
+							baseKey = target.value;
+							rule['rule-data'][xStyles][baseKey] = {};
+						} else {
+							rule['rule-data'][xStyles][baseKey][key] = that.getValue(target);
+						}
 					});
 				}
 
-				if(dataElement.classList.contains('text-input')) {
+				if(xStyles === 'ng-styles') {
 
-					var textInput = dataElement;
+					var stylesListItems = multiDataWrapper.querySelectorAll('.styles-list-item');
 
-					var textInputItem = textInput.querySelector('input');
+					rule['rule-data'][xStyles] = [];
 
-					if(textInputItem.value) {
-						rule[ruleType] = textInputItem.value;
-					}
+					that.each(stylesListItems, function(stylesListItem) {
+
+						var obj = {};
+						var targets = stylesListItem.querySelectorAll('[data-id]');
+						var baseKey;
+
+						that.each(targets, function(target) {
+							var key = target.dataset.id;
+
+							if(key === 'key') {
+								baseKey = target.value;
+								obj[baseKey] = {};
+							} else {
+								obj[baseKey][key] = that.getValue(target);
+							}
+						});
+
+						rule['rule-data'][xStyles].push(obj);
+					});
+
 				}
+
 			});
 
 			jsonArray.push(rule);
@@ -873,6 +956,26 @@ STYLEV.RULES = {
 		
 		return jsonArray;
 	},
+
+	isCheckboxOrRadio: function(target) {
+		return target.type && /^(checkbox|radio)/.test(target.type);
+	},
+
+	getValue: function(target) {
+		var that = STYLEV.RULES;
+
+		return that.isCheckboxOrRadio(target) ? target.checked : target.value;
+	},
+
+	setValue: function(target, value) {
+		var that = STYLEV.RULES;
+		if(that.isCheckboxOrRadio(target)) {
+			target.checked = value;
+		} else {
+			target.value = value;
+		}
+	},
+
 	getURL: function(url) {
 
 		return new Promise(function (resolve, reject) {
@@ -898,17 +1001,19 @@ STYLEV.RULES = {
 		var xhr = new XMLHttpRequest();
 		var apiURI = '/saveJSON';
 		var method = 'POST';
-		var json = that.generateJSON();
+		var json = that.generatedJSON || that.generateJSON();
 		var data4send = JSON.stringify(json, null, '\t');
 
 		xhr.open(method, apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.addEventListener('load', function () {
 			if (xhr.status === 200) {
+				that.saveButton.classList.remove('is-modified');
 				that.showSuccessMsg();
 			} else {
 				that.showErrorMsg();
 			}
+
 		});
 		xhr.addEventListener('error', that.showErrorMsg);
 
@@ -918,11 +1023,23 @@ STYLEV.RULES = {
 
 		xhr.send(data4send);
 	},
+
+	saveJSONByShortcutKey: function(event) {
+		var that = STYLEV.RULES;
+		var isPressedCommandOrCtrlKey = (event.ctrlKey && !event.metaKey) || (!event.ctrlKey && event.metaKey);
+
+		if (isPressedCommandOrCtrlKey && event.keyCode == 83) {//s
+			event.preventDefault();
+			event.target.blur();
+			that.saveJSON();
+		}
+	},
+
 	showSuccessMsg: function() {
 		alert('Saving of rules was successful! Let\'s send Pull Request!');
 	},
 	showErrorMsg: function() {
-		alert('Could not connect to api server. Connect to api server, or click download button.');
+		alert('Sorry. Could not connect to api server. Connect to api server, or click download button.');
 	},
 
 	parseSelector: function (selector) {
@@ -1022,48 +1139,134 @@ STYLEV.RULES = {
 		return element;
 	},
 
-	resizeTimer: null,
-	RESIZE_INTERVAL_MILLISECOND: 1000,
-
-	resizeTextareaBasedOnLine: function() {
-		var that = STYLEV.RULES;
-
-		if(that.resizeTimer) {
-			clearTimeout(that.resizeTimer);
-		}
-
-		function resizeTextarea() {
-			that.each(that.reasons, function(reason) {
-				that.adjustHeightOfTextarea(null, reason);
-			});
-		}
-
-		if(!that.isShowedAllAtFirst) {
-			resizeTextarea();
-		} else {
-			that.resizeTimer = setTimeout(resizeTextarea, that.RESIZE_INTERVAL_MILLISECOND);
-		}
-	},
-
 	bindEvents2Textarea: function(textarea) {
 		var that = STYLEV.RULES;
-		textarea.addEventListener('keyup', that.adjustHeightOfTextarea);
+		var dummyTextarea = textarea.parentElement.querySelector('.dummy-textarea');
+
+		that.setValue2dummyTextarea(textarea, dummyTextarea);
+		textarea.addEventListener('input', that.bindEvents2DummyTextarea(textarea, dummyTextarea));
+	},
+	
+	bindEvents2DummyTextarea: function(textarea, dummyTextarea) {
+		var that = STYLEV.RULES;
+		return function() {
+			that.setValue2dummyTextarea(textarea, dummyTextarea);
+		};
 	},
 
-	adjustHeightOfTextarea: function(event, target) {
-		var target = target || event.currentTarget || event.target;
-		target.style.setProperty('height', 0 + 'px', '');
-		target.style.setProperty('height', target.scrollHeight + 'px', '');
+	setValue2dummyTextarea: function(textarea, dummyTextarea) {
+		var that = STYLEV.RULES;
+		dummyTextarea.textContent = textarea.value + '\n';
 	},
 
 	removeLoadingSpinner: function() {
+		var that = STYLEV.RULES;
 		var loadingSpinner = document.querySelector('#loadingSpinner');
 		loadingSpinner && loadingSpinner.parentElement.removeChild(loadingSpinner);
 	},
 
-	adjustPosition: function() {
+	adjustWrapperPosition: function() {
 		var that = STYLEV.RULES;
-		that.wrapper.style.setProperty('padding-top', that.mainHeader.offsetHeight + 'px', '');
+
+		if(that.adjustWrapperPositionTimer !== undefined) {
+			clearTimeout(that.adjustWrapperPositionTimer);
+		}
+		that.adjustWrapperPositionTimer = setTimeout(function() {
+			that.wrapper.style.setProperty('padding-top', that.mainHeader.offsetHeight + 'px', '');
+		}, 0);
+	},
+
+	getEachHeight: function() {
+		var that = STYLEV.RULES;
+			that.mainHeaderOffsetHeight = that.mainHeader.offsetHeight;
+			that.windowInnerHeight = window.innerHeight;
+	},
+
+	positionHandlers: [],
+	fixInScrollingTimer: null,
+
+	fixInScrolling: function() {
+		var that = STYLEV.RULES;
+
+		that.each(that.positionHandlers, function(positionHandler) {
+			window.removeEventListener('scroll', positionHandler);
+		});
+
+		that.each(that.fixInScrollingTargets, function(target, i) {
+
+			var rulesBox = target;
+			var rulesBoxGBCR = target.getBoundingClientRect();
+			var rulesBoxHeader = rulesBox.querySelector('.rules-box-header');
+			var rulesBoxSection = rulesBox.querySelector('.rules-box-section');
+			var rulesBoxSectionInner = rulesBoxSection.querySelector('.rules-box-section-inner');
+			var rulesBoxSectionInnerOffsetHeight = rulesBoxSectionInner.offsetHeight + 20;//TODO: need to dyna
+			var isHorizontal = rulesBoxSection.getBoundingClientRect().top === rulesBoxSection.nextElementSibling.getBoundingClientRect().top;
+			var fixTargets = [rulesBoxHeader, rulesBoxSectionInner];
+			var fixTargetGBCR;
+
+			if(isHorizontal) {
+				rulesBox.classList.remove('vertical');
+				rulesBox.classList.add('horizontal');
+			} else {
+				rulesBox.classList.remove('horizontal');
+				rulesBox.classList.add('vertical');
+			}
+
+			rulesBoxHeader.style.setProperty('top', that.mainHeaderOffsetHeight + 'px', '');
+			rulesBoxHeader.style.setProperty('left', rulesBoxGBCR.left + 'px', '');
+			rulesBoxHeader.style.setProperty('right', window.innerWidth - rulesBoxGBCR.right + 'px', '');
+
+			rulesBoxSectionInner.style.setProperty('top', (that.mainHeaderOffsetHeight + 40) + 'px', '');//TODO: need to dyna
+			rulesBoxSectionInner.style.setProperty('left', (rulesBoxGBCR.left + 1) + 'px', '');
+			if(isHorizontal) {
+				rulesBoxSectionInner.style.setProperty('right', null, '');
+			} else {
+				rulesBoxSection.style.setProperty('min-height', rulesBoxSectionInnerOffsetHeight + 'px', '');
+				rulesBoxSectionInner.style.setProperty('right', (rulesBoxGBCR.left + 1) + 'px', '');
+			}
+
+			function positionHandler() {
+
+				that.each(fixTargets, function(fixTarget, i) {
+
+					var fixTargetGBCR;
+					var rulesBoxGBCR = rulesBox.getBoundingClientRect();
+
+					//enter
+					if(rulesBoxGBCR.top <= that.mainHeaderOffsetHeight + 1) {
+
+						fixTarget.classList.add('float-in-window', 'fixed-in-window');
+						fixTarget.classList.remove('absolute-in-window');
+
+						fixTargetGBCR = fixTargetGBCR || fixTarget.getBoundingClientRect();
+
+						console.log('==================');
+						console.log(fixTarget.className);
+						console.log('rulesBoxGBCR.bottom:' + rulesBoxGBCR.bottom);
+						console.log('fixTargetGBCR.bottom:' + fixTargetGBCR.bottom);
+
+						//transition
+						if(rulesBoxGBCR.bottom <= fixTargetGBCR.bottom) {
+
+							fixTarget.classList.remove('fixed-in-window');
+							fixTarget.classList.add('absolute-in-window');
+
+						}
+
+						//out
+					} else {
+						fixTargetGBCR = null;
+						fixTarget.classList.remove('float-in-window', 'fixed-in-window', 'absolute-in-window');
+					}
+
+
+				});
+			}
+
+			window.addEventListener('scroll', positionHandler);
+			window.addEventListener('load', positionHandler);
+			that.positionHandlers.push(positionHandler);
+		});
 	}
 
 };

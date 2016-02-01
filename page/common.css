@@ -21,7 +21,7 @@ img, input, select, textarea, button, svg, canvas, object {
 	vertical-align: middle;
 }
 input, select, textarea, button {
-	outline: 0;
+	/*outline: 0;*/
 	background-color: inherit;
 	color: inherit;
 }
@@ -32,7 +32,10 @@ input, select, textarea, button, h1, h2, h3, h4, h5, h6 {
 	font-size: inherit;
 	font-family: inherit;
 }
-
+label {
+	display: inherit;
+	cursor: pointer;
+}
 html {
 	font-size: 13px;
 	line-height: 1.4;
@@ -126,20 +129,26 @@ a:active {
 /* module */
 input[type="text"] {
 	background-color: white;
-	border: 1px solid #999;
+	border: 1px solid #DDD;
+}
+input[type="radio"],
+input[type="checkbox"] {
+	margin-top: 0;
+	margin-bottom: 0;
 }
 button,
 .button {
 	background-color: #FAFAFA;
-	color: initial !important;
+	color: inherit !important;
 	border: 0;
 	font-size: 11px;
-	padding: 4px 2px;
+	padding: 4px;
 	cursor: pointer;
 	text-align: center;
 	text-decoration: none !important;
 	border-radius: 4px;
 	border-bottom: 2px solid #CECECE;
+	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
 }
 .note-list {
 	counter-reset: note-list;

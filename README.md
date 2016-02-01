@@ -12,18 +12,19 @@ Style Validator is CSS Validator that can detect `Risky Style` that might break 
 - **[Chrome Extension](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod)**(In conjunction with Chrome DevTools)
 - **[JavaScript Bookmarklet](http://style-validator.github.io/)**(Currently, supported only Google Chrome and Opera)
 
+
 # Function
 
 - Detecting problems of between CSS properties and HTML tags
 - Detecting problems after JavaScript and Media Queries
 - Detecting problems of Computed Style
 
+
 # Why we need to detect `Risky Style`?
 
-- Over 300 CSS properties
-- Over 10,000 Browser types
-- Other Front-end technology has evolved too much
-
+- Over 300 CSS properties (if include pattern of value... it's insane volume)
+- Over 10,000 Browser types (including mobile)
+- Other Front-end technology has evolved too much (We are so hard to develop...)
 
 The Risky Style will cause**Unintended Behavior**in the browser such as layout breaking.
 
@@ -213,14 +214,14 @@ Dear Web Engineers,
 Please feel free to send me any feedback and Pull requests.
 If you need, check it out the document for developer.
 
-## Edit Validation Rules
+## Contributing
+
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+
+## Only Validation Rules
 
 You can edit from [web page](http://style-validator.github.io/page/rules.html)
-
-## Brush up Style Validator
-
-1. Clone git repository
-```
-git clone https://github.com/Style-Validator/style-validator.github.io.git
-```
-2. Send me Pull requests

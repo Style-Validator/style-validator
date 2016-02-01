@@ -15,7 +15,7 @@ var executeWithInspect = function() {
 	chrome.devtools.inspectedWindow.eval(
 		"var bindInspect = function(){" +
 			"STYLEV.CHROME_DEVTOOLS.execute(function(targetElem) {" +
-//				"inspect(targetElem || $0);" +
+//				"inspect(targetElem || $0);" +chrome
 				"inspect(targetElem);" +
 			"});" +
 		"};" +

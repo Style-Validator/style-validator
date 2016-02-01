@@ -27,7 +27,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	bindEvents: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
-		window.addEventListener('resize', that.adjustPosition);
+		window.addEventListener('resize', that.adjustWrapperPosition);
 		window.addEventListener('scroll', that.addShadow2header);
 	},
 	
@@ -35,12 +35,18 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
 		setTimeout(that.startFadeIn, 100);
-		setTimeout(that.adjustPosition, 0);
+		setTimeout(that.adjustWrapperPosition, 0);
 	},
 
-	adjustPosition: function() {
+	adjustWrapperPosition: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-		that.wrapper.style.setProperty('padding-top', that.header.offsetHeight + 'px', '');
+
+		if(that.adjustWrapperPositionTimer !== undefined) {
+			clearTimeout(that.adjustWrapperPositionTimer);
+		}
+		that.adjustWrapperPositionTimer = setTimeout(function() {
+			that.wrapper.style.setProperty('padding-top', that.header.offsetHeight + 'px', '');
+		}, 0);
 	},
 
 	addShadow2header: function() {

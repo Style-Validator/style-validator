@@ -154,7 +154,7 @@
 				<button id="reset-button" type="reset"><img src="/img/iconmonstr-undo-4-icon.svg" width="20" height="20">Reset</button>
 				<button id="add-button"><img src="/img/iconmonstr-selection-10-icon.svg" width="20" height="20">Add</button>
 				<a href="javascript: void(0);" id="download-button" download="rules.json" class="button" title="Override a local file and Let's pull request:)"><img src="/img/iconmonstr-download-2-icon.svg" width="20" height="20">DL</a>
-				<button id="save-button" title="Override a local file and Let's pull request:)"><img src="/img/iconmonstr-save-icon.svg" width="20" height="20">Save</button>
+				<button id="save-button" title="Override a local file and Let's pull request:)"><img src="/img/iconmonstr-save-icon.svg" width="20" height="20" class="save-button-image"><img src="/img/iconmonstr-save-icon-active.svg" width="20" height="20"class="save-button-image-active">Save</button>
 			</nav>
 		</header>
 		<div id="loadingSpinner"></div>
@@ -216,63 +216,99 @@
 				</tbody>
 			</table>
 		</details>
-		<ul id="rules-list" class="rules-list"></ul>
+		<ul id="rules-list" class="rules-list rules-list-list"></ul>
 		<common-footer></common-footer>
 	</main>
 </div>
 
 <template id="template-rule">
 	<li>
-		<div class="rules-list-wrapper">
-			<header class="rules-list-header text-input" data-id="title">
-				<input type="text" tabindex="1">
-				<a href="javascript: void(0);" class="remove-button">Remove</a>
-				<a href="javascript: void(0);" class="edit-button">Edit</a>
+		<div class="rules-box fix-in-scrolling">
+			<header class="rules-box-header">
+				<input type="text" placeholder="Input title" data-id="title" tabindex="1">
+				<a href="javascript: void(0);" class="rules-box-remove-button">Remove</a>
+				<a href="javascript: void(0);" class="rules-box-edit-button">Edit</a>
 			</header>
-			<div class="rules-list-body">
-				<section class="type-select" data-id="replaced">
-					<select tabindex="1">
-						<option value="" selected="selected">------------</option>
-						<option value="Non-replaced elements">Non-replaced elements</option>
-						<option value="Replaced elements">Replaced elements</option>
-					</select>
+			<div class="rules-box-body">
+				<section class="rules-box-section">
+					<div class="rules-box-section-inner">
+						<div class="rules-box-section-header">
+							<h3 class="rules-box-section-heading"><img src="/img/iconmonstr-cube-2.svg" width="16">Base Styles (<output>0</output>)</h3>
+							<ul class="element-type-list">
+								<li>&lrarr; <label><input type="checkbox" data-id="is-replaced-tag" tabindex="1">ReplacedTag</label></li>
+								<li>&empty; <label><input type="checkbox" data-id="is-empty-tag" tabindex="1">EmptyTag</label></li>
+							</ul>
+							<ul class="control-buttons-list">
+								<li><button class="add-property-button">+ Add</button></li>
+							</ul>
+						</div>
+						<div class="rules-box-section-body">
+							<ul class="styles-list styles-list-base" data-id="base-styles" tabindex="1"></ul>
+						</div>
+					</div>
 				</section>
-				<section class="type-select" data-id="empty">
-					<select>
-						<option value="" selected="selected">------------</option>
-						<option value="Empty elements">Empty elements</option>
-					</select>
+				<section class="rules-box-section">
+					<div class="rules-box-section-inner">
+						<div class="rules-box-section-header">
+							<h3 class="rules-box-section-heading"><img src="/img/iconmonstr-cube-1.svg" width="16">Error Styles (<output>0</output>) &amp; Warning Styles (<output>0</output>)</h3>
+							<div class="rules-box-section-heading-search"><input type="text" placeholder="Search Property"></div>
+							<ul class="control-buttons-list">
+								<li><button class="add-property-button">+ Add</button></li>
+							</ul>
+						</div>
+						<div class="rules-box-section-body">
+							<ul class="styles-list styles-list-ng" data-id="ng-styles" tabindex="1"></ul>
+						</div>
+					</div>
 				</section>
-				<ul class="styles-list styles-list-base" data-id="base-styles" tabindex="1"></ul>
-				<ul class="styles-list styles-list-ng" data-id="error-styles" tabindex="1"></ul>
-				<ul class="styles-list styles-list-ng" data-id="warning-styles" tabindex="1"></ul>
-				<ul class="styles-list styles-list-ng" data-id="parent-error-styles" tabindex="1"></ul>
-				<ul class="styles-list styles-list-ng" data-id="parent-warning-styles" tabindex="1"></ul>
-				<!--<ul class="styles-list-ng" data-id="pseudo-before-error-styles"></ul>-->
-				<!--<ul class="styles-list-ng" data-id="pseudo-before-warning-styles"></ul>-->
-				<!--<ul class="styles-list-ng" data-id="pseudo-after-error-styles"></ul>-->
-				<!--<ul class="styles-list-ng" data-id="pseudo-after-warning-styles"></ul>-->
 			</div>
 		</div>
 	</li>
 </template>
 <template id="template-property-base">
 	<li>
-		<input type="text" class="css-property" list="all-css-properties"> : <input type="text" class="css-property-value" list="css-properties-value"> ;
+		<section class="styles-list-body">
+			<div class="styles-list-body-property">
+				<input type="text" class="css-property" data-id="key" list="all-css-properties" tabindex="1"> : <input type="text" class="css-property-value" data-id="value" list="css-properties-value" tabindex="1"> ;
+			</div>
+			<ul class="styles-meta-list">
+				<li class="styles-meta-list-parent"><label tabindex="1"><input type="checkbox" data-id="is-parent">Parent Element</label></li>
+				<li class="styles-meta-list-pseudo"><label tabindex="1"><input type="checkbox" data-id="is-pseudo">Pseudo Element</label></li>
+			</ul>
+		</section>
+		<aside class="styles-list-delete">
+			<a href="javascript: void(0);" class="styles-list-delete-button">Delete</a>
+		</aside>
 	</li>
 </template>
 <template id="template-property-ng">
-	<li>
-		<section>
-			<input type="text" class="css-property" list="all-css-properties"> : <input type="text" class="css-property-value" list="css-properties-value"> ;
+	<li class="styles-list-item">
+		<section class="styles-list-body">
+			<div class="styles-list-body-property">
+				<input type="text" class="css-property" data-id="key" list="all-css-properties" tabindex="1"> : <input type="text" class="css-property-value" data-id="value" list="css-properties-value" tabindex="1"> ;
+			</div>
+			<ul class="styles-meta-list">
+				<li class="styles-meta-list-risk-level">
+					<label>
+						<select data-id="risk-level" tabindex="1">
+							<option value="error">error</option>
+							<option value="warning">warning</option>
+						</select>
+					</label>
+				</li>
+				<li class="styles-meta-list-parent"><label tabindex="1"><input type="checkbox" data-id="is-parent">Parent Element</label></li>
+				<li class="styles-meta-list-pseudo"><label tabindex="1"><input type="checkbox" data-id="is-pseudo">Pseudo Element</label></li>
+				<li class="styles-meta-list-reason"><label><textarea placeholder="Input Reason" class="reason" data-id="reason" tabindex="1"></textarea><div class="dummy-textarea">&nbsp;</div></label></li>
+				<li class="styles-meta-list-reference-url"><label tabindex="1"><input type="text" placeholder="Input Reference URL" class="reference-url" data-id="reference-url"></label></li>
+			</ul>
 		</section>
-		<section class="styles-list-meta-data">
-			<label class="styles-list-meta-data-reason"><textarea placeholder="Input Reason" class="reason"></textarea></label>
-			<label class="styles-list-meta-data-reference-url"><input type="text" placeholder="Input Reference URL" class="reference-url"></label>
-		</section>
+		<aside class="styles-list-delete">
+			<a href="javascript: void(0);" class="styles-list-delete-button">Delete</a>
+		</aside>
 	</li>
 </template>
 <datalist id="all-css-properties"></datalist>
+<datalist id="all-html-tags"></datalist>
 <datalist id="css-properties-value">
 	<option value="default">default</option>
 	<option value="!default">!default</option>

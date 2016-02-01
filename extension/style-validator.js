@@ -95,28 +95,28 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			.then(function(dataArray) {
 
-				//ルールのデータ取得
+				//Set rule data
 				that.rulesData = dataArray[0];
 
-				//HTMLタグのデータ
+				//Set html tags data
 				that.tagsAllData = dataArray[1];
 				that.tagsEmptyData = dataArray[2];
 				that.tagsReplacedElementData = dataArray[3];
 				that.tagsTableChildren = dataArray[4];
 
-				//HTMLタグを判定する用の正規表現
+				//Set regex for detecting html tags
 				that.regexAllHTMLTag = new RegExp('^( ' + that.tagsAllData.join(' | ') + ' )');
 				that.regexEmptyElem = new RegExp('^( ' + that.tagsEmptyData.join(' | ') + ' )');
 				that.regexReplacedElem = new RegExp('^( ' + that.tagsReplacedElementData.join(' | ') + ' )');
 				that.regexTableChildElem = new RegExp('^( ' + that.tagsTableChildren.join(' | ') + ' )');
 
-				//オプションを更新してから、検証実行
+				//Do after updating options
 				that.updateOptions().then(function() {
 
-					//DOM監視をセットアップ
+					//Set up Mutation Observer
 					that.moManager = that.setupMutationObserver();
 
-					//検証開始
+					//Start Validate
 					that.validate(callback);
 
 					STYLEV.isFirstExecuted = false;
@@ -129,7 +129,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		var that = STYLEV.VALIDATOR;
 
-		//要素の取得
+		//Elements
 		that.html = document.querySelector('html');
 		that.head = that.html.querySelector(':scope > head');
 		that.body = that.html.querySelector(':scope > body');
@@ -201,7 +201,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		var promiseArray = [];
 		
 		STYLEV.METHODS.each(that.DATA_PATHES, function(path) {
-			promiseArray.push(that.getDataFromURL(path).then(JSON.parse))
+			promiseArray.push(that.getURL(path).then(JSON.parse))
 		});
 
 		return promiseArray;
@@ -209,7 +209,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 	//Ajaxでデータを取得する関数
 	//promiseオブジェクトを返す
-	getDataFromURL: function(url) {
+	getURL: function(url) {
 
 		return new Promise(function (resolve, reject) {
 			var req = new XMLHttpRequest();
@@ -365,7 +365,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			if(elemData.targetParentElem) {
 
 				//tagName of parent element
-				elemData.targetParentElemTagName = elemData.targetParentElem.tagName;
+				elemData.targetParentElemTagName = elemData.targetParentElem.tagName.toLocaleLowerCase();
 
 
 				//親要素のスタイル情報
@@ -385,15 +385,15 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			elemData.targetElemDefaultDisplayProp = that.getStyle(elemData.targetElemDefault, 'display');
 
 			//空要素を判定
-			var isEmptyElements = that.regexEmptyElem.test(' ' + elemData.targetElemTagName + ' ');
+			var targetElemIsEmptyTag = that.regexEmptyElem.test(' ' + elemData.targetElemTagName + ' ');
 
 			//サイズ指定できるインライン要素を判定
-			var isReplacedElemTag = that.regexReplacedElem.test(' ' + elemData.targetElemTagName + ' ');
+			var targetIsReplacedTag = that.regexReplacedElem.test(' ' + elemData.targetElemTagName + ' ');
 
-			//HTML以外であれば、親が存在するので親要素のチェック
+			//HTML以外であれば、親が存在するので親要素のチェック TODO: Unused. Check whether may be deleted
 			var hasParent = elemData.targetElemTagName !== 'html';
 
-			if(isEmptyElements) {
+			if(targetElemIsEmptyTag) {
 				//TODO: 擬似要素をインスタンス変数に格納し、擬似要素エラー
 			}
 
@@ -401,39 +401,47 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			STYLEV.METHODS.each(that.rulesData, function(rule) {
 
 				//全てのbaseStyleが指定されているか
+				var isReplacedTag = rule['rule-data']['is-replaced-tag'];
+				var isEmptyTag = rule['rule-data']['is-empty-tag'];
+				var baseStyles = rule['rule-data']['base-styles'];
+				var ngStyles = rule['rule-data']['ng-styles'];
+
 				var hasAllBaseStyles = true;
-				var baseStyles = rule['base-styles'];
-				var ngStyles = rule['ng-styles'];
-				var replaced = rule['replaced'];
-				var empty = rule['empty'];
 				var baseStylesText = '';
 
-				//初期化
-				elemData.isDisplayPropChanged = false;
-
-				//置換要素のルールに対応しない要素の場合はフィルターする
-				if(replaced === 'Replaced elements') {
-					if(!isReplacedElemTag) {
+				//置換要素の場合、置換要素に対応しない要素の場合は中止
+				if(isReplacedTag) {
+					if(!targetIsReplacedTag) {
 						return 'continue';
 					}
 				}
 
 				//置換要素のルールに対応しない要素の場合はフィルターする
-				if(replaced === 'Non-replaced elements') {
-					if(isReplacedElemTag) {
+				if(!isReplacedTag) {
+					if(targetIsReplacedTag) {
 						return 'continue';
 					}
 				}
 
 				//空要素用のルールだった場合は、空要素でない場合はフィルターする
-				if(empty === 'Empty elements') {
-					if(!isEmptyElements) {
+				if(isEmptyTag) {
+					if(!targetElemIsEmptyTag) {
+						return 'continue';
+					}
+				}
+
+				if(!isEmptyTag) {
+					if(targetElemIsEmptyTag) {
 						return 'continue';
 					}
 				}
 
 				//全てのベーススタイルの分だけ検査
-				STYLEV.METHODS.each(baseStyles, function(baseStyleProp, baseStylePropVal) {
+				STYLEV.METHODS.each(baseStyles, function(baseStyleProp, baseStylePropValObj) {
+
+					var baseStylePropVal = baseStylePropValObj['value'];
+					var isParent = baseStylePropValObj['is-parent'];
+					var isPseudo = baseStylePropValObj['is-pseudo'];
 
 					if(baseStylesText !== '') {
 						baseStylesText += ' ';
@@ -455,11 +463,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				//全てのベーススタイルに適合した場合 TODO: ORもオプションで指定できるようにするか検討
 				if(hasAllBaseStyles) {
 
-					STYLEV.METHODS.each(ngStyles, function(ngStyleType, ngStyleProps) {
+					STYLEV.METHODS.each(ngStyles, function(ngStyle) {
 
-						STYLEV.METHODS.each(ngStyleProps, function(ngStyleProp, ngStylePropVal) {
+						//TODO: consider to use Object.keys
+						STYLEV.METHODS.each(ngStyle, function(ngStyleProp, ngStylePropValObj) {
 
-							that.detectError(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData, baseStylesText);
+							//TODO: move to next function base style text
+							that.detectNGStyles(ngStyleProp, ngStylePropValObj, rule, elemData, baseStylesText);
 
 						});
 
@@ -524,43 +534,27 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		}
 	},
 
-	//エラーや警告を検知する
-	detectError: function(ngStyleType, ngStyleProp, ngStylePropVal, rule, elemData, baseStylesText) {
+	detectNGStyles: function(ngStyleProp, ngStylePropValObj, rule, elemData, baseStylesText) {
 
 		var that = STYLEV.VALIDATOR;
 
-		//メッセージ管理するオブジェクト
 		var result = {};
 
-		var splitedNgStyleTypeArray = ngStyleType.split('-');
+		var ngStylePropVal = ngStylePropValObj['value'];
+		var riskLevel = ngStylePropValObj['risk-level'];
+		var isParent = elemData.targetParentElem ? ngStylePropValObj['is-parent'] : false;
+		var pseudoSelector = ngStylePropValObj['is-pseudo'];
+		var reason = ngStylePropValObj['reason'];
+		var referenceURL = ngStylePropValObj['reference-url'];
 
-		//親要素をチェックする
-		var isCheckingParent = elemData.targetParentElem && splitedNgStyleTypeArray[0] === 'parent';
+		//Default value of NG style that is defined to target
+		var targetElemNGStyleDefaultVal = that.getStyle(elemData.targetElemDefault, ngStyleProp, pseudoSelector);
 
-		//擬似セレクター
-		var pseudoSelector = splitedNgStyleTypeArray[0] === 'pseudo' ? splitedNgStyleTypeArray[1] : null;
-
-		//対象要素のNGスタイルのデフォルト値
-		var targetElemNgStyleDefaultVal = that.getStyle(elemData.targetElemDefault, ngStyleProp, pseudoSelector);
-
-		//対象要素のNGスタイルの現在の値
-		var targetElemNgStyleVal = that.getStyle(elemData.targetElem, ngStyleProp, pseudoSelector);
-
-		//NGスタイルのプロパティ値を検索するための正規表現
-		var regexNgStyleRulesPropVal;
-
-		var reason;
-		var referenceURL;
-
-		//値が配列の場合
-		if(ngStylePropVal instanceof Array) {
-			reason = ngStylePropVal[1];
-			referenceURL = ngStylePropVal[2];
-			ngStylePropVal = ngStylePropVal[0];
-		}
+		//Value of NG style that is defined to target
+		var targetElemNGStyleVal = that.getStyle(elemData.targetElem, ngStyleProp, pseudoSelector);
 
 		//否定表現の有無を検査
-		var isReverse = ngStylePropVal.indexOf('!') === 0;
+		var isReverse = ngStylePropVal.charAt(0) === '!';
 
 		//[]括弧が存在するか検査
 		var hasGroupOperator = ngStylePropVal.match(/^!{0,1}\[(.+)\]$/);
@@ -574,23 +568,26 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//OR演算子がある場合は、OR演算子で区切った配列を返却し、そうでない場合はそのまま
 		ngStylePropVal = hasOrOperator ? ngStylePropVal.split('|') : ngStylePropVal;
 
+		//NGスタイルのプロパティ値を検索するための正規表現
+		var regexNGStyleRulesPropVal;
+
 		//NGスタイルのプロパティ値が複数あった場合
 		if(hasOrOperator) {
 
 			//両端にスペースをいれて完全単語検索をしてかつ、複数ワードで検索
-			regexNgStyleRulesPropVal = new RegExp(' ' + ngStylePropVal.join(' | ') + ' ');
+			regexNGStyleRulesPropVal = new RegExp(' ' + ngStylePropVal.join(' | ') + ' ');
 
 		} else {
 
 			//両端にスペースをいれて完全単語検索をしている
-			regexNgStyleRulesPropVal = new RegExp(' ' + ngStylePropVal + ' ');
+			regexNGStyleRulesPropVal = new RegExp(' ' + ngStylePropVal + ' ');
 		}
 
 		//親要素を持つ場合
 		if(elemData.targetParentElem) {
 
 			//親要素のNGスタイルの値
-			var targetElemParentNgStyleVal = elemData.targetElemParentComputedStyle.getPropertyValue(ngStyleProp);
+			var targetElemParentNGStyleVal = elemData.targetElemParentComputedStyle.getPropertyValue(ngStyleProp);
 
 			//line-heightの相対指定の場合は、親子の継承関係であってもfont-sizeによって相対的に変わるため、font-sizeの関係性を計算に入れる
 			//TODO: line-heightの計算にバグあり　今は指定を外している？
@@ -599,19 +596,19 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				var targetElemParentFontSize = parseFloat(elemData.targetElemParentComputedStyle.getPropertyValue('font-size'));
 				var fontSizeScaleRate = targetElemParentFontSize / targetElemFontSize;
 				var lineHeightNormalScaleRate = 1.14;
-				targetElemNgStyleVal = targetElemNgStyleVal === 'normal' ? targetElemFontSize * lineHeightNormalScaleRate + 'px' : targetElemNgStyleVal;
-				targetElemParentNgStyleVal = targetElemParentNgStyleVal === 'normal' ? that.controlFloat(targetElemParentFontSize * lineHeightNormalScaleRate, 1) + 'px' : targetElemParentNgStyleVal;
+				targetElemNGStyleVal = targetElemNGStyleVal === 'normal' ? targetElemFontSize * lineHeightNormalScaleRate + 'px' : targetElemNGStyleVal;
+				targetElemParentNGStyleVal = targetElemParentNGStyleVal === 'normal' ? that.controlFloat(targetElemParentFontSize * lineHeightNormalScaleRate, 1) + 'px' : targetElemParentNGStyleVal;
 			}
 		}
 
-		var isNgStyle = regexNgStyleRulesPropVal.test(' ' + targetElemNgStyleVal + ' ');
-		var isZeroOver = (parseInt(targetElemNgStyleVal, 10) > 0);
-		var isZeroUnder = (parseInt(targetElemNgStyleVal, 10) < 0);
-		var isZero = (parseInt(targetElemNgStyleVal, 10) === 0);
-		var isDefault = (targetElemNgStyleVal === targetElemNgStyleDefaultVal);
-		var isInheritWithLineHeight = (that.controlFloat(parseFloat(targetElemNgStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNgStyleVal), 1));
-		var isInherit = (targetElemNgStyleVal === targetElemParentNgStyleVal);
-		var isParentNgStyle = (regexNgStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' '));
+		var isNGStyle = regexNGStyleRulesPropVal.test(' ' + targetElemNGStyleVal + ' ');
+		var isZeroOver = (parseInt(targetElemNGStyleVal, 10) > 0);
+		var isZeroUnder = (parseInt(targetElemNGStyleVal, 10) < 0);
+		var isZero = (parseInt(targetElemNGStyleVal, 10) === 0);
+		var isDefault = (targetElemNGStyleVal === targetElemNGStyleDefaultVal);
+		var isInheritWithLineHeight = (that.controlFloat(parseFloat(targetElemNGStyleVal) * fontSizeScaleRate, 1) !== that.controlFloat(parseFloat(targetElemParentNGStyleVal), 1));
+		var isInherit = (targetElemNGStyleVal === targetElemParentNGStyleVal);
+		var isParentNGStyle = (regexNGStyleRulesPropVal.test(' ' + elemData.targetElemParentDisplayProp + ' '));
 
 		//TODO: 以下の判定処理は、ズタボロ。全体的に修正する。
 		//TODO: 0.00001とかの場合を考慮して、parseIntの10進数も考える
@@ -620,7 +617,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			// Normal Pattern
 
 			// Equal with NG Style
-			(!isReverse && isNgStyle) ||
+			(!isReverse && isNGStyle) ||
 
 			// Granter than 0
 			(!isReverse && ngStylePropVal === 'over-0' && isZeroOver) ||
@@ -638,13 +635,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			(!isReverse && ngStylePropVal === 'inherit' && isInherit) ||
 
 			// Parent element has NG Style
-			(!isReverse && isCheckingParent && isParentNgStyle) ||
+			(!isReverse && isParent && isParentNGStyle) ||
 
 
 			// Reverse Pattern
 
 			// Without it TODO: Need to research that how it is possible
-//			(isReverse && !isNgStyle) ||
+//			(isReverse && !isNGStyle) ||
 
 			// Not 0
 			(isReverse && ngStylePropVal === '0' && !isZero) ||
@@ -659,7 +656,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			(isReverse && ngStylePropVal === 'inherit' && !isInherit) ||
 
 			// Parent element dose not have NG Style
-			(isReverse && isCheckingParent && !isParentNgStyle)
+			(isReverse && isParent && !isParentNGStyle)
 
 		){
 
@@ -683,30 +680,30 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				'[' + rule['title'] + ']' + ' '+
 				'<' + elemData.targetElemTagName + '> ' +
 				(baseStylesText ? '{' + baseStylesText + '} ' : '') +
-				(isCheckingParent ? 'This parent element ' + '<' + elemData.targetParentElemTagName + '>' : '') + ' is defined ' +
-				'{' + ngStyleProp + ': ' + (isCheckingParent ? targetElemParentNgStyleVal : targetElemNgStyleVal) + ';}' + ' ' +
+				(isParent ? 'This parent element ' + '<' + elemData.targetParentElemTagName + '>' : '') + ' is defined ' +
+				'{' + ngStyleProp + ': ' + (isParent ? targetElemParentNGStyleVal : targetElemNGStyleVal) + ';}' + ' ' +
 				(reason ? reason : '');
 
 //			result.rule = rule;
 			result.tagName = elemData.targetElemTagName;
 			result.targetStyle = {};
-			result.targetStyle[ngStyleProp] = targetElemNgStyleVal;
+			result.targetStyle[ngStyleProp] = targetElemNGStyleVal;
 
 			result.ngStyle = {};
 			result.ngStyle[ngStyleProp] = ngStylePropVal;
 			if(rule['base-styles']) {
 				result.baseStyle = rule['base-styles'];
 			}
-			if(isCheckingParent) {
+			if(isParent) {
 				result.targetParentStyle = {};
-				result.targetParentStyle[ngStyleProp] = targetElemParentNgStyleVal;
+				result.targetParentStyle[ngStyleProp] = targetElemParentNGStyleVal;
 			}
 			result.reason = reason;
 			result.referenceURL = referenceURL;
 
 			//For generating data and for other function
 			result.stylevid = elemData.targetElem.dataset.stylevid;
-			result.riskLevel = splitedNgStyleTypeArray[splitedNgStyleTypeArray.length - 2];
+			result.riskLevel = riskLevel;
 
 			//Generate Result Data
 			that.resultArray.push(result);

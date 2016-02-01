@@ -15,11 +15,11 @@
 			"ng-styles": [
 				{
 					"display": {
-						"value": "![inline|inline-block|block]",
+						"value": "!default",
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect. It will be changed to \"block(or list-item)\" from defined property forcibly. Although, flexbox will not changed.",
+						"reason": "Display property is needless. Defined display property has changed to block(or list-item) forcibly. So this display property is needless.",
 						"reference-url": ""
 					}
 				},
@@ -29,7 +29,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect. Floated element does not have parent as rendering context. ",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				}
@@ -39,7 +39,7 @@
 	{
 		"rule-id": 2,
 		"rule-data": {
-			"title": "Non-replaced Inline",
+			"title": "Inline Elements (Non-replaced)",
 			"is-replaced-tag": false,
 			"is-empty-tag": false,
 			"base-styles": {
@@ -56,7 +56,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -66,7 +66,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -76,7 +76,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -86,7 +86,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -96,7 +96,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -106,7 +106,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -116,7 +116,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -126,7 +126,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -136,7 +136,7 @@
 						"risk-level": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "No effect. It will be changed to \"block(or list-item)\" from defined property forcibly.",
+						"reason": "Needless. Defined property is no effective.",
 						"reference-url": ""
 					}
 				},
@@ -176,8 +176,8 @@
 	{
 		"rule-id": 3,
 		"rule-data": {
-			"title": "Replaced Inline",
-			"is-replaced-tag": true,
+			"title": "Inline Elements (Replaced)",
+			"is-replaced-tag": false,
 			"is-empty-tag": false,
 			"base-styles": {
 				"display": {
@@ -441,67 +441,56 @@
 					"is-pseudo": false
 				}
 			},
-			"ng-styles": [
-				{
-					"max-height": {
-						"value": "!default",
-						"risk-level": "warning",
-						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
-					}
+			"ng-styles": [{
+				"max-height": {
+					"value": "!default",
+					"risk-level": "warning",
+					"is-parent": false,
+					"is-pseudo": false,
+					"reason": "",
+					"reference-url": ""
 				},
-				{
-					"max-width": {
-						"value": "!default",
-						"risk-level": "warning",
-						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
-					}
+				"max-width": {
+					"value": "!default",
+					"risk-level": "warning",
+					"is-parent": false,
+					"is-pseudo": false,
+					"reason": "",
+					"reference-url": ""
 				},
-				{
-					"min-height": {
-						"value": "!default",
-						"risk-level": "warning",
-						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
-					}
+				"min-height": {
+					"value": "!default",
+					"risk-level": "warning",
+					"is-parent": false,
+					"is-pseudo": false,
+					"reason": "",
+					"reference-url": ""
 				},
-				{
-					"min-width": {
-						"value": "!default",
-						"risk-level": "warning",
-						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
-					}
+				"min-width": {
+					"value": "!default",
+					"risk-level": "warning",
+					"is-parent": false,
+					"is-pseudo": false,
+					"reason": "",
+					"reference-url": ""
 				},
-				{
-					"vertical-align": {
-						"value": "!default",
-						"risk-level": "warning",
-						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
-					}
+				"vertical-align": {
+					"value": "!default",
+					"risk-level": "warning",
+					"is-parent": false,
+					"is-pseudo": false,
+					"reason": "",
+					"reference-url": ""
 				},
-				{
-					"display": {
-						"value": "![none|block|inline-block|list-item|table-cell]",
-						"risk-level": "error",
-						"is-parent": true,
-						"is-pseudo": false,
-						"reason": "Needless Style",
-						"reference-url": ""
-					}
+				"display": {
+					"value": "![none|block|inline-block|list-item|table-cell]",
+					"risk-level": "error",
+					"is-parent": true,
+					"is-pseudo": false,
+					"reason": "Needless Style",
+					"reference-url": ""
 				}
+			}
 			]
 		}
 	},
@@ -1355,8 +1344,7 @@
 					"is-parent": false,
 					"is-pseudo": false
 				}
-			},
-			"ng-styles": []
+			}
 		}
 	},
 	{
@@ -1366,13 +1354,10 @@
 			"is-replaced-tag": false,
 			"is-empty-tag": false,
 			"base-styles": {
-				"display": {
-					"value": "inline-flex",
-					"is-parent": false,
-					"is-pseudo": false
-				}
-			},
-			"ng-styles": []
+				"value": "inline-flex",
+				"is-parent": false,
+				"is-pseudo": false
+			}
 		}
 	},
 	{
@@ -1388,18 +1373,16 @@
 					"is-pseudo": false
 				}
 			},
-			"ng-styles": [
-				{
-					"display": {
-						"value": "!default",
-						"risk-level": "warning",
-						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "Needless Style",
-						"reference-url": ""
-					}
+			"ng-styles": {
+				"display": {
+					"value": "!default",
+					"risk-level": "warning",
+					"is-parent": false,
+					"is-pseudo": false,
+					"reason": "Needless Style",
+					"reference-url": ""
 				}
-			]
+			}
 		}
 	},
 	{
@@ -1408,19 +1391,16 @@
 			"title": "Empty Elements",
 			"is-replaced-tag": false,
 			"is-empty-tag": true,
-			"base-styles": {},
-			"ng-styles": [
-				{
-					"padding": {
-						"value": "over-0",
-						"risk-level": "warning",
-						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "Needless Style",
-						"reference-url": ""
-					}
+			"ng-styles": {
+				"padding": {
+					"value": "over-0",
+					"risk-level": "warning",
+					"is-parent": false,
+					"is-pseudo": false,
+					"reason": "Needless Style",
+					"reference-url": ""
 				}
-			]
+			}
 		}
 	}
 ]

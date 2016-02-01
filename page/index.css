@@ -41,7 +41,7 @@
 	max-width: 1000px;
 	margin-right: auto;
 	margin-left: auto;
-	padding-bottom: 10%;
+	padding-bottom: 6%;
 }
 .kv-logo {
 	/* margin-right: 2%; */
@@ -210,9 +210,9 @@ hr {
 }
 .section-video .section-body {
 	overflow: hidden;
-	margin-top: -10%;
+	/*margin-top: -10%;*/
 	border-radius: 3px;
-	box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1);
+	/*box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1);*/
 }
 .section-video-tag {
 	margin-top: -1.8%;
@@ -277,7 +277,7 @@ hr {
 }
 .section-feature-list > li img {
 	width: 80%;
-	max-width: 200px;
+	max-width: 160px;
 	height: auto;
 	border: 5px solid #FFFF8E;
 }
@@ -292,7 +292,7 @@ hr {
 	left: 66.666%;
 }
 .section-feature-js img {
-	width: 60% !important;
+	width: 70% !important;
 }
 
 @media (max-width: 640px) {
