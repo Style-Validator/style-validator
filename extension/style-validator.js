@@ -570,10 +570,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 				//If all base rules is passed TODO: ORもオプションで指定できるようにするか検討
 				if(ruleObj.hasAllBaseStyles) {
-
-					console.log('===============');
-					console.log(ruleObj.title);
-
 					//Check All NG Styles
 					STYLEV.METHODS.each(ruleObj.ngStyles, function(ngStyleObj) {
 						that.testStyles(ngStyleObj, elemObj, ruleObj, 'ng');
