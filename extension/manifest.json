@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "Style-Validator",
-	"version": "0.5.0",
+	"version": "0.5.1",
 
 	"description": "Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.",
 	"icons": {

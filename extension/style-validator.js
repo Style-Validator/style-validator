@@ -926,8 +926,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 
 			var xhr = new XMLHttpRequest();
-			//var apiURI = 'https://style-validator.herokuapp.com/send2db';
-			var apiURI = 'http://localhost:8001/send2db';
+			var apiURI = 'https://style-validator.herokuapp.com/send2db';
+			//var apiURI = 'http://localhost:8001/send2db';
 
 			var dataObj = {};
 
