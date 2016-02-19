@@ -1440,5 +1440,31 @@
 				"referenceURL": ""
 			}
 		]
+	},
+	{
+		"ruleID": 26,
+		"title": "Flex Child",
+		"replacedElem": "",
+		"emptyElem": "",
+		"isEnabled": true,
+		"baseStyles": [
+			{
+				"property": "flex",
+				"value": "!default",
+				"isParentElem": false,
+				"pseudoElem": ""
+			}
+		],
+		"ngStyles": [
+			{
+				"property": "display",
+				"value": "!flex",
+				"isParentElem": true,
+				"pseudoElem": "",
+				"riskLevel": "error",
+				"reason": "No effect.",
+				"referenceURL": ""
+			}
+		]
 	}
 ]

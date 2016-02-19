@@ -157,7 +157,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.RESOURCE_ROOT + 'data/tags-all.json',
 				that.RESOURCE_ROOT + 'data/tags-empty.json',
 				that.RESOURCE_ROOT + 'data/tags-replaced-element.json',
-				that.RESOURCE_ROOT + 'data/tags-filter.json'
+				that.RESOURCE_ROOT + 'data/tags-filter.json',
+				that.RESOURCE_ROOT + 'data/special-kw-vals.json'
 			];
 		},
 
@@ -242,6 +243,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.tagsEmptyData = dataArray[2];
 				that.tagsReplacedElementData = dataArray[3];
 				that.tagsFilter = dataArray[4];
+				that.specialKwVals = dataArray[5];
 
 				//Set regex for detecting html tags TODO: remove above all
 				that.regexAllHTMLTag = new RegExp('^( ' + that.tagsAllData.join(' | ') + ' )');
@@ -569,6 +571,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				//If all base rules is passed TODO: ORもオプションで指定できるようにするか検討
 				if(ruleObj.hasAllBaseStyles) {
 
+					console.log('===============');
+					console.log(ruleObj.title);
+
 					//Check All NG Styles
 					STYLEV.METHODS.each(ruleObj.ngStyles, function(ngStyleObj) {
 						that.testStyles(ngStyleObj, elemObj, ruleObj, 'ng');
@@ -702,8 +707,17 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//TODO: refactor
 			if(!hasRulePropVal) {
-				styleObj.prop.valueSpecialKW = styleObj.prop.value[0];
+
+				var hasSpecialKW = false;
+				STYLEV.METHODS.each(styleObj.prop.value, function(value) {
+					if(that.specialKwVals.indexOf(value) > -1) {
+						styleObj.prop.valueSpecialKW = value;
+						hasSpecialKW = true;
+						return 'break';
+					}
+				});
 			}
+
 
 			//TODO: refactor below
 			//TODO: 0.00001とかの場合を考慮して、parseIntの10進数も考える 修正済み？要確認
@@ -746,22 +760,23 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				(styleObj.prop.isReverse && (
 
 					// Without it TODO: Need to research that how it is possible
-	//				(!hasRulePropVal) ||
+					(!hasRulePropVal && !hasSpecialKW) ||
 
 					// Not 0
 					(styleObj.prop.valueSpecialKW === '0' && !isZero) ||
 
-						// Not Detault
-						(styleObj.prop.valueSpecialKW === 'default' && !isDefault) ||
+					// Not Detault
+					(styleObj.prop.valueSpecialKW === 'default' && !isDefault) ||
 
-						// Not Inherit Style（in case of line-height）
-						(styleObj.prop.valueSpecialKW === 'inherit' && styleObj.prop.isLineHeight && !elemObj.prop.isInheritLineHeight) ||
+					// Not Inherit Style（in case of line-height）
+					(styleObj.prop.valueSpecialKW === 'inherit' && styleObj.prop.isLineHeight && !elemObj.prop.isInheritLineHeight) ||
 
-						// Not Inherit Style（in case of NOT line-height）
-						(styleObj.prop.valueSpecialKW === 'inherit' && !isInherit)
-					))
+					// Not Inherit Style（in case of NOT line-height）
+					(styleObj.prop.valueSpecialKW === 'inherit' && !isInherit)
 
-				){
+				))
+
+			){
 
 				//TODO: 一度取得したものをインスタンス変数に格納しておく
 				if(styleObj.prop.isLineHeight) {

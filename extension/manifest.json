@@ -65,6 +65,7 @@
 		"data/tags-empty.json",
 		"data/tags-replaced-element.json",
 		"data/tags-filter.json",
+		"data/special-kw-vals.json",
 		"style-validator-for-console.css",
 		"specificity.js",
 		"google-analytics.js",
