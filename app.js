@@ -157,14 +157,14 @@ function serveData(req, res, path) {
 
 			case '/send2db':
 
-				//var hostname = getClientIP(req, res, path);
-				//if(hostname && hostname !== 'localhost') {
-				//	ipLocation(hostname).then(function (location) {
-				//		MongoClient.connect(dburl, dbHandler(req, res, path, store, location));
-				//	});
-				//} else {
+				var hostname = getClientIP(req, res, path);
+				if(hostname && hostname !== 'localhost') {
+					ipLocation(hostname).then(function (location) {
+						MongoClient.connect(dburl, dbHandler(req, res, path, store, location));
+					});
+				} else {
 					MongoClient.connect(dburl, dbHandler(req, res, path, store));
-				//}
+				}
 				break;
 
 			default:
@@ -434,9 +434,6 @@ function sendDirectoryIndex(req, res, path, files) {
 function dbHandler(req, res, path, store, location) {
 
 	var json = JSON.parse(store);
-
-	console.log(req.headers.cookie);
-	console.log(req.headers);
 
 	var parsedCookieObj = cookieParse(req.headers.cookie);
 	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
