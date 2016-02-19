@@ -95,11 +95,9 @@ function callbackAfterServerListening() {
 
 
 function cookieParse(cookie) {
-	if(cookie === undefined) {
-		return {};
-	} else {
+	var parsedCookieObj = {};
+	if(cookie !== undefined) {
 		var cookieArray = cookie.split(';');
-		var parsedCookieObj = {};
 		for(var i = 0, len = cookieArray.length; i < len; i++) {
 			var trimmedCookie = cookieArray[i].trim();
 			var splitCookie = trimmedCookie.split('=');
@@ -107,8 +105,8 @@ function cookieParse(cookie) {
 			var cookieValue = splitCookie[1];
 			parsedCookieObj[cookieKey] = cookieValue;
 		}
-		return parsedCookieObj;
 	}
+	return parsedCookieObj;
 }
 function setCookie(key, value) {
 	return key + '=' + value + '; path=/; expires=Tue, 1-Jan-2030 00:00:00 GMT;'
