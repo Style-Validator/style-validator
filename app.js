@@ -95,20 +95,20 @@ function callbackAfterServerListening() {
 
 
 function cookieParse(cookie) {
-	console.log(cookie);
-	if(typeof cookie !== 'string') {
-		return;
+	if(cookie === undefined) {
+		return {};
+	} else {
+		var cookieArray = cookie.split(';');
+		var parsedCookieObj = {};
+		for(var i = 0, len = cookieArray.length; i < len; i++) {
+			var trimmedCookie = cookieArray[i].trim();
+			var splitCookie = trimmedCookie.split('=');
+			var cookieKey = splitCookie[0];
+			var cookieValue = splitCookie[1];
+			parsedCookieObj[cookieKey] = cookieValue;
+		}
+		return parsedCookieObj;
 	}
-	var cookieArray = cookie.split(';');
-	var parsedCookieObj = {};
-	for(var i = 0, len = cookieArray.length; i < len; i++) {
-		var trimmedCookie = cookieArray[i].trim();
-		var splitCookie = trimmedCookie.split('=');
-		var cookieKey = splitCookie[0];
-		var cookieValue = splitCookie[1];
-		parsedCookieObj[cookieKey] = cookieValue;
-	}
-	return parsedCookieObj;
 }
 function setCookie(key, value) {
 	return key + '=' + value + '; path=/; expires=Tue, 1-Jan-2030 00:00:00 GMT;'
@@ -436,6 +436,7 @@ function dbHandler(req, res, path, store, location) {
 	var json = JSON.parse(store);
 
 	console.log(req.headers.cookie);
+	console.log(req.headers);
 
 	var parsedCookieObj = cookieParse(req.headers.cookie);
 	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
