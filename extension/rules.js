@@ -1,7 +1,7 @@
 /*!
  Style Validator
 
- Description": Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).
+ Description": Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.
  URL: http://style-validator.github.io/
  Author: Igari Takeharu
  License: MIT License
@@ -716,14 +716,13 @@ STYLEV.RULES = {
 				obj4ChromeStorage[that.presetsSelect.value] = that.generatedJSON;
 				chrome.storage.local.set(obj4ChromeStorage, function() {
 					that.callbackOnSave();
-					alert('Saving rules was successful! Let\'s try your new setting of rules.');
+					alert('Saving rules was successful! Let\'s try your new rule setting of rules.');
 				});
 
 			} else {
 
 				var xhr = new XMLHttpRequest();
 				var apiURI = 'http://localhost:8001/saveJSON'; //Local
-				//var apiURI = 'https://style-validator.herokuapp.com/saveJSON'; //TODO: Test
 				var method = 'POST';
 				var data4send = JSON.stringify(that.generatedJSON, null, '\t');
 
@@ -1152,31 +1151,31 @@ STYLEV.RULES = {
 				formPart.addEventListener('focus', that.selectAllTextOnFocus);
 			}
 
-			if(formPart.dataset.id === 'emptyElem') {
-				formPart.addEventListener('change', function(event) {
-					var target = event.target;
-					var linkTarget = target.closest('.css-meta-list').querySelector('[data-id="isParentElem"]');
-					if(that.getValue(target)) {
-						linkTarget.disabled = true;
-						that.setValue(linkTarget, false);
-					} else {
-						linkTarget.disabled = false;
-					}
-				});
-			}
+			//if(formPart.dataset.id === 'emptyElem') {
+			//	formPart.addEventListener('change', function(event) {
+			//		var target = event.target;
+			//		var linkTarget = target.closest('.css-meta-list').querySelector('[data-id="isParentElem"]');
+			//		if(that.getValue(target)) {
+			//			linkTarget.disabled = true;
+			//			that.setValue(linkTarget, false);
+			//		} else {
+			//			linkTarget.disabled = false;
+			//		}
+			//	});
+			//}
 
-			if(formPart.dataset.id === 'isParentElem') {
-				formPart.addEventListener('change', function(event) {
-					var target = event.target;
-					var linkTarget = target.closest('.css-meta-list').querySelector('[data-id="emptyElem"]');
-					if(that.getValue(target)) {
-						linkTarget.disabled = true;
-						that.setValue(linkTarget, '');
-					} else {
-						linkTarget.disabled = false;
-					}
-				});
-			}
+			//if(formPart.dataset.id === 'isParentElem') {
+			//	formPart.addEventListener('change', function(event) {
+			//		var target = event.target;
+			//		var linkTarget = target.closest('.css-meta-list').querySelector('[data-id="emptyElem"]');
+			//		if(that.getValue(target)) {
+			//			linkTarget.disabled = true;
+			//			that.setValue(linkTarget, '');
+			//		} else {
+			//			linkTarget.disabled = false;
+			//		}
+			//	});
+			//}
 			
 			if(formPart.dataset.id === 'riskLevel') {
 				formPart.addEventListener('change', that.toggleRiskLevel);

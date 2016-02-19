@@ -2,7 +2,7 @@
 Style Validator
 ============================
 
-Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).
+Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.
 
 [demo](http://style-validator.github.io/gif_animations/demo.gif)
 

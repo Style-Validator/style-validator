@@ -1,7 +1,7 @@
 /*!
  Style Validator
 
- Description": Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).
+ Description": Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.
  URL: http://style-validator.github.io/
  Author: Igari Takeharu
  License: MIT License
@@ -500,10 +500,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			that.getElementInformation(elemObj);
 
-			if(elemObj.elemTagName !== 'span') {
-				return;
-			}
-
 			//Check All Rules
 			STYLEV.METHODS.each(that.rulesData, that.validateByRule(elemObj));
 
@@ -915,8 +911,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 
 			var xhr = new XMLHttpRequest();
-			var apiURI = 'https://style-validator.herokuapp.com/send2db';
-			//var apiURI = 'http://localhost:8001/send2db';
+			//var apiURI = 'https://style-validator.herokuapp.com/send2db';
+			var apiURI = 'http://localhost:8001/send2db';
 
 			var dataObj = {};
 

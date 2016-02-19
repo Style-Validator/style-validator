@@ -28,7 +28,7 @@ var server = http.createServer();
 var port = process.env.PORT || 8001;
 
 var MongoClient = mongodb.MongoClient;
-var dbname = 'validation_log';
+var dbname = 'sv';
 var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
 
 var mimeTypes = {
@@ -470,7 +470,7 @@ function dbHandler(req, res, path, store, location) {
 				console.log('Updated data completely to Database');
 
 				if(location) {
-					user.update({uuid: uuid}, {$set: {location: location}}, true, function(err, records) {
+					user.update({uuid: uuid}, {$set: {location: location}}, {upsert: true}, function(err, records) {
 
 						assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 						console.log('Updated data completely to Database');
@@ -481,7 +481,7 @@ function dbHandler(req, res, path, store, location) {
 		});
 
 		//TODO: remove below
-		fs.writeFile("./log.json", JSON.stringify(json, null, '\t'));
+		//fs.writeFile("./log.json", JSON.stringify(json, null, '\t'));
 	}
 }
 

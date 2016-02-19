@@ -75,8 +75,8 @@ chrome.devtools.network.onNavigated.addListener(function(url) {
 	chrome.devtools.inspectedWindow.onResourceContentCommitted.addListener(executionWhenModified);
 
 	//If resources is added
-	chrome.devtools.inspectedWindow.onResourceAdded.removeListener(executionWhenModified2);
-	chrome.devtools.inspectedWindow.onResourceAdded.addListener(executionWhenModified2);
+	//chrome.devtools.inspectedWindow.onResourceAdded.removeListener(executionWhenModified);
+	//chrome.devtools.inspectedWindow.onResourceAdded.addListener(executionWhenModified);
 });
 
 //If resources is modified
