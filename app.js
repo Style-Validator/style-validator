@@ -470,7 +470,7 @@ function dbHandler(req, res, path, store, location) {
 				console.log('Updated data completely to Database');
 
 				if(location) {
-					user.update({uuid: uuid}, {$set: {location: location}}, {upsert: true}, function(err, records) {
+					user.update({uuid: uuid}, {$push: {location: location}}, {upsert: true}, function(err, records) {
 
 						assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 						console.log('Updated data completely to Database');
