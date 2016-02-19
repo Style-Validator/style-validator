@@ -96,6 +96,9 @@ function callbackAfterServerListening() {
 
 function cookieParse(cookie) {
 	console.log(cookie);
+	if(typeof cookie !== 'string') {
+		return;
+	}
 	var cookieArray = cookie.split(';');
 	var parsedCookieObj = {};
 	for(var i = 0, len = cookieArray.length; i < len; i++) {
