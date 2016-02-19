@@ -95,6 +95,7 @@ function callbackAfterServerListening() {
 
 
 function cookieParse(cookie) {
+	console.log(cookie);
 	var cookieArray = cookie.split(';');
 	var parsedCookieObj = {};
 	for(var i = 0, len = cookieArray.length; i < len; i++) {
@@ -430,6 +431,9 @@ function sendDirectoryIndex(req, res, path, files) {
 function dbHandler(req, res, path, store, location) {
 
 	var json = JSON.parse(store);
+
+	console.log(req.headers.cookie);
+
 	var parsedCookieObj = cookieParse(req.headers.cookie);
 	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
 	var uuid;
