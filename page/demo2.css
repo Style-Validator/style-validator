@@ -1,0 +1,48 @@
+@charset "utf-8";
+html {
+	/*line-height: 1.7;*/
+}
+html body span:nth-child(1) {
+	width: 6000px;
+}
+body span:nth-child(1) {
+	width: 400px;
+}
+span:nth-child(1) {
+	width: 9000px !important;
+}
+
+span:nth-child(2) {
+	width: 300px !important;
+}
+span:nth-child(2) {
+	width: 300px !important;
+}
+span:nth-child(3) {
+	width: 200px !important;
+}
+span:nth-child(4) {
+	width: 100px !important;
+}
+
+div.a {
+	width: auto;
+}
+div.b {
+	width: 100%;
+}
+div.c {
+	width: 5em;
+}
+input {
+	width: 300px;
+}
+
+p {
+	width: 30px;
+	margin-left: auto;
+	/*line-height: 2;*/
+}
+span {
+	line-height: 3;
+}

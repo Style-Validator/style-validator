@@ -1,24 +1,144 @@
 [
 	{
+		"ruleID": 24,
+		"title": "Pseudo element in Empty element",
+		"baseStyles": [
+			{
+				"property": "",
+				"value": "",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": true
+			}
+		],
+		"ngStyles": [
+			{
+				"property": "content",
+				"value": "!default",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": true,
+				"pseudoElem": "::after",
+				"emptyElem": false,
+				"riskLevel": "error",
+				"reason": "",
+				"referenceURL": ""
+			},
+			{
+				"property": "content",
+				"value": "!default",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": true,
+				"pseudoElem": "::before",
+				"emptyElem": false,
+				"riskLevel": "error",
+				"reason": "",
+				"referenceURL": ""
+			}
+		]
+	},
+	{
+		"ruleID": 23,
+		"title": "Non-clearfix Float",
+		"baseStyles": [
+			{
+				"property": "float",
+				"value": "[left|right]",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
+			},
+			{
+				"property": "position",
+				"value": "[static|relative]",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
+			}
+		],
+		"ngStyles": [
+			{
+				"property": "clear",
+				"value": "none",
+				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": true,
+				"pseudoElem": "::after",
+				"emptyElem": false,
+				"riskLevel": "error",
+				"reason": "Float element should has parent element that defined clear property.",
+				"referenceURL": ""
+			}
+		]
+	},
+	{
+		"ruleID": 22,
+		"title": "Non-width Inline-block",
+		"baseStyles": [
+			{
+				"property": "display",
+				"value": "inline-block",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
+			},
+			{
+				"property": "width",
+				"value": "default",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
+			}
+		],
+		"ngStyles": [
+			{
+				"property": "text-align",
+				"value": "!default",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false,
+				"riskLevel": "warning",
+				"reason": "No effect.",
+				"referenceURL": ""
+			}
+		]
+	},
+	{
 		"ruleID": 1,
 		"title": "Absolute(Fixed)",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "position",
 				"value": "[absolute|fixed]",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
 			{
 				"property": "display",
-				"value": "[inline|inline-block|table-row|table-row-group|table-column|table-column-group|table-cell|table-caption|table-header-group|table-footer-group]",
+				"value": "![inline|inline-block|block]",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly. Flexbox will not be changed like that.",
 				"referenceURL": ""
@@ -27,25 +147,28 @@
 				"property": "float",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
-				"reason": "No effect.",
+				"reason": "No effect. Floated element does not have parent as rendering context. ",
 				"referenceURL": ""
 			}
 		]
 	},
 	{
 		"ruleID": 2,
-		"title": "Non-Replaced Inline",
-		"replacedElem": "non-replaced",
-		"emptyElem": "",
-		"isEnabled": true,
+		"title": "Non-replaced Inline",
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "inline",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -53,7 +176,10 @@
 				"property": "width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -62,7 +188,10 @@
 				"property": "height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -71,7 +200,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -80,7 +212,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -89,7 +224,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -98,7 +236,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -107,7 +248,10 @@
 				"property": "margin-top",
 				"value": "!0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -116,7 +260,10 @@
 				"property": "margin-bottom",
 				"value": "!0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -125,16 +272,22 @@
 				"property": "float",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly.",
-				"referenceURL": "https://developer.mozilla.org/en/docs/Web/CSS/float"
+				"referenceURL": ""
 			},
 			{
 				"property": "text-align",
 				"value": "!inherit",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -143,7 +296,10 @@
 				"property": "overflow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -152,7 +308,10 @@
 				"property": "text-indent",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -162,15 +321,15 @@
 	{
 		"ruleID": 3,
 		"title": "Replaced Inline",
-		"replacedElem": "replaced",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "inline",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": true,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -178,7 +337,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Effect. But it is possible to be not used it. To control size of element, use width/height better.",
 				"referenceURL": ""
@@ -187,7 +349,10 @@
 				"property": "text-align",
 				"value": "!inherit",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -196,7 +361,10 @@
 				"property": "overflow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -206,23 +374,38 @@
 	{
 		"ruleID": 4,
 		"title": "Block",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "block",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
 			{
+				"property": "vertical-align",
+				"value": "!default",
+				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false,
+				"riskLevel": "warning",
+				"reason": "No effect.",
+				"referenceURL": ""
+			},
+			{
 				"property": "display",
 				"value": "[table|inline-table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Closest parent element should be non table category element except for table-cell.",
 				"referenceURL": ""
@@ -231,7 +414,10 @@
 				"property": "display",
 				"value": "[inline]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Closest parent element is better to be non inline element.",
 				"referenceURL": ""
@@ -241,15 +427,15 @@
 	{
 		"ruleID": 5,
 		"title": "Inline Block",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "inline-block",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -257,18 +443,24 @@
 				"property": "float",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly.",
-				"referenceURL": "https://developer.mozilla.org/en/docs/Web/CSS/float"
+				"referenceURL": ""
 			},
 			{
 				"property": "display",
 				"value": "[table|inline-table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
-				"reason": "Closest parent element should be non table category element except for table-cell.",
+				"reason": "Closest parent element should be non table element except for table-cell.",
 				"referenceURL": ""
 			}
 		]
@@ -276,15 +468,15 @@
 	{
 		"ruleID": 6,
 		"title": "List Item",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "list-item",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -292,7 +484,10 @@
 				"property": "vertical-align",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "No effect.",
 				"referenceURL": ""
@@ -301,7 +496,10 @@
 				"property": "display",
 				"value": "[table|inline-table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Closest parent element should be non table category element except for table-cell.",
 				"referenceURL": ""
@@ -310,7 +508,10 @@
 				"property": "display",
 				"value": "inline",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Closest parent element is better to be non inline element.",
 				"referenceURL": ""
@@ -320,15 +521,15 @@
 	{
 		"ruleID": 7,
 		"title": "Inline Table",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "inline-table",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -336,7 +537,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -345,7 +549,10 @@
 				"property": "vertical-align",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -354,7 +561,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -363,7 +573,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -372,7 +585,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -381,7 +597,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -390,7 +609,10 @@
 				"property": "display",
 				"value": "![none|block|inline-block|list-item|table-cell]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -400,15 +622,15 @@
 	{
 		"ruleID": 8,
 		"title": "Table",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -416,7 +638,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -425,7 +650,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -434,7 +662,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -443,7 +674,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -452,7 +686,10 @@
 				"property": "vertical-align",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -461,7 +698,10 @@
 				"property": "display",
 				"value": "![none|block|inline-block|list-item|table-cell]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -471,21 +711,24 @@
 	{
 		"ruleID": 9,
 		"title": "Collapsed Table",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "[table|inline-table]",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			},
 			{
 				"property": "border-collapse",
 				"value": "collapse",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -493,7 +736,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -503,15 +749,15 @@
 	{
 		"ruleID": 10,
 		"title": "Table Cell",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-cell",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -519,7 +765,10 @@
 				"property": "margin",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -528,7 +777,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -537,7 +789,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -546,7 +801,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -555,7 +813,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -564,7 +825,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -573,7 +837,10 @@
 				"property": "display",
 				"value": "![none|table|table-row|table-row-group|table-header-group|table-footer-group]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -583,15 +850,15 @@
 	{
 		"ruleID": 11,
 		"title": "Table Row",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-row",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -599,7 +866,10 @@
 				"property": "margin",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -608,7 +878,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -617,7 +890,10 @@
 				"property": "border-width",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -626,7 +902,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -635,7 +914,10 @@
 				"property": "box-shadow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -644,7 +926,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -653,7 +938,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -662,7 +950,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -671,7 +962,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -680,7 +974,10 @@
 				"property": "display",
 				"value": "![none|table|table-row-group|table-header-group|table-footer-group]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "parent style is bad.",
 				"referenceURL": ""
@@ -690,15 +987,15 @@
 	{
 		"ruleID": 12,
 		"title": "Table Row Group",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-row-group",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -706,7 +1003,10 @@
 				"property": "margin",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -715,7 +1015,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -724,7 +1027,10 @@
 				"property": "border-width",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -733,7 +1039,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -742,7 +1051,10 @@
 				"property": "box-shadow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -751,7 +1063,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -760,7 +1075,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -769,7 +1087,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -778,7 +1099,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -787,7 +1111,10 @@
 				"property": "display",
 				"value": "![none|table]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -797,15 +1124,15 @@
 	{
 		"ruleID": 13,
 		"title": "Table Header Group",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-header-group",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -813,7 +1140,10 @@
 				"property": "margin",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -822,7 +1152,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -831,7 +1164,10 @@
 				"property": "border-width",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -840,7 +1176,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -849,7 +1188,10 @@
 				"property": "box-shadow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -858,7 +1200,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -867,7 +1212,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -876,7 +1224,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -885,7 +1236,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -894,7 +1248,10 @@
 				"property": "display",
 				"value": "![none|table]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -904,15 +1261,15 @@
 	{
 		"ruleID": 14,
 		"title": "Table Footer",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-footer-group",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -920,7 +1277,10 @@
 				"property": "margin",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -929,7 +1289,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -938,7 +1301,10 @@
 				"property": "border-width",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -947,7 +1313,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -956,7 +1325,10 @@
 				"property": "box-shadow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -965,7 +1337,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -974,7 +1349,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -983,7 +1361,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -992,7 +1373,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1001,7 +1385,10 @@
 				"property": "display",
 				"value": "![none|table]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -1011,15 +1398,15 @@
 	{
 		"ruleID": 15,
 		"title": "Table Column",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-column",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -1027,7 +1414,10 @@
 				"property": "margin",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -1036,7 +1426,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -1045,7 +1438,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1054,7 +1450,10 @@
 				"property": "box-shadow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1063,7 +1462,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1072,7 +1474,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1081,7 +1486,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1090,7 +1498,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1099,7 +1510,10 @@
 				"property": "display",
 				"value": "![none|table-column-group|table]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -1108,16 +1522,16 @@
 	},
 	{
 		"ruleID": 16,
-		"title": "Table Column Group",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
+		"title": "Table Column",
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-column-group",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -1125,7 +1539,10 @@
 				"property": "margin",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -1134,7 +1551,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -1143,7 +1563,10 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1152,7 +1575,10 @@
 				"property": "box-shadow",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1161,7 +1587,10 @@
 				"property": "min-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1170,7 +1599,10 @@
 				"property": "min-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1179,7 +1611,10 @@
 				"property": "max-width",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1188,7 +1623,10 @@
 				"property": "max-height",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "",
 				"referenceURL": ""
@@ -1197,7 +1635,10 @@
 				"property": "display",
 				"value": "![none|table]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -1207,15 +1648,15 @@
 	{
 		"ruleID": 17,
 		"title": "Table Caption",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "table-caption",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -1223,7 +1664,10 @@
 				"property": "position",
 				"value": "!default",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "",
 				"referenceURL": ""
@@ -1232,7 +1676,10 @@
 				"property": "display",
 				"value": "![none|table]",
 				"isParentElem": true,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "error",
 				"reason": "Needless Style",
 				"referenceURL": ""
@@ -1242,15 +1689,15 @@
 	{
 		"ruleID": 18,
 		"title": "Flex",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "flex",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": []
@@ -1258,31 +1705,31 @@
 	{
 		"ruleID": 19,
 		"title": "Inline Flex",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "display",
 				"value": "inline-flex",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": []
 	},
 	{
 		"ruleID": 20,
-		"title": "Float with Inline(Inline-block)",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
+		"title": "Float with inline(inline-block)",
 		"baseStyles": [
 			{
 				"property": "float",
 				"value": "[left|right]",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": false
 			}
 		],
 		"ngStyles": [
@@ -1290,25 +1737,28 @@
 				"property": "display",
 				"value": "[inline|inline-block]",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly. Flexbox will not be changed like that.",
-				"referenceURL": "https://developer.mozilla.org/en/docs/Web/CSS/float"
+				"referenceURL": ""
 			}
 		]
 	},
 	{
 		"ruleID": 21,
 		"title": "Padding with Empty Element",
-		"replacedElem": "",
-		"emptyElem": "empty",
-		"isEnabled": true,
 		"baseStyles": [
 			{
 				"property": "",
 				"value": "",
 				"isParentElem": false,
-				"pseudoElem": ""
+				"isReplaced": false,
+				"isPseudo": false,
+				"pseudoElem": "",
+				"emptyElem": true
 			}
 		],
 		"ngStyles": [
@@ -1316,127 +1766,12 @@
 				"property": "padding",
 				"value": "over-0",
 				"isParentElem": false,
+				"isReplaced": false,
+				"isPseudo": false,
 				"pseudoElem": "",
+				"emptyElem": false,
 				"riskLevel": "warning",
 				"reason": "Needless Style",
-				"referenceURL": ""
-			}
-		]
-	},
-	{
-		"ruleID": 22,
-		"title": "Non-Width Inline-block",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
-		"baseStyles": [
-			{
-				"property": "display",
-				"value": "inline-block",
-				"isParentElem": false,
-				"pseudoElem": ""
-			},
-			{
-				"property": "width",
-				"value": "default",
-				"isParentElem": false,
-				"pseudoElem": ""
-			}
-		],
-		"ngStyles": [
-			{
-				"property": "text-align",
-				"value": "!default",
-				"isParentElem": false,
-				"pseudoElem": "",
-				"riskLevel": "warning",
-				"reason": "No effect.",
-				"referenceURL": ""
-			}
-		]
-	},
-	{
-		"ruleID": 23,
-		"title": "Non-Clearfix Float",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
-		"baseStyles": [
-			{
-				"property": "float",
-				"value": "[left|right]",
-				"isParentElem": false,
-				"pseudoElem": ""
-			},
-			{
-				"property": "position",
-				"value": "[static|relative]",
-				"isParentElem": false,
-				"pseudoElem": ""
-			}
-		],
-		"ngStyles": [
-			{
-				"property": "clear",
-				"value": "none",
-				"isParentElem": true,
-				"pseudoElem": "::after",
-				"riskLevel": "error",
-				"reason": "Float element should has parent element that defined clear property.",
-				"referenceURL": ""
-			}
-		]
-	},
-	{
-		"ruleID": 24,
-		"title": "Pseudo in Empty",
-		"replacedElem": "",
-		"emptyElem": "empty",
-		"isEnabled": true,
-		"baseStyles": [],
-		"ngStyles": [
-			{
-				"property": "content",
-				"value": "!default",
-				"isParentElem": false,
-				"pseudoElem": "::after",
-				"riskLevel": "error",
-				"reason": "",
-				"referenceURL": ""
-			},
-			{
-				"property": "content",
-				"value": "!default",
-				"isParentElem": false,
-				"pseudoElem": "::before",
-				"riskLevel": "error",
-				"reason": "",
-				"referenceURL": ""
-			}
-		]
-	},
-	{
-		"ruleID": 25,
-		"title": "Non-Effect Vertical-align",
-		"replacedElem": "",
-		"emptyElem": "",
-		"isEnabled": true,
-		"baseStyles": [
-			{
-				"property": "vertical-align",
-				"value": "!default",
-				"isParentElem": false,
-				"pseudoElem": ""
-			}
-		],
-		"ngStyles": [
-			{
-				"property": "display",
-				"value": "[block|table|flex]",
-				"isParentElem": false,
-				"pseudoElem": "",
-				"riskLevel": "warning",
-				"reason": "",
 				"referenceURL": ""
 			}
 		]

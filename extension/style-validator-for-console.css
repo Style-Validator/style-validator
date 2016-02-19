@@ -46,7 +46,7 @@
 	border-bottom: 1px solid #CCC;
 	border-right-width: 0;
 	border-left-width: 0;
-	flex: 0 1 auto;
+	flex: 0 0 28px;
 	cursor: ns-resize;
 }
 :host .stylev-console-header:active {
@@ -57,7 +57,6 @@
 	align-self: stretch;
 	align-items: center;
 	flex: 0 0 auto;
-	min-height: 28px;
 }
 :host .stylev-console-heading {
 	justify-content: center;
@@ -91,7 +90,7 @@
 	background-color: green;
 }
 :host .stylev-console-mode-devtools-disconnected {
-	background-color: red;
+	background-color: #FF0000;
 }
 @media (max-width: 640px) {
 	:host .stylev-console-mode {
@@ -120,7 +119,6 @@
 	line-height: 1.2;
 }
 :host .stylev-console-buttons {
-	/* border-left: 1px solid #CCC; */
 }
 :host .stylev-console-buttons > a {
 	display: flex;
@@ -135,12 +133,6 @@
 	align-self: stretch;
 }
 :host .stylev-console-buttons > a > img {
-	/*position: absolute;*/
-	/*top: 0;*/
-	/*right: 0;*/
-	/*bottom: 0;*/
-	/*left: 0;*/
-	/*margin: auto;*/
 }
 :host .stylev-console-refresh-button {
 }
@@ -210,16 +202,16 @@
 	line-height: 1.5;
 }
 :host .stylev-console-list > li {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	/*display: flex;*/
+	/*justify-content: space-between;*/
+	/*align-items: center;*/
 	padding: 3px 0 2px;
 }
 :host .stylev-console-list > li + li {
 	border-top: 1px solid #EEE;
 }
 :host .stylev-console-list-anchor {
-	flex-grow: 1;
+	display: block;
 	padding: 0 5px;
 	color: inherit !important;
 	text-decoration: none !important;
@@ -234,8 +226,26 @@
 :host .stylev-console-list-anchor:hover {
 	text-decoration: underline;
 }
-:host .stylev-console-list-logid {
+:host .stylev-console-list-ids {
+	float: right;
 	padding: 0 5px;
+	display: flex;
+	text-align: right;
+	flex: 0 1 auto;
+}
+:host .stylev-console-list-stylevid {
+	margin-left: 5px;
+	color: #808080 !important;
+}
+:host .stylev-console-list-stylevid:before {
+	content: 'stylevid:'
+}
+:host .stylev-console-list-ruleid {
+	margin-left: 5px;
+	color: #666 !important;
+}
+:host .stylev-console-list-ruleid:before {
+	content: 'Rule:'
 }
 :host .stylev-console-list > li.stylev-trigger-error {
 	border-color: #FFD8D7;

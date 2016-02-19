@@ -1,1406 +1,1668 @@
 [
 	{
-		"rule-id": 1,
-		"rule-data": {
-			"title": "Absolute(Fixed)",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
-			"base-styles": {
-				"position": {
-					"value": "[absolute|fixed]",
-					"is-parent": false,
-					"is-pseudo": false
-				}
-			},
+		"ruleID": 22,
+		"ruleData": {
+			"title": "Pseudo in empty tag",
+			"isReplaced": false,
+			"emptyElem": true,
+			"base-styles": {},
 			"ng-styles": [
 				{
-					"display": {
+					"content": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "error",
 						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "Display property is needless. Defined display property has changed to block(or list-item) forcibly. So this display property is needless.",
-						"reference-url": ""
+						"is-pseudo": true,
+						"pseudo": "::after",
+						"reason": "",
+						"referenceURL": ""
 					}
 				},
 				{
-					"float": {
+					"content": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "error",
 						"is-parent": false,
-						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"is-pseudo": true,
+						"pseudo": "::before",
+						"reason": "",
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 2,
-		"rule-data": {
-			"title": "Inline Elements (Non-replaced)",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+		"ruleID": 23,
+		"ruleData": {
+			"title": "Non-clearfix float",
+			"isReplaced": false,
+			"emptyElem": false,
+			"base-styles": {
+				"float": {
+					"value": "[left|right]",
+					"is-parent": false,
+					"is-pseudo": false,
+					"pseudo": ""
+				},
+				"position": {
+					"value": "[static|relative]",
+					"is-parent": false,
+					"is-pseudo": false,
+					"pseudo": ""
+				}
+			},
+			"ng-styles": [
+				{
+					"clear": {
+						"value": "none",
+						"riskLevel": "error",
+						"is-parent": true,
+						"is-pseudo": true,
+						"pseudo": "::after",
+						"reason": "Float element should has parent element that defined clear property.",
+						"referenceURL": ""
+					}
+				}
+			]
+		}
+	},
+	{
+		"ruleID": 22,
+		"ruleData": {
+			"title": "Non-width Inline-block",
+			"isReplaced": false,
+			"emptyElem": false,
+			"base-styles": {
+				"display": {
+					"value": "inline-block",
+					"is-parent": false,
+					"is-pseudo": false,
+					"pseudo": ""
+				},
+				"width": {
+					"value": "default",
+					"is-parent": false,
+					"is-pseudo": false,
+					"pseudo": ""
+				}
+			},
+			"ng-styles": [
+				{
+					"text-align": {
+						"value": "!default",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
+					}
+				}
+			]
+		}
+	},
+	{
+		"ruleID": 1,
+		"ruleData": {
+			"title": "Absolute(Fixed)",
+			"isReplaced": false,
+			"emptyElem": false,
+			"base-styles": {
+				"position": {
+					"value": "[absolute|fixed]",
+					"is-parent": false,
+					"is-pseudo": false,
+					"pseudo": ""
+				}
+			},
+			"ng-styles": [
+				{
+					"display": {
+						"value": "![inline|inline-block|block]",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly. Flexbox will not be changed like that.",
+						"referenceURL": ""
+					}
+				},
+				{
+					"float": {
+						"value": "!default",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "No effect. Floated element does not have parent as rendering context. ",
+						"referenceURL": ""
+					}
+				}
+			]
+		}
+	},
+	{
+		"ruleID": 2,
+		"ruleData": {
+			"title": "Non-replaced Inline",
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "inline",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"margin-top": {
 						"value": "!0",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"margin-bottom": {
 						"value": "!0",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"float": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"text-align": {
 						"value": "!inherit",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective. Need to non inline element and width property.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"overflow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"text-indent": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 3,
-		"rule-data": {
-			"title": "Inline Elements (Replaced)",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+		"ruleID": 3,
+		"ruleData": {
+			"title": "Replaced Inline",
+			"isReplaced": true,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "inline",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Not so good. If you have to control size, use width/height property simply.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "Effect. But it is possible to be not used it. To control size of element, use width/height better.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"text-align": {
 						"value": "!inherit",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"overflow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "Needless. Defined property is no effective.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 4,
-		"rule-data": {
+		"ruleID": 4,
+		"ruleData": {
 			"title": "Block",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "block",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"vertical-align": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
-						"value": "[table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
-						"risk-level": "error",
+						"value": "[table|inline-table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
-						"reason": "Closest parent element should be non table element except for table-cell.",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "Closest parent element should be non table category element except for table-cell.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "[inline]",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Closest parent element is better to be non inline element.",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 5,
-		"rule-data": {
+		"ruleID": 5,
+		"ruleData": {
 			"title": "Inline Block",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "inline-block",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"float": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
-						"value": "[table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
-						"risk-level": "error",
+						"value": "[table|inline-table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Closest parent element should be non table element except for table-cell.",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 6,
-		"rule-data": {
+		"ruleID": 6,
+		"ruleData": {
 			"title": "List Item",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "list-item",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"vertical-align": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
-						"reason": "",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "No effect.",
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
-						"value": "![none|block|inline-block|flex]",
-						"risk-level": "error",
+						"value": "[table|inline-table|table-row|table-row-group|table-header-group|table-footer-group|table-column|table-column-group]",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
-						"reason": "Needless Style",
-						"reference-url": ""
+						"pseudo": "",
+						"reason": "Closest parent element should be non table category element except for table-cell.",
+						"referenceURL": ""
+					}
+				},
+				{
+					"display": {
+						"value": "inline",
+						"riskLevel": "warning",
+						"is-parent": true,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "Closest parent element is better to be non inline element.",
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 7,
-		"rule-data": {
+		"ruleID": 7,
+		"ruleData": {
 			"title": "Inline Table",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "inline-table",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"vertical-align": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|block|inline-block|list-item|table-cell]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 8,
-		"rule-data": {
+		"ruleID": 8,
+		"ruleData": {
 			"title": "Table",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
-			"ng-styles": [{
-				"max-height": {
-					"value": "!default",
-					"risk-level": "warning",
-					"is-parent": false,
-					"is-pseudo": false,
-					"reason": "",
-					"reference-url": ""
+			"ng-styles": [
+				{
+					"max-height": {
+						"value": "!default",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "",
+						"referenceURL": ""
+					}
 				},
-				"max-width": {
-					"value": "!default",
-					"risk-level": "warning",
-					"is-parent": false,
-					"is-pseudo": false,
-					"reason": "",
-					"reference-url": ""
+				{
+					"max-width": {
+						"value": "!default",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "",
+						"referenceURL": ""
+					}
 				},
-				"min-height": {
-					"value": "!default",
-					"risk-level": "warning",
-					"is-parent": false,
-					"is-pseudo": false,
-					"reason": "",
-					"reference-url": ""
+				{
+					"min-height": {
+						"value": "!default",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "",
+						"referenceURL": ""
+					}
 				},
-				"min-width": {
-					"value": "!default",
-					"risk-level": "warning",
-					"is-parent": false,
-					"is-pseudo": false,
-					"reason": "",
-					"reference-url": ""
+				{
+					"min-width": {
+						"value": "!default",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "",
+						"referenceURL": ""
+					}
 				},
-				"vertical-align": {
-					"value": "!default",
-					"risk-level": "warning",
-					"is-parent": false,
-					"is-pseudo": false,
-					"reason": "",
-					"reference-url": ""
+				{
+					"vertical-align": {
+						"value": "!default",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "",
+						"referenceURL": ""
+					}
 				},
-				"display": {
-					"value": "![none|block|inline-block|list-item|table-cell]",
-					"risk-level": "error",
-					"is-parent": true,
-					"is-pseudo": false,
-					"reason": "Needless Style",
-					"reference-url": ""
+				{
+					"display": {
+						"value": "![none|block|inline-block|list-item|table-cell]",
+						"riskLevel": "error",
+						"is-parent": true,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "Needless Style",
+						"referenceURL": ""
+					}
 				}
-			}
 			]
 		}
 	},
 	{
-		"rule-id": 9,
-		"rule-data": {
+		"ruleID": 9,
+		"ruleData": {
 			"title": "Collapsed Table",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "[table|inline-table]",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				},
 				"border-collapse": {
 					"value": "collapse",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 10,
-		"rule-data": {
+		"ruleID": 10,
+		"ruleData": {
 			"title": "Table Cell",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-cell",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"margin": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table|table-row|table-row-group|table-header-group|table-footer-group]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 11,
-		"rule-data": {
+		"ruleID": 11,
+		"ruleData": {
 			"title": "Table Row",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-row",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"margin": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"border-width": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"box-shadow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table|table-row-group|table-header-group|table-footer-group]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "parent style is bad.",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 12,
-		"rule-data": {
+		"ruleID": 12,
+		"ruleData": {
 			"title": "Table Row Group",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-row-group",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"margin": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"border-width": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"box-shadow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 13,
-		"rule-data": {
+		"ruleID": 13,
+		"ruleData": {
 			"title": "Table Header Group",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-header-group",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"margin": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"border-width": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"box-shadow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 14,
-		"rule-data": {
+		"ruleID": 14,
+		"ruleData": {
 			"title": "Table Footer",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-footer-group",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"margin": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"border-width": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"box-shadow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 15,
-		"rule-data": {
+		"ruleID": 15,
+		"ruleData": {
 			"title": "Table Column",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-column",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"margin": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"box-shadow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table-column-group|table]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 16,
-		"rule-data": {
+		"ruleID": 16,
+		"ruleData": {
 			"title": "Table Column",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-column-group",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"margin": {
 						"value": "over-0",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"padding": {
 						"value": "over-0",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"box-shadow": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"min-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-width": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"max-height": {
 						"value": "!default",
-						"risk-level": "warning",
+						"riskLevel": "warning",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 17,
-		"rule-data": {
+		"ruleID": 17,
+		"ruleData": {
 			"title": "Table Caption",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "table-caption",
 					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
 			"ng-styles": [
 				{
 					"position": {
 						"value": "!default",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": false,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				},
 				{
 					"display": {
 						"value": "![none|table]",
-						"risk-level": "error",
+						"riskLevel": "error",
 						"is-parent": true,
 						"is-pseudo": false,
+						"pseudo": "",
 						"reason": "Needless Style",
-						"reference-url": ""
+						"referenceURL": ""
 					}
 				}
 			]
 		}
 	},
 	{
-		"rule-id": 18,
-		"rule-data": {
+		"ruleID": 18,
+		"ruleData": {
 			"title": "Flex",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
+			"isReplaced": false,
+			"emptyElem": false,
 			"base-styles": {
 				"display": {
 					"value": "flex",
 					"is-parent": false,
-					"is-pseudo": false
-				}
-			}
-		}
-	},
-	{
-		"rule-id": 19,
-		"rule-data": {
-			"title": "Inline Flex",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
-			"base-styles": {
-				"value": "inline-flex",
-				"is-parent": false,
-				"is-pseudo": false
-			}
-		}
-	},
-	{
-		"rule-id": 20,
-		"rule-data": {
-			"title": "Float",
-			"is-replaced-tag": false,
-			"is-empty-tag": false,
-			"base-styles": {
-				"float": {
-					"value": "!default",
-					"is-parent": false,
-					"is-pseudo": false
+					"is-pseudo": false,
+					"pseudo": ""
 				}
 			},
-			"ng-styles": {
-				"display": {
-					"value": "!default",
-					"risk-level": "warning",
-					"is-parent": false,
-					"is-pseudo": false,
-					"reason": "Needless Style",
-					"reference-url": ""
-				}
-			}
+			"ng-styles": []
 		}
 	},
 	{
-		"rule-id": 21,
-		"rule-data": {
-			"title": "Empty Elements",
-			"is-replaced-tag": false,
-			"is-empty-tag": true,
-			"ng-styles": {
-				"padding": {
-					"value": "over-0",
-					"risk-level": "warning",
+		"ruleID": 19,
+		"ruleData": {
+			"title": "Inline Flex",
+			"isReplaced": false,
+			"emptyElem": false,
+			"base-styles": {
+				"display": {
+					"value": "inline-flex",
 					"is-parent": false,
 					"is-pseudo": false,
-					"reason": "Needless Style",
-					"reference-url": ""
+					"pseudo": ""
 				}
-			}
+			},
+			"ng-styles": []
+		}
+	},
+	{
+		"ruleID": 20,
+		"ruleData": {
+			"title": "Float with inline(inline-block)",
+			"isReplaced": false,
+			"emptyElem": false,
+			"base-styles": {
+				"float": {
+					"value": "[left|right]",
+					"is-parent": false,
+					"is-pseudo": false,
+					"pseudo": ""
+				}
+			},
+			"ng-styles": [
+				{
+					"display": {
+						"value": "[inline|inline-block]",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly. Flexbox will not be changed like that.",
+						"referenceURL": ""
+					}
+				}
+			]
+		}
+	},
+	{
+		"ruleID": 21,
+		"ruleData": {
+			"title": "Empty Elements",
+			"isReplaced": false,
+			"emptyElem": true,
+			"base-styles": {},
+			"ng-styles": [
+				{
+					"padding": {
+						"value": "over-0",
+						"riskLevel": "warning",
+						"is-parent": false,
+						"is-pseudo": false,
+						"pseudo": "",
+						"reason": "Needless Style",
+						"referenceURL": ""
+					}
+				}
+			]
 		}
 	}
 ]

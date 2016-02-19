@@ -60,7 +60,7 @@ html {
 .stylev-target-error {
 	outline-width: 5px;
 	outline-style: solid;
-	outline-color: #EE363B;
+	outline-color: #FF0000;
 }
 .stylev-animation .stylev-target-error {
 	-webkit-animation: error 1s infinite alternate;
@@ -90,7 +90,7 @@ html {
 .stylev-target-error.stylev-target-warning {
 	outline-width: 5px;
 	outline-style: solid;
-	outline-color: #EE363B;
+	outline-color: #FF0000;
 }
 .stylev-animation .stylev-target-error.stylev-target-warning {
 	-webkit-animation: errorAndWarning 1s infinite alternate;
@@ -99,17 +99,17 @@ html {
 }
 
 @-webkit-keyframes errorAndWarning {
-	from { outline-color: #EE363B; }
+	from { outline-color: #FF0000; }
 	to { outline-color: rgba(0, 0, 0, 0); }
 }
 
 @-moz-keyframes errorAndWarning {
-	from { outline-color: #EE363B; }
+	from { outline-color: #FF0000; }
 	to { outline-color: rgba(0, 0, 0, 0); }
 }
 
 @keyframes errorAndWarning {
-	from { outline-color: #EE363B; }
+	from { outline-color: #FF0000; }
 	to { outline-color: rgba(0, 0, 0, 0); }
 }
 

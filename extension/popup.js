@@ -13,7 +13,7 @@ STYLEV.popup = {
 		var that = this;
 
 		that.validateTrigger = document.querySelector('#validate-trigger');
-		that.formParts = document.querySelectorAll('.popup-form-parts');
+		that.formParts = document.querySelectorAll('.option-form-parts');
 		that.isFirst = true;
 		that.options = {};
 	},

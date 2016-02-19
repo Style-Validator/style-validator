@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+div:after {
+	content: '';
+	/*clear: both;*/
+}
+p {
+	float: left;
+	display: inline;
+}
+
+img::after {
+	content: 'a';
+}

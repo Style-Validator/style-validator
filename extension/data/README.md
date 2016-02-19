@@ -22,12 +22,12 @@ npm install
 #### 1. gulp
 
 ```
-gulp
+node app.js
 ```
 
 #### 2. access edit page via web server
 
-http://localhost:8001/page/rules.html
+http://localhost:8001/extension/rules.html
 
 
 #### 3. add new rule and save
@@ -60,7 +60,7 @@ http://localhost:8001/page/rules.html
     },
     "psuedo-after-warning-style": {
     },
-	"reference-url": "http://.github.io/page/reference.html#hoge",
+	"referenceURL": "http://.github.io/page/reference.html#hoge",
 	"message": "here is error message"
   }
 ]

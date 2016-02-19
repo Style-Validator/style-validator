@@ -1,6 +1,6 @@
 var STYLEV = STYLEV || {};
 
-STYLEV.popup = {
+STYLEV.OPTIONS = {
 	execute: function() {
 
 		var that = this;
@@ -12,7 +12,7 @@ STYLEV.popup = {
 
 		var that = this;
 
-		that.formParts = document.querySelectorAll('.popup-form-parts');
+		that.formParts = document.querySelectorAll('.option-form-parts');
 		that.isFirst = true;
 		that.options = {};
 	},
@@ -48,7 +48,7 @@ STYLEV.popup = {
 
 				if(checkbox) {
 
-					target.checked = !!(localStorage.getItem(id) === 'true');
+					target.checked = localStorage.getItem(id) === 'true';
 				}
 				if(textbox) {
 
@@ -85,4 +85,4 @@ STYLEV.popup = {
 		that.isFirst = false;
 	}
 };
-STYLEV.popup.execute();
+STYLEV.OPTIONS.execute();

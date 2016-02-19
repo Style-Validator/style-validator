@@ -13,18 +13,18 @@ var currentTabWinId = null;
 var returnTabIndex = null;
 var returnTab = null;
 
-chrome.storage.local.get(isValidated, function(item) {
+chrome.storage.local.get('isValidated', function(message) {
 
-	if(item) {
-		isValidated = item;
+	if(message['isValidated']) {
+		isValidated = message['isValidated'];
 	} else {
 		isValidated = {};
 	}
 });
-chrome.storage.local.get(isDevtoolsOpened, function(item) {
+chrome.storage.local.get('isDevtoolsOpened', function(message) {
 
-	if(item) {
-		isDevtoolsOpened = item;
+	if(message['isDevtoolsOpened']) {
+		isDevtoolsOpened = message['isDevtoolsOpened'];
 	} else {
 		isDevtoolsOpened = {};
 	}
@@ -59,7 +59,7 @@ function toggleValidation() {
 
 				//コンソールを開いたという情報を保存
 				isValidated[tabId] = true;
-				chrome.storage.local.set(isValidated);
+				chrome.storage.local.set({isValidated: isValidated});
 
 			//検証されている場合は、検証を解除
 			} else {
@@ -73,7 +73,7 @@ function toggleValidation() {
 
 				//コンソールを開いたという情報を保存
 				isValidated[tabId] = false;
-				chrome.storage.local.set(isValidated);
+				chrome.storage.local.set({isValidated: isValidated});
 
 			}
 
@@ -183,7 +183,7 @@ function initByTabs(tabs) {
 			.all(promiseFuncArray)
 			.then(function() {
 				chrome.tabs.highlight({ windowId: returnTabWinId, tabs: returnTabIndex });
-				chrome.storage.local.clear();
+				chrome.storage.local.remove(['isValidated', 'isDevtoolsOpened']);
 			});
 	}
 }
@@ -210,7 +210,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 					//DevToolsの開閉状態
 					isDevtoolsOpened[tabId] = true;
-					chrome.storage.local.set(isDevtoolsOpened);
+					chrome.storage.local.set({isDevtoolsOpened: isDevtoolsOpened});
 
 					setTimeout(function() {//Fix Timing Bug
 
@@ -240,7 +240,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 					//DevToolsの開閉状態
 					isDevtoolsOpened[tabId] = false;
-					chrome.storage.local.set(isDevtoolsOpened);
+					chrome.storage.local.set({isDevtoolsOpened: isDevtoolsOpened});
 
 					//DevToolsとのメッセージがされた場合に発火するイベントを解除
 					port.onMessage.removeListener(sendTabIdFromDevToolsToBackground);
@@ -356,7 +356,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 //有効に切り替えた時
 chrome.management.onEnabled.addListener(function () {
 
-	chrome.storage.local.clear();
+	chrome.storage.local.remove(['isValidated', 'isDevtoolsOpened']);
 
 	//検証済のタブ全てにリロードをかけ（検証済のタブは置換）その後、再度ファイルをインジェクト
 	chrome.tabs.query({windowType: 'normal'}, initByTabs);
@@ -367,7 +367,7 @@ chrome.management.onEnabled.addListener(function () {
 chrome.runtime.onInstalled.addListener(function(details) {
 
 	if(details.reason === 'install') {
-		chrome.storage.local.clear();
+		chrome.storage.local.remove(['isValidated', 'isDevtoolsOpened']);
 
 	}
 

@@ -15,6 +15,11 @@ var assert = require('assert');
 var mongodb = require('mongodb');
 var requestIp = require('request-ip');
 
+//TODO: test:start
+var mongoose = require('mongoose');
+var nodeUUID = require('node-uuid');
+var ipLocation = require('ip-location');//TODO: implement
+
 /*
  * variables
  * */
@@ -26,7 +31,6 @@ var MongoClient = mongodb.MongoClient;
 var dbname = 'validation_log';
 var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
 
-//TODO: confirm.start
 var mimeTypes = {
 	"txt":  "text/plain",
 	"html": "text/html",
@@ -43,6 +47,7 @@ var mimeTypes = {
 	"webm": "video/webm"
 };
 
+//TODO: confirm.start
 var dirSpacesBeforeDate = 51;
 var dirSpacesBeforeSize = 9;
 var dirMonths = 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',');
@@ -54,6 +59,15 @@ var parsedQueryString;
 /*
  * execution
  * */
+
+require("console-stamp")(console, {
+	pattern : "HH:MM:ss",
+	//label: false,
+	colors: {
+		stamp: ["gray"],
+		label: ["gray"]
+	}
+});
 
 //set handler
 server.on('request', requestHandler);
@@ -72,13 +86,29 @@ function callbackAfterServerListening() {
 	var host = ipAddress ===  '::' ? 'localhost' : ipAddress;
 	var port = serverAddress.port;
 
-	console.log("Server is runnnig at http://%s:%s", host, port);
+	console.log("Server is running at http://%s:%s", host, port);
 }
-
 
 /*
  * functions - web server
  * */
+
+
+function cookieParse(cookie) {
+	var cookieArray = cookie.split(';');
+	var parsedCookieObj = {};
+	for(var i = 0, len = cookieArray.length; i < len; i++) {
+		var trimmedCookie = cookieArray[i].trim();
+		var splitCookie = trimmedCookie.split('=');
+		var cookieKey = splitCookie[0];
+		var cookieValue = splitCookie[1];
+		parsedCookieObj[cookieKey] = cookieValue;
+	}
+	return parsedCookieObj;
+}
+function setCookie(key, value) {
+	return key + '=' + value + '; path=/; expires=Tue, 1-Jan-2030 00:00:00 GMT;'
+}
 
 function requestHandler(req, res){
 
@@ -116,12 +146,23 @@ function serveData(req, res, path) {
 		res.setHeader("Access-Control-Allow-Origin", "*");
 
 		switch(path) {
+
 			case '/saveJSON':
 				saveJSON(store);
 				break;
+
 			case '/send2db':
-				MongoClient.connect(dburl, dbHandler(store));
+
+				var hostname = getClientIP(req, res, path);
+				if(hostname && hostname !== 'localhost') {
+					ipLocation(hostname).then(function (location) {
+						MongoClient.connect(dburl, dbHandler(req, res, path, store, location));
+					});
+				} else {
+					MongoClient.connect(dburl, dbHandler(req, res, path, store));
+				}
 				break;
+
 			default:
 				break;
 		}
@@ -142,7 +183,7 @@ function serveFiles(req, res, path) {
 	}
 
 	//Deny if hostname is style-validator.herokuapp.com
-	//Because, style-validator.github.io is exist already
+	//Because, this app has already hosted with style-validator.github.io
 	if(req.headers.host === 'style-validator.herokuapp.com') {
 		return sendNotFound(req, res, path);
 	}
@@ -217,6 +258,11 @@ function sendVideo(req, res, path, extension) {
 	});
 }
 
+function getClientIP(req, res, path) {
+	var clientIP = requestIp.getClientIp(req);
+	return clientIP === '::1' ? 'localhost' : clientIP;
+}
+
 function sendClientIP(req, res, path) {
 
 	parsedQueryString = querystring.parse(parsedURL.query);
@@ -228,7 +274,7 @@ function sendClientIP(req, res, path) {
 	res.writeHead(200, {'Content-Type': mimeTypes['js']});
 	res.end('var ' + variable + ' = \'' + clientIp + '\';');
 
-	console.log('Client IP has been sent successfully')
+	console.log('Client IP has been sent successfully');
 }
 
 function escapeHtml(value) {
@@ -381,31 +427,61 @@ function sendDirectoryIndex(req, res, path, files) {
  * functions - database
  * */
 
-function dbHandler(store) {
+function dbHandler(req, res, path, store, location) {
+
+	var json = JSON.parse(store);
+	var parsedCookieObj = cookieParse(req.headers.cookie);
+	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
+	var uuid;
+
+	if(isNoCookie) {
+		//var ObjectID = mongodb.ObjectID;
+		//uuid = new ObjectID();
+		//uuid = nodeUUID.v4(null, new Buffer(16));
+		//uuid = mongodb.Binary(uuid, mongodb.Binary.SUBTYPE_UUID);
+		uuid = nodeUUID.v4();
+		res.setHeader('Set-Cookie', setCookie('_sv', uuid));
+	} else {
+		uuid = parsedCookieObj._sv;
+	}
+
 	return function(err, db) {
 
 		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
 		console.log("Connected correctly to MongoDB");
 
-		var results = db.collection('testData');
-		var users = db.collection('users');
-		var json = JSON.parse(store);
+		json.uuid = uuid;
 
-//		users.findAndModify({id: "user_id"}, [], { $inc: { seq: 1 } }, { new: true }, function(err, result){
-//			// auto_incrementされたuser_idが取得できた
-//			var newUserId = result.value.seq;
-//			// ユーザーを追加
-//			usersColl.insert({
-//				id: newUserId,
-//				name: "Taro"+newUserId
-//			});
-//		});
+		if(location) {
+			json.location = location;
+		}
 
+		var log = db.collection('log');
+		var user = db.collection('user');
 
-		results.insert(json, {}, function(err, records) {
+		log.insert(json, {}, function(err, records) {
+
+			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 			console.log('Inserted data completely to Database');
-			db.close();
+
+			user.update({uuid: uuid}, {$inc: {count: 1}}, {upsert: true}, function(err, records) {
+
+				assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+				console.log('Updated data completely to Database');
+
+				if(location) {
+					user.update({uuid: uuid}, {$set: {location: location}}, true, function(err, records) {
+
+						assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+						console.log('Updated data completely to Database');
+						db.close();
+					});
+				}
+			});
 		});
+
+		//TODO: remove below
+		fs.writeFile("./log.json", JSON.stringify(json, null, '\t'));
 	}
 }
 

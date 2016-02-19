@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "Style-Validator",
-	"version": "0.3.1",
+	"version": "0.5.0",
 
 	"description": "Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).",
 	"icons": {
@@ -41,7 +41,7 @@
 
 	"devtools_page": "./devtools.html",
 
-	"options_page": "./options.html",
+	"options_page": "./rules.html",
 
 	"commands": {
 		"toggle-validation": {
@@ -64,7 +64,7 @@
 		"data/tags-all.json",
 		"data/tags-empty.json",
 		"data/tags-replaced-element.json",
-		"data/tags-table-children.json",
+		"data/tags-filter.json",
 		"style-validator-for-console.css",
 		"specificity.js",
 		"google-analytics.js",
@@ -88,6 +88,6 @@
 		"management"
 	],
 
-	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
+	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'"
 
 }

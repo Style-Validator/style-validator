@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- ***** prefetch ***** -->
+	<meta http-equiv="x-dns-prefetch-control" content="on">
+	<link rel="dns-prefetch" href="//www.google-analytics.com">
+
+	<!-- ***** charset ***** -->
+	<meta charset="utf-8">
+
+	<!-- ***** robots ***** -->
+	<meta name="robots" content="noydir">
+	<meta name="robots" content="noodp">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="http://style-validator.github.io/rules.html">
+	<link rel="alternate" href="http://style-validator.github.io/" hreflang="x-default" />
+
+	<!-- ***** viewport ***** -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+
+	<!-- ***** format-detection ***** -->
+	<meta name="format-detection" content="telephone=no, email=no, address=no">
+
+	<!-- ***** data ***** -->
+	<title>Rules | Style Validator</title>
+	<meta name="description" content="Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).">
+	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon">
+
+	<!-- ***** ogp ***** -->
+	<meta property="og:site_name" content="Style Validator">
+	<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="http://style-validator.github.io/rules.html">
+	<meta property="og:description" content="Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).">
+	<meta property="og:image" content="http://style-validator.github.io./style-validator.logo.png">
+
+	<!-- ***** favicon ***** -->
+	<link rel="icon" type="image/x-icon" href="./favicon.ico?v=1">
+	<link rel="shortcut icon" type="image/x-icon" href="./favicon.ico?v=1">
+
+	<!-- ***** app icon ***** -->
+	<link rel="apple-touch-icon" href="./style-validator.logo.png">
+	<meta name="apple-mobile-web-app-title" content="Style Validator">
+	<meta name="application-name" content="Style Validator">
+
+	<!-- ***** app icon (for ms app)***** -->
+	<meta name="msapplication-TileColor" content="#F0F8FF">
+	<meta name="msapplication-TileImage" content="./ms-style-validator.logo.png">
+	<meta name="theme-color" content="#52B050">
+
+	<!-- ***** styles ***** -->
+	<link rel="stylesheet" href="./common.css">
+	<link rel="stylesheet" href="./rules.css">
+
+	<!-- ***** imports ***** -->
+	<!--<script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
+	<!--<link rel="import" href="../dom_modules/footer.html">-->
+	<!--<link rel="import" href="../dom_modules/jsonld.html">-->
+
+	<!-- ***** scripts ***** -->
+	<script src="./google-analytics2.js" async></script>
+</head>
+<body>
+<div class="wrapper">
+	<aside class="aside">
+		<div class="aside-body">
+			<div class="aside-content aside-presets">
+				<header class="aside-content-header">
+					<h2 class="aside-content-heading">Presets</h2>
+					<div><a href="#" id="reset-all-presets-button">Reset All Presets</a></div>
+				</header>
+				<div class="aside-content-body">
+					<section class="aside-content-section aside-presets-section">
+						<select class="presets-select">
+							<option value="Default">Default</option>
+							<option value="Add">+Add New Rules</option>
+						</select>
+						<div><a href="#" id="delete-presets-button">Delete</a></div>
+					</section>
+				</div>
+			</div>
+			<div class="aside-content aside-settings">
+				<header class="aside-content-header">
+					<h2 class="aside-content-heading">Settings</h2>
+				</header>
+				<div class="aside-content-body">
+					<section class="aside-content-section">
+						<h3>Mutation Observer</h3>
+						<ul>
+							<li><label><input type="checkbox" name="enabledMutationObserver" class="option-form-parts" id="enabledMutationObserver" checked="checked" /> Enable Mutation Observer</label></li>
+						</ul>
+					</section>
+					<section class="aside-content-section">
+						<h3>Execution</h3>
+						<ul>
+							<li><label><input type="checkbox" name="autoExecution" class="option-form-parts" id="enableAutoExecution" /> Enable Auto Execution</label></li>
+						</ul>
+					</section>
+					<section class="aside-content-section">
+						<h3>Animation</h3>
+						<ul>
+							<li><label><input type="checkbox" name="animation" class="option-form-parts" id="enableAnimation" /> Enable Animation</label></li>
+						</ul>
+					</section>
+					<section style="display: none;">
+						<h3>Define Scope by Selector</h3>
+						<ul>
+							<li>
+								<label><input type="radio" name="defineScope" class="option-form-parts" id="scopeSelectors" /> Define Target Selectors (Separate with ",").</label>
+								<input type="text" name="defineScopeText" class="option-form-parts" id="scopeSelectorsText" placeholder=".class, #id, [any-selector='ok']" />
+							</li>
+							<li>
+								<label><input type="radio" name="defineScope" class="option-form-parts" id="ignoreSelectors" /> Define NOT Target Selectors (Separate with ",").</label>
+								<input type="text" name="defineScopeText" class="option-form-parts" id="ignoreSelectorsText" placeholder=".class, #id, [any-selector='ok']" disabled="disabled" />
+							</li>
+						</ul>
+					</section>
+					<section style="display: none;">
+						<h3>URL Filter</h3>
+						<ul>
+							<li><input type="text" name="defineUrlFilters" class="option-form-parts" id="urlFilters" placeholder="www.example.com, test.domain.com" /></li>
+						</ul>
+					</section>
+					<section style="display: none;">
+						<h3>Debug Mode</h3>
+						<ul>
+							<li><label><input type="checkbox" name="debugMode" class="option-form-parts" id="debugMode" /> Enable Debug Mode</label></li>
+						</ul>
+					</section>
+				</div>
+			</div>
+		</div>
+	</aside>
+	<main class="main">
+		<header class="main-header">
+			<h1 class="main-heading"><a href="/"><img src="./style-validator.logo.svg" width="40" height="40"> Rules</a></h1>
+			<nav class="main-header-nav-search">
+				<label class="main-header-nav-search-label">
+					<img src="./iconmonstr-magnifier-6.svg">
+					<input type="search" placeholder="Filter with title" class="main-header-nav-search-input" id="search-rule-input">
+				</label>
+				<div class="main-header-nav-search-count">
+					<output id="searched-rule-count"></output> / <output id="total-rule-count"></output>
+				</div>
+			</nav>
+			<nav class="main-header-nav-toggle main-header-nav-toggle-detail">
+				<ul class="main-header-nav-toggle-list">
+					<li><label><input type="checkbox" checked="checked" id="reason-checkbox"><img src="./iconmonstr-help-6-icon.svg" alt="Reason" class="reason-icon"></label></li>
+					<li><label><input type="checkbox" checked="checked" id="reference-url-checkbox"><img src="./iconmonstr-link-icon-gray.svg" alt="Reference URL" class="reference-url-icon"></label></li>
+				</ul>
+			</nav>
+			<nav class="main-header-nav-toggle main-header-nav-toggle-mode">
+				<ul class="main-header-nav-toggle-list">
+					<li><label><input type="radio" name="display-mode-list" value="column" id="display-column-mode" checked="checked"><img src="./iconmonstr-view-6.svg" alt="Column Mode"></label></li>
+					<li><label><input type="radio" name="display-mode-list" value="list" id="display-list-mode"><img src="./iconmonstr-menu-2.svg" alt="List Mode"></label></li>
+				</ul>
+			</nav>
+			<nav class="main-header-nav">
+				<button id="reset-button" class="reset-button" type="reset"><img src="./iconmonstr-undo-4-icon.svg" width="20" height="20"></button>
+				<button id="add-rule-button" class="add-rule-button"><img src="./iconmonstr-selection-10-icon.svg" width="20" height="20"></button>
+				<a href="#" id="download-button" download="rules.json" class="button download-button" title="Override a local file and Let's pull request:)"><img src="./iconmonstr-download-2-icon.svg" width="20" height="20" class="download-button-image"><img src="./iconmonstr-download-2-icon-active.svg" width="20" height="20" class="download-button-image-active"></a>
+				<button id="save-button" title="Override a local file and Let's pull request:)" class="save-button"><img src="./iconmonstr-save-icon.svg" width="20" height="20" class="save-button-image"><img src="./iconmonstr-save-icon-active.svg" width="20" height="20" class="save-button-image-active"></button>
+			</nav>
+		</header>
+		<div id="loading-spinner"></div>
+		<div class="main-content">
+			<div class="main-content-header cf">
+				<details class="syntax-explanation">
+					<summary>Glossary</summary>
+					<table class="syntax-explanation-table">
+						<tbody>
+						<tr>
+							<th>Base Styles</th>
+							<td>Property that is defined on `base` when defining the errors or warning. If multiple properties, `AND` search is used.</td>
+						</tr>
+						<tr>
+							<th>Error Styles</th>
+							<td>Property that is defined as `error`. If multiple properties, `OR` search is used.</td>
+						</tr>
+						<tr>
+							<th>Warning Styles</th>
+							<td>Property that is defined as `warning`. If multiple properties, `OR` search is used.</td>
+						</tr>
+						<tr>
+							<th>Property Value</th>
+							<td>
+								Value could be used special keywords. <br />
+								<table class="syntax-explanation-inner-table">
+									<tbody>
+									<tr>
+										<th>default</th>
+										<td>Default value that each elements have.<br />(It's equal with value of User Agent Stylesheet)<br />e.g. {display: block;} in &lt;div&gt;</td>
+									</tr>
+									<tr>
+										<th>over-0</th>
+										<td>over 0, not 0.</td>
+									</tr>
+									<tr>
+										<th>under-0</th>
+										<td>under 0, not 0.</td>
+									</tr>
+									<tr>
+										<th>OR operator</th>
+										<td>[value1|value2|...]</td>
+									</tr>
+									<tr>
+										<th>Reverse operator</th>
+										<td>
+											!value<br />
+											(Single Property)<br />
+											<br />
+											![value1|value2|...]<br />
+											(Multiple Properties)<br />
+											<br />
+											!keyword<br />
+											e.g. !default, !over-0, !under-0<br />
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</details>
+				<h2 class="main-content-heading">Local</h2>
+			</div>
+		</div>
+		<ul id="rule-list" class="rule-list rule-list-list"></ul>
+		<footer class="footer">
+			<p><small>Copyright © <a href="https://github.com/igari" target="_blank">igari</a>. All rights reserved.</small></p>
+		</footer>
+	</main>
+</div>
+
+<template id="template-rule">
+	<li class="rule-list-item">
+		<div class="rule-box fix-in-scrolling">
+			<header class="rule-box-header">
+				<h3 class="rule-box-heading"><input type="text" placeholder="Input title" class="rule-box-heading-input title" data-id="title"></h3>
+				<a href="#" class="rule-box-hash-link">#</a>
+				<a href="#" class="rule-box-delete-button">Remove</a>
+				<a href="#" class="rule-box-edit-button">Edit</a>
+				<label class="rule-box-checkbox-label"><input type="checkbox" class="rule-box-checkbox" data-id="isEnabled" /><i></i></label>
+			</header>
+			<div class="rule-box-body">
+				<section class="rule-box-style">
+					<div class="rule-box-style-inner">
+						<section class="element-type">
+							<header>
+								<h3 class="element-type-heading">Element</h3>
+							</header>
+							<ul class="element-type-list">
+								<li class="element-type-replaced">
+									<label>
+										Replaced
+										<select class="pseudo-select" data-id="replacedElem">
+											<option value="">---</option>
+											<option value="replaced">Yes</option>
+											<option value="non-replaced">No</option>
+										</select>
+									</label>
+								</li>
+								<li class="element-type-empty">
+									<label>
+										Empty
+										<select class="pseudo-select" data-id="emptyElem">
+											<option value="">---</option>
+											<option value="empty">Yes</option>
+											<option value="non-empty">No</option>
+										</select>
+									</label>
+								</li>
+							</ul>
+						</section>
+						<section>
+							<header class="rule-box-style-header">
+								<h3 class="rule-box-style-heading"><img src="./iconmonstr-cube-2.svg" width="16">Base Style <output>0</output></h3>
+								<div class="rule-box-style-heading-search"><input type="text" placeholder="Search Property"></div>
+								<ul class="control-buttons-list">
+									<li><button class="add-property-button">+ Add</button></li>
+								</ul>
+							</header>
+							<div class="rule-box-style-body">
+								<ul class="style-list style-list-base" data-id="baseStyles"></ul>
+							</div>
+						</section>
+					</div>
+				</section>
+				<section class="rule-box-style">
+					<div class="rule-box-style-inner">
+						<div class="rule-box-style-header">
+							<h3 class="rule-box-style-heading"><img src="./iconmonstr-cube-1.svg" width="16">NG Style <output>0</output></h3>
+							<div class="rule-box-style-heading-search"><input type="text" placeholder="Search Property"></div>
+							<ul class="control-buttons-list">
+								<li><button class="add-property-button">+ Add</button></li>
+							</ul>
+						</div>
+						<div class="rule-box-style-body">
+							<ul class="style-list style-list-ng" data-id="ngStyles"></ul>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</li>
+</template>
+<template id="template-style-base">
+	<li class="style-list-item">
+		<section class="style-list-body">
+			<ul class="css-properties-list">
+				<li>
+					<div class="dummy-css-property">
+						<output></output>
+						<textarea class="css-property" data-id="property" placeholder="____"></textarea>
+					</div>
+					<div class="dummy-css-value">
+						<output></output>
+						<textarea class="css-value" data-id="value" placeholder="____"></textarea>
+					</div>
+				</li>
+			</ul>
+			<ul class="css-meta-list">
+				<li class="css-meta-parent">
+					<label>
+						<input type="checkbox" data-id="isParentElem">Parent
+					</label>
+				</li>
+				<li class="css-meta-pseudo">
+					<label>
+						Pseudo
+						<select class="pseudo-select" data-id="pseudoElem">
+							<option value="">---</option>
+							<option value="::before">::before</option>
+							<option value="::after">::after</option>
+						</select>
+					</label>
+				</li>
+			</ul>
+		</section>
+		<aside class="style-list-delete">
+			<a href="#" class="style-list-delete-button" tabindex="-1">Delete</a>
+		</aside>
+	</li>
+</template>
+<template id="template-style-ng">
+	<li class="style-list-item">
+		<section class="style-list-body">
+			<ul class="css-properties-list">
+				<li>
+					<div class="dummy-css-property">
+						<output></output>
+						<textarea class="css-property" data-id="property" placeholder="____"></textarea>
+					</div>
+					<div class="dummy-css-value">
+						<output></output>
+						<textarea class="css-value" data-id="value" placeholder="____"></textarea>
+					</div>
+				</li>
+			</ul>
+			<ul class="css-meta-list">
+				<li class="css-meta-parent">
+					<label>
+						<input type="checkbox" data-id="isParentElem">Parent
+					</label>
+				</li>
+				<li class="css-meta-pseudo">
+					<label>
+						Pseudo
+						<select class="pseudo-select" data-id="pseudoElem">
+							<option value="">---</option>
+							<option value="::before">::before</option>
+							<option value="::after">::after</option>
+						</select>
+					</label>
+				</li>
+				<li class="css-meta-list-risk-level">
+					<label>
+						<select class="risk-level" data-id="riskLevel">
+							<option value="error">Error</option>
+							<option value="warning">Warning</option>
+						</select>
+					</label>
+				</li>
+				<li class="css-meta-list-reason">
+					<label>
+						<span class="dummy-textarea">
+							<output></output>
+							<textarea placeholder="Input Reason" class="reason" data-id="reason"></textarea>
+						</span>
+					</label>
+				</li>
+				<li class="css-meta-list-reference-url"><label><input type="text" placeholder="Input Reference URL" class="reference-url" data-id="referenceURL"></label></li>
+			</ul>
+		</section>
+		<aside class="style-list-delete">
+			<a href="#" class="style-list-delete-button" tabindex="-1">Delete</a>
+		</aside>
+	</li>
+</template>
+<!--<datalist id="all-css-properties"></datalist>-->
+<!--<datalist id="all-html-tags"></datalist>-->
+<datalist id="css-properties-value"></datalist>
+<script src="./style-validator.js"></script>
+<script src="./specificity.js"></script>
+<script src="./common.js"></script>
+<script src="./rules.js"></script>
+<script type="application/ld+json">
+	{
+	"@context" : "http://schema.org",
+	"@type" : "SoftwareApplication",
+	"name" : "Style Validator",
+	"image" : "http://style-validator.github.io/img/style-validator.logo.nopadding.svg",
+	"author" : {
+	"@type" : "Person",
+	"name" : "Igari Takeharu"
+	},
+	"downloadUrl" : "https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod",
+	"screenshot" : "http://style-validator.github.io/img/screenshot.gif"
+	}
+</script>
+</body>
+</html>

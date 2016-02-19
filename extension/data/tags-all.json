@@ -123,5 +123,6 @@
 	"ul",
 	"var",
 	"video",
-	"wbr"
+	"wbr",
+	"svg"
 ]

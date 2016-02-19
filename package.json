@@ -4,22 +4,30 @@
   "keywords": [
     "CSS",
     "Validator",
-    "CSS Validator"
+    "CSS Validator",
+    "Style Validator"
   ],
   "author": "Igari Takeharu",
   "contributors": [
     "Igari Takeharu"
   ],
-  "version": "0.3.1",
+  "version": "0.5.0",
   "license": "MIT",
   "repository": "https://github.com/Style-Validator/Style-Validator.git",
   "dependencies": {
+    "console-stamp": "^0.2.0",
+    "cookie": "^0.2.3",
     "del": "^2.0.1",
     "devtools-detect": "^2.0.0",
+    "express-session": "^1.13.0",
+    "ip-location": "^1.0.0",
     "kerberos": "0.0.17",
     "mongodb": "^2.1.4",
+    "mongoose": "^4.4.2",
+    "node-uuid": "^1.4.7",
     "open": "0.0.5",
-    "request-ip": "^1.1.4"
+    "request-ip": "^1.1.4",
+    "socket.io": "^1.4.5"
   },
   "devDependencies": {
     "browser-sync": "^2.9.11",

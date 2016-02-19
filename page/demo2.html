@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+	<!-- ***** base ***** -->
+	<base>
 
 	<!-- ***** prefetch ***** -->
 	<meta http-equiv="x-dns-prefetch-control" content="on">
@@ -13,7 +15,7 @@
 	<meta name="robots" content="noydir">
 	<meta name="robots" content="noodp">
 	<meta name="robots" content="noindex, nofollow">
-	<link rel="canonical" href="http://style-validator.github.io/analytics.html">
+	<link rel="canonical" href="http://style-validator.github.io/page/demo-simple.html">
 	<link rel="alternate" href="http://style-validator.github.io/" hreflang="x-default" />
 
 	<!-- ***** viewport ***** -->
@@ -23,7 +25,7 @@
 	<meta name="format-detection" content="telephone=no, email=no, address=no">
 
 	<!-- ***** data ***** -->
-	<title>Style Validator - Reduce Meaningless Patches for Cross Browser - </title>
+	<title>Demo | Style Validator</title>
 	<meta name="description" content="Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).">
 	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon">
 
@@ -31,7 +33,7 @@
 	<meta property="og:site_name" content="Style Validator">
 	<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser">
 	<meta property="og:type" content="website">
-	<meta property="og:url" content="http://style-validator.github.io//analytics.html">
+	<meta property="og:url" content="http://style-validator.github.io/page/demo-simple.html">
 	<meta property="og:description" content="Style Validator is CSS Validator that can detect `Risky Style` that might break layout, NOT syntax. In addition, it can validate after DOM&amp;Style modifying (e.g. by JavaScript or CSS Media Queries).">
 	<meta property="og:image" content="http://style-validator.github.io/img/style-validator.logo.png">
 
@@ -50,8 +52,7 @@
 	<meta name="theme-color" content="#52B050">
 
 	<!-- ***** styles ***** -->
-	<link rel="stylesheet" href="/extension/common.css">
-	<link rel="stylesheet" href="/page/index.css">
+	<link rel="stylesheet" href="/page/demo2.css">
 
 	<!-- ***** imports ***** -->
 	<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
@@ -73,15 +74,28 @@
 	</script>
 </head>
 <body>
-<div class="wrapper">
-	<header class="header">
-		<h1 class="header-heading"><a href="/"><img src="/img/style-validator.logo.svg" width="40" height="40"> References</a></h1>
-	</header>
-	<main>
-		Analytics Page
-		<common-footer></common-footer>
-	</main>
-</div>
+
+<span>span with style of CSS Rule with no-important(non-replaced inline element)</span>
+<span>span with style of CSS Rule with important(non-replaced inline element)</span>
+<span style="width: 2000px !important;">span with style of style attribute with important(non-replaced inline element)</span>
+<span style="width: 1000px;">span with style of style attribute with no-important(non-replaced inline element)</span>
+<span style="width: 1000px;">span with style of style attribute with no-important(non-replaced inline element)</span>
+
+<p>p css rule</p>
+<p style="width: 30px;margin-left: auto;">p style attribute</p>
+
+<div class="a">div</div>
+<div class="b">div</div>
+<div class="c">div</div>
+<div style="width: auto;">div</div>
+<div style="width: 100%;">div</div>
+<img src="" alt="img(replaced inline empty element)" />
+<input type="text" value="input(replaced inline empty element)" />
+<canvas>canvas</canvas>
+
+<div></div>
+
+<common-footer></common-footer>
 <common-jsonld></common-jsonld>
 </body>
 </html>

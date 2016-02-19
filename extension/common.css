@@ -29,11 +29,14 @@ input, textarea {
 	line-height: inherit;
 }
 input, select, textarea, button, h1, h2, h3, h4, h5, h6 {
-	font-size: inherit;
+	font-size: 1rem;
 	font-family: inherit;
 }
+
+input:disabled, select:disabled, textarea:disabled, button:disabled {
+	opacity: 0.6;
+}
 label {
-	display: inherit;
 	cursor: pointer;
 }
 html {
@@ -53,6 +56,13 @@ a:visited {
 a:hover,
 a:active {
 	text-decoration: underline;
+}
+
+/* clearfix */
+.cf:after {
+	content: '';
+	display: block;
+	clear: both;
 }
 
 .header {
@@ -162,7 +172,7 @@ button,
 	content: counter(note-list,decimal) ', ';
 }
 
-.hidden {
+.is-hidden {
 	display: none !important;
 }
 
