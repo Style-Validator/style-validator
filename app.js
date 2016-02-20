@@ -89,6 +89,69 @@ function callbackAfterServerListening() {
 	console.log("Server is running at http://%s:%s", host, port);
 }
 
+
+/*
+ * functions - database
+ * */
+
+function dbHandler(req, res, path, store, location) {
+
+	var json = JSON.parse(store);
+
+	var parsedCookieObj = cookieParse(req.headers.cookie);
+	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
+	var uuid;
+
+	if(isNoCookie) {
+		//var ObjectID = mongodb.ObjectID;
+		//uuid = new ObjectID();
+		//uuid = nodeUUID.v4(null, new Buffer(16));
+		//uuid = mongodb.Binary(uuid, mongodb.Binary.SUBTYPE_UUID);
+		uuid = nodeUUID.v4();
+		res.setHeader('Set-Cookie', setCookie('_sv', uuid));
+	} else {
+		uuid = parsedCookieObj._sv;
+	}
+
+	return function(err, db) {
+
+		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
+		console.log("Connected correctly to MongoDB");
+
+		json.uuid = uuid;
+
+		if(location) {
+			json.location = location;
+		}
+
+		var log = db.collection('log');
+		var user = db.collection('user');
+
+		log.insert(json, {}, function(err, records) {
+
+			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+			console.log('Inserted data completely to Database');
+
+			user.update({uuid: uuid}, {$inc: {count: 1}}, {upsert: true}, function(err, records) {
+
+				assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+				console.log('Updated data completely to Database');
+
+				var log = location ? {location: location, date: json.date} : {location: {}, date: json.date};
+				user.update({uuid: uuid}, {$push: {log: log}}, {upsert: true}, function(err, records) {
+
+					assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+					console.log('Updated data completely to Database');
+					db.close();
+				});
+			});
+		});
+
+		//TODO: remove below
+		//fs.writeFile("./log.json", JSON.stringify(json, null, '\t'));
+	}
+}
+
 /*
  * functions - web server
  * */
@@ -423,69 +486,6 @@ function sendDirectoryIndex(req, res, path, files) {
 
 	res.write('</pre><hr></body></html>\n');
 	res.end();
-}
-
-/*
- * functions - database
- * */
-
-function dbHandler(req, res, path, store, location) {
-
-	var json = JSON.parse(store);
-
-	var parsedCookieObj = cookieParse(req.headers.cookie);
-	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
-	var uuid;
-
-	if(isNoCookie) {
-		//var ObjectID = mongodb.ObjectID;
-		//uuid = new ObjectID();
-		//uuid = nodeUUID.v4(null, new Buffer(16));
-		//uuid = mongodb.Binary(uuid, mongodb.Binary.SUBTYPE_UUID);
-		uuid = nodeUUID.v4();
-		res.setHeader('Set-Cookie', setCookie('_sv', uuid));
-	} else {
-		uuid = parsedCookieObj._sv;
-	}
-
-	return function(err, db) {
-
-		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
-		console.log("Connected correctly to MongoDB");
-
-		json.uuid = uuid;
-
-		if(location) {
-			json.location = location;
-		}
-
-		var log = db.collection('log');
-		var user = db.collection('user');
-
-		log.insert(json, {}, function(err, records) {
-
-			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-			console.log('Inserted data completely to Database');
-
-			user.update({uuid: uuid}, {$inc: {count: 1}}, {upsert: true}, function(err, records) {
-
-				assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-				console.log('Updated data completely to Database');
-
-				if(location) {
-					user.update({uuid: uuid}, {$push: {location: location, date: json.date}}, {upsert: true}, function(err, records) {
-
-						assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-						console.log('Updated data completely to Database');
-						db.close();
-					});
-				}
-			});
-		});
-
-		//TODO: remove below
-		//fs.writeFile("./log.json", JSON.stringify(json, null, '\t'));
-	}
 }
 
 /*
