@@ -26,32 +26,32 @@ var executionString =
 
 var executionTimerString = 'STYLEV.VALIDATOR.setExecutionTimer();';
 
-var executionSetting = { useContentScriptContext: true };
+var scriptSetting = { useContentScriptContext: true };
 
 var executeWithInspect = function() {
-	chrome.devtools.inspectedWindow.eval(executionString, executionSetting);
+	chrome.devtools.inspectedWindow.eval(executionString, scriptSetting);
 };
 
-var executionWhenModified = function(resource) {
+var executeWhenModified = function(resource) {
 
-	//TODO: handle resource?
+	//TODO: handle `resource` arguments?
 	if(isValidated) {
-		chrome.devtools.inspectedWindow.eval(executionTimerString, executionSetting);
+		chrome.devtools.inspectedWindow.eval(executionTimerString, scriptSetting);
 		console.log(resource.url);
 	}
 };
 
-var createConnection = function() {
+var connect2BackgroundPage = function() {
 
-	// Backgroundページとの接続
 	port = chrome.runtime.connect({
-		name: "devtools-page"
+		name: "devtoolsPage"
 	});
 
 	port.postMessage({
-		name: 'sendTabIdFromDevToolsToBackground',
+		name: 'sendTabId',
 		tabId: chrome.devtools.inspectedWindow.tabId
 	});
+	
 	port.onMessage.addListener(function(message) {
 		if(message.name == "executeWithInspect") {
 			executeWithInspect();
@@ -64,20 +64,24 @@ var createConnection = function() {
 };
 
 //Create connection to background page
-createConnection();
+connect2BackgroundPage();
 
-//If reloaded
+//When reloaded
 chrome.devtools.network.onNavigated.addListener(function(url) {
-	createConnection();
 
-	//If resources is modified
-	chrome.devtools.inspectedWindow.onResourceContentCommitted.removeListener(executionWhenModified);
-	chrome.devtools.inspectedWindow.onResourceContentCommitted.addListener(executionWhenModified);
+	connect2BackgroundPage();
 
-	//If resources is added
-	//chrome.devtools.inspectedWindow.onResourceAdded.removeListener(executionWhenModified);
-	//chrome.devtools.inspectedWindow.onResourceAdded.addListener(executionWhenModified);
+	//When resources is modified
+	chrome.devtools.inspectedWindow.onResourceContentCommitted.removeListener(executeWhenModified);
+	chrome.devtools.inspectedWindow.onResourceContentCommitted.addListener(executeWhenModified);
+
+	//When resources is added
+	//chrome.devtools.inspectedWindow.onResourceAdded.removeListener(executeWhenModified);
+	//chrome.devtools.inspectedWindow.onResourceAdded.addListener(executeWhenModified);
 });
 
-//If resources is modified
-chrome.devtools.inspectedWindow.onResourceContentCommitted.addListener(executionWhenModified);
+//When resources is modified
+chrome.devtools.inspectedWindow.onResourceContentCommitted.addListener(executeWhenModified);
+
+//When resources is added
+//chrome.devtools.inspectedWindow.onResourceAdded.addListener(executeWhenModified);

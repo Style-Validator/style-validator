@@ -48,7 +48,7 @@ STYLEV.options = {
 	IGNORE_SELECTORS: false,
 	IGNORE_SELECTORS_TEXT: '',
 	URL_FILTERS: [
-		'/rules.html'
+		'/options.html'
 	]
 };
 
@@ -1715,7 +1715,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 					ruleID.target = '_blank';
 					if(STYLEV.isChromeExtension) {
-						ruleID.href = that.RESOURCE_ROOT + 'rules.html#rule-' + outputObj.ruleID;//TODO: change url
+						ruleID.href = 'javascript: void(0);';
+						ruleID.addEventListener('click', that.jump2RulePage('#rule-' + outputObj.ruleID));
 					} else {
 						//ruleID.href = 'http://localhost:8001/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
 						ruleID.href = 'http://style-validator.github.io/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
@@ -1762,6 +1763,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					that.docFlag.appendChild(li);
 				});
 			}
+		},
+
+		jump2RulePage: function(hash) {
+			var that = STYLEV.VALIDATOR;
+			return function(event) {
+				chrome.runtime.sendMessage({name: 'openOptionsPage', hash: hash});
+			};
 		},
 
 		setParametersAfterShowingConsole: function() {

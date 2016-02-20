@@ -1,4 +1,4 @@
-//TODO: 同じような処理をまとめる
+"use strict";
 
 var connections = {};
 var isValidated;
@@ -11,7 +11,10 @@ var isHTTPorHTTPS = {};
 var currentTabIndex = null;
 var currentTabWinId = null;
 var returnTabIndex = null;
-var returnTab = null;
+var returnTabWinId = null;
+var ruleId = '';
+var isOptionsPageCreated = false;
+var optionsPageTabId = null;
 
 chrome.storage.local.get('isValidated', function(message) {
 
@@ -30,25 +33,22 @@ chrome.storage.local.get('isDevtoolsOpened', function(message) {
 	}
 });
 
-//検証したり止めたり
 function toggleValidation() {
 
-	//実行したり破壊したりの処理
 	chrome.tabs.query({active: true, currentWindow: true, windowType: 'normal'}, function(tabs) {
 
-		//タブが1つも無い場合エラーを回避するために、存在判定
 		if(tabs.length) {
 
 			var tabId = tabs[0].id;
 
-			//検証されていない場合、検証を発動
+			//If extension is not opened
 			if(!isValidated[tabId]) {
 
-				//DevToolsと接続されているタブの場合
+				//If connected to devtools
 				if (tabId in connections) {
 					connections[tabId].postMessage({name: 'executeWithInspect'});
 
-				//DevToolsと接続されていない場合
+				//If disconnected to devtools
 				} else {
 					chrome.tabs.executeScript(tabId, {
 						code:
@@ -57,27 +57,27 @@ function toggleValidation() {
 					});
 				}
 
-				//コンソールを開いたという情報を保存
+				//Save state of extension
 				isValidated[tabId] = true;
 				chrome.storage.local.set({isValidated: isValidated});
 
-			//検証されている場合は、検証を解除
+			//If extension is opened
 			} else {
 
-				//コンソールを削除
+				//Destroy extension
 				chrome.tabs.executeScript(tabId, {
 					code:
-							"console.info('Style Validator: Removed from Background Page');" +
-							"STYLEV.VALIDATOR.destroy();"
+						"console.info('Style Validator: Removed from Background Page');" +
+						"STYLEV.VALIDATOR.destroy();"
 				});
 
-				//コンソールを開いたという情報を保存
+				//Save state of extension
 				isValidated[tabId] = false;
 				chrome.storage.local.set({isValidated: isValidated});
 
 			}
 
-			//DevTools側に検証ステータスを渡す
+			//Pass state of extension to devtools page
 			connections[tabId].postMessage({
 				name: 'getIsValidated',
 				isValidated: isValidated[tabId]
@@ -87,10 +87,10 @@ function toggleValidation() {
 	});
 }
 
-//ファイルを挿入
+//Inject files
 function modifyAndInsertFiles2Tab(tabId) {
 
-	//既に挿入済の場合か、HTTPかHTTPSプロトコルではない場合は何もしない
+	//Do nothing if already inserted or not http(s)
 	if(isInsertedFiles[tabId] || !isHTTPorHTTPS[tabId]) {
 		return;
 	}
@@ -153,10 +153,9 @@ function modifyAndInsertFiles2Tab(tabId) {
 	return promise;
 }
 
-//タブ毎の初期化処理
-function initByTabs(tabs) {
+//Initialize by tab
+function initializeByTab(tabs) {
 
-	//タブが1つも無い場合エラーを回避するために、存在判定
 	if(tabs.length) {
 
 		var promiseFuncArray = [];
@@ -188,27 +187,33 @@ function initByTabs(tabs) {
 	}
 }
 
-//DevToolsが開く度に実行
+//When connected other page
 chrome.runtime.onConnect.addListener(function (port) {
 
-	if (port.name == "devtools-page") {
+	//Options Page
+	if(port.name === 'optionsPage') {
+		port.postMessage({name: 'sendRuleId', ruleId: ruleId});
+	}
 
-		//DevToolsとの接続時の関数
-		var sendTabIdFromDevToolsToBackground = function (message, sender, sendResponse) {
+	//Devtools Page
+	if(port.name == "devtoolsPage") {
+
+		//TODO: refactor function name
+		var sendTabId = function (message, sender, sendResponse) {
 
 			// The original connection event doesn't include the tab ID of the
 			// DevTools page, so we need to send it explicitly.
-			if (message.name == "sendTabIdFromDevToolsToBackground") {
+			if (message.name == "sendTabId") {
 
 				var tabId = message.tabId;
 
-				//portをTabIdに紐付けて保存
+				//Save port with tabId
 				connections[tabId] = port;
 
-				//DevToolsを開いた時
+				//When devtools is opened
 				if (!(!!isDevtoolsOpened[tabId])) {
 
-					//DevToolsの開閉状態
+					//Save state of devtools
 					isDevtoolsOpened[tabId] = true;
 					chrome.storage.local.set({isDevtoolsOpened: isDevtoolsOpened});
 
@@ -216,18 +221,17 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 						chrome.tabs.query({active: true, currentWindow: true, windowType: 'normal'}, function(tabs) {
 
-							//タブが1つも無い場合エラーを回避するために、存在判定
 							if(tabs.length) {
 
 								var tabId = tabs[0].id;
 
-								//バリデート済の場合
+								//If validated
 								if(isValidated[tabId]) {
 
-									//モードテキストを変更
+									//Modify text of indicator
 									chrome.tabs.sendMessage(tabId, {isConnected2Devtools: true});
 
-									//DevTools Modeで実行
+									//Execute from devtools page
 									connections[tabId].postMessage({name: 'executeWithInspect'});
 								}
 							}
@@ -235,69 +239,57 @@ chrome.runtime.onConnect.addListener(function (port) {
 					}, 0);
 				}
 
-				//DevToolsを閉じた時
+				//When devtools is closed
 				port.onDisconnect.addListener(function(port) {
 
-					//DevToolsの開閉状態
+					//Save state of devtools
 					isDevtoolsOpened[tabId] = false;
 					chrome.storage.local.set({isDevtoolsOpened: isDevtoolsOpened});
 
-					//DevToolsとのメッセージがされた場合に発火するイベントを解除
-					port.onMessage.removeListener(sendTabIdFromDevToolsToBackground);
+					//Remove listner
+					port.onMessage.removeListener(sendTabId);
 
-					//タブの接続状態
+					//Delete tab data that is connected to devtools
 					var tabs = Object.keys(connections);
-
 					for (var i = 0, len = tabs.length; i < len; i++) {
-
-						//保存している通信状態を
 						if (connections[tabs[i]] == port) {
-
-							//通信状態を削除
 							delete connections[tabs[i]];
 							break;
 						}
 					}
 
-					//閉じた時に検証済の場合は、コンソールを塗り替える
+					//Re-execute when devtools is closed if extension is opened
 					chrome.tabs.query({active: true, currentWindow: true, windowType: 'normal'}, function(tabs) {
 
-						//タブが1つも無い場合エラーを回避するために、存在判定
 						if(tabs.length) {
 
 							var tabId = tabs[0].id;
 
-							//バリデート済の場合
+							//If extension is opened
 							if(isValidated[tabId]) {
 
-								//Background Modeで実行
+								//Execute from background page
 								chrome.tabs.executeScript(tabId, {
 									code:
-										"console.groupEnd();console.group('Style Validator: Executed by Chrome Extension from Background Page');" +
-										"STYLEV.VALIDATOR.execute();"
+									"console.groupEnd();console.group('Style Validator: Executed by Chrome Extension from Background Page');" +
+									"STYLEV.VALIDATOR.execute();"
 								});
 
-								//モードテキストを変更
+								//Modify text of indicator
 								chrome.tabs.sendMessage(tabId, {isConnected2Devtools: false});
 							}
 						}
 					});
-
 				});
-
 			}
-
-			// other message handling
-
 		};
-
-		// DevToolsから接続された時に発火する
-		port.onMessage.addListener(sendTabIdFromDevToolsToBackground);
-
+		
+		//When connected from DevTools
+		port.onMessage.addListener(sendTabId);
 	}
 });
 
-// メッセージ送信される度実行
+//When sent messages
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 	// Messages from content scripts should have sender.tab set
@@ -307,7 +299,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 		if(message.name === 'setBadgeText') {
 
-			//アイコンの数字を設定
+			//Show number on icon on browser header menu
 			totalNumber[tabId] = message.badgeText + '';
 			chrome.browserAction.setBadgeText({ text: totalNumber[tabId] });
 		}
@@ -316,12 +308,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 			isValidated[tabId] = true;
 
-			//DevToolsが開いている時
+			//If devtools is opening
 			if (tabId in connections) {
 
 				connections[tabId].postMessage({name: 'executeWithInspect'});
 
-			//DevToolsが閉じている時
+			//If devtools is closing
 			} else {
 
 				chrome.tabs.executeScript(tabId, {
@@ -330,6 +322,34 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 						"STYLEV.VALIDATOR.execute();"
 				});
 			}
+		}
+
+		if(message.name === 'openOptionsPage') {
+
+			//Save selected ruleId
+			ruleId = message.hash;
+
+			//Open Options Page
+			//chrome.runtime.openOptionsPage();
+
+			if(!isOptionsPageCreated) {
+				chrome.tabs.create({
+					url: chrome.runtime.getURL('options.html')
+				}, function(tab) {
+					isOptionsPageCreated = true;
+					optionsPageTabId = tab.id;
+
+					chrome.tabs.onRemoved.addListener(function(tabId) {
+						if(tabId === optionsPageTabId) {
+							isOptionsPageCreated = false;
+							optionsPageTabId = null;
+						}
+					});
+				});
+			} else {
+				chrome.tabs.update(optionsPageTabId, {selected: true});
+			}
+
 		}
 
 		if(message.name === 'syncStatusIsValidated') {
@@ -341,29 +361,22 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 			sendResponse({isConnected2Devtools: !!isDevtoolsOpened[tabId]});
 		}
-
-		if(message.name === 'detectDevToolsOpened') {
-
-//			isDevtoolsOpened[tabId] = message.isDevtoolsOpened;
-//			chrome.storage.local.set(isDevtoolsOpened);
-		}
-
 	}
 
 	return false;
 });
 
-//有効に切り替えた時
+//When enabled
 chrome.management.onEnabled.addListener(function () {
 
 	chrome.storage.local.remove(['isValidated', 'isDevtoolsOpened']);
 
-	//検証済のタブ全てにリロードをかけ（検証済のタブは置換）その後、再度ファイルをインジェクト
-	chrome.tabs.query({windowType: 'normal'}, initByTabs);
+	//Reload all tab that is opened extension. Next, Re-Inject file of scripts and stylesheets
+	chrome.tabs.query({windowType: 'normal'}, initializeByTab);
 });
 
 
-//インストール時とアップデート時に実行
+//When extension is installed or reloaded
 chrome.runtime.onInstalled.addListener(function(details) {
 
 	if(details.reason === 'install') {
@@ -371,14 +384,14 @@ chrome.runtime.onInstalled.addListener(function(details) {
 
 	}
 
-	//検証済のタブ全てにリロードをかけ（検証済のタブは置換）その後、再度ファイルをインジェクト
-	chrome.tabs.query({windowType: 'normal'}, initByTabs);
+	//Reload all tab that is opened extension. Next, Re-Inject file of scripts and stylesheets
+	chrome.tabs.query({windowType: 'normal'}, initializeByTab);
 
 });
 
+//Save Tag Index and Window ID
 chrome.tabs.query({active: true, currentWindow: true, windowType: 'normal'}, function(tabs) {
 
-	//タブが1つも無い場合エラーを回避するために、存在判定
 	if(tabs.length) {
 
 		var tab = tabs[0];
@@ -391,12 +404,11 @@ chrome.tabs.query({active: true, currentWindow: true, windowType: 'normal'}, fun
 	}
 });
 
-//タブが切り替わるタイミングで実行
+//When moved another tab
 chrome.tabs.onActivated.addListener(function(activeInfo) {
 
 	chrome.tabs.query({active: true, currentWindow: true, windowType: 'normal'}, function(tabs) {
 
-		//タブが1つも無い場合エラーを回避するために、存在判定
 		if(tabs.length) {
 
 			var tab = tabs[0];
@@ -407,7 +419,7 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 			currentTabIndex = tabIndex;
 			currentTabWinId = tabWinId;
 
-			//アイコンの数字を設定
+			//Show number on icon on browser header menu
 			totalNumber[tabId] = totalNumber[tabId] ? totalNumber[tabId] : '';
 			chrome.browserAction.setBadgeText({ text: totalNumber[tabId] });
 
@@ -415,25 +427,26 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 	});
 });
 
-//リロードする度
+//When page is reloaded
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 
 	var tabId = tab.id;
 	var tabStatus = tab.status;
 
-	//タブ毎の検証ステータスを初期化
 	if (tabStatus === 'complete') {
+
+		//Initialize state of extension of tab
 		isValidated[tabId] = false;
-		//reset
+
+		//Initialize badge text
 		chrome.browserAction.setBadgeText({ text: '' });
 	}
 });
 
-//popup.htmlがない場合
-// Execution from Icon
+//When click icon on browser header menu (If popup.html is not exist, it's enable)
 chrome.browserAction.onClicked.addListener(toggleValidation);
 
-//ショートカットキーを押した場合
+//Define shortcut key
 chrome.commands.onCommand.addListener(function(command) {
 	if(command === 'toggle-validation') {
 		toggleValidation();
