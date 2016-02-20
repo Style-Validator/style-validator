@@ -1714,8 +1714,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					elemID.classList.add('stylev-console-list-stylevid');
 
 					ruleID.target = '_blank';
-					//ruleID.href = 'http://localhost:8001/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
-					ruleID.href = 'http://style-validator.github.io/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
+					if(STYLEV.isChromeExtension) {
+						ruleID.href = that.RESOURCE_ROOT + 'rules.html#rule-' + outputObj.ruleID;//TODO: change url
+					} else {
+						//ruleID.href = 'http://localhost:8001/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
+						ruleID.href = 'http://style-validator.github.io/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
+					}
 					ruleID.classList.add('stylev-console-list-ruleid');
 
 
