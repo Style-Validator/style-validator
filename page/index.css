@@ -260,7 +260,7 @@ hr {
 	padding-bottom: 60%;
 }
 .section-feature-list:before {
-	border: 2px dotted #EFEF8F;
+	border: 1px solid #DCDCD7;
 	border-radius: 50% 50%;
 }
 

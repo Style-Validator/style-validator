@@ -1417,7 +1417,7 @@
 	},
 	{
 		"ruleID": 25,
-		"title": "Non-Effect Vertical-align",
+		"title": "No effect vertical-align",
 		"replacedElem": "",
 		"emptyElem": "",
 		"isEnabled": true,
@@ -1436,7 +1436,7 @@
 				"isParentElem": false,
 				"pseudoElem": "",
 				"riskLevel": "warning",
-				"reason": "",
+				"reason": "No effect.",
 				"referenceURL": ""
 			}
 		]

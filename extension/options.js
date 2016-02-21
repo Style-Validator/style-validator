@@ -44,7 +44,8 @@ STYLEV.RULES = {
 		that.resetButton = document.querySelector('#reset-button');
 		that.addRuleButton = document.querySelector('#add-rule-button');
 		that.saveButton = document.querySelector('#save-button');
-		that.downloadButton = document.querySelector('#download-button');
+		that.exportButton = document.querySelector('#export-button');
+		that.importButton = document.querySelector('#import-button');
 		that.datalistOfProperties = document.querySelector('#all-css-properties');
 		that.datalistOfTags = document.querySelector('#all-html-tags');
 		that.ruleList = document.querySelector('#rule-list');
@@ -112,10 +113,11 @@ STYLEV.RULES = {
 	bindEventsAfterShow: function() {
 		var that = STYLEV.RULES;
 
-		that.resetButton.addEventListener('click', that.renderRuleArea);
+		that.resetButton.addEventListener('click', that.resetRule);
 		that.addRuleButton.addEventListener('click', that.addRule);
 		that.saveButton.addEventListener('click', that.saveJSON);
-		that.downloadButton.addEventListener('mousedown', that.downloadJSON);
+		that.exportButton.addEventListener('mousedown', that.exportJSON);
+		that.importButton.addEventListener('change', that.importJSON);
 		that.reasonCheckbox.addEventListener('change', that.toggleReason);
 		that.referenceURLCheckbox.addEventListener('change', that.toggleReferenceURL);
 		that.searchRuleInput.addEventListener('input', that.searchRules);
@@ -263,8 +265,8 @@ STYLEV.RULES = {
 			that.getEachHeight();
 			that.adjustPadding()
 				.then(that.getHashFromConsole)
-				.then(that.adjustScrollByHash);
-			that.positionBasedOnScroll();
+				.then(that.adjustScrollByHash)
+				.then(/*that.positionBasedOnScroll*/);
 			//window.scrollBy(0, 1);//TODO: fix better
 
 			STYLEV.VALIDATOR.getStyleSheets();
@@ -345,7 +347,7 @@ STYLEV.RULES = {
 		var target = event.target;
 
 		if(target.value === 'Add') {
-			that.addNewPresets(target);
+			that.addNewPresets();
 		} else {
 			that.togglePresets(target.value);
 		}
@@ -393,24 +395,35 @@ STYLEV.RULES = {
 		event.preventDefault();
 
 
+		//TODO: けせてないので、消す
 		if(confirm('Are you sure you want to initialize all presets? (It can not restore)')) {
-			chrome.storage.local.remove('savedPresetsArray', function() {
-				chrome.storage.local.remove('selectedPresetsName', function() {
-					that.initializePresetsSelect();
-				});
-			});
+
+			chrome.storage.local.get('savedPresetsArray', function(message) {
+				var savedPresetsArray = message['savedPresetsArray'];
+				if(savedPresetsArray) {
+					that.each(savedPresetsArray, function(savedPresets) {
+						chrome.storage.local.remove(savedPresets.value);
+					});
+				}
+				//TODO: refactor
+				chrome.storage.local.remove('Default');
+				chrome.storage.local.remove('savedPresetsArray');
+				chrome.storage.local.remove('selectedPresetsName');
+				that.initializePresetsSelect();
+			})
+
 		}
 	},
 
-	addNewPresets: function(target) {
+	addNewPresets: function(importedJSON) {
 		var that = STYLEV.RULES;
 
 		//Get the option element
-		var option2Add = target.querySelector('option[value="' + target.value + '"]');
+		var option2Add = that.presetsSelect.querySelector('option[value="Add"]');
 
 		//Count of default presets name
 		var defaultPresetsNameCount = 0;
-		that.each(target.children, function(option) {
+		that.each(that.presetsSelect.children, function(option) {
 			if(option.value.indexOf(that.defaultPresetsName4Duplication) > -1) {
 				defaultPresetsNameCount++;
 			}
@@ -422,7 +435,7 @@ STYLEV.RULES = {
 
 		//Validation
 		var isValidName = true;
-		that.each(target.children, function(option) {
+		that.each(that.presetsSelect.children, function(option) {
 			if(option.value === newPresetsName) {
 				isValidName = false;
 				return 'break';
@@ -437,25 +450,41 @@ STYLEV.RULES = {
 
 			//Create New Option
 			var newOption = new Option(newPresetsName, newPresetsName, false, true);
-			target.insertBefore(newOption, option2Add);
+			that.presetsSelect.insertBefore(newOption, option2Add);
 
 			//Show Delete Anchor
 			that.deletePresetsButton.classList.remove('is-hidden');
 
-			//TODO: defaultからのコピーにするか?
-			that.getURL('./data/rules.json').then(JSON.parse).then(function(data) {
+			if(importedJSON) {
+
 				var obj4ChromeStorage = {};
-				obj4ChromeStorage[newPresetsName] = data;
-				chrome.storage.local.set(obj4ChromeStorage);
+				obj4ChromeStorage[newPresetsName] = importedJSON;
+				chrome.storage.local.set(obj4ChromeStorage, function() {
+					that.togglePresets(newPresetsName);
+				});
 				that.updateSavedPresetsArray();
-			});
+
+			} else {
+
+				//TODO: defaultからのコピーにするか?
+				that.getURL('./data/rules.json').then(JSON.parse).then(function(data) {
+					var obj4ChromeStorage = {};
+					obj4ChromeStorage[newPresetsName] = data;
+					chrome.storage.local.set(obj4ChromeStorage, function() {
+						that.togglePresets(newPresetsName);
+					});
+					that.updateSavedPresetsArray();
+				});
+			}
+
+
 
 		} else {
 
 			alert('Invalid name! Please retry to set another name.');
 
 			//Revert
-			target.value = that.mainContentHeading.textContent;
+			that.presetsSelect.value = that.mainContentHeading.textContent;
 		}
 	},
 
@@ -726,23 +755,28 @@ STYLEV.RULES = {
 		//
 		//that.isJSONModified = generatedJSONString !== originalJSONString;
 
-		if(that.ruleList.querySelector('.is-modified')) {
+		if( that.ruleList.querySelector('.is-modified' ) ||
+			that.generatedJSON.length !== that.originalJSON.length ) {
+
 			that.isJSONModified = true;
+
 		} else {
+
 			that.isJSONModified = false;
+
 		}
 
 		if(that.isJSONModified) {
 			that.saveButton.classList.add('is-modified');
-			//that.downloadButton.classList.add('is-modified');
+			//that.exportButton.classList.add('is-modified');
 
 		} else {
 			that.saveButton.classList.remove('is-modified');
-			//that.downloadButton.classList.remove('is-modified');
+			//that.exportButton.classList.remove('is-modified');
 		}
 	},
 
-	downloadJSON: function(event) {
+	exportJSON: function(event) {
 
 		event.preventDefault();
 		var that = STYLEV.RULES;
@@ -754,6 +788,24 @@ STYLEV.RULES = {
 
 			that.callbackOnSave();
 		}
+	},
+
+	importJSON: function(event) {
+		var that = STYLEV.RULES;
+
+		var data = null;
+		var file = event.target.files[0];
+		var reader = new FileReader();
+		reader.readAsText(file);
+		reader.onload = function(event) {
+			var textData = event.target.result;
+			data = JSON.parse(textData);
+			that.addNewPresets(data);
+		};
+		reader.onerror = function() {
+			alert('Unable to read ' + file.fileName);
+		};
+
 	},
 
 	saveJSON: function() {
@@ -807,7 +859,7 @@ STYLEV.RULES = {
 	},
 
 	showErrorMsg: function() {
-		alert('Sorry. Could not connect to api server. Connect to api server, or click download button.');
+		alert('Sorry. Could not connect to api server. Connect to api server, or click export button.');
 	},
 
 	callbackOnSave: function() {
@@ -869,7 +921,7 @@ STYLEV.RULES = {
 		var that = STYLEV.RULES;
 
 		that.saveButton.classList.remove('is-modified');
-		that.downloadButton.classList.remove('is-modified');
+		that.exportButton.classList.remove('is-modified');
 	},
 
 	/******************************************************************************************************************
@@ -910,7 +962,9 @@ STYLEV.RULES = {
 
 		localStorage.setItem(that.searchRuleInput.id, inputValue);
 
-		that.positionBasedOnScroll();
+		if(event) {
+			that.positionBasedOnScroll();
+		}
 	},
 
 	isHit: false,
@@ -1075,6 +1129,12 @@ STYLEV.RULES = {
 	/******************************************************************************************************************
 	* Rules Box
 	*******************************************************************************************************************/
+
+	resetRule: function() {
+		var that = STYLEV.RULES;
+
+		that.togglePresets(that.presetsSelect.value);
+	},
 
 	//TODO: unite applyRuleData2HTML?
 	addRule: function(event) {
@@ -1682,23 +1742,25 @@ STYLEV.RULES = {
 
 		var that = STYLEV.RULES;
 
-		//TODO: refactor
-		var isHashChange = event && event.type === 'hashchange';
-		var isLanding = event === undefined;
-		var ruleId = isHashChange || isLanding ? location.hash || that.ruleId : that.ruleId;
+		return new Promise(function(resolve, reject) {
 
-		if(ruleId) {
-			var target = document.querySelector(ruleId);
-			if(target) {
-				var title = target.querySelector('.title').value + ' | ' + document.title;
-				var targetMarginTop = parseInt(getComputedStyle(target, '').getPropertyValue('margin-top'), 10);
-				setTimeout(function() {
-					var targetPosY = target.offsetTop - that.mainHeaderOffsetHeight - targetMarginTop;
+			//TODO: refactor
+			var isHashChange = event && event.type === 'hashchange';
+			var isLanding = event === undefined;
+			var ruleId = isHashChange || isLanding ? location.hash || that.ruleId : that.ruleId;
+
+			if(ruleId) {
+				var target = document.querySelector(ruleId);
+				if(target) {
+					var title = target.querySelector('.title').value + ' | ' + document.title;
+					var targetMarginTop = parseInt(getComputedStyle(target, '').getPropertyValue('margin-top'), 10);
+					var targetPosY = target.getBoundingClientRect().top + window.scrollY - that.mainHeaderOffsetHeight - targetMarginTop;
 					window.scrollTo(0, targetPosY);
-				}, 0);
-				history.pushState(null, title, ruleId);
+					history.pushState(null, title, ruleId);
+					resolve();
+				}
 			}
-		}
+		});
 	}
 };
 

@@ -69,7 +69,7 @@
 					<section class="aside-content-section aside-presets-section">
 						<select class="presets-select">
 							<option value="Default">Default</option>
-							<option value="Add">+Add New Rules</option>
+							<option value="Add">+Add New Presets</option>
 						</select>
 						<div><a href="#" id="delete-presets-button">Delete</a></div>
 					</section>
@@ -154,7 +154,8 @@
 			<nav class="main-header-nav">
 				<button id="reset-button" class="reset-button" type="reset"><img src="./iconmonstr-undo-4-icon.svg" width="20" height="20"></button>
 				<button id="add-rule-button" class="add-rule-button"><img src="./iconmonstr-selection-10-icon.svg" width="20" height="20"></button>
-				<a href="#" id="download-button" download="rules.json" class="button download-button" title="Override a local file and Let's pull request:)"><img src="./iconmonstr-download-2-icon.svg" width="20" height="20" class="download-button-image"><img src="./iconmonstr-download-2-icon-active.svg" width="20" height="20" class="download-button-image-active"></a>
+				<label id="import-button" class="button import-button"><img src="./iconmonstr-upload-4.svg" width="20" height="20" class="export-button-image"><input type="file" name="import-rule" accept=".json"></label>
+				<a href="#" id="export-button" download="rules.json" class="button export-button" title="Override a local file and Let's pull request:)"><img src="./iconmonstr-download-2-icon.svg" width="20" height="20" class="export-button-image"><img src="./iconmonstr-download-2-icon-active.svg" width="20" height="20" class="export-button-image-active"></a>
 				<button id="save-button" title="Override a local file and Let's pull request:)" class="save-button"><img src="./iconmonstr-save-icon.svg" width="20" height="20" class="save-button-image"><img src="./iconmonstr-save-icon-active.svg" width="20" height="20" class="save-button-image-active"></button>
 			</nav>
 		</header>
@@ -163,61 +164,79 @@
 			<div class="main-content-header cf">
 				<details class="syntax-explanation">
 					<summary>Glossary</summary>
-					<table class="syntax-explanation-table">
-						<tbody>
-						<tr>
-							<th>Base Styles</th>
-							<td>Property that is defined on `base` when defining the errors or warning. If multiple properties, `AND` search is used.</td>
-						</tr>
-						<tr>
-							<th>Error Styles</th>
-							<td>Property that is defined as `error`. If multiple properties, `OR` search is used.</td>
-						</tr>
-						<tr>
-							<th>Warning Styles</th>
-							<td>Property that is defined as `warning`. If multiple properties, `OR` search is used.</td>
-						</tr>
-						<tr>
-							<th>Property Value</th>
-							<td>
-								Value could be used special keywords. <br />
-								<table class="syntax-explanation-inner-table">
+					<div class="syntax-explanation-body">
+						<!--<section class="syntax-explanation-section">
+							<header class="syntax-explanation-header">
+								<h3 class="syntax-explanation-heading">Usage</h3>
+							</header>
+							<div>
+								<dl>
+									<dt>Presets of rules</dt>
+									<dd>
+										At first, try default presets. And adjust
+									</dd>
+								</dl>
+							</div>
+						</section>-->
+						<section class="syntax-explanation-section">
+							<header class="syntax-explanation-header">
+								<h3 class="syntax-explanation-heading">Glossary</h3>
+							</header>
+							<div>
+								<table class="syntax-explanation-table">
 									<tbody>
 									<tr>
-										<th>default</th>
-										<td>Default value that each elements have.<br />(It's equal with value of User Agent Stylesheet)<br />e.g. {display: block;} in &lt;div&gt;</td>
+										<th>Base Styles</th>
+										<td>Property that is defined on `base` when defining the errors or warning. If multiple properties, `AND` search is used.</td>
 									</tr>
 									<tr>
-										<th>over-0</th>
-										<td>over 0, not 0.</td>
+										<th>NG Styles</th>
+										<td>Property that is defined as `error` or `warning`. If multiple properties, `OR` search is used.</td>
 									</tr>
 									<tr>
-										<th>under-0</th>
-										<td>under 0, not 0.</td>
-									</tr>
-									<tr>
-										<th>OR operator</th>
-										<td>[value1|value2|...]</td>
-									</tr>
-									<tr>
-										<th>Reverse operator</th>
+										<th>Special Keywords Values</th>
 										<td>
-											!value<br />
-											(Single Property)<br />
-											<br />
-											![value1|value2|...]<br />
-											(Multiple Properties)<br />
-											<br />
-											!keyword<br />
-											e.g. !default, !over-0, !under-0<br />
+											Value of rule can be used special keywords. <br />
+											<table class="syntax-explanation-inner-table">
+												<tbody>
+												<tr>
+													<th>default</th>
+													<td>Default value that each elements have.<br />(It's equal with value of User Agent Stylesheet)<br />e.g. {display: block;} in &lt;div&gt;</td>
+												</tr>
+												<tr>
+													<th>over-0</th>
+													<td>over 0, not 0.</td>
+												</tr>
+												<tr>
+													<th>under-0</th>
+													<td>under 0, not 0.</td>
+												</tr>
+												<tr>
+													<th>OR operator</th>
+													<td>[value1|value2|...]</td>
+												</tr>
+												<tr>
+													<th>Reverse operator</th>
+													<td>
+														!value<br />
+														(Single Property)<br />
+														<br />
+														![value1|value2|...]<br />
+														(Multiple Properties)<br />
+														<br />
+														!keyword<br />
+														e.g. !default, !over-0, !under-0<br />
+													</td>
+												</tr>
+												</tbody>
+											</table>
 										</td>
 									</tr>
 									</tbody>
 								</table>
-							</td>
-						</tr>
-						</tbody>
-					</table>
+							</div>
+						</section>
+					</div>
 				</details>
 				<h2 class="main-content-heading">Local</h2>
 			</div>
@@ -244,7 +263,7 @@
 					<div class="rule-box-style-inner">
 						<section class="element-type">
 							<header>
-								<h3 class="element-type-heading">Element</h3>
+								<h3 class="element-type-heading">Base Element</h3>
 							</header>
 							<ul class="element-type-list">
 								<li class="element-type-replaced">

@@ -1,0 +1,4 @@
+{
+  "commitMessage": "v%s",
+  "tagName": "v%s-src"
+}

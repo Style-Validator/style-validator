@@ -138,8 +138,8 @@ function dbHandler(req, res, path, store, location) {
 				console.log('Updated data completely to Database');
 
 				//TODO: add count index
-				var log = location ? {location: location, date: json.date} : {location: {}, date: json.date};
-				user.update({uuid: uuid}, {$push: {log: log}}, {upsert: true}, function(err, records) {
+				var situation = location ? {location: location, date: json.date} : {location: {}, date: json.date};
+				user.update({uuid: uuid}, {$push: {log: situation}}, {upsert: true}, function(err, records) {
 
 					assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 					console.log('Updated data completely to Database');
