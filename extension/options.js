@@ -266,7 +266,9 @@ STYLEV.RULES = {
 			that.adjustPadding()
 				.then(that.getHashFromConsole)
 				.then(that.adjustScrollByHash)
-				.then(/*that.positionBasedOnScroll*/);
+				.then(that.positionBasedOnScroll)
+				.then(that.adjustScrollByHash)
+			;
 			//window.scrollBy(0, 1);//TODO: fix better
 
 			STYLEV.VALIDATOR.getStyleSheets();
@@ -1649,20 +1651,25 @@ STYLEV.RULES = {
 	positionBasedOnScroll: function() {
 		var that = STYLEV.RULES;
 
-		//Initialize handler
-		if(that.fixPositionHandlers.length) {
-			that.each(that.fixPositionHandlers, function(positionHandler) {
-				window.removeEventListener('scroll', positionHandler);
-			});
-			that.fixPositionHandlers = [];
-		}
+		return new Promise(function(resolve, reject) {
 
-		//Bind events
-		that.each(that.fixInScrollingTargets, function(target) {
-			var fixPositionHandler = that.setPosition2FixElement(target);
-			fixPositionHandler();
-			window.addEventListener('scroll', fixPositionHandler);
-			that.fixPositionHandlers.push(fixPositionHandler);
+			//Initialize handler
+			if(that.fixPositionHandlers.length) {
+				that.each(that.fixPositionHandlers, function(positionHandler) {
+					window.removeEventListener('scroll', positionHandler);
+				});
+				that.fixPositionHandlers = [];
+			}
+
+			//Bind events
+			that.each(that.fixInScrollingTargets, function(target) {
+				var fixPositionHandler = that.setPosition2FixElement(target);
+				window.addEventListener('scroll', fixPositionHandler);
+				that.fixPositionHandlers.push(fixPositionHandler);
+			});
+
+			setTimeout(resolve, 0);
+
 		});
 	},
 
@@ -1708,6 +1715,7 @@ STYLEV.RULES = {
 
 		return function(event) {
 
+
 			that.each(fixTargets, function(fixTarget, i) {
 
 				var fixTargetGBCR;
@@ -1727,14 +1735,12 @@ STYLEV.RULES = {
 						fixTarget.classList.add('absolute-in-window');
 					}
 
-				//leave
+					//leave
 				} else {
 					fixTargetGBCR = null;
 					fixTarget.classList.remove('float-in-window', 'fixed-in-window', 'absolute-in-window');
 				}
-
 			});
-
 		};
 	},
 
@@ -1757,6 +1763,7 @@ STYLEV.RULES = {
 					var targetPosY = target.getBoundingClientRect().top + window.scrollY - that.mainHeaderOffsetHeight - targetMarginTop;
 					window.scrollTo(0, targetPosY);
 					history.pushState(null, title, ruleId);
+					console.log('hoge')
 					resolve();
 				}
 			}

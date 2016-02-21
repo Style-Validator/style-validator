@@ -192,7 +192,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 	//Options Page
 	if(port.name === 'optionsPage') {
-		port.postMessage({name: 'sendRuleId', ruleId: ruleId});
+		port.postMessage({name: 'sendRuleId', ruleId: ruleId}, function() {
+			ruleId = null;
+		});
 	}
 
 	//Devtools Page
