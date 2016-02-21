@@ -1763,7 +1763,6 @@ STYLEV.RULES = {
 					var targetPosY = target.getBoundingClientRect().top + window.scrollY - that.mainHeaderOffsetHeight - targetMarginTop;
 					window.scrollTo(0, targetPosY);
 					history.pushState(null, title, ruleId);
-					console.log('hoge')
 					resolve();
 				}
 			}
