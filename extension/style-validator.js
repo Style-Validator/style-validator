@@ -69,29 +69,38 @@ STYLEV.scaleMode = STYLEV.scaleMode || 'normal';
 STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		execute: function(callback) {
-
 			var that = STYLEV.VALIDATOR;
 
-			that.startTime = new Date();
+			try {
 
-			if(STYLEV.isFirstExecution) {
-				that.setParameters();
-				that.bindEvents();
+				that.startTime = new Date();
 
-				//Getting Data and Inserting JS Libraries
-				Promise
-					.all(that.getAllData())
-					.then(that.getRulesData)
-					.then(that.setParametersViaAJAX)
-					.then(that.updateOptions)
-					.then(that.executeValidation(callback));
+				if(STYLEV.isFirstExecution) {
+					that.setParameters();
+					that.bindEvents();
 
-			} else {
+					//Getting Data and Inserting JS Libraries
+					Promise
+						.all(that.getAllData())
+						.then(that.getRulesData)
+						.then(that.setParametersViaAJAX)
+						.then(that.updateOptions)
+						.then(that.firstValidate(callback));
 
-				that.getRulesData().then(function() {
-					that.validate(callback);
-				});
+				} else {
+
+					that.getRulesData().then(function() {
+						that.validate(callback);
+					});
+				}
+
+			} catch(error) {
+
+				that.insertGA(error);
+				throw new Error(error);
+
 			}
+
 		},
 
 		setParameters: function() {
@@ -165,7 +174,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		bindEvents: function() {
 			var that = STYLEV.VALIDATOR;
 
-			//TODO: remove?
+			//remove?
+
 		},
 
 		getAllData: function() {
@@ -176,6 +186,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			STYLEV.METHODS.each(that.DATA_PATHES, function(path) {
 				promiseArray.push(that.getURL(path).then(JSON.parse))
 			});
+
+			//Insert CSS file
+			promiseArray.push(that.getConsoleStyle());
 
 			//If bookmarklet insert external JavaScript files
 			promiseArray.concat(that.insertJS4Bookmarklet());
@@ -255,10 +268,21 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			});
 		},
 
-		executeValidation: function(callback) {
+		getConsoleStyle: function() {
+			var that = STYLEV.VALIDATOR;
+			return new Promise(function(resolve, reject) {
+				that.getURL(that.RESOURCE_ROOT + 'style-validator-for-console.css')
+					.then(function(consoleStyleText) {
+						that.consoleStyleText = consoleStyleText;
+						resolve();
+					});
+			});
+		},
+
+		firstValidate: function(callback) {
 			var that = STYLEV.VALIDATOR;
 
-			return function() {
+			return function(consoleStyleText) {
 
 				//Set up Mutation Observer
 				that.moManager = that.setupMutationObserver();
@@ -454,15 +478,29 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 		},
 
-		insertGA: function() {
+		insertGA: function(error) {
 			var that = STYLEV.VALIDATOR;
 
 			if(that.scriptTagGA !== undefined) {
 				that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
 			}
 
+			var queryString = '';
+
+			if(error) {
+				queryString += 'error=';
+				queryString += error.message || '';
+				if(error.filename) {
+					queryString += '(';
+					queryString += error.filename || '';
+					queryString += error.lineno ? ':' + error.lineno : '';
+					queryString += error.colno ? ':' + error.colno : '';
+					queryString += ')';
+				}
+			}
+
 			that.scriptTagGA = document.createElement('script');
-			that.scriptTagGA.src = that.settings.GA_PATH;
+			that.scriptTagGA.src = that.settings.GA_PATH + (queryString ? '?' + encodeURIComponent(queryString) : '');
 			that.scriptTagGA.async = "async";
 			that.scriptTagGA.id = 'stylev-ga';
 			that.scriptTagGA.classList.add('stylev-ignore');
@@ -984,7 +1022,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.allElem = document.querySelectorAll('*:not(.stylev-ignore)');
 
 			//Inserting StyleSheet when Validator has been executed from Bookmarklet
-			that.insertCSS4bookmarklet();
+			that.insertCSS4Bookmarklet();
 
 			//initialize array of validation result
 			that.logObjArray = [];
@@ -1348,7 +1386,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		},
 
 		//スタイルシート挿入
-		insertCSS4bookmarklet: function() {
+		insertCSS4Bookmarklet: function() {
 
 			var that = STYLEV.VALIDATOR;
 
@@ -1463,8 +1501,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		insertStyle2ShadowDOM: function() {
 			var that = STYLEV.VALIDATOR;
-			var styleString = '<style>@import "' + that.RESOURCE_ROOT + 'style-validator-for-console.css' + '";</style>';
-			that.consoleWrapperShadowRoot.innerHTML = styleString;
+			var styleElement = document.createElement('style');
+			styleElement.textContent = that.consoleStyleText;
+			that.consoleWrapperShadowRoot.appendChild(styleElement);
 		},
 
 		//結果を表示させる

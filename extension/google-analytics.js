@@ -1,4 +1,4 @@
-//TODO: confirm which script is active
+"use strict";
 
 function hasAnalyticsGoogle(){
 	var scripts = document.querySelectorAll('script');
@@ -23,3 +23,22 @@ if(!hasAnalyticsGoogle()) {
 }
 ga('create', 'UA-53227157-5', 'auto', {'name': 'styleValidator'});
 ga('styleValidator.send', 'event', 'button', 'click', 'executing validation', 1);
+
+var queryStrings = document.currentScript.src.split('?').pop();
+
+queryStrings = decodeURIComponent(queryStrings);
+
+var queryStringArray = queryStrings.split('&');
+
+for(var i = 0, len = queryStringArray.length; i < len; i++) {
+	var queryString = queryStringArray[i].split('=');
+	var key = queryString[0];
+	var value = queryString[1];
+
+	if(key === 'error') {
+		ga('styleValidator.send', 'exception',{
+			'exDescription': value,
+			'exFatal': true
+		});
+	}
+}
