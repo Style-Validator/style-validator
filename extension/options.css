@@ -18,7 +18,6 @@ body {
 .aside {
 	background: #FFFFFF;
 	width: 230px;
-	flex-shrink: 0;
 	border-right: 1px solid #EAEAEA;
 	position: fixed;
 	top: 0;
