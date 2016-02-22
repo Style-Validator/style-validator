@@ -96,8 +96,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			} catch(error) {
 
-				that.insertGA(error);
-				throw new Error(error);
+				that.insertGA(error).then(function() {
+					//throw new Error(error);
+				});
 
 			}
 
@@ -481,32 +482,37 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		insertGA: function(error) {
 			var that = STYLEV.VALIDATOR;
 
-			if(that.scriptTagGA !== undefined) {
-				that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
-			}
+			return new Promise(function(resolve, reject) {
 
-			var queryString = '';
-
-			if(error) {
-				queryString += 'error=';
-				queryString += error.message || '';
-				if(error.filename) {
-					queryString += '(';
-					queryString += error.filename || '';
-					queryString += error.lineno ? ':' + error.lineno : '';
-					queryString += error.colno ? ':' + error.colno : '';
-					queryString += ')';
+				if(that.scriptTagGA !== undefined) {
+					that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
 				}
-			}
 
-			that.scriptTagGA = document.createElement('script');
-			that.scriptTagGA.src = that.settings.GA_PATH + (queryString ? '?' + encodeURIComponent(queryString) : '');
-			that.scriptTagGA.async = "async";
-			that.scriptTagGA.id = 'stylev-ga';
-			that.scriptTagGA.classList.add('stylev-ignore');
+				var queryString = '';
 
-			/* append */
-			that.head.appendChild(that.scriptTagGA);
+				if(error) {
+					queryString += 'error=';
+					queryString += error.message || '';
+					if(error.filename) {
+						queryString += '(';
+						queryString += error.filename || '';
+						queryString += error.lineno ? ':' + error.lineno : '';
+						queryString += error.colno ? ':' + error.colno : '';
+						queryString += ')';
+					}
+				}
+
+				that.scriptTagGA = document.createElement('script');
+				that.scriptTagGA.src = that.settings.GA_PATH + (queryString ? '?' + encodeURIComponent(queryString) : '');
+				that.scriptTagGA.async = "async";
+				that.scriptTagGA.id = 'stylev-ga';
+				that.scriptTagGA.classList.add('stylev-ignore');
+
+				/* append */
+				that.head.appendChild(that.scriptTagGA);
+
+				resolve();
+			});
 		},
 
 		isRegularTag: function (tagName) {
@@ -1510,7 +1516,19 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		showConsole: function() {
 
 			var that = STYLEV.VALIDATOR;
-
+			
+			that.createConsoleElements();
+			that.insertStyle2ShadowDOM();
+			that.showConsoleMessages();
+			that.bindEvents2Console();
+			that.generateConsoleCounterText();
+			that.appendConsoleElements();
+			that.doAfterShowingConsole();
+		},
+		
+		createConsoleElements: function() {
+			var that = STYLEV.VALIDATOR;
+			
 			//ドキュメンとフラグメント
 			that.docFlag = document.createDocumentFragment();
 
@@ -1580,22 +1598,22 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButtonImage.classList.add('stylev-console-normalize-button-image');
 			that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
 
-			//コンソールのスタイルを指定
-			that.insertStyle2ShadowDOM();
+		},
 
-			//コンソール内に表示させる結果の要素を生成
-			that.createMessagesInConsole();
+		generateConsoleCounterText: function() {
+			var that = STYLEV.VALIDATOR;
 
-			//コンソール関連の動作のイベントの登録
-			that.bindEvents2Console();
-
-				//コンソールヘッダに表示させるテキストの設定
+			//コンソールヘッダに表示させるテキストの設定
 			that.consoleHeadingText = document.createTextNode(that.settings.CONSOLE_HEADING_TEXT);
 			that.consoleCounter.textContent = 'Total: ' + that.outputObjArray.length + ' / Error: ' + that.errorNum + ' / Warning: ' + that.warningNum;
+		},
+		
+		appendConsoleElements: function() {
+			var that = STYLEV.VALIDATOR;
 
 			//ロゴを挿入
 			that.consoleHeadingLogo.appendChild(that.consoleHeadingLogoImage);
-	//		that.consoleHeadingLogo.appendChild(that.consoleHeadingText);
+			//		that.consoleHeadingLogo.appendChild(that.consoleHeadingText);
 			that.consoleHeading.appendChild(that.consoleHeadingLogo);
 
 			//ボタンの中に画像を配置
@@ -1622,9 +1640,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleBody.appendChild(that.consoleList);
 			that.html.appendChild(that.consoleWrapper);
 
-			that.doAfterShowingConsole();
 		},
-
+		
 		doAfterShowingConsole: function() {
 
 			var that = STYLEV.VALIDATOR;
@@ -1716,92 +1733,82 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 		},
 
-		//コンソール内に表示させる結果の要素を生成
-		createMessagesInConsole: function() {
+		showConsoleMessages: function() {
 
 			var that = STYLEV.VALIDATOR;
 
-			//エラーや警告が1件もなかった場合
 			if(that.outputObjArray.length === 0) {
-
-				that.congratulationsMessage = document.createElement('li');
-				that.congratulationsMessage.classList.add('stylev-console-perfect');
-				that.congratulationsMessage.textContent = that.settings.CONGRATULATION_MESSAGE_TEXT;
-				that.docFlag.appendChild(that.congratulationsMessage);
-
-			//エラーや警告が存在した場合
+				that.showPerfectMessage();
 			} else {
-
-				//メッセージの数だけループ
-				STYLEV.METHODS.each(that.outputObjArray, function(outputObj) {
-
-					//ログの行を表示させるHTML要素を生成
-					var li = document.createElement('li');
-					var anchor = document.createElement('a');
-					var ids = document.createElement('span');
-					var elemID = document.createElement('a');
-					var ruleID = document.createElement('a');
-
-					ids.classList.add('stylev-console-list-ids');
-
-					anchor.href = 'javascript: void(0);';
-					anchor.dataset.stylevconsoleid = outputObj.stylevid;
-					anchor.classList.add('stylev-console-list-anchor');
-
-					elemID.href = 'javascript: void(0);';
-					elemID.dataset.stylevconsoleid = outputObj.stylevid;
-					elemID.classList.add('stylev-console-list-stylevid');
-
-					ruleID.target = '_blank';
-					if(STYLEV.isChromeExtension) {
-						ruleID.href = 'javascript: void(0);';
-						ruleID.addEventListener('click', that.jump2RulePage('#rule-' + outputObj.ruleID));
-					} else {
-						//ruleID.href = 'http://localhost:8001/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
-						ruleID.href = 'http://style-validator.github.io/extension/rules.html#rule-' + outputObj.ruleID;//TODO: change url
-					}
-					ruleID.classList.add('stylev-console-list-ruleid');
-
-
-					//クリックイベントを設定
-					anchor.addEventListener('click', that.markElementViaConsole);
-					elemID.addEventListener('click', that.markElementViaConsole);
-
-					//テキスト情報を挿入
-					anchor.textContent = outputObj.messageText;
-					elemID.textContent = outputObj.stylevid;
-					ruleID.textContent = outputObj.ruleID;
-
-					//エラー数をカウント
-					if(outputObj.riskLevel === 'error') {
-
-						//エラーか警告のタイプのクラス名を設定
-						li.classList.add('stylev-trigger-error');
-						that.errorNum = (that.errorNum+1)|0;
-					}
-
-					//警告数をカウント
-					if(outputObj.riskLevel === 'warning') {
-
-						//エラーか警告のタイプのクラス名を設定
-						li.classList.add('stylev-trigger-warning');
-						that.warningNum = (that.warningNum+1)|0;
-					}
-
-					//DocumentFragmentにHTML要素を挿入
-					ids.appendChild(elemID);
-
-					if(ruleID.href) {
-						ids.appendChild(ruleID);
-					}
-
-					li.appendChild(ids);
-
-					li.appendChild(anchor);
-
-					that.docFlag.appendChild(li);
-				});
+				STYLEV.METHODS.each(that.outputObjArray, that.createConsoleMessage);
 			}
+		},
+		
+		showPerfectMessage: function() {
+			var that = STYLEV.VALIDATOR;
+
+			that.congratulationsMessage = document.createElement('li');
+			that.congratulationsMessage.classList.add('stylev-console-perfect');
+			that.congratulationsMessage.textContent = that.settings.CONGRATULATION_MESSAGE_TEXT;
+			that.docFlag.appendChild(that.congratulationsMessage);
+
+		},
+		
+		createConsoleMessage: function(outputObj) {
+			var that = STYLEV.VALIDATOR;
+
+			var li = document.createElement('li');
+			var anchor = document.createElement('a');
+			var ids = document.createElement('span');
+			var elemID = document.createElement('a');
+			var ruleID = document.createElement('a');
+
+			ids.classList.add('stylev-console-list-ids');
+
+			anchor.href = 'javascript: void(0);';
+			anchor.dataset.stylevconsoleid = outputObj.stylevid;
+			anchor.classList.add('stylev-console-list-anchor');
+
+			elemID.href = 'javascript: void(0);';
+			elemID.dataset.stylevconsoleid = outputObj.stylevid;
+			elemID.classList.add('stylev-console-list-stylevid');
+
+			ruleID.target = '_blank';
+			
+			if(STYLEV.isChromeExtension) {
+				ruleID.href = 'javascript: void(0);';
+				ruleID.addEventListener('click', that.jump2RulePage('#rule-' + outputObj.ruleID));
+			} else {
+				//ruleID.href = 'http://localhost:8001/extension/options.html#rule-' + outputObj.ruleID;//TODO: change url
+				ruleID.href = 'http://style-validator.github.io/extension/options.html#rule-' + outputObj.ruleID;//TODO: change url
+			}
+			ruleID.classList.add('stylev-console-list-ruleid');
+
+			anchor.addEventListener('click', that.markElementViaConsole);
+			elemID.addEventListener('click', that.markElementViaConsole);
+
+			anchor.textContent = outputObj.messageText;
+			elemID.textContent = outputObj.stylevid;
+			ruleID.textContent = outputObj.ruleID;
+
+			if(outputObj.riskLevel === 'error') {
+
+				li.classList.add('stylev-trigger-error');
+				that.errorNum = (that.errorNum+1)|0;
+			}
+
+			if(outputObj.riskLevel === 'warning') {
+
+				li.classList.add('stylev-trigger-warning');
+				that.warningNum = (that.warningNum+1)|0;
+			}
+			ids.appendChild(elemID);
+			if(ruleID.href) {
+				ids.appendChild(ruleID);
+			}
+			li.appendChild(ids);
+			li.appendChild(anchor);
+			that.docFlag.appendChild(li);
 		},
 
 		jump2RulePage: function(hash) {
@@ -1819,7 +1826,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleTriggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid]');
 		},
 
-		//コンソール関連のイベントを登録
 		bindEvents2Console: function() {
 			var that = STYLEV.VALIDATOR;
 
@@ -1882,7 +1888,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 		},
 
-		//コンソールからの動作
 		markElementViaConsole: function(event) {
 
 			event.preventDefault();
@@ -1890,15 +1895,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			var that = STYLEV.VALIDATOR;
 
-			//監視を中断
 			that.moManager.disconnect();
 
-			var lines = that.consoleList.children;
-
-			//全ての行から選択状態を外す
-			STYLEV.METHODS.each(lines, function(line) {
-				line.classList.remove('stylev-trigger-selected');
-			});
+			var allLines = that.consoleList.children;
+			STYLEV.METHODS.each(allLines, that.offSelectedClassFromLine);
 
 			//クリックした行と同じidを持つ行に選択状態を付加
 			var triggers = that.consoleList.querySelectorAll('a[data-stylevconsoleid="' + event.currentTarget.dataset.stylevconsoleid + '"]');
@@ -1920,6 +1920,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			that.moManager.connect();
 
+		},
+		
+		offSelectedClassFromLine: function(line) {
+			line.classList.remove('stylev-trigger-selected');
 		},
 
 		bind2elem: function() {
@@ -2586,9 +2590,10 @@ STYLEV.METHODS = {
 		return result && 'rgb(' + parseInt(result[1], 16) + ' ,' + parseInt(result[2], 16) + ' ,' + parseInt(result[3], 16) + ')';
 	},
 
+	//TODO: refactor
 	isHidden: function(target) {
 
-		if(target.tagName.toLowerCase() !== 'svg') {
+		if(target.tagName.toLowerCase() !== 'svg' || target.ownerSVGElement) {
 
 			if(target.offsetParent === null) {
 
@@ -2654,9 +2659,8 @@ STYLEV.CHROME_DEVTOOLS = {
 
 		var that = STYLEV.CHROME_DEVTOOLS;
 
-		//エラーや警告が１件もなければ何もしない
 		if(STYLEV.VALIDATOR.outputObjArray.length === 0) {
-			return false;
+			return;
 		}
 		that.inspectOfConsoleAPI = inspectOfConsoleAPI;
 		that.bindEvents();
@@ -2686,8 +2690,10 @@ STYLEV.CHROME_DEVTOOLS = {
 
 		try {
 			that.inspectOfConsoleAPI(elem);
-		} catch(e) {
-			console.error(e);
+		} catch(error) {
+			STYLEV.VALIDATOR.insertGA(error).then(function() {
+				//throw new Error(error);
+			});
 		}
 
 	},
@@ -2703,8 +2709,10 @@ STYLEV.CHROME_DEVTOOLS = {
 
 		try {
 			that.inspectOfConsoleAPI(target);
-		} catch(e) {
-			console.error(e);
+		} catch(error) {
+			STYLEV.VALIDATOR.insertGA(error).then(function() {
+				//throw new Error(error);
+			});
 		}
 
 	}

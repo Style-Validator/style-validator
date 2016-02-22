@@ -27,7 +27,7 @@ node app.js
 
 #### 2. access edit page via web server
 
-http://localhost:8001/extension/rules.html
+http://localhost:8001/extension/options.html
 
 
 #### 3. add new rule and save
