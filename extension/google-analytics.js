@@ -17,7 +17,7 @@
 	//Normal
 	if(splitSrc.length <= 1) {
 
-		ga('styleValidator.send', 'event', 'button', 'click', 'executing validation', 1);
+		ga('styleValidator.send', 'event', 'button', 'execute', 'validation', 1);
 
 	//Other
 	} else {
@@ -30,6 +30,8 @@
 				'exDescription': queryStringObj.error,
 				'exFatal': true
 			});
+			ga('styleValidator.send', 'event', 'error', 'execute', 'exception', 1);
+
 		}
 
 	}

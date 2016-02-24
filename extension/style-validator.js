@@ -94,10 +94,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					});
 				}
 
+
 			} catch(error) {
 
 				that.insertGA(error).then(function() {
-					//throw new Error(error);
+					throw new Error(error);
 				});
 
 			}

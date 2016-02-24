@@ -96,6 +96,8 @@ function callbackAfterServerListening() {
 
 function dbHandler(req, res, path, store, location) {
 
+	console.log('hoge');
+
 	var json = JSON.parse(store);
 
 	var parsedCookieObj = cookieParse(req.headers.cookie);
