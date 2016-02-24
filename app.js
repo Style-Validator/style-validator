@@ -95,6 +95,7 @@ function callbackAfterServerListening() {
  * */
 
 function dbHandler(req, res, path, store, location) {
+	console.log('dbHandler')
 
 	var json = JSON.parse(store);
 
@@ -114,6 +115,8 @@ function dbHandler(req, res, path, store, location) {
 	}
 
 	return function(err, db) {
+
+		console.log('dbHandler r')
 
 		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
 		console.log("Connected correctly to MongoDB");
@@ -218,13 +221,22 @@ function serveData(req, res, path) {
 				break;
 
 			case '/send2db':
+				console.log('send2db')
 
 				var hostname = getClientIP(req, res, path);
+
+				console.log('hostname: ' + hostname)
+
+
 				if(hostname && hostname !== 'localhost') {
+
+					console.log('yes')
+
 					ipLocation(hostname).then(function (location) {
 						MongoClient.connect(dburl, dbHandler(req, res, path, store, location));
 					});
 				} else {
+					console.log('no')
 					MongoClient.connect(dburl, dbHandler(req, res, path, store));
 				}
 				break;
