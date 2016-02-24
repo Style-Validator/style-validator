@@ -232,9 +232,15 @@ function serveData(req, res, path) {
 
 					console.log('yes')
 
-					ipLocation(hostname).then(function (location) {
-						MongoClient.connect(dburl, dbHandler(req, res, path, store, location));
-					});
+					ipLocation(hostname)
+						.then(function (location) {
+							console.log('oh yes')
+							MongoClient.connect(dburl, dbHandler(req, res, path, store, location));
+						})
+						.catch(function (err) {
+							console.log('ouups')
+							console.error(err)
+						});
 				} else {
 					console.log('no')
 					MongoClient.connect(dburl, dbHandler(req, res, path, store));
