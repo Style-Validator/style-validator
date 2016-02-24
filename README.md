@@ -23,12 +23,14 @@ WIN: ctrl + shift + i
 ```
 It is just similar to DevTools's shortcut key
 
+![Validator Screenshot](http://style-validator.github.io/img/screenshot-validator.png)
+
 ## Rule Editor
 
 1. Click `RuleID(e.g. Rule-24)` or go to `options page of extension`
-![Rule Page Screenshot](http://style-validator.github.io/img/screenshot-console.png)
+![Rule page Screenshot](http://style-validator.github.io/img/screenshot-console.png)
 2. View or Edit or Generate Rules and Presets(shareable)
-![Rule Page Screenshot](http://style-validator.github.io/img/screenshot-rulepage.png)
+![Console Screenshot](http://style-validator.github.io/img/screenshot-rulepage.png)
 
 
 # Goal
