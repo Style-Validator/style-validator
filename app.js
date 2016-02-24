@@ -18,7 +18,8 @@ var requestIp = require('request-ip');
 //TODO: test:start
 var mongoose = require('mongoose');
 var nodeUUID = require('node-uuid');
-var ipLocation = require('ip-location');//TODO: implement
+//var ipLocation = require('ip-location');//TODO: implement
+var iplocation = require('iplocation')
 
 /*
  * variables
@@ -223,24 +224,26 @@ function serveData(req, res, path) {
 			case '/send2db':
 				console.log('send2db')
 
-				var hostname = getClientIP(req, res, path);
+				var clientIpAdress = getClientIP(req, res, path);
 
-				console.log('hostname: ' + hostname)
+				console.log('hostname: ' + clientIpAdress)
 
 
-				if(hostname && hostname !== 'localhost') {
+				if(clientIpAdress && clientIpAdress !== 'localhost') {
 
 					console.log('yes')
 
-					ipLocation(hostname)
-						.then(function (location) {
-							console.log('oh yes')
+					iplocation(clientIpAdress, function(error, location) {
+						console.log('yes 1')
+						if(error) {
+							console.log('yes 2')
+							console.error('Unable to get location data');
+							MongoClient.connect(dburl, dbHandler(req, res, path, store));
+						} else {
+							console.log('yes 3')
 							MongoClient.connect(dburl, dbHandler(req, res, path, store, location));
-						})
-						.catch(function (err) {
-							console.log('ouups')
-							console.error(err)
-						});
+						}
+					});
 				} else {
 					console.log('no')
 					MongoClient.connect(dburl, dbHandler(req, res, path, store));
