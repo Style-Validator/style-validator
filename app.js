@@ -18,8 +18,6 @@ var requestIp = require('request-ip');
 //TODO: test:start
 var mongoose = require('mongoose');
 var nodeUUID = require('node-uuid');
-//var ipLocation = require('ip-location');//TODO: implement
-var iplocation = require('iplocation')
 
 /*
  * variables
@@ -133,19 +131,11 @@ function dbHandler(req, res, path, store, location) {
 			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 			console.log('Inserted log data completely to Database');
 
-			user.update({uuid: uuid}, {$inc: {count: 1}}, {upsert: true}, function(err, records) {
+			user.update({uuid: uuid}, {$inc: {count: 1}, $push: {log: {date: json.date, url: json.url}}}, {upsert: true}, function(err, records) {
 
 				assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-				console.log('Updated user data(count) completely to Database');
-
-				//TODO: add count index
-				var situation = location ? {location: location, date: json.date} : {location: {}, date: json.date};
-				user.update({uuid: uuid}, {$push: {log: situation}}, {upsert: true}, function(err, records) {
-
-					assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-					console.log('Updated user data(situation) completely to Database');
-					db.close();
-				});
+				console.log('Updated user data completely to Database');
+				db.close();
 			});
 		});
 
