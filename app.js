@@ -96,8 +96,6 @@ function callbackAfterServerListening() {
 
 function dbHandler(req, res, path, store, location) {
 
-	console.log('hoge');
-
 	var json = JSON.parse(store);
 
 	var parsedCookieObj = cookieParse(req.headers.cookie);
@@ -132,19 +130,19 @@ function dbHandler(req, res, path, store, location) {
 		log.insert(json, {}, function(err, records) {
 
 			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-			console.log('Inserted data completely to Database');
+			console.log('Inserted log data completely to Database');
 
 			user.update({uuid: uuid}, {$inc: {count: 1}}, {upsert: true}, function(err, records) {
 
 				assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-				console.log('Updated data completely to Database');
+				console.log('Updated user data(count) completely to Database');
 
 				//TODO: add count index
 				var situation = location ? {location: location, date: json.date} : {location: {}, date: json.date};
 				user.update({uuid: uuid}, {$push: {log: situation}}, {upsert: true}, function(err, records) {
 
 					assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-					console.log('Updated data completely to Database');
+					console.log('Updated user data(situation) completely to Database');
 					db.close();
 				});
 			});
