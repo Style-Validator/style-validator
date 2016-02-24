@@ -26,7 +26,10 @@ It is just similar to DevTools's shortcut key
 ## Rule Editor
 
 1. Click `RuleID(e.g. Rule-24)` or go to `options page of extension`
+![Rule Page Screenshot](http://style-validator.github.io/img/rule-page-screenshot.png)
 2. View or Edit or Generate Rules and Presets(shareable)
+![Rule Page Screenshot](http://style-validator.github.io/img/rule-page-screenshot.png)
+
 
 # Goal
 
