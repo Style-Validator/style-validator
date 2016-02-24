@@ -14,7 +14,7 @@ Style Validator
 
 [Little Movie (Gif Animation)](http://style-validator.github.io/gif_animations/demo.gif)
 
-1. Install ([Chrome Web Store](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod) or [Bookmarklet](http://style-validator.github.io))
+1. Install from ([Chrome Web Store](https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod) or [Bookmarklet](http://style-validator.github.io))
 2. Click `extension icon` or Press `shortcut key` (MAC: command + shift + i / WIN: ctrl + shift + i)
 ![Validator Screenshot](http://style-validator.github.io/img/screenshot-validator.png?v=1)
 
