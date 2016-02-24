@@ -23,7 +23,7 @@ WIN: ctrl + shift + i
 ```
 It is just similar to DevTools's shortcut key
 
-![Validator Screenshot](http://style-validator.github.io/img/screenshot-validator.png)
+![Validator Screenshot](http://style-validator.github.io/img/screenshot-validator.png?v=1)
 
 ## Rule Editor
 
