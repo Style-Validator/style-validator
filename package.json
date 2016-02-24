@@ -21,6 +21,7 @@
     "devtools-detect": "^2.0.0",
     "express-session": "^1.13.0",
     "ip-location": "^1.0.0",
+    "iplocation": "^2.0.1",
     "kerberos": "0.0.17",
     "mongodb": "^2.1.4",
     "mongoose": "^4.4.2",
