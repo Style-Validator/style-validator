@@ -17,7 +17,7 @@ STYLEV.isChromeExtension = (function() {
 	try {
 		chrome.runtime.onMessage.addListener(function() {} );
 		return true;
-	} catch(e) {
+	} catch(error) {
 		return false;
 	}
 }());
@@ -89,18 +89,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 				} else {
 
-					that.getRulesData().then(function() {
-						that.validate(callback);
-					});
+					that.getRulesData()
+						.then(that.validate.bind(null, callback));
 				}
-
 
 			} catch(error) {
 
-				that.insertGA(error).then(function() {
-					throw new Error(error);
-				});
-
+				that.insertGA(error);
+				throw new Error(error);
 			}
 
 		},
@@ -182,49 +178,57 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		getAllData: function() {
 			var that = STYLEV.VALIDATOR;
+			try {
 
-			var promiseArray = [];
+				var promiseArray = [];
 
-			STYLEV.METHODS.each(that.DATA_PATHES, function(path) {
-				promiseArray.push(that.getURL(path).then(JSON.parse))
-			});
+				STYLEV.METHODS.each(that.DATA_PATHES, function(path) {
+					promiseArray.push(that.getURL(path).then(JSON.parse))
+				});
 
-			//Insert CSS file
-			promiseArray.push(that.getConsoleStyle());
+				//Insert CSS file
+				promiseArray.push(that.getConsoleStyle());
 
-			//If bookmarklet insert external JavaScript files
-			promiseArray.concat(that.insertJS4Bookmarklet());
+				//If bookmarklet insert external JavaScript files
+				promiseArray.concat(that.insertJS4Bookmarklet());
 
-			return promiseArray;
+				return promiseArray;
+
+			} catch(error) {
+
+				that.insertGA(error);
+				throw new Error(error);
+			}
 		},
 
 		getRulesData: function(dataArrayViaAJAX) {
 			var that = STYLEV.VALIDATOR;
-
 			return new Promise(function(resolve, reject) {
-
-				//TODO: refactor
-				if(STYLEV.isChromeExtension) {
-					chrome.storage.local.get('selectedPresetsName', function(message) {
-						var selectedPresetsName = message['selectedPresetsName'];
-						if(selectedPresetsName) {
-							chrome.storage.local.get(selectedPresetsName, function(message) {
-								var rulesData = message[selectedPresetsName];
-								if(rulesData) {
-									that.setRuleDataViaChromeStorage(rulesData, dataArrayViaAJAX, resolve);
-								} else {
-									that.setRuleDataViaAJAX(dataArrayViaAJAX, resolve);
-								}
-							});
-						} else {
-							that.setRuleDataViaAJAX(dataArrayViaAJAX, resolve);
-						}
-					});
-				} else {
-					that.setRuleDataViaAJAX(dataArrayViaAJAX, resolve);
+				try {
+					//TODO: refactor
+					if(STYLEV.isChromeExtension) {
+						chrome.storage.local.get('selectedPresetsName', function(message) {
+							var selectedPresetsName = message['selectedPresetsName'];
+							if(selectedPresetsName) {
+								chrome.storage.local.get(selectedPresetsName, function(message) {
+									var rulesData = message[selectedPresetsName];
+									if(rulesData) {
+										that.setRuleDataViaChromeStorage(rulesData, dataArrayViaAJAX, resolve);
+									} else {
+										that.setRuleDataViaAJAX(dataArrayViaAJAX, resolve);
+									}
+								});
+							} else {
+								that.setRuleDataViaAJAX(dataArrayViaAJAX, resolve);
+							}
+						});
+					} else {
+						that.setRuleDataViaAJAX(dataArrayViaAJAX, resolve);
+					}
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
 				}
-
-
 			});
 		},
 
@@ -250,23 +254,28 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		
 		setParametersViaAJAX: function(dataArray) {
 			var that = STYLEV.VALIDATOR;
-
 			return new Promise(function(resolve, reject) {
+				try {
 
-				//Set html tags data
-				that.tagsAllData = dataArray[1];
-				that.tagsEmptyData = dataArray[2];
-				that.tagsReplacedElementData = dataArray[3];
-				that.tagsFilter = dataArray[4];
-				that.specialKwVals = dataArray[5];
+					//Set html tags data
+					that.tagsAllData = dataArray[1];
+					that.tagsEmptyData = dataArray[2];
+					that.tagsReplacedElementData = dataArray[3];
+					that.tagsFilter = dataArray[4];
+					that.specialKwVals = dataArray[5];
 
-				//Set regex for detecting html tags TODO: remove above all
-				that.regexAllHTMLTag = new RegExp('^( ' + that.tagsAllData.join(' | ') + ' )');
-				that.regexEmptyElem = new RegExp('^( ' + that.tagsEmptyData.join(' | ') + ' )');
-				that.regexReplacedElem = new RegExp('^( ' + that.tagsReplacedElementData.join(' | ') + ' )');
-				that.regexTagsFilter = new RegExp('^( ' + that.tagsFilter.join(' | ') + ' )');
+					//Set regex for detecting html tags TODO: remove above all
+					that.regexAllHTMLTag = new RegExp('^( ' + that.tagsAllData.join(' | ') + ' )');
+					that.regexEmptyElem = new RegExp('^( ' + that.tagsEmptyData.join(' | ') + ' )');
+					that.regexReplacedElem = new RegExp('^( ' + that.tagsReplacedElementData.join(' | ') + ' )');
+					that.regexTagsFilter = new RegExp('^( ' + that.tagsFilter.join(' | ') + ' )');
 
-				resolve();
+					resolve();
+
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
+				}
 			});
 		},
 
@@ -283,16 +292,20 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		firstValidate: function(callback) {
 			var that = STYLEV.VALIDATOR;
+			return function() {
+				try {
+					//Set up Mutation Observer
+					that.moManager = that.setupMutationObserver();
 
-			return function(consoleStyleText) {
+					//Start Validate
+					that.validate(callback);
 
-				//Set up Mutation Observer
-				that.moManager = that.setupMutationObserver();
+					STYLEV.isFirstExecution = false;
 
-				//Start Validate
-				that.validate(callback);
-
-				STYLEV.isFirstExecution = false;
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
+				}
 			}
 		},
 
@@ -321,7 +334,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 
 			return new Promise(function(resolve, reject) {
-
 				var script = document.createElement('script');
 				script.src = path;
 				script.classList.add('stylev-ignore');
@@ -388,132 +400,140 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		updateOptions: function() {
 			var that = STYLEV.VALIDATOR;
-
 			return new Promise(function(resolve, reject) {
+				try {
+					//Chrome Extensionの場合は更新する
+					if(STYLEV.isChromeExtension) {
 
-				//Chrome Extensionの場合は更新する
-				if(STYLEV.isChromeExtension) {
+						chrome.storage.sync.get('options', function(message) {
 
-					chrome.storage.sync.get('options', function(message) {
+							if(message.options !== undefined) {
+								//オプション設定
+								STYLEV.options = {
 
-						if(message.options !== undefined) {
-							//オプション設定
-							STYLEV.options = {
+									ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
+									ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
+									ENABLE_ANIMATION: message.options.enableAnimation,
+									SCOPE_SELECTORS: message.options.scopeSelectors,
+									SCOPE_SELECTORS_TEXT: message.options.scopeSelectorsText ? message.options.scopeSelectorsText.split(',') : '',
+									IGNORE_SELECTORS: message.options.ignoreSelectors,
+									IGNORE_SELECTORS_TEXT: message.options.ignoreSelectorsText ? message.options.ignoreSelectorsText.split(',') : '',
+									URL_FILTERS: message.options.urlFilters
+								};
+							}
 
-								ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
-								ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
-								ENABLE_ANIMATION: message.options.enableAnimation,
-								SCOPE_SELECTORS: message.options.scopeSelectors,
-								SCOPE_SELECTORS_TEXT: message.options.scopeSelectorsText ? message.options.scopeSelectorsText.split(',') : '',
-								IGNORE_SELECTORS: message.options.ignoreSelectors,
-								IGNORE_SELECTORS_TEXT: message.options.ignoreSelectorsText ? message.options.ignoreSelectorsText.split(',') : '',
-								URL_FILTERS: message.options.urlFilters
-							};
-						}
+							resolve();
+
+						});
+
+						//Chrome Extension以外の場合何もしない
+					} else {
 
 						resolve();
-
-					});
-
-				//Chrome Extension以外の場合何もしない
-				} else {
-
-					resolve();
+					}
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
 				}
 			});
 
 		},
 
 		validate: function(callback) {
-
-			console.info('Style Validator: Validator is starting...');
-			console.time('Style Validator Execution');
-
 			var that = STYLEV.VALIDATOR;
 
-			that.initializeBeforeValidation();
+			try {
+				console.info('Style Validator: Validator is starting...');
+				console.time('Style Validator Execution');
 
-			console.profile('validate');
-			console.time('validate');
-			//Check all elements in the document
-			STYLEV.METHODS.each(that.allElem, that.validateByElement);
-			console.timeEnd('validate');
-			console.profileEnd('validate');
+				that.initializeBeforeValidation();
 
-			//デフォルトスタイル取得用のiframeを削除
-			that.removeIframe4getDefaultStyles();
+				console.profile('validate');
+				console.time('validate');
+				//Check all elements in the document
+				STYLEV.METHODS.each(that.allElem, that.validateByElement);
+				console.timeEnd('validate');
+				console.profileEnd('validate');
 
-			if(that.isSameWithPreviousData()) {
-				return false;
-			}
-			console.time('show');
-			that.showConsole();
-			console.timeEnd('show');
+				//デフォルトスタイル取得用のiframeを削除
+				that.removeIframe4getDefaultStyles();
 
-			//Send result data to database
-			that.send2db();
+				if(that.isSameWithPreviousData()) {
+					return false;
+				}
+				console.time('show');
+				that.showConsole();
+				console.timeEnd('show');
 
-			//Get DOM of console
-			that.setParametersAfterShowingConsole();
+				//Send result data to database
+				that.send2db();
 
-			//対象要素をクリックした時のイベントハンドラを登録
-			that.bind2elem();
+				//Get DOM of console
+				that.setParametersAfterShowingConsole();
 
-			//バリデート完了時のcallbackが存在し関数だった場合実行
-			if(typeof callback === 'function') {
-				callback();
-			}
+				//対象要素をクリックした時のイベントハンドラを登録
+				that.bind2elem();
 
-			//GAタグを挿入
-			that.insertGA();
+				//バリデート完了時のcallbackが存在し関数だった場合実行
+				if(typeof callback === 'function') {
+					callback();
+				}
 
-			console.info('Style Validator: Validated and Console has been displayed');
-			console.timeEnd('Style Validator Execution');
+				//GAタグを挿入
+				that.insertGA();
 
-			//バリデータによるDOM変更が全て完了してから監視開始
-			that.moManager.connect();
+				console.info('Style Validator: Validated and Console has been displayed');
+				console.timeEnd('Style Validator Execution');
 
-			STYLEV.isValidated = true;
+				//バリデータによるDOM変更が全て完了してから監視開始
+				that.moManager.connect();
 
-			if(STYLEV.isChromeExtension) {
-				STYLEV.CHROME_EXTENSION.syncStatusIsValidated(true);
+				STYLEV.isValidated = true;
+
+				if(STYLEV.isChromeExtension) {
+					STYLEV.CHROME_EXTENSION.syncStatusIsValidated(true);
+				}
+
+			} catch(error) {
+				that.insertGA(error);
+				throw new Error(error);
 			}
 		},
 
+		//TODO: move to outside for try-catch wrapping
 		insertGA: function(error) {
 			var that = STYLEV.VALIDATOR;
 
-			return new Promise(function(resolve, reject) {
+			if(that.scriptTagGA !== undefined) {
+				that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
+			}
 
-				if(that.scriptTagGA !== undefined) {
-					that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
+			var queryString = '';
+
+			if(error) {
+				queryString += 'error=';
+				queryString += error.message || '';
+				if(error.filename) {
+					queryString += '(';
+					queryString += error.filename || '';
+					queryString += error.lineno ? ':' + error.lineno : '';
+					queryString += error.colno ? ':' + error.colno : '';
+					queryString += ')';
 				}
-
-				var queryString = '';
-
-				if(error) {
-					queryString += 'error=';
-					queryString += error.message || '';
-					if(error.filename) {
-						queryString += '(';
-						queryString += error.filename || '';
-						queryString += error.lineno ? ':' + error.lineno : '';
-						queryString += error.colno ? ':' + error.colno : '';
-						queryString += ')';
-					}
+				if(error.stack) {
+					queryString += '(';
+					queryString += error.stack
+					queryString += ')';
 				}
+			}
 
-				that.scriptTagGA = document.createElement('script');
-				that.scriptTagGA.src = that.settings.GA_PATH + (queryString ? '?' + encodeURIComponent(queryString) : '');
-				that.scriptTagGA.async = "async";
-				that.scriptTagGA.id = 'stylev-ga';
-				that.scriptTagGA.classList.add('stylev-ignore');
+			that.scriptTagGA = document.createElement('script');
+			that.scriptTagGA.src = that.settings.GA_PATH + (queryString ? '?' + encodeURIComponent(queryString) : '');
+			that.scriptTagGA.async = "async";
+			that.scriptTagGA.id = 'stylev-ga';
+			that.scriptTagGA.classList.add('stylev-ignore');
 
-				/* append */
-				that.head.appendChild(that.scriptTagGA);
-
-				resolve();
-			});
+			that.head.appendChild(that.scriptTagGA);
 		},
 
 		isRegularTag: function (tagName) {
@@ -582,43 +602,48 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		validateByRule: function(elemObj) {
 			var that = STYLEV.VALIDATOR;
-
 			return function(ruleObj) {
+				try {
 
-				if(!ruleObj.isEnabled) {
-					return 'continue';
-				}
+					if(!ruleObj.isEnabled) {
+						return 'continue';
+					}
 
-				//Filter unsupported tag
-				var isUnsupportedTag =
-					(ruleObj.replacedElem === 'replaced' && !elemObj.isReplaced) ||
-					(ruleObj.replacedElem === 'non-replaced' && elemObj.isReplaced) ||
-					(ruleObj.emptyElem === 'empty' && !elemObj.emptyElem) ||
-					(ruleObj.emptyElem === 'no-empty' && elemObj.emptyElem);
+					//Filter unsupported tag
+					var isUnsupportedTag =
+						(ruleObj.replacedElem === 'replaced' && !elemObj.isReplaced) ||
+						(ruleObj.replacedElem === 'non-replaced' && elemObj.isReplaced) ||
+						(ruleObj.emptyElem === 'empty' && !elemObj.emptyElem) ||
+						(ruleObj.emptyElem === 'no-empty' && elemObj.emptyElem);
 
-				if(isUnsupportedTag) {
-					return 'continue';
-				}
+					if(isUnsupportedTag) {
+						return 'continue';
+					}
 
-				//Extend Property to Element Object
-				//These properties need to be initialize by a rule
-				ruleObj.hasAllBaseStyles = true;
-				ruleObj.baseStylesText = '';//TODO: unite below?
-				ruleObj.baseStylesObjArray = [];
-
-
-				//Check All Base Styles
-				STYLEV.METHODS.each(ruleObj.baseStyles, function(baseStyleObj) {
-					that.testStyles(baseStyleObj, elemObj, ruleObj, 'base')
-				});
+					//Extend Property to Element Object
+					//These properties need to be initialize by a rule
+					ruleObj.hasAllBaseStyles = true;
+					ruleObj.baseStylesText = '';//TODO: unite below?
+					ruleObj.baseStylesObjArray = [];
 
 
-				//If all base rules is passed TODO: ORもオプションで指定できるようにするか検討
-				if(ruleObj.hasAllBaseStyles) {
-					//Check All NG Styles
-					STYLEV.METHODS.each(ruleObj.ngStyles, function(ngStyleObj) {
-						that.testStyles(ngStyleObj, elemObj, ruleObj, 'ng');
+					//Check All Base Styles
+					STYLEV.METHODS.each(ruleObj.baseStyles, function(baseStyleObj) {
+						that.testStyles(baseStyleObj, elemObj, ruleObj, 'base')
 					});
+
+
+					//If all base rules is passed TODO: ORもオプションで指定できるようにするか検討
+					if(ruleObj.hasAllBaseStyles) {
+						//Check All NG Styles
+						STYLEV.METHODS.each(ruleObj.ngStyles, function(ngStyleObj) {
+							that.testStyles(ngStyleObj, elemObj, ruleObj, 'ng');
+						});
+					}
+
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
 				}
 			};
 		},
@@ -758,7 +783,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					}
 				});
 			}
-
 
 			//TODO: refactor below
 			//TODO: 0.00001とかの場合を考慮して、parseIntの10進数も考える 修正済み？要確認
@@ -2051,24 +2075,33 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var styleSheets = doc.styleSheets;
 
 			return new Promise(function(resolve, reject) {
-				STYLEV.METHODS.each(styleSheets, that.searchByStyleSheet(doc));
-				resolve();
+				try {
+					STYLEV.METHODS.each(styleSheets, that.searchByStyleSheet(doc));
+					resolve();
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
+				}
 			});
 		},
 
 		searchByStyleSheet: function(doc) {
 			var that = STYLEV.VALIDATOR;
-
 			return function(styleSheet) {
+				try {
+					var cssRules = styleSheet.cssRules;
 
-				var cssRules = styleSheet.cssRules;
+					//TODO: remove?
+					if(cssRules === null) {
+						return 'continue';
+					}
 
-				//TODO: remove?
-				if(cssRules === null) {
-					return 'continue';
+					STYLEV.METHODS.each(cssRules, that.searchByCssRule(doc));
+
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
 				}
-
-				STYLEV.METHODS.each(cssRules, that.searchByCssRule(doc));
 			};
 		},
 
@@ -2076,34 +2109,40 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 
 			return function(cssRule) {
-
-				that.bindMediaQueryChange(cssRule);
-				that.handleCssRule(cssRule, doc);
+				try {
+					that.bindMediaQueryChange(cssRule);
+					that.handleCssRule(cssRule, doc);
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
+				}
 			}
 		},
 
 		mediaTextArray: [],
 		bindMediaQueryChange: function(cssRule) {
 			var that = STYLEV.VALIDATOR;
-
 			if(cssRule.media) {
 				var mediaText = cssRule.media.mediaText;
-
 				if(that.mediaTextArray.indexOf(mediaText) < 0) {
 					matchMedia(mediaText).addEventListener('change', that.mediaQueryEventHandler);
 					that.mediaTextArray.push(mediaText);
 				}
-
 			}
 		},
 
 		mediaQueryEventHandler: function(event) {
 			var that = STYLEV.VALIDATOR;
-
-			if(STYLEV.isValidated) {
-				console.info('Style Validator: Media Query has been changed ' + (event.matches ? 'to' : 'from') + ' ' + event.media);
-				that.getStyleSheets()
-					.then(that.setExecutionTimer);
+			try {
+				if(STYLEV.isValidated) {
+					//TODO: display console header
+					console.info('Style Validator: Media Query has been changed ' + (event.matches ? 'to' : 'from') + ' ' + event.media);
+					that.getStyleSheets()
+						.then(that.setExecutionTimer);
+				}
+			} catch(error) {
+				that.insertGA(error);
+				throw new Error(error);
 			}
 		},
 
@@ -2158,7 +2197,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			STYLEV.METHODS.each(style, function(property) {
 				var value = style.getPropertyValue(property);
 				if(value) {
-					styleData[property] = {};//styleData[property] = styleData[property] || {}
+					styleData[property] = {};
 					styleData[property].value = value;
 					styleData[property].priority = style.getPropertyPriority(property);
 				}
@@ -2171,95 +2210,103 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		searchBySelector: function(styleData, doc) {
 			var that = STYLEV.VALIDATOR;
-
 			return function(specificityObj) {
+				try {
+					var selector = specificityObj.selector;
 
-				var selector = specificityObj.selector;
+					var targetsBySelector = doc.querySelectorAll(selector);
+					var specificity = parseInt(specificityObj.specificity.replace(/,/g, ''), 10);
 
-				var targetsBySelector = doc.querySelectorAll(selector);
-				var specificity = parseInt(specificityObj.specificity.replace(/,/g, ''), 10);
+					STYLEV.METHODS.each(styleData, function(property) {
+						styleData[property].specificity = specificity;
+					});
 
-				STYLEV.METHODS.each(styleData, function(property) {
-					styleData[property].specificity = specificity;
-				});
+					STYLEV.METHODS.each(targetsBySelector, that.searchByElement(styleData));
 
-				STYLEV.METHODS.each(targetsBySelector, that.searchByElement(styleData));
-
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
+				}
 			};
 		},
 
 		searchByElement: function(styleData) {
 			var that = STYLEV.VALIDATOR;
-
 			return function(target) {
-
-				var targetStyle = target.style;
-
-				var targetProperties = Array.prototype.filter.call(Object.keys(styleData), function(element) {
-					return that.specifiedTargetProperties.indexOf(element) >= 0;
-				});
-
-				STYLEV.METHODS.each(targetProperties, that.setStyleDataViaStylesheet(target, targetStyle, styleData));
+				try {
+					var targetStyle = target.style;
+					var targetProperties = Array.prototype.filter.call(Object.keys(styleData), function(element) {
+						return that.specifiedTargetProperties.indexOf(element) >= 0;
+					});
+					STYLEV.METHODS.each(targetProperties, that.setStyleDataViaStylesheet(target, targetStyle, styleData));
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
+				}
 			};
 		},
 
 		setStyleDataViaStylesheet: function(target, targetStyle, styleData) {
 			var that = STYLEV.VALIDATOR;
-
 			return function(property) {
+				try {
 
-				//Cancel If property data is none [important]
-				if(styleData[property] === undefined) {
-					return 'continue';
-				}
-
-				//Via CSS Rule
-				var valueOfCssRule = styleData[property].value || 'auto';//TODO: refactor
-				var priorityOfCSSRule = styleData[property].priority || '';//TODO: refactor
-				var specificityOfCSSRule = styleData[property].specificity || '';//TODO: refactor
-
-				//Via Style Attribute
-				var valueOfAttr = targetStyle.getPropertyValue(property);
-				var priorityOfAttr = targetStyle.getPropertyPriority(property);
-
-				//Calculate specificity
-				var specificity = valueOfAttr ? 1000 : specificityOfCSSRule;
-
-				//Set & initialize custom property
-				target.specifiedStyle = target.specifiedStyle || {};
-				target.specifiedStyle[property] = target.specifiedStyle[property] || {};
-
-				target.specifiedStyle[property].priority = target.specifiedStyle[property].priority || '';
-				target.specifiedStyle[property].specificity = target.specifiedStyle[property].specificity || 0;
-
-				//片方：CSS指定がありstyle属性がない（CSS Rule win）
-				if(valueOfCssRule && !valueOfAttr) {
-					return that.testAndSet(target, property, valueOfCssRule, priorityOfCSSRule, specificity);
-				}
-
-				//片方：CSS指定がないstyle属性がある（Style Attribute win）
-				if(!valueOfCssRule && valueOfAttr) {
-					return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
-				}
-
-				if(valueOfCssRule && valueOfAttr) {
-
-					//両方：CSS指定（importantなし）とstyle属性（importantなし）（Style Attribute win）
-					if(!priorityOfCSSRule && !priorityOfAttr) {
-						return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
+					//Cancel If property data is none [important]
+					if(styleData[property] === undefined) {
+						return 'continue';
 					}
-					//両方：CSS指定（importantあり）とstyle属性（importantなし）（CSS Rule win）
-					if(priorityOfCSSRule && !priorityOfAttr) {
+
+					//Via CSS Rule
+					var valueOfCssRule = styleData[property].value || 'auto';//TODO: refactor
+					var priorityOfCSSRule = styleData[property].priority || '';//TODO: refactor
+					var specificityOfCSSRule = styleData[property].specificity || '';//TODO: refactor
+
+					//Via Style Attribute
+					var valueOfAttr = targetStyle.getPropertyValue(property);
+					var priorityOfAttr = targetStyle.getPropertyPriority(property);
+
+					//Calculate specificity
+					var specificity = valueOfAttr ? 1000 : specificityOfCSSRule;
+
+					//Set & initialize custom property
+					target.specifiedStyle = target.specifiedStyle || {};
+					target.specifiedStyle[property] = target.specifiedStyle[property] || {};
+
+					target.specifiedStyle[property].priority = target.specifiedStyle[property].priority || '';
+					target.specifiedStyle[property].specificity = target.specifiedStyle[property].specificity || 0;
+
+					//片方：CSS指定がありstyle属性がない（CSS Rule win）
+					if(valueOfCssRule && !valueOfAttr) {
 						return that.testAndSet(target, property, valueOfCssRule, priorityOfCSSRule, specificity);
 					}
-					//両方：CSS指定（importantあり）とstyle属性（importantあり）（Style Attribute win）
-					if(priorityOfCSSRule && priorityOfAttr) {
+
+					//片方：CSS指定がないstyle属性がある（Style Attribute win）
+					if(!valueOfCssRule && valueOfAttr) {
 						return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
 					}
-					//両方：CSS指定（importantなし）とstyle属性（importantあり）（Style Attribute win）
-					if(!priorityOfCSSRule && priorityOfAttr) {
-						return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
+
+					if(valueOfCssRule && valueOfAttr) {
+
+						//両方：CSS指定（importantなし）とstyle属性（importantなし）（Style Attribute win）
+						if(!priorityOfCSSRule && !priorityOfAttr) {
+							return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
+						}
+						//両方：CSS指定（importantあり）とstyle属性（importantなし）（CSS Rule win）
+						if(priorityOfCSSRule && !priorityOfAttr) {
+							return that.testAndSet(target, property, valueOfCssRule, priorityOfCSSRule, specificity);
+						}
+						//両方：CSS指定（importantあり）とstyle属性（importantあり）（Style Attribute win）
+						if(priorityOfCSSRule && priorityOfAttr) {
+							return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
+						}
+						//両方：CSS指定（importantなし）とstyle属性（importantあり）（Style Attribute win）
+						if(!priorityOfCSSRule && priorityOfAttr) {
+							return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
+						}
 					}
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
 				}
 			};
 		},
@@ -2319,16 +2366,21 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		},
 
 		setStyleDataViaAttr: function(target, targetStyle) {
+			var that = STYLEV.VALIDATOR;
 			return function(property) {
-
-				var value = targetStyle.getPropertyValue(property);
-				if(value) {
-					var priority = targetStyle.getPropertyPriority(property);
-					target.specifiedStyle = target.specifiedStyle || {};
-					target.specifiedStyle[property] = target.specifiedStyle[property] || {};
-					target.specifiedStyle[property].value = value;
-					target.specifiedStyle[property].priority = priority || '';
-					target.specifiedStyle[property].specificity = 1000;
+				try {
+					var value = targetStyle.getPropertyValue(property);
+					if(value) {
+						var priority = targetStyle.getPropertyPriority(property);
+						target.specifiedStyle = target.specifiedStyle || {};
+						target.specifiedStyle[property] = target.specifiedStyle[property] || {};
+						target.specifiedStyle[property].value = value;
+						target.specifiedStyle[property].priority = priority || '';
+						target.specifiedStyle[property].specificity = 1000;
+					}
+				} catch(error) {
+					that.insertGA(error);
+					throw new Error(error);
 				}
 			};
 		},
@@ -2692,9 +2744,8 @@ STYLEV.CHROME_DEVTOOLS = {
 		try {
 			that.inspectOfConsoleAPI(elem);
 		} catch(error) {
-			STYLEV.VALIDATOR.insertGA(error).then(function() {
-				//throw new Error(error);
-			});
+			STYLEV.VALIDATOR.insertGA(error);
+			throw new Error(error);
 		}
 
 	},
@@ -2711,9 +2762,8 @@ STYLEV.CHROME_DEVTOOLS = {
 		try {
 			that.inspectOfConsoleAPI(target);
 		} catch(error) {
-			STYLEV.VALIDATOR.insertGA(error).then(function() {
-				//throw new Error(error);
-			});
+			STYLEV.VALIDATOR.insertGA(error);
+			throw new Error(error);
 		}
 
 	}

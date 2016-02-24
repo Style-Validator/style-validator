@@ -26,14 +26,11 @@
 		var queryStringObj = parseQueryString(queryStrings);
 
 		if(queryStringObj.error) {
+			ga('styleValidator.send', 'event', 'error', 'execute', queryStringObj.error, location.href);
 			ga('styleValidator.send', 'exception',{
 				'exDescription': queryStringObj.error,
 				'exFatal': true
-			});
-			ga('styleValidator.send', 'event', 'error', 'execute', 'exception', 1);
-
-		}
-
+			});		}
 	}
 
 	function parseQueryString(path) {
@@ -57,7 +54,7 @@
 		var len = scripts.length;
 		for (var i = 0; i < len; i++) {
 			var scriptSrc = scripts[i].src;
-			if (scriptSrc.indexOf('google-analytics.com/analytics.js')>-1) {
+			if (scriptSrc.indexOf('google-analytics.com/analytics.js') > -1) {
 				return true;
 			}
 		}
