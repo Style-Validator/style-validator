@@ -262,11 +262,7 @@ STYLEV.RULES = {
 				.then(that.getHashFromConsole)
 				.then(that.adjustScrollByHash)
 				.then(that.positionBasedOnScroll)
-				.then(that.adjustScrollByHash)
-			;
-			//window.scrollBy(0, 1);//TODO: fix better
-
-			STYLEV.VALIDATOR.getStyleSheets();
+				.then(that.adjustScrollByHash);
 		});
 	},
 
@@ -1662,9 +1658,7 @@ STYLEV.RULES = {
 				window.addEventListener('scroll', fixPositionHandler);
 				that.fixPositionHandlers.push(fixPositionHandler);
 			});
-
 			setTimeout(resolve, 0);
-
 		});
 	},
 
@@ -1707,36 +1701,41 @@ STYLEV.RULES = {
 
 	fixPositionHandler: function(target, fixTargets) {
 		var that = STYLEV.RULES;
+		that.fixPosition(target, fixTargets);
 
 		return function(event) {
-
-
-			that.each(fixTargets, function(fixTarget, i) {
-
-				var fixTargetGBCR;
-				var targetGBCR = target.getBoundingClientRect();
-
-				//enter
-				if(targetGBCR.top <= that.mainHeaderOffsetHeight + 1) {//TODO: fix magic number
-
-					fixTarget.classList.add('float-in-window', 'fixed-in-window');
-					fixTarget.classList.remove('absolute-in-window');
-
-					fixTargetGBCR = fixTarget.getBoundingClientRect();
-
-					//transition
-					if(targetGBCR.bottom <= fixTargetGBCR.bottom + 1) {//TODO: fix magic number
-						fixTarget.classList.remove('fixed-in-window');
-						fixTarget.classList.add('absolute-in-window');
-					}
-
-					//leave
-				} else {
-					fixTargetGBCR = null;
-					fixTarget.classList.remove('float-in-window', 'fixed-in-window', 'absolute-in-window');
-				}
-			});
+			that.fixPosition(target, fixTargets);
 		};
+	},
+
+	fixPosition: function(target, fixTargets) {
+		var that = STYLEV.RULES;
+
+		that.each(fixTargets, function(fixTarget, i) {
+
+			var fixTargetGBCR;
+			var targetGBCR = target.getBoundingClientRect();
+
+			//enter
+			if(targetGBCR.top <= that.mainHeaderOffsetHeight + 1) {//TODO: fix magic number
+
+				fixTarget.classList.add('float-in-window', 'fixed-in-window');
+				fixTarget.classList.remove('absolute-in-window');
+
+				fixTargetGBCR = fixTarget.getBoundingClientRect();
+
+				//transition
+				if(targetGBCR.bottom <= fixTargetGBCR.bottom + 1) {//TODO: fix magic number
+					fixTarget.classList.remove('fixed-in-window');
+					fixTarget.classList.add('absolute-in-window');
+				}
+
+				//leave
+			} else {
+				fixTargetGBCR = null;
+				fixTarget.classList.remove('float-in-window', 'fixed-in-window', 'absolute-in-window');
+			}
+		});
 	},
 
 	adjustScrollByHash: function(event) {
@@ -1760,6 +1759,8 @@ STYLEV.RULES = {
 					history.pushState(null, title, ruleId);
 					resolve();
 				}
+			} else {
+				resolve();
 			}
 		});
 	}

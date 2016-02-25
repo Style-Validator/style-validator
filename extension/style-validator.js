@@ -538,6 +538,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 
 			that.scriptTagGA = document.createElement('script');
+			console.log(that.settings.GA_PATH)
 			that.scriptTagGA.src = that.settings.GA_PATH + (queryString ? '?' + encodeURIComponent(queryString) : '');
 			that.scriptTagGA.async = "async";
 			that.scriptTagGA.id = 'stylev-ga';
@@ -1012,6 +1013,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			logObj.date = new Date();
 			logObj.ua = navigator.userAgent;
 			logObj.timeMS = new Date() - that.startTime;
+			logObj.matchedMediaTexts = that.matchedMediaTextsArray;
 			logObj.count = {};
 			logObj.count.total = that.logObjArray.length;
 			logObj.count.error = that.errorNum;
@@ -2106,14 +2108,16 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			var doc = _document || document;
 			var styleSheets = doc.styleSheets;
+			that.matchedMediaTextsArray = [];
 
 			return new Promise(function(resolve, reject) {
 				try {
 					STYLEV.METHODS.each(styleSheets, that.searchByStyleSheet(doc));
 					resolve();
 				} catch(error) {
-					that.insertGA(error);
-					throw new Error(error);
+					console.error(error)
+					//that.insertGA(error);
+					//throw new Error(error);
 				}
 			});
 		},
@@ -2152,24 +2156,34 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 		},
 
-		mediaTextArray: [],
+		allMediaTextsArray: [],
 		bindMediaQueryChange: function(cssRule) {
 			var that = STYLEV.VALIDATOR;
 			if(cssRule.media) {
 				var mediaText = cssRule.media.mediaText;
-				if(that.mediaTextArray.indexOf(mediaText) < 0) {
-					matchMedia(mediaText).addEventListener('change', that.mediaQueryEventHandler);
-					that.mediaTextArray.push(mediaText);
+				var _matchMedia = matchMedia(mediaText);
+
+				//If same mediaText is not exist
+				if(that.allMediaTextsArray.indexOf(mediaText) < 0) {
+					_matchMedia.addEventListener('change', that.mediaQueryEventHandler);
+					that.allMediaTextsArray.push(mediaText);
+				}
+
+				if(_matchMedia.matches) {
+					that.matchedMediaTextsArray.push(mediaText);
 				}
 			}
 		},
 
+		//TODO: support muliple mediaquery
 		mediaQueryEventHandler: function(event) {
 			var that = STYLEV.VALIDATOR;
 			try {
 				if(STYLEV.isValidated) {
+
 					//TODO: display console header
 					console.info('Style Validator: Media Query has been changed ' + (event.matches ? 'to' : 'from') + ' ' + event.media);
+
 					that.getStyleSheets()
 						.then(that.setExecutionTimer);
 				}

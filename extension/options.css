@@ -295,7 +295,6 @@ body {
 }
 .main-content-heading {
 	font-size: 24px;
-	flex: 0 0 auto;
 	font-weight: normal;
 	float: left;
 	margin-top: 42px;

@@ -1427,6 +1427,24 @@
 				"value": "!default",
 				"isParentElem": false,
 				"pseudoElem": ""
+			},
+			{
+				"property": "display",
+				"value": "!flex",
+				"isParentElem": true,
+				"pseudoElem": ""
+			},
+			{
+				"property": "float",
+				"value": "!default",
+				"isParentElem": false,
+				"pseudoElem": ""
+			},
+			{
+				"property": "position",
+				"value": "[absolute|fixed]",
+				"isParentElem": false,
+				"pseudoElem": ""
 			}
 		],
 		"ngStyles": [
@@ -1458,7 +1476,7 @@
 		"ngStyles": [
 			{
 				"property": "display",
-				"value": "!flex",
+				"value": "![flex|none]",
 				"isParentElem": true,
 				"pseudoElem": "",
 				"riskLevel": "error",
