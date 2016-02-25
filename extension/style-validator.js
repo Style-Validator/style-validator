@@ -65,6 +65,15 @@ STYLEV.consoleScrollTop = STYLEV.consoleScrollTop || 0;
 STYLEV.selectedConsoleLine = STYLEV.selectedConsoleLine || null;
 STYLEV.scaleMode = STYLEV.scaleMode || 'normal';
 
+//Get Version of Extension
+if(STYLEV.isChromeExtension) {
+	chrome.runtime.sendMessage({
+		name: 'requestVersion'
+	}, function(message) {
+		STYLEV.version = message.version;
+	});
+}
+
 //Main object of Validator
 STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
@@ -994,20 +1003,21 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var apiURI = 'https://style-validator.herokuapp.com/send2db';
 			//var apiURI = 'http://localhost:8001/send2db';
 
-			var dataObj = {};
+			var logObj = {};
 
-			dataObj.uuid = '';
-			dataObj.url = location.href;
-			dataObj.date = new Date();
-			dataObj.ua = navigator.userAgent;
-			dataObj.timeMS = new Date() - that.startTime;
-			dataObj.count = {};
-			dataObj.count.total = that.logObjArray.length;
-			dataObj.count.error = that.errorNum;
-			dataObj.count.warning = that.warningNum;
-			dataObj.results = that.logObjArray;
+			logObj.uuid = '';
+			logObj.version = STYLEV.version;
+			logObj.url = location.href;
+			logObj.date = new Date();
+			logObj.ua = navigator.userAgent;
+			logObj.timeMS = new Date() - that.startTime;
+			logObj.count = {};
+			logObj.count.total = that.logObjArray.length;
+			logObj.count.error = that.errorNum;
+			logObj.count.warning = that.warningNum;
+			logObj.results = that.logObjArray;
 
-			var data4send = JSON.stringify(dataObj, null, '\t');
+			var data4send = JSON.stringify(logObj, null, '\t');
 
 			xhr.open('POST', apiURI, true);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -1713,9 +1723,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 				//DevToolsの接続状態を表示させる
 				chrome.runtime.sendMessage({
-
 					name: 'switchMode'
-
 				}, function(message) {
 
 					if(message.isConnected2Devtools !== undefined) {

@@ -102,10 +102,13 @@ function dbHandler(req, res, path, store, location) {
 	var uuid;
 
 	if(isNoCookie) {
+
+		//Converting ObjectID to UUID
 		//var ObjectID = mongodb.ObjectID;
 		//uuid = new ObjectID();
 		//uuid = nodeUUID.v4(null, new Buffer(16));
 		//uuid = mongodb.Binary(uuid, mongodb.Binary.SUBTYPE_UUID);
+
 		uuid = nodeUUID.v4();
 		res.setHeader('Set-Cookie', setCookie('_sv', uuid));
 	} else {
@@ -119,10 +122,6 @@ function dbHandler(req, res, path, store, location) {
 
 		json.uuid = uuid;
 
-		if(location) {
-			json.location = location;
-		}
-
 		var log = db.collection('log');
 		var user = db.collection('user');
 
@@ -131,7 +130,7 @@ function dbHandler(req, res, path, store, location) {
 			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 			console.log('Inserted log data completely to Database');
 
-			user.update({uuid: uuid}, {$inc: {count: 1}, $push: {log: {date: json.date, url: json.url}}}, {upsert: true}, function(err, records) {
+			user.update({uuid: uuid}, {$inc: {count: 1}, $push: {log: {date: json.date, url: json.url, version: json.version}}, $set: {currentVersion: json.version}}, {upsert: true}, function(err, records) {
 
 				assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 				console.log('Updated user data completely to Database');

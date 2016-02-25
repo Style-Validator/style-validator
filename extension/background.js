@@ -306,6 +306,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 			chrome.browserAction.setBadgeText({ text: totalNumber[tabId] });
 		}
 
+		if(message.name === 'requestVersion') {
+			sendResponse({version: chrome.app.getDetails().version});
+		}
+
 		if(message.name === 'execute') {
 
 			isValidated[tabId] = true;
