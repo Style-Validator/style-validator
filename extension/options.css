@@ -1136,6 +1136,7 @@ body {
 		background-color: transparent;
 		flex-grow: 1;
 		border-left: 1px solid #DDD;
+		padding: 0 15px;
 	}
 	.main-heading > a {
 		display: flex;
