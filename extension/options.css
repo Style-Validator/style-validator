@@ -96,7 +96,7 @@ body {
 	justify-content: space-between;
 	align-items: stretch;
 	border-bottom: 1px solid #EEE;
-	z-index: 4;
+	z-index: 14;
 	background: #EEEEEE;
 }
 
@@ -1119,7 +1119,7 @@ body {
 		transform: translateX(-100%);
 	}
 	.show-aside .aside {
-		z-index: 4;
+		z-index: 14;
 		transform: translateX(0);
 	}
 	.wrapper {
