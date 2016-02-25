@@ -136,11 +136,15 @@
 }
 :host .stylev-console-refresh-button {
 }
-:host .stylev-console-refresh-button-image {
+:host .stylev-console-refresh-button img {
 	width: 22px;
 	height: 22px;
 }
+:host .stylev-console-refresh-button-image {
+}
 :host .stylev-console-refresh-button-image-active {
+}
+:host .stylev-console-refresh-button-active .stylev-console-refresh-button-image-active {
 	-webkit-animation: active-button 1s infinite;
 	-o-animation: active-button 1s infinite;
 	animation: active-button 1s infinite;
@@ -303,4 +307,8 @@
 	height: 50px;
 	line-height: 50px;
 	text-align: center;
+}
+
+:host .is-hidden {
+	display: none !important;
 }

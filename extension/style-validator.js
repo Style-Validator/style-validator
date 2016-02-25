@@ -1362,22 +1362,22 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		resetRefreshButton: function() {
 			var that = STYLEV.VALIDATOR;
 
-			//Initialize countdown second
 			that.countdownDynamicSecond = that.COUNTDOWN_DEFAULT_SECOND;
 			that.consoleRefreshCount.textContent = '';
 
-			that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_PATH;
-			that.consoleRefreshButtonImage.classList.remove('stylev-console-refresh-button-image-active');
+			that.consoleRefreshButtonImage.classList.remove('is-hidden');
+			that.consoleRefreshButtonImageActive.classList.add('is-hidden');
+			that.consoleRefreshButton.classList.remove('stylev-console-refresh-button-active');
 		},
 
 		indicateRefreshButton: function() {
 			var that = STYLEV.VALIDATOR;
 
-			//initialize countdown second
 			that.consoleRefreshCount.textContent = that.COUNTDOWN_DEFAULT_SECOND;
 
-			that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_ACTIVE_PATH;
-			that.consoleRefreshButtonImage.classList.add('stylev-console-refresh-button-image-active');
+			that.consoleRefreshButtonImage.classList.add('is-hidden');
+			that.consoleRefreshButtonImageActive.classList.remove('is-hidden');
+			that.consoleRefreshButton.classList.add('stylev-console-refresh-button-active');
 		},
 
 		executeWithDetectingCE: function() {
@@ -1567,8 +1567,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleMode = document.createElement('p');
 			that.consoleButtons = document.createElement('div');
 			that.consoleRefreshButton = document.createElement('a');
-			that.consoleRefreshCount = document.createElement('output');
 			that.consoleRefreshButtonImage = document.createElement('img');
+			that.consoleRefreshButtonImageActive = document.createElement('img');
+			that.consoleRefreshCount = document.createElement('output');
 			that.consoleCounter = document.createElement('div');
 			that.consoleBody = document.createElement('div');
 			that.consoleList = document.createElement('ul');
@@ -1590,6 +1591,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//属性を設定
 			that.consoleWrapper.id = that.settings.CONSOLE_WRAPPER_ID;
 			that.consoleWrapper.classList.add('stylev-ignore');
+
+			//TODO: refactor change to class?
 			that.consoleWrapper.style.setProperty('opacity', '0', '');
 			that.consoleList.id = that.settings.CONSOLE_LIST_ID;
 			that.consoleHeader.classList.add('stylev-console-header');
@@ -1603,9 +1606,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleButtons.classList.add('stylev-console-buttons');
 			that.consoleRefreshButton.href = 'javascript: void(0);';
 			that.consoleRefreshButton.classList.add('stylev-console-refresh-button');
-			that.consoleRefreshCount.classList.add('stylev-console-refresh-count');
 			that.consoleRefreshButtonImage.classList.add('stylev-console-refresh-button-image');
 			that.consoleRefreshButtonImage.src = that.settings.ICON_REFRESH_PATH;
+			that.consoleRefreshButtonImageActive.classList.add('stylev-console-refresh-button-image-active');
+			that.consoleRefreshButtonImageActive.classList.add('is-hidden');
+			that.consoleRefreshButtonImageActive.src = that.settings.ICON_REFRESH_ACTIVE_PATH;
+			that.consoleRefreshCount.classList.add('stylev-console-refresh-count');
 			that.consoleCounter.classList.add('stylev-console-counter');
 			that.consoleBody.classList.add('stylev-console-body');
 			that.consoleList.classList.add('stylev-console-list');
@@ -1618,7 +1624,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleMinimizeButtonImage.classList.add('stylev-console-minimize-button-image');
 			that.consoleMinimizeButtonImage.src = that.settings.ICON_MINIMIZE_PATH;
 			that.consoleNormalizeButton.href = 'javascript: void(0);';
-			that.consoleNormalizeButton.style.setProperty('display', 'none', 'important');
+			that.consoleNormalizeButton.classList.add('is-hidden');
 			that.consoleNormalizeButton.classList.add('stylev-console-normalize-button');
 			that.consoleNormalizeButtonImage.classList.add('stylev-console-normalize-button-image');
 			that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
@@ -1638,12 +1644,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//ロゴを挿入
 			that.consoleHeadingLogo.appendChild(that.consoleHeadingLogoImage);
-			//		that.consoleHeadingLogo.appendChild(that.consoleHeadingText);
+			//that.consoleHeadingLogo.appendChild(that.consoleHeadingText);
 			that.consoleHeading.appendChild(that.consoleHeadingLogo);
 
 			//ボタンの中に画像を配置
-			that.consoleRefreshButton.appendChild(that.consoleRefreshCount);
 			that.consoleRefreshButton.appendChild(that.consoleRefreshButtonImage);
+			that.consoleRefreshButton.appendChild(that.consoleRefreshButtonImageActive);
+			that.consoleRefreshButton.appendChild(that.consoleRefreshCount);
 			that.consoleNormalizeButton.appendChild(that.consoleNormalizeButtonImage);
 			that.consoleMinimizeButton.appendChild(that.consoleMinimizeButtonImage);
 			that.consoleCloseButton.appendChild(that.consoleCloseButtonImage);
@@ -1674,19 +1681,20 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			setTimeout(function() {
 
 				that.normalizeConsole();
+
+				//TODO: refactor change to class?
 				that.consoleWrapper.style.setProperty('opacity', null, '');
 
 				//コンソールの包括要素のデフォルトの高さを計算し記憶しておく
+				//TODO: refactor export named function
 				that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
 
 				//コンソールの包括要素の高さ分だけ最下部に余白をつくる
 				//コンソールで隠れる要素がでないための対応
+				//TODO: refactor export named function
 				that.html.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + 'px', 'important');
 
-				//表示結果をChrome Extensionに伝える
 				that.send2ChromeExtension();
-
-				//前回開いた状態を復元する
 				that.restorePreviousCondition();
 			}, 0);
 		},
@@ -1886,11 +1894,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
 
 				if(that.consoleWrapper.offsetHeight === 30) {
-					that.consoleNormalizeButton.style.setProperty('display', null, '');
-					that.consoleMinimizeButton.style.setProperty('display', 'none', 'important');
+					that.consoleNormalizeButton.classList.remove('is-hidden');
+					that.consoleMinimizeButton.classList.add('is-hidden');
 				} else if(that.consoleWrapper.offsetHeight > 30) {
-					that.consoleNormalizeButton.style.setProperty('display', 'none', 'important');
-					that.consoleMinimizeButton.style.setProperty('display', null, '');
+					that.consoleNormalizeButton.classList.add('is-hidden');
+					that.consoleMinimizeButton.classList.remove('is-hidden');
 				}
 			}
 		},
@@ -2052,8 +2060,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		minimizeConsole: function() {
 			var that = STYLEV.VALIDATOR;
-			that.consoleMinimizeButton.style.setProperty('display', 'none', 'important');
-			that.consoleNormalizeButton.style.setProperty('display', null, '');
+			that.consoleMinimizeButton.classList.add('is-hidden');
+			that.consoleNormalizeButton.classList.remove('is-hidden');
 			that.consoleWrapper.style.setProperty('height', that.consoleHeader.offsetHeight + 'px', '');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.scaleMode = 'minimum';
@@ -2061,8 +2069,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		normalizeConsole: function() {
 			var that = STYLEV.VALIDATOR;
-			that.consoleMinimizeButton.style.setProperty('display', null, '');
-			that.consoleNormalizeButton.style.setProperty('display', 'none', 'important');
+			that.consoleMinimizeButton.classList.remove('is-hidden');
+			that.consoleNormalizeButton.classList.add('is-hidden');
 			that.consoleWrapper.style.setProperty('height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.scaleMode = 'normal';
