@@ -38,7 +38,7 @@ STYLEV.isFirstExecution = true;
 STYLEV.isValidated = STYLEV.isValidated || false;
 
 //Options
-STYLEV.options = {
+STYLEV.OPTIONS = {
 
 	ENABLE_MUTATION_OBSERVER: true,
 	ENABLE_AUTO_EXECUTION: false,
@@ -418,7 +418,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 							if(message.options !== undefined) {
 								//オプション設定
-								STYLEV.options = {
+								STYLEV.OPTIONS = {
 
 									ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
 									ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
@@ -1178,7 +1178,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 						}
 					}
 
-					if( isElementNode && target.classList.contains('stylev-ignore')) {
+					if( isElementNode && (
+							target.classList.contains('stylev-ignore') ||
+							target.classList.contains('stylev-animation')
+						)
+					) {
 						continue;
 					}
 
@@ -1325,7 +1329,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			return {
 
 				connect: function() {
-					if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
+					if(!STYLEV.OPTIONS.ENABLE_MUTATION_OBSERVER) {
 						return false;
 					}
 					if(!that.isObserving) {
@@ -1337,7 +1341,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				},
 
 				disconnect: function() {
-					if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
+					if(!STYLEV.OPTIONS.ENABLE_MUTATION_OBSERVER) {
 						return false;
 					}
 					if(that.isObserving) {
@@ -1549,8 +1553,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		//結果を表示させる
 		showConsole: function() {
-
 			var that = STYLEV.VALIDATOR;
+			
+			if(STYLEV.OPTIONS.ENABLE_AUTO_EXECUTION && that.outputObjArray.length === 0) {
+				that.showBadgeText();
+				return;
+			}
 			
 			that.createConsoleElements();
 			that.insertStyle2ShadowDOM();
@@ -1704,41 +1712,49 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				//TODO: refactor export named function
 				that.html.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + 'px', 'important');
 
-				that.send2ChromeExtension();
+				that.sendResult2ChromeExtension();
 				that.restorePreviousCondition();
 			}, 0);
 		},
 
-		send2ChromeExtension: function() {
+		showBadgeText: function() {
+			var that = STYLEV.VALIDATOR;
+			var length = that.outputObjArray.length;
+
+			chrome.runtime.sendMessage({
+				name: 'setBadgeText',
+				badgeText: length ? length : ''
+			});
+		},
+
+		showConnectionStatus: function() {
+			var that = STYLEV.VALIDATOR;
+
+			chrome.runtime.sendMessage({
+				name: 'switchMode'
+			}, function(message) {
+
+				if(message.isConnected2Devtools !== undefined) {
+
+					var consoleModeImage = document.createElement('img');
+					var consoleModeText = document.createTextNode(message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_MESSAGE : that.settings.DISCONNECTED_2_DEVTOOLS_MESSAGE);
+					consoleModeImage.classList.add('stylev-console-mode-image');
+					consoleModeImage.src = message.isConnected2Devtools ? that.settings.ICON_CONNECTED_PATH : that.settings.ICON_DISCONNECTED_PATH;
+					that.consoleMode.appendChild(consoleModeImage);
+					that.consoleMode.appendChild(consoleModeText);
+					that.consoleMode.classList.add(message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_CLASS : that.settings.DISCONNECTED_2_DEVTOOLS_CLASS);
+				}
+			});
+		},
+
+		sendResult2ChromeExtension: function() {
 
 			var that = STYLEV.VALIDATOR;
 
 			if(STYLEV.isChromeExtension) {
-
-				//アイコンに件数を表示させる
-				chrome.runtime.sendMessage({
-					name: 'setBadgeText',
-					badgeText: that.outputObjArray.length
-				});
-
-				//DevToolsの接続状態を表示させる
-				chrome.runtime.sendMessage({
-					name: 'switchMode'
-				}, function(message) {
-
-					if(message.isConnected2Devtools !== undefined) {
-
-						var consoleModeImage = document.createElement('img');
-						var consoleModeText = document.createTextNode(message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_MESSAGE : that.settings.DISCONNECTED_2_DEVTOOLS_MESSAGE);
-						consoleModeImage.classList.add('stylev-console-mode-image');
-						consoleModeImage.src = message.isConnected2Devtools ? that.settings.ICON_CONNECTED_PATH : that.settings.ICON_DISCONNECTED_PATH;
-						that.consoleMode.appendChild(consoleModeImage);
-						that.consoleMode.appendChild(consoleModeText);
-						that.consoleMode.classList.add(message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_CLASS : that.settings.DISCONNECTED_2_DEVTOOLS_CLASS);
-					}
-				});
+				that.showBadgeText();
+				that.showConnectionStatus();
 			}
-
 		},
 
 		//前回開いた状態を復元する
@@ -2787,7 +2803,7 @@ STYLEV.CHROME_DEVTOOLS = {
 
 //TODO: confirm this function
 STYLEV.isPassedURLFilters = true;
-STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
+STYLEV.METHODS.each(STYLEV.OPTIONS.URL_FILTERS, function(url) {
 	if(location.href.indexOf(url) > -1) {
 		STYLEV.isPassedURLFilters = false;
 		return 'break';
@@ -2796,26 +2812,19 @@ STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
 
 //STYLEV.VALIDATOR.getAllCSSProperties();
 
-//Chrome Extensionの場合
 if(STYLEV.isChromeExtension){
 
-	//オプションを更新してから実行　TODO: promiseを整理する
 	STYLEV.VALIDATOR.updateOptions().then(function() {
-
-		//自動実行の場合
-		if(STYLEV.options.ENABLE_AUTO_EXECUTION) {
+		if(STYLEV.OPTIONS.ENABLE_AUTO_EXECUTION) {
 			STYLEV.CHROME_EXTENSION.execute();
 		}
-
-		//Extension内のリソースへアクセスするためのリソースルートを取得
-		STYLEV.VALIDATOR.RESOURCE_ROOT = chrome.runtime.getURL('');
 	});
 
+	STYLEV.VALIDATOR.RESOURCE_ROOT = chrome.runtime.getURL('');
 
 	chrome.storage.onChanged.addListener(function(changes, namespace) {
 		if(namespace === 'sync') {
 			if(changes.options) {
-				//TODO: class変更による検証再実行が嫌なら、監視を停止してトグルする
 				if(changes.options.newValue.enableAnimation) {
 					document.documentElement.classList.add('stylev-animation');
 				} else {
