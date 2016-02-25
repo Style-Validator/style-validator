@@ -407,6 +407,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			return promiseArray;
 		},
 
+		//TODO: remove
 		updateOptions: function() {
 			var that = STYLEV.VALIDATOR;
 			return new Promise(function(resolve, reject) {
@@ -1550,7 +1551,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		showConsole: function() {
 			var that = STYLEV.VALIDATOR;
-			
+
 			if(STYLEV.options.ENABLE_AUTO_EXECUTION && that.outputObjArray.length === 0) {
 				that.showBadgeText();
 				return;
@@ -2826,6 +2827,19 @@ if(STYLEV.isChromeExtension){
 				} else {
 					document.documentElement.classList.remove('stylev-animation');
 				}
+
+				//Override TODO: confirm and implement
+				//STYLEV.options = {
+				//
+				//	ENABLE_MUTATION_OBSERVER: changes.options.newValue.enabledMutationObserver,
+				//	ENABLE_AUTO_EXECUTION: changes.options.newValue.enableAutoExecution,
+				//	ENABLE_ANIMATION: changes.options.newValue.enableAnimation,
+				//	SCOPE_SELECTORS: changes.options.newValue.scopeSelectors,
+				//	SCOPE_SELECTORS_TEXT: changes.options.newValue.scopeSelectorsText ? changes.options.newValue.scopeSelectorsText.split(',') : '',
+				//	IGNORE_SELECTORS: changes.options.newValue.ignoreSelectors,
+				//	IGNORE_SELECTORS_TEXT: changes.options.newValue.ignoreSelectorsText ? changes.options.newValue.ignoreSelectorsText.split(',') : '',
+				//	URL_FILTERS: changes.options.newValue.urlFilters
+				//};
 			}
 		}
 	});
