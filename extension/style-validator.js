@@ -522,7 +522,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				}
 				if(error.stack) {
 					queryString += '(';
-					queryString += error.stack
+					queryString += error.stack;
 					queryString += ')';
 				}
 			}
