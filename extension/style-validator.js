@@ -417,7 +417,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 						chrome.storage.sync.get('options', function(message) {
 
 							if(message.options !== undefined) {
-								//オプション設定
+
 								STYLEV.options = {
 
 									ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
@@ -2307,31 +2307,32 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					target.specifiedStyle[property].priority = target.specifiedStyle[property].priority || '';
 					target.specifiedStyle[property].specificity = target.specifiedStyle[property].specificity || 0;
 
-					//片方：CSS指定がありstyle属性がない（CSS Rule win）
+					//other hand：CSS Rule: yes Style Attribute: no => (CSS Rule win)
 					if(valueOfCssRule && !valueOfAttr) {
 						return that.testAndSet(target, property, valueOfCssRule, priorityOfCSSRule, specificity);
 					}
 
-					//片方：CSS指定がないstyle属性がある（Style Attribute win）
+					//other hand：CSS Rule: no Style Attribute: yes => (Style Attribute win)
 					if(!valueOfCssRule && valueOfAttr) {
 						return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
 					}
 
+					//If defined css rule and attribute
 					if(valueOfCssRule && valueOfAttr) {
 
-						//両方：CSS指定（importantなし）とstyle属性（importantなし）（Style Attribute win）
+						//Both：CSS Rule(important: no) and  Style Attribute(important: no) => (Style Attribute win)
 						if(!priorityOfCSSRule && !priorityOfAttr) {
 							return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
 						}
-						//両方：CSS指定（importantあり）とstyle属性（importantなし）（CSS Rule win）
+						//Both：CSS Rule(important: yes) and  Style Attribute(important: no) => (CSS Rule win)
 						if(priorityOfCSSRule && !priorityOfAttr) {
 							return that.testAndSet(target, property, valueOfCssRule, priorityOfCSSRule, specificity);
 						}
-						//両方：CSS指定（importantあり）とstyle属性（importantあり）（Style Attribute win）
+						//Both：CSS Rule(important: yes) and  Style Attribute(important: yes) => (Style Attribute win)
 						if(priorityOfCSSRule && priorityOfAttr) {
 							return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
 						}
-						//両方：CSS指定（importantなし）とstyle属性（importantあり）（Style Attribute win）
+						//Both：CSS Rule(important: no) and  Style Attribute(important: yes) => (Style Attribute win)
 						if(!priorityOfCSSRule && priorityOfAttr) {
 							return that.testAndSet(target, property, valueOfAttr, priorityOfAttr, specificity);
 						}
@@ -2349,18 +2350,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var isWinPrevSpecificity = specificity >= target.specifiedStyle[property].specificity;
 			var isWinPreviousPriority = priority.length > target.specifiedStyle[property].priority.length;
 
-			//優先度が等価
 			if(isEqualWithPreviousPriority) {
-				//特定度が前回以上
-				if( isWinPrevSpecificity ) {
+				if(isWinPrevSpecificity) {
 					target.specifiedStyle[property].value = value;
 					target.specifiedStyle[property].priority = priority;
 					target.specifiedStyle[property].specificity = specificity;
 				}
 
-			//優先度が等価でない
 			} else {
-				//優先度が前回よりも上
 				if(isWinPreviousPriority) {
 					target.specifiedStyle[property].value = value;
 					target.specifiedStyle[property].priority = priority;
@@ -2545,8 +2542,7 @@ STYLEV.METHODS = {
 	//スムーススクロール TODO: 親要素を指定してインナースクロールにも対応させる
 	smoothScroll: {
 
-		//トップ座標を取得
-		getOffsetTop: function(target) {
+		getAbsoluteTopPosition: function(target) {
 
 			if(target.nodeName.toLowerCase() === 'html') {
 				return -window.pageYOffset;
@@ -2555,11 +2551,9 @@ STYLEV.METHODS = {
 			}
 		},
 
-		//イージング
 		easeInOutCubic: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; },
 
-		//対象要素の位置取得
-		getTargetPos: function(start, end, elapsed, duration) {
+		getTargetPosition: function(start, end, elapsed, duration) {
 
 			var that = STYLEV.METHODS.smoothScroll;
 
@@ -2567,14 +2561,13 @@ STYLEV.METHODS = {
 			return start + (end - start) * that.easeInOutCubic(elapsed / duration); // <-- you can change the easing funtion there
 		},
 
-		//実行
 		execute: function(target, duration) {
 
 			var that = STYLEV.METHODS.smoothScroll;
 
 			var duration = duration || 500;
 			var scrollTopY = window.pageYOffset;
-			var targetPosY = that.getOffsetTop(target) - 100;
+			var targetPosY = that.getAbsoluteTopPosition(target) - 100;
 
 			var clock = Date.now();
 
@@ -2587,7 +2580,7 @@ STYLEV.METHODS = {
 			//進度を計算し、スクロールさせる
 			var step = function() {
 				var elapsed = Date.now() - clock;
-				window.scroll(0, that.getTargetPos(scrollTopY, targetPosY, elapsed, duration));
+				window.scroll(0, that.getTargetPosition(scrollTopY, targetPosY, elapsed, duration));
 				if(elapsed <= duration) {
 					requestAnimationFrame(step);
 				}
@@ -2825,6 +2818,8 @@ if(STYLEV.isChromeExtension){
 	chrome.storage.onChanged.addListener(function(changes, namespace) {
 		if(namespace === 'sync') {
 			if(changes.options) {
+
+				//Toggle Class
 				if(changes.options.newValue.enableAnimation) {
 					document.documentElement.classList.add('stylev-animation');
 				} else {
