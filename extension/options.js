@@ -1765,6 +1765,8 @@ STYLEV.RULES = {
 	}
 };
 
+
+
 STYLEV.OPTIONS = {
 	execute: function() {
 
@@ -1778,6 +1780,7 @@ STYLEV.OPTIONS = {
 		var that = STYLEV.OPTIONS;
 
 		that.formParts = document.querySelectorAll('.option-form-parts');
+		that.isFirst = true;
 		that.options = {};
 	},
 	bindEvents: function() {
@@ -1842,9 +1845,14 @@ STYLEV.OPTIONS = {
 		}
 
 		//初期表示を終わりクリックした時
-		if(event) {
+
+
+		//初期表示を終わりクリックした時
+		if(!that.isFirst && event) {
 			chrome.storage.sync.set({'options': that.options});
 		}
+
+		that.isFirst = false;
 	}
 };
 

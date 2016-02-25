@@ -38,7 +38,7 @@ STYLEV.isFirstExecution = true;
 STYLEV.isValidated = STYLEV.isValidated || false;
 
 //Options
-STYLEV.OPTIONS = {
+STYLEV.options = {
 
 	ENABLE_MUTATION_OBSERVER: true,
 	ENABLE_AUTO_EXECUTION: false,
@@ -418,7 +418,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 							if(message.options !== undefined) {
 								//オプション設定
-								STYLEV.OPTIONS = {
+								STYLEV.options = {
 
 									ENABLE_MUTATION_OBSERVER: message.options.enabledMutationObserver,
 									ENABLE_AUTO_EXECUTION: message.options.enableAutoExecution,
@@ -1329,7 +1329,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			return {
 
 				connect: function() {
-					if(!STYLEV.OPTIONS.ENABLE_MUTATION_OBSERVER) {
+					if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
 						return false;
 					}
 					if(!that.isObserving) {
@@ -1341,7 +1341,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				},
 
 				disconnect: function() {
-					if(!STYLEV.OPTIONS.ENABLE_MUTATION_OBSERVER) {
+					if(!STYLEV.options.ENABLE_MUTATION_OBSERVER) {
 						return false;
 					}
 					if(that.isObserving) {
@@ -1555,7 +1555,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		showConsole: function() {
 			var that = STYLEV.VALIDATOR;
 			
-			if(STYLEV.OPTIONS.ENABLE_AUTO_EXECUTION && that.outputObjArray.length === 0) {
+			if(STYLEV.options.ENABLE_AUTO_EXECUTION && that.outputObjArray.length === 0) {
 				that.showBadgeText();
 				return;
 			}
@@ -2803,7 +2803,7 @@ STYLEV.CHROME_DEVTOOLS = {
 
 //TODO: confirm this function
 STYLEV.isPassedURLFilters = true;
-STYLEV.METHODS.each(STYLEV.OPTIONS.URL_FILTERS, function(url) {
+STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
 	if(location.href.indexOf(url) > -1) {
 		STYLEV.isPassedURLFilters = false;
 		return 'break';
@@ -2815,7 +2815,7 @@ STYLEV.METHODS.each(STYLEV.OPTIONS.URL_FILTERS, function(url) {
 if(STYLEV.isChromeExtension){
 
 	STYLEV.VALIDATOR.updateOptions().then(function() {
-		if(STYLEV.OPTIONS.ENABLE_AUTO_EXECUTION) {
+		if(STYLEV.options.ENABLE_AUTO_EXECUTION) {
 			STYLEV.CHROME_EXTENSION.execute();
 		}
 	});
