@@ -1250,7 +1250,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					 * Record Section
 					 ****************************************************************/
 
-					//1つでも通過したら、無視しない
+					//If a muted info passed, don't ignore
 					that.isIgnore = false;
 
 					if(target.dataset_mutationOvserberID === undefined) {
@@ -1484,7 +1484,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 		},
 
-		//デフォルトスタイルを取得するために、ダミーiframeを挿入
 		insertIframe4getDefaultStyles: function() {
 
 			var that = STYLEV.VALIDATOR;
@@ -1507,14 +1506,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 		},
 
-		//ダミーiframeを削除
 		removeIframe4getDefaultStyles: function() {
 			var that = STYLEV.VALIDATOR;
 
 			that.iframe4test.parentElement.removeChild(that.iframe4test);
 		},
 
-		//全要素のclassを削除する関数
 		removeAllAttrAndEvents: function() {
 			var that = STYLEV.VALIDATOR;
 
@@ -1551,7 +1548,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleWrapperShadowRoot.appendChild(styleElement);
 		},
 
-		//結果を表示させる
 		showConsole: function() {
 			var that = STYLEV.VALIDATOR;
 			
@@ -1559,8 +1555,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.showBadgeText();
 				return;
 			}
-			
+
+			that.setParameters4Console();
 			that.createConsoleElements();
+			that.setAttrOfConsoleElements();
 			that.insertStyle2ShadowDOM();
 			that.showConsoleMessages();
 			that.bindEvents2Console();
@@ -1568,14 +1566,22 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.appendConsoleElements();
 			that.doAfterShowingConsole();
 		},
+
+		setParameters4Console: function() {
+			var that = STYLEV.VALIDATOR;
+
+			that.isMouseDownConsoleHeader = false;
+
+			that.consoleStartPosY = 0;
+			that.consoleCurrentPosY = 0;
+			that.consoleDiffPosY = 0;
+		},
 		
 		createConsoleElements: function() {
 			var that = STYLEV.VALIDATOR;
 			
-			//ドキュメンとフラグメント
 			that.docFlag = document.createDocumentFragment();
 
-			//要素を生成
 			that.consoleWrapper = document.createElement('div');
 			that.consoleWrapperShadowRoot = that.consoleWrapper.createShadowRoot();
 			that.consoleHeader = document.createElement('header');
@@ -1597,16 +1603,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleMinimizeButtonImage = document.createElement('img');
 			that.consoleNormalizeButton = document.createElement('a');
 			that.consoleNormalizeButtonImage = document.createElement('img');
+		},
 
-			//クリック時の判定
-			that.isMouseDownConsoleHeader = false;
+		setAttrOfConsoleElements: function() {
+			var that = STYLEV.VALIDATOR;
 
-			//ドラッグアンドドロップで移動させる処理に必要な変数
-			that.consoleStartPosY = 0;
-			that.consoleCurrentPosY = 0;
-			that.consoleDiffPosY = 0;
-
-			//属性を設定
 			that.consoleWrapper.id = that.settings.CONSOLE_WRAPPER_ID;
 			that.consoleWrapper.classList.add('stylev-ignore');
 
@@ -1646,7 +1647,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButton.classList.add('stylev-console-normalize-button');
 			that.consoleNormalizeButtonImage.classList.add('stylev-console-normalize-button-image');
 			that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
-
 		},
 
 		generateConsoleCounterText: function() {
@@ -2539,7 +2539,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 STYLEV.METHODS = {
 
-	//スムーススクロール TODO: 親要素を指定してインナースクロールにも対応させる
+	//TODO: support innerScroll(by defined parent element)
 	smoothScroll: {
 
 		getAbsoluteTopPosition: function(target) {
@@ -2803,6 +2803,7 @@ STYLEV.METHODS.each(STYLEV.options.URL_FILTERS, function(url) {
 	}
 });
 
+//TODO: remove?
 //STYLEV.VALIDATOR.getAllCSSProperties();
 
 if(STYLEV.isChromeExtension){
