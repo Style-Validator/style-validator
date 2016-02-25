@@ -19,6 +19,8 @@ Style Validator
 
 ## Rule Editor
 
+If you want to edit default rule, use rule editor page like below.
+
 1. Click `RuleID(e.g. Rule-24)` or go to `options page of extension`
 ![Rule page Screenshot](http://style-validator.github.io/img/screenshot-console.png)
 2. View or Edit or Generate Rules and Presets(shareable)
