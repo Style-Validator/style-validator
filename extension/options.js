@@ -52,11 +52,6 @@ STYLEV.RULES = {
 		that.templateStyleBase = document.querySelector('#template-style-base').content;
 		that.templateStyleNg = document.querySelector('#template-style-ng').content;
 		that.templateRule = document.querySelector('#template-rule').content;
-		that.dummyElementWrapper = document.createElement('div');
-		that.dummyElementWrapper.classList.add('dummy-wrapper');
-		that.dummyElement4TestStyle = document.createElement('div');
-		that.dummyElement4TestStyle.id = 'dummy-element-4-test-style';
-		that.dummyElement4TestStyle.classList.add('dummy');
 		that.reasonCheckbox = document.querySelector('#reason-checkbox');
 		that.referenceURLCheckbox = document.querySelector('#reference-url-checkbox');
 		that.searchRuleInput = document.querySelector('#search-rule-input');
