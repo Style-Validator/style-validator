@@ -54,6 +54,8 @@
 	align-items: center;
 	flex: 0 0 auto;
 	min-height: 28px;
+	border-bottom: 1px dotted #CCCCCC;
+	margin-bottom: -1px;
 }
 :host .stylev-console-heading {
 	justify-content: center;
@@ -117,9 +119,18 @@
 }
 :host .stylev-console-mediaqueries {
 	padding: 0 6px;
-	background: #f9f9f9;
+	background-color: #f9f9f9;
+}
+:host .stylev-console-mediaqueries-image {
+	width: 18px;
+	height: auto;
+	margin-right: 4px;
+}
+:host .stylev-console-mediaqueries-image:only-child {
+	margin-right: 0;
 }
 :host .stylev-console-buttons {
+	margin-left: auto;
 }
 :host .stylev-console-buttons > a {
 	display: flex;

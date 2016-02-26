@@ -141,6 +141,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 				GA_PATH: that.RESOURCE_ROOT + 'google-analytics.js',
 
+				ICON_RESPONSIVE_PATH:		that.RESOURCE_ROOT + 'iconmonstr-responsive.svg',
 				ICON_REFRESH_PATH:			that.RESOURCE_ROOT + 'iconmonstr-refresh-3-icon.svg',
 				ICON_REFRESH_ACTIVE_PATH:	that.RESOURCE_ROOT + 'iconmonstr-refresh-3-icon-active.svg',
 				ICON_CLOSE_PATH:			that.RESOURCE_ROOT + 'iconmonstr-x-mark-icon.svg',
@@ -1580,6 +1581,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleRefreshCount = document.createElement('output');
 			that.consoleCounter = document.createElement('div');
 			that.consoleMediaQueries = document.createElement('div');
+			that.consoleMediaQueriesImage = document.createElement('img');
+			that.consoleMediaQueriesText = document.createElement('span');
 			that.consoleBody = document.createElement('div');
 			that.consoleList = document.createElement('ul');
 			that.consoleCloseButton = document.createElement('a');
@@ -1618,6 +1621,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleRefreshCount.classList.add('stylev-console-refresh-count');
 			that.consoleCounter.classList.add('stylev-console-counter');
 			that.consoleMediaQueries.classList.add('stylev-console-mediaqueries');
+			that.consoleMediaQueriesImage.classList.add('stylev-console-mediaqueries-image');
+			that.consoleMediaQueriesImage.src = that.settings.ICON_RESPONSIVE_PATH;
+			that.consoleMediaQueriesText.classList.add('stylev-console-mediaqueries-text');
 			that.consoleBody.classList.add('stylev-console-body');
 			that.consoleList.classList.add('stylev-console-list');
 			that.consoleCloseButton.href = 'javascript: void(0);';
@@ -1640,7 +1646,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			that.consoleHeadingText = document.createTextNode(that.settings.CONSOLE_HEADING_TEXT);
 			that.consoleCounter.textContent = 'Total: ' + that.outputObjArray.length + ' / Error: ' + that.errorNum + ' / Warning: ' + that.warningNum;
-			that.consoleMediaQueries.textContent = that.matchedMediaTextsArray.join(', ');
+			that.consoleMediaQueriesText.textContent = that.matchedMediaTextsArray.join(', ');
 		},
 		
 		appendConsoleElements: function() {
@@ -1650,6 +1656,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//that.consoleHeadingLogo.appendChild(that.consoleHeadingText);
 			that.consoleHeading.appendChild(that.consoleHeadingLogo);
 
+			that.consoleMediaQueries.appendChild(that.consoleMediaQueriesImage);
+			if(that.consoleMediaQueriesText.hasChildNodes()) {
+				that.consoleMediaQueries.appendChild(that.consoleMediaQueriesText);
+			}
 			that.consoleRefreshButton.appendChild(that.consoleRefreshButtonImage);
 			that.consoleRefreshButton.appendChild(that.consoleRefreshButtonImageActive);
 			that.consoleRefreshButton.appendChild(that.consoleRefreshCount);
