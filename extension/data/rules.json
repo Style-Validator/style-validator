@@ -46,6 +46,18 @@
 				"value": "inline",
 				"isParentElem": false,
 				"pseudoElem": ""
+			},
+			{
+				"property": "position",
+				"value": "![absolute|fixed]",
+				"isParentElem": false,
+				"pseudoElem": ""
+			},
+			{
+				"property": "float",
+				"value": "default",
+				"isParentElem": false,
+				"pseudoElem": ""
 			}
 		],
 		"ngStyles": [
@@ -1292,7 +1304,7 @@
 				"isParentElem": false,
 				"pseudoElem": "",
 				"riskLevel": "warning",
-				"reason": "Unreadable. It will be changed to \"block(or list-item)\" forcibly. Flexbox will not be changed like that.",
+				"reason": "Remove display property. Because, it will be changed to \"block(or list-item)\" forcibly.",
 				"referenceURL": "https://developer.mozilla.org/en/docs/Web/CSS/float"
 			}
 		]
@@ -1346,7 +1358,7 @@
 		"ngStyles": [
 			{
 				"property": "text-align",
-				"value": "!default",
+				"value": "!inherit",
 				"isParentElem": false,
 				"pseudoElem": "",
 				"riskLevel": "warning",
