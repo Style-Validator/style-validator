@@ -344,7 +344,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				var script = document.createElement('script');
 				script.classList.add('stylev-ignore');
 				script.addEventListener('load', function() {
-					console.log('hoge');
 					resolve();
 				});
 				script.addEventListener('error', function(event) {
