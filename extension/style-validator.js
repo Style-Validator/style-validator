@@ -2053,6 +2053,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.removeStyleSheet();
 			}
 
+			if(that.scriptTagGA !== undefined) {
+				that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
+			}
+
 			STYLEV.isValidated = false;
 
 			if(STYLEV.isChromeExtension) {
@@ -2254,7 +2258,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 						styleData[property].specificity = specificity;
 					});
 
-					STYLEV.METHODS.each(targetsBySelector, that.searchByElement(styleData));
+					STYLEV.METHODS.each(targetsBySelector, that.searchByElementViaSelector(styleData));
 
 				} catch(error) {
 					that.throwError(error);
@@ -2262,7 +2266,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			};
 		},
 
-		searchByElement: function(styleData) {
+		searchByElementViaSelector: function(styleData) {
 			var that = STYLEV.VALIDATOR;
 			return function(target) {
 				try {
@@ -2376,22 +2380,23 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var doc = _document || document;
 			var targets = doc.querySelectorAll('*:not(.stylev-ignore)');
 
-			STYLEV.METHODS.each(targets, that.searchByTarget);
+			STYLEV.METHODS.each(targets, that.searchByElement);
 		},
 
-		searchByTarget: function(target) {
+		searchByElement: function(target) {
 			var that = STYLEV.VALIDATOR;
 
 			var targetStyle = target.style;
 			var targetProperties = Array.prototype.filter.call(targetStyle, function(element) {
 				return that.specifiedTargetProperties.indexOf(element) >= 0;
 			});
-			that.initializeTarget(target);
+			that.initializeElement(target);
 			STYLEV.METHODS.each(targetProperties, that.setStyleDataViaAttr(target, targetStyle));
 		},
 
 		//TODO: remove?
-		initializeTarget: function(target) {
+		initializeElement: function(target) {
+			var that = STYLEV.VALIDATOR;
 			target.specifiedStyle = null;
 		},
 

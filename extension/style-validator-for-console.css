@@ -35,6 +35,7 @@
 :host .stylev-console-header {
 	display: flex;
 	flex-wrap: wrap;
+	/*overflow-x: auto;*/
 	justify-content: space-between;
 	align-items: center;
 	background-color: #EEE;

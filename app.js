@@ -88,7 +88,6 @@ function callbackAfterServerListening() {
 	console.log("Server is running at http://%s:%s", host, port);
 }
 
-
 /*
  * functions - database
  * */
@@ -100,6 +99,7 @@ function dbHandler(req, res, path, store, location) {
 	var parsedCookieObj = cookieParse(req.headers.cookie);
 	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
 	var uuid;
+	var clientIP =  getClientIP(req, res, path);
 
 	if(isNoCookie) {
 
@@ -130,12 +130,26 @@ function dbHandler(req, res, path, store, location) {
 			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
 			console.log('Inserted log data completely to Database');
 
-			user.update({uuid: uuid}, {$inc: {count: 1}, $push: {log: {date: json.date, url: json.url, version: json.version}}, $set: {currentVersion: json.version}}, {upsert: true}, function(err, records) {
+			user.update({uuid: uuid}, {
+					$inc: {count: 1},
+					$push: {
+						log: {
+							date: json.date,
+							url: json.url,
+							version: json.version,
+							caller: json.caller,
+							clientIP: clientIP
+						}
+					},
+					$set: {currentVersion: json.version}
+				},
+				{upsert: true},
+				function(err, records) {
 
-				assert.equal(null, err, 'Unable to insert to the MongoDB server.');
-				console.log('Updated user data completely to Database');
-				db.close();
-			});
+					assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+					console.log('Updated user data completely to Database');
+					db.close();
+				});
 		});
 
 		//TODO: remove below
