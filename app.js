@@ -20,7 +20,9 @@ var mongodb = require('mongodb');
 var requestIp = require('request-ip');
 var nodeUUID = require('node-uuid');
 var webdriver = require('selenium-webdriver');
+var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
+
 /*
  * variables
  * */
@@ -73,8 +75,12 @@ require("console-stamp")(console, {
 //set handler
 server.on('request', requestHandler);
 
-//listen to server
-server.listen(port, callbackAfterServerListening);
+selenium.install(function() {
+	selenium.start(function() {
+		//listen to server
+		server.listen(port, callbackAfterServerListening);
+	});
+});
 
 /*
 * functions
@@ -97,6 +103,7 @@ var driver;
 function validateWithSelenium(req, res, path, url) {
 	console.log('TEST: validateWithSelenium: start');
 	driver = new webdriver.Builder()
+		.usingServer('http://127.0.0.1:4444/wd/hub')
 		.withCapabilities(webdriver.Capabilities.chrome())
 		.build();
 	console.log('TEST: validateWithSelenium: build');
