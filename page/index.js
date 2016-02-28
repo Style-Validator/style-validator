@@ -59,8 +59,6 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		var method = 'POST';
 		var data4send = JSON.stringify(data);
 
-		console.log(data4send);
-
 		xhr.open(method, apiURI, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.addEventListener('load', function () {
