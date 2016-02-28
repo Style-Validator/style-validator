@@ -287,17 +287,18 @@ function serveData(req, res, path) {
 
 	req.on('end', function() {
 
-		res.setHeader("Content-Type", "application/json");
 		res.setHeader("Access-Control-Allow-Origin", "*");
 
 		switch(path) {
 
 			case '/saveJSON':
+				res.setHeader("Content-Type", "application/json");
 				saveJSON(store);
 				res.end(store);
 				break;
 
 			case '/sendLog':
+				res.setHeader("Content-Type", "application/json");
 				MongoClient.connect(dburl, dbHandler(req, res, path, store));
 				res.end(store);
 				break;
