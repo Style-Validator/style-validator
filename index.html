@@ -23,13 +23,13 @@
 	<meta name="format-detection" content="telephone=no, email=no, address=no">
 
 	<!-- ***** data ***** -->
-	<title>Style Validator - Reduce Meaningless Patches for Cross Browser</title>
+	<title>Style Validator - Tracking Type CSS Validation</title>
 	<meta name="description" content="Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.">
 	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon">
 
 	<!-- ***** ogp ***** -->
 	<meta property="og:site_name" content="Style Validator">
-	<meta property="og:title" content="Style Validator | Reduce Meaningless Patches for Cross Browser">
+	<meta property="og:title" content="Style Validator | Tracking Type CSS Validation">
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="http://style-validator.github.io/">
 	<meta property="og:description" content="Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.">
@@ -86,6 +86,19 @@
 					<p class="kv-body-p">
 						Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.
 					</p>
+
+					<section class="section-validate">
+						<div class="section-validate-header">
+							<h3 class="section-validate-heading">Online Validator</h3>
+						</div>
+						<div class="section-validate-body">
+							<form action="/result" method="post" class="section-validate-form">
+								<input type="text" name="url" placeholder="Input URL of Web Page" class="section-validate-input" required="required" />
+								<button type="submit" class="section-validate-button">Validate</button>
+							</form>
+						</div>
+					</section>
+
 					<ul class="kv-buttons-list">
 						<li>
 							<a href="https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link', 1);">
@@ -129,9 +142,9 @@
 
 		<section class="section section-video">
 			<div class="section-inner content-width">
-				<!--<div class="section-header">
-					<h3 class="section-heading">Console</h3>
-				</div>-->
+				<div class="section-header">
+					<h3 class="section-heading">Chrome Extension</h3>
+				</div>
 				<div class="section-body">
 					<!--<video class="section-video-tag" src="/video/style-validator.m4v" poster="/video/style-validator.jpg" autoplay loop></video>-->
 					<img class="section-gif-animation" src="/gif_animations/demo.gif" alt="Demo Video" />

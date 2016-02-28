@@ -1,0 +1,41 @@
+@charset "utf-8";
+
+.result {
+	display: flex;
+	flex-wrap: wrap;
+	padding-bottom: 5%;
+}
+.result-screenshot {
+	flex: 1 0 70%;
+	padding: 10% 0%;
+	background: url(/img/macbook-pro-retina.png) no-repeat center center;
+	background-size: 116% auto;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.screenshot-image {
+	width: 70%;
+	height: auto;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+	margin-top: -3.5%;
+}
+.result-body {
+	padding: 4%;
+	flex: 1 0 auto;
+}
+.result-table {
+	font-size: 18px;
+}
+.result-table th {
+	text-align: left;
+}
+.result-table th,
+.result-table td {
+	padding: 5px 10px;
+}
+
+.result-table td {
+	font-size: 26px;
+}

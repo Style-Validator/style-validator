@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * modules
+ * core modules
  * */
 
 var http = require('http');
@@ -12,17 +12,18 @@ var path = require('path');
 var querystring = require('querystring');
 var assert = require('assert');
 
+/*
+ * app modules
+ * */
+
 var mongodb = require('mongodb');
 var requestIp = require('request-ip');
-
-//TODO: test:start
-var mongoose = require('mongoose');
 var nodeUUID = require('node-uuid');
-
+var webdriver = require('selenium-webdriver');
+var handlebars = require('handlebars');
 /*
  * variables
  * */
-
 var server = http.createServer();
 var port = process.env.PORT || 8001;
 
@@ -33,6 +34,7 @@ var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
 var mimeTypes = {
 	"txt":  "text/plain",
 	"html": "text/html",
+	"hbs": "text/html",
 	"css":  "text/css",
 	"jpeg": "image/jpeg",
 	"jpg":  "image/jpeg",
@@ -86,6 +88,64 @@ function callbackAfterServerListening() {
 	var port = serverAddress.port;
 
 	console.log("Server is running at http://%s:%s", host, port);
+}
+
+/*
+ * functions - selenium
+ * */
+var driver;
+function validateWithSelenium(req, res, path, url) {
+	driver = new webdriver.Builder()
+		.withCapabilities(webdriver.Capabilities.chrome())
+		.build();
+	driver.manage().timeouts().setScriptTimeout(100000);
+
+	//TODO: support full load or wait???
+	driver.get(url)
+		.then(executeStyleValidator)
+		.then(getResultOfStyleValidator(req, res, path));
+}
+function executeStyleValidator() {
+	return driver.executeAsyncScript(
+		"var callback = arguments[arguments.length - 1];" +
+		"var script = document.createElement('script');" +
+		"script.src = 'http://localhost:8001/extension/style-validator.js?mode=manual';" +
+		"script.addEventListener('load', function() {" +
+		"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+		"});" +
+		"document.head.appendChild(script);"
+	);
+}
+function getResultOfStyleValidator(req, res, path) {
+	return function(STYLEV) {
+		driver.takeScreenshot()
+			.then(getScreenshotData(req, res, path, STYLEV))
+			.then(function() {
+				driver.quit();
+			});
+	};
+}
+
+function getScreenshotData(req, res, path, STYLEV) {
+	return function(data, err) {
+		return new Promise(function(resolve, reject) {
+			if(!err) {
+				var SV = STYLEV.VALIDATOR;
+				var dataObj = {
+					count: {
+						total: SV.logObjArray.length,
+						error: SV.errorNum,
+						warning: SV.warningNum
+					},
+					screenshot: 'data:image/png;base64,' + data
+				};
+				sendParsedFile(req, res, path, dataObj);
+				resolve();
+			} else {
+				reject(sendServerError.bind(null, req, res, err));
+			}
+		});
+	}
 }
 
 /*
@@ -195,7 +255,7 @@ function requestHandler(req, res){
 			break;
 		default:
 			res.writeHead(200, {'Content-Type': 'text/plain'});
-			res.end(requestMethod + ' request');
+			res.end(requestMethod + ' request is not suppoted.');
 			break;
 	}
 }
@@ -203,11 +263,8 @@ function requestHandler(req, res){
 function serveData(req, res, path) {
 
 	var store = '';
-
 	req.on('data', function(chunk) {
-
 		store += chunk;
-
 	});
 
 	req.on('end', function() {
@@ -219,17 +276,23 @@ function serveData(req, res, path) {
 
 			case '/saveJSON':
 				saveJSON(store);
+				res.end(store);
 				break;
 
-			case '/send2db':
+			case '/sendLog':
 				MongoClient.connect(dburl, dbHandler(req, res, path, store));
+				res.end(store);
+				break;
+
+			case '/result':
+				var url = querystring.parse(store).url;
+				validateWithSelenium(req, res, path, url);
 				break;
 
 			default:
+				res.end(store);
 				break;
 		}
-
-		res.end(store);
 	});
 }
 
@@ -265,7 +328,6 @@ function serveFiles(req, res, path) {
 
 			//Directory
 			if(stats.isDirectory()) {
-
 				//if last char is not '/', then redirect with '/'
 				if(path.charAt(path.length-1) !== '/') {
 					return sendRedirect(req, res, path + '/');
@@ -273,16 +335,22 @@ function serveFiles(req, res, path) {
 
 				fs.stat(path + 'index.html', function(err2, stats2) {
 					if(err2) {
-						return sendDirectory(req, res, path);
+						fs.stat(path + 'index.hbs', function(err3, stats3) {
+							if(err3) {
+								return sendDirectory(req, res, path);
+							} else {
+								return sendFile(req, res, path + '/index.html');
+							}
+						});
+					} else {
+						return sendFile(req, res, path + '/index.html');
 					}
-					return sendFile(req, res, path + '/index.html');
 				});
 
 			//Not directory
 			} else {
 
 				return sendFile(req, res, path);
-
 			}
 
 		}
@@ -355,6 +423,21 @@ function convertSize(value) {
 	if(value > 1000000) return ((value*0.000001) | 0) + 'M';
 	if(value > 10000) return ((value*0.001) | 0) + 'K';
 	return '' + value;
+}
+
+function sendParsedFile(req, res, path, data) {
+	fs.readFile('./page' + path + '.hbs', 'utf-8', function(error, source){
+		if(!error) {
+			res.writeHead(200, {'Content-Type': 'text/html'});
+			var context = data;
+			var template = handlebars.compile(source);
+			var html = template(context);
+			res.end(html);
+
+		} else {
+			sendNotFound(req, res, path);
+		}
+	});
 }
 
 function sendFile(req, res, path) {

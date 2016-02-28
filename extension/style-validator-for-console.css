@@ -35,7 +35,7 @@
 :host .stylev-console-header {
 	display: flex;
 	flex-wrap: wrap;
-	/*overflow-x: auto;*/
+	overflow: hidden;
 	justify-content: space-between;
 	align-items: center;
 	background-color: #EEE;
@@ -79,6 +79,9 @@
 	color: white;
 	line-height: 1.1;
 	flex-shrink: 0;
+}
+:host .stylev-console-mode:empty {
+	display: none;
 }
 :host .stylev-console-mode-image {
 	width: 18px;

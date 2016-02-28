@@ -30,7 +30,8 @@
 			ga('styleValidator.send', 'exception',{
 				'exDescription': queryStringObj.error,
 				'exFatal': true
-			});		}
+			});
+		}
 	}
 
 	function parseQueryString(path) {
