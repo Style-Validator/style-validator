@@ -60,7 +60,7 @@ http://localhost:8001/extension/options.html
     },
     "psuedo-after-warning-style": {
     },
-	"referenceURL": "http://.github.io/page/reference.html#hoge",
+	"referenceURL": "https://developer.mozilla.org/en/docs/Web/CSS/float",
 	"message": "here is error message"
   }
 ]

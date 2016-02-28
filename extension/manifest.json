@@ -51,7 +51,7 @@
 			"description": "Toggle Validation"
 		}
 	},
-	"homepage_url": "http://style-validator.herokuapp.com/",
+	"homepage_url": "https://style-validator.herokuapp.com/",
 	"offline_enabled": true,
 	"short_name": "Style Validator",
 	"web_accessible_resources": [
