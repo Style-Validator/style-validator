@@ -53,8 +53,8 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		var xhr = new XMLHttpRequest();
 
 		//TODO: change url
-		//var apiURI = 'https://style-validator.herokuapp.com/result';
-		var apiURI = 'http://localhost:8001/result';
+		var apiURI = 'https://style-validator.herokuapp.com/result';
+		//var apiURI = 'http://localhost:8001/result';
 
 		var method = 'POST';
 		var data4send = JSON.stringify(data);

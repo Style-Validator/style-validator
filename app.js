@@ -76,8 +76,9 @@ require("console-stamp")(console, {
 server.on('request', requestHandler);
 
 selenium.install(function() {
+	console.log('Selenium is installed.');
 	selenium.start(function() {
-		//listen to server
+		console.log('Selenium is running.');
 		server.listen(port, callbackAfterServerListening);
 	});
 });
