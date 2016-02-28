@@ -188,8 +188,11 @@ function dbHandler(req, res, path, store, location) {
 		//uuid = mongodb.Binary(uuid, mongodb.Binary.SUBTYPE_UUID);
 
 		uuid = nodeUUID.v4();
-		res.setHeader('Set-Cookie', setCookie('_sv', uuid));
+		res.writeHead(200, {
+			'Set-Cookie': setCookie('_sv', uuid)
+		});
 	} else {
+		res.writeHead(200);
 		uuid = parsedCookieObj._sv;
 	}
 
@@ -287,19 +290,23 @@ function serveData(req, res, path) {
 
 	req.on('end', function() {
 
-		res.setHeader("Access-Control-Allow-Origin", "*");
-
 		switch(path) {
 
 			case '/saveJSON':
-				res.setHeader("Content-Type", "application/json");
 				saveJSON(store);
+				res.writeHead(200, {
+					"Content-Type": "application/json",
+					"Access-Control-Allow-Origin": "*"
+				});
 				res.end(store);
 				break;
 
 			case '/sendLog':
-				res.setHeader("Content-Type", "application/json");
 				MongoClient.connect(dburl, dbHandler(req, res, path, store));
+				res.writeHead(200, {
+					"Content-Type": "application/json",
+					"Access-Control-Allow-Origin": "*"
+				});
 				res.end(store);
 				break;
 
@@ -447,7 +454,10 @@ function convertSize(value) {
 function sendParsedFile(req, res, path, data) {
 	fs.readFile('./page' + path + '.hbs', 'utf-8', function(error, source){
 		if(!error) {
-			res.writeHead(200, {'Content-Type': 'text/html'});
+			res.writeHead(200, {
+				'Content-Type': 'text/html',
+				"Access-Control-Allow-Origin": "*"
+			});
 			var context = data;
 			var template = handlebars.compile(source);
 			var html = template(context);
