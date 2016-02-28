@@ -302,9 +302,8 @@ function serveData(req, res, path) {
 				break;
 
 			case '/result':
-				var url = querystring.parse(store).url;
-				console.log('TEST: ' + url);
-				//validateWithSelenium(req, res, path, url);
+				var url = JSON.parse(store).url;
+				validateWithSelenium(req, res, path, url);
 				break;
 
 			default:

@@ -87,14 +87,14 @@
 						Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.
 					</p>
 
-					<section class="section-validate" hidden>
+					<section class="section-validate">
 						<div class="section-validate-header">
 							<h3 class="section-validate-heading">Online Validator</h3>
 						</div>
 						<div class="section-validate-body">
-							<form action="/page/demo.html" method="post" class="section-validate-form">
-								<input type="text" name="url" placeholder="Input URL of Web Page" class="section-validate-input" required="required" />
-								<button type="submit" class="section-validate-button">Validate</button>
+							<form action="/page/demo.html" class="section-validate-form" id="validation-form">
+								<input type="text" name="url" placeholder="Input URL of Web Page" class="section-validate-input" id="validation-input" required="required" />
+								<button type="submit" class="section-validate-button" id="validation-button">Validate</button>
 							</form>
 						</div>
 					</section>

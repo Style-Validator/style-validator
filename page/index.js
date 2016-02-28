@@ -23,7 +23,9 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		that.wrapper = document.querySelector('.wrapper');
 		that.main = document.querySelector('.main');
 		that.header = document.querySelector('.header');
-
+		that.submitForm = document.querySelector('#validation-form');
+		that.submitInput = document.querySelector('#validation-input');
+		that.submitButton = document.querySelector('#validation-button');
 	},
 
 	bindEvents: function() {
@@ -31,6 +33,56 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 
 		window.addEventListener('resize', that.adjustWrapperPosition);
 		window.addEventListener('scroll', that.addShadow2header);
+		that.submitForm.addEventListener('submit', that.submitValidation);
+	},
+
+	submitValidation: function(event) {
+		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+		event.preventDefault();
+		
+		var data = {
+			url: that.submitInput.value
+		};
+
+		that.submit(data);
+	},
+	
+	submit: function(data) {
+		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+
+		var xhr = new XMLHttpRequest();
+
+		//TODO: change url
+		//var apiURI = 'https://style-validator.herokuapp.com/result';
+		var apiURI = 'http://localhost:8001/result';
+
+		var method = 'POST';
+		var data4send = JSON.stringify(data);
+
+		console.log(data4send);
+
+		xhr.open(method, apiURI, true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.addEventListener('load', function () {
+			if (xhr.status === 200) {
+				//console.log('success');
+			} else {
+				that.throwError();
+			}
+
+		});
+		xhr.addEventListener('error', that.throwError);
+
+		if (xhr.readyState == 4) {
+			return;
+		}
+
+		xhr.send(data4send);
+	},
+
+	throwError: function(error) {
+		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+		throw new Error(error || 'Connection failed.');
 	},
 	
 	startAnimation: function() {
