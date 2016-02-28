@@ -95,10 +95,13 @@ function callbackAfterServerListening() {
  * */
 var driver;
 function validateWithSelenium(req, res, path, url) {
+	console.log('TEST: validateWithSelenium: start');
 	driver = new webdriver.Builder()
 		.withCapabilities(webdriver.Capabilities.chrome())
 		.build();
+	console.log('TEST: validateWithSelenium: build');
 	driver.manage().timeouts().setScriptTimeout(100000);
+	console.log('TEST: validateWithSelenium: timeout');
 
 	//TODO: support full load or wait???
 	driver.get(url)
@@ -106,6 +109,7 @@ function validateWithSelenium(req, res, path, url) {
 		.then(getResultOfStyleValidator(req, res, path));
 }
 function executeStyleValidator() {
+	console.log('TEST: executeStyleValidator: start');
 	return driver.executeAsyncScript(
 		"var callback = arguments[arguments.length - 1];" +
 		"var script = document.createElement('script');" +
@@ -117,18 +121,24 @@ function executeStyleValidator() {
 	);
 }
 function getResultOfStyleValidator(req, res, path) {
+	console.log('TEST: getResultOfStyleValidator: start');
 	return function(STYLEV) {
+		console.log('TEST: takeScreenshot: start');
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
+				console.log('TEST: quit: start');
 				driver.quit();
 			});
 	};
 }
 
 function getScreenshotData(req, res, path, STYLEV) {
+	console.log('TEST: getScreenshotData: start');
 	return function(data, err) {
+		console.log('TEST: getScreenshotData: start2');
 		return new Promise(function(resolve, reject) {
+			console.log('TEST: getScreenshotData: start3');
 			if(!err) {
 				var SV = STYLEV.VALIDATOR;
 				var dataObj = {
@@ -286,6 +296,7 @@ function serveData(req, res, path) {
 
 			case '/result':
 				var url = querystring.parse(store).url;
+				console.log('TEST: ' + url);
 				validateWithSelenium(req, res, path, url);
 				break;
 
