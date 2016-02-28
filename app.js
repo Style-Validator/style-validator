@@ -113,7 +113,7 @@ function executeStyleValidator() {
 	return driver.executeAsyncScript(
 		"var callback = arguments[arguments.length - 1];" +
 		"var script = document.createElement('script');" +
-		"script.src = 'http://localhost:8001/extension/style-validator.js?mode=manual';" +
+		"script.src = 'http://style-validator.github.io/extension/style-validator.js?mode=manual';" +
 		"script.addEventListener('load', function() {" +
 		"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
 		"});" +
