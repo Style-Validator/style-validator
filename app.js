@@ -121,7 +121,7 @@ function executeStyleValidator() {
 	return driver.executeAsyncScript(
 		"var callback = arguments[arguments.length - 1];" +
 		"var script = document.createElement('script');" +
-		"script.src = '//style-validator.github.io/extension/style-validator.js?mode=manual';" +
+		"script.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
 		"script.addEventListener('load', function() {" +
 		"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
 		"});" +
@@ -333,11 +333,12 @@ function serveFiles(req, res, path) {
 		return sendClientIP(req, res, path);
 	}
 
+	//TODO: remove
 	//Deny if hostname is style-validator.herokuapp.com
-	//Because, this app has already hosted with style-validator.github.io
-	if(req.headers.host === 'style-validator.herokuapp.com') {
-		return sendNotFound(req, res, path);
-	}
+	//Because, this app has already hosted with style-validator.herokuapp.com
+	//if(req.headers.host === 'style-validator.herokuapp.com') {
+	//	return sendNotFound(req, res, path);
+	//}
 
 	//video
 	if(/^mp4|m4v|webm/.test(extension)) {

@@ -2,7 +2,7 @@
  Style Validator
 
  Description": Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.
- URL: http://style-validator.github.io/
+ URL: http://style-validator.herokuapp.com/
  Author: Igari Takeharu
  License: MIT License
  */

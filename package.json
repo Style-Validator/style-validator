@@ -52,5 +52,5 @@
     "node": "5.4.1",
     "npm": "3.3.12"
   },
-  "homepage": "http://style-validator.github.io"
+  "homepage": "http://style-validator.herokuapp.com"
 }
