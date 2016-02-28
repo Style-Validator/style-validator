@@ -116,6 +116,7 @@ function validateWithSelenium(req, res, path, url) {
 		.then(executeStyleValidator)
 		.then(getResultOfStyleValidator(req, res, path));
 }
+
 function executeStyleValidator() {
 	console.log('TEST: executeStyleValidator: start');
 	return driver.executeAsyncScript(
