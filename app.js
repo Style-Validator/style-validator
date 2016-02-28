@@ -297,7 +297,7 @@ function serveData(req, res, path) {
 			case '/result':
 				var url = querystring.parse(store).url;
 				console.log('TEST: ' + url);
-				validateWithSelenium(req, res, path, url);
+				//validateWithSelenium(req, res, path, url);
 				break;
 
 			default:
