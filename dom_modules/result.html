@@ -74,6 +74,7 @@
 				var source = new EventSource(url);
 
 				source.addEventListener('message', function(event) {
+					console.log(event.data);
 					source.close();
 					loadingSpinner.parentElement.removeChild(loadingSpinner);
 					resultContent.innerHTML = event.data;
@@ -85,7 +86,10 @@
 
 				source.addEventListener('error', function(event) {
 					source.close();
-					throw new Error('Event Source is failed');
+					var message = 'Event Source is failed';
+					loadingSpinner.parentElement.removeChild(loadingSpinner);
+					resultContent.innerHTML = message;
+					throw new Error(message);
 				}, false);
 			}
 		});
