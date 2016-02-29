@@ -135,12 +135,13 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	//TODO: support full load or wait???
 	driver.get(targetURL)
-		//.then(executeStyleValidator)
+		.then(executeStyleValidator)
 		.then(getResultOfStyleValidator(req, res, path));
 }
 
 function executeStyleValidator() {
 	return driver.executeAsyncScript(
+		"console.log('hoge');" +
 		"var callback = arguments[arguments.length - 1];" +
 		"var script = document.createElement('script');" +
 		"script.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
@@ -164,19 +165,19 @@ function getScreenshotData(req, res, path, STYLEV) {
 	return function(data, err) {
 		return new Promise(function(resolve, reject) {
 			if(!err) {
-				//var SV = STYLEV.VALIDATOR;
-				//var dataObj = {
-				//	total: SV.logObjArray.length,
-				//	error: SV.errorNum,
-				//	warning: SV.warningNum,
-				//	screenshot: 'data:image/png;base64,' + data
-				//};
+				var SV = STYLEV.VALIDATOR;
 				var dataObj = {
-					total: 10,
-					error: 5,
-					warning: 5,
-					screenshot: 'hoge.jpg'
+					total: SV.logObjArray.length,
+					error: SV.errorNum,
+					warning: SV.warningNum,
+					screenshot: 'data:image/png;base64,' + data
 				};
+				//var dataObj = {
+				//	total: 10,
+				//	error: 5,
+				//	warning: 5,
+				//	screenshot: 'hoge.jpg'
+				//};
 				sendParsedFile(req, res, path, dataObj);
 				resolve();
 			} else {
