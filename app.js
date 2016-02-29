@@ -102,7 +102,6 @@ function callbackAfterServerListening() {
  * */
 var driver;
 function validateWithSelenium(req, res, path, targetURL) {
-	console.log('TEST: validateWithSelenium: start');
 	driver = new webdriver.Builder()
 		.usingServer('http://127.0.0.1:4444/wd/hub')
 		//.withCapabilities(webdriver.Capabilities.chrome())
@@ -113,8 +112,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 			}
 		})
 		.build();
-	console.log('TEST: validateWithSelenium: build');
-	driver.manage().timeouts().setScriptTimeout(100000);//TODO: confirm
+	driver.manage().timeouts().setScriptTimeout(1000000);//TODO: confirm
 	console.log('TEST: validateWithSelenium: timeout');
 
 	//TODO: support full load or wait???
