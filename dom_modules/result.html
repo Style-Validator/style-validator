@@ -67,24 +67,28 @@
 			is: "validation-result",
 			ready: function() {
 
+				//TODO: if no querystring redirect or put link into body
+
 				var resultContent = document.querySelector('#result-content');
 				var loadingSpinner = document.querySelector('#loading-spinner');
-
 				var url = '/page/result.hbs' + location.search;
-				var xhr = new XMLHttpRequest();
-				xhr.open('GET', url, true);
-				xhr.onload = function () {
+				var source = new EventSource(url);
+
+				source.addEventListener('message', function(event) {
+					source.close();
 					loadingSpinner.parentElement.removeChild(loadingSpinner);
-					if (xhr.status === 200) {
-						resultContent.innerHTML = xhr.responseText;
-					} else {
-						throw new Error(xhr.statusText);
-					}
-				};
-				xhr.onerror = function () {
-					throw new Error(xhr.statusText);
-				};
-				xhr.send();
+					resultContent.innerHTML = event.data;
+				}, false);
+
+				source.addEventListener('open', function(event) {
+					console.info('Opened stream!');
+				}, false);
+
+				source.addEventListener('error', function(error) {
+					source.close();
+					console.log(error);
+					throw new Error(error);
+				}, false);
 			}
 		});
 	</script>

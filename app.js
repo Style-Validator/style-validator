@@ -11,6 +11,7 @@ var url = require('url');
 var path = require('path');
 var querystring = require('querystring');
 var assert = require('assert');
+var events = require('events')
 
 /*
  * app modules
@@ -32,6 +33,8 @@ var port = process.env.PORT || 8001;
 var MongoClient = mongodb.MongoClient;
 var dbname = 'sv';
 var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
+
+var emitter = new events.EventEmitter();
 
 var mimeTypes = {
 	'txt':  'text/plain',
@@ -122,22 +125,21 @@ function getCapabilities(req) {
 }
 function validateWithSelenium(req, res, path, targetURL) {
 
-	var capabilities = getCapabilities(req);
+	setUpSSE(req, res, path);
+
 	driver = new webdriver.Builder()
 		.usingServer('http://127.0.0.1:4444/wd/hub')
-		.withCapabilities(capabilities)
+		.withCapabilities(getCapabilities(req))
 		.build();
 	driver.manage().timeouts().setScriptTimeout(1000000/* millisecond */);//TODO: confirm
-	console.log('TEST: validateWithSelenium: timeout');
 
 	//TODO: support full load or wait???
 	driver.get(targetURL)
-		//.then(executeStyleValidator)
+		.then(executeStyleValidator)
 		.then(getResultOfStyleValidator(req, res, path));
 }
 
 function executeStyleValidator() {
-	console.log('TEST: executeStyleValidator: start');
 	return driver.executeAsyncScript(
 		"var callback = arguments[arguments.length - 1];" +
 		"var script = document.createElement('script');" +
@@ -149,38 +151,26 @@ function executeStyleValidator() {
 	);
 }
 function getResultOfStyleValidator(req, res, path) {
-	console.log('TEST: getResultOfStyleValidator: start');
 	return function(STYLEV) {
-		console.log('TEST: takeScreenshot: start');
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
-				console.log('TEST: quit: start');
 				driver.quit();
 			});
 	};
 }
 
 function getScreenshotData(req, res, path, STYLEV) {
-	console.log('TEST: getScreenshotData: start');
 	return function(data, err) {
-		console.log('TEST: getScreenshotData: start2');
 		return new Promise(function(resolve, reject) {
-			console.log('TEST: getScreenshotData: start3');
 			if(!err) {
-
-				//var SV = STYLEV.VALIDATOR;
-				//var dataObj = {
-				//	total: SV.logObjArray.length,
-				//	error: SV.errorNum,
-				//	warning: SV.warningNum,
-				//	screenshot: 'data:image/png;base64,' + data
-				//};
+				console.log(STYLEV);
+				var SV = STYLEV.VALIDATOR;
 				var dataObj = {
-					total: 10,
-					error: 5,
-					warning: 5,
-					screenshot: 'hoge.jpg',
+					total: SV.logObjArray.length,
+					error: SV.errorNum,
+					warning: SV.warningNum,
+					screenshot: 'data:image/png;base64,' + data
 				};
 				sendParsedFile(req, res, path, dataObj);
 				resolve();
@@ -360,8 +350,10 @@ function serveFiles(req, res, path) {
 			break;
 
 		case './page/result.hbs':
+
 			var targetURL = querystring.parse(url.parse(req.url).query).url;
 			return validateWithSelenium(req, res, path, targetURL);
+
 			break;
 
 		default:
@@ -406,6 +398,30 @@ function serveFiles(req, res, path) {
 
 			break;
 	}
+}
+
+function setUpSSE(req, res, path) {
+	res.writeHead(200, {
+		'Content-Type': 'text/event-stream',
+		'Cache-Control': 'no-cache',
+		'Connection': 'no-cache'
+	});
+
+	// 55秒のタイムアウト対策
+	var timer = setInterval(function() {
+		res.write(':\n\n');
+	}, 50000);
+
+	// 最初の30秒のタイムアウト対策
+	res.write(':\n\n');
+
+	emitter.on('data', function(data) {
+		res.write('data: ' + data.replace(/\r?\n|\r/g, '') + '\n\n');
+	});
+
+	req.on('close', function() {
+		clearTimeout(timer);
+	});
 }
 
 function sendVideo(req, res, path, extension) {
@@ -476,19 +492,13 @@ function convertSize(value) {
 }
 
 function sendParsedFile(req, res, path, data) {
-	console.log(path);
 	fs.readFile(path, 'utf-8', function(error, source){
-		console.log('sendParsedFile')
 		if(!error) {
-			console.log('no error')
-			res.writeHead(200, {'Content-Type': 'text/html'});
 			var context = data;
 			var template = handlebars.compile(source);
 			var html = template(context);
-			res.end(html);
-
+			emitter.emit('data', html);
 		} else {
-			console.log('error')
 			sendNotFound(req, res, path);
 		}
 	});
