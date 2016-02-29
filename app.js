@@ -135,7 +135,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	//TODO: support full load or wait???
 	driver.get(targetURL)
-		.then(executeStyleValidator)
+		//.then(executeStyleValidator)
 		.then(getResultOfStyleValidator(req, res, path));
 }
 
@@ -164,12 +164,18 @@ function getScreenshotData(req, res, path, STYLEV) {
 	return function(data, err) {
 		return new Promise(function(resolve, reject) {
 			if(!err) {
-				var SV = STYLEV.VALIDATOR;
+				//var SV = STYLEV.VALIDATOR;
+				//var dataObj = {
+				//	total: SV.logObjArray.length,
+				//	error: SV.errorNum,
+				//	warning: SV.warningNum,
+				//	screenshot: 'data:image/png;base64,' + data
+				//};
 				var dataObj = {
-					total: SV.logObjArray.length,
-					error: SV.errorNum,
-					warning: SV.warningNum,
-					screenshot: 'data:image/png;base64,' + data
+					total: 10,
+					error: 5,
+					warning: 5,
+					screenshot: 'hoge.jpg'
 				};
 				sendParsedFile(req, res, path, dataObj);
 				resolve();
@@ -406,12 +412,12 @@ function setUpSSE(req, res, path) {
 		'Connection': 'no-cache'
 	});
 
-	// 55秒のタイムアウト対策
+	// Avoiding 55s timeout
 	var timer = setInterval(function() {
 		res.write(':\n\n');
 	}, 50000);
 
-	// 最初の30秒のタイムアウト対策
+	// Avoiding first 30s timeout
 	res.write(':\n\n');
 
 	emitter.on('data', function(data) {
