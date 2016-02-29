@@ -34,20 +34,20 @@ var dbname = 'sv';
 var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
 
 var mimeTypes = {
-	"txt":  "text/plain",
-	"html": "text/html",
-	"hbs": "text/html",
-	"css":  "text/css",
-	"jpeg": "image/jpeg",
-	"jpg":  "image/jpeg",
-	"png":  "image/png",
-	"js":   "application/javascript",
-	"json": "application/json",
-	"xml":  "application/xml",
-	"svg":  "image/svg+xml",
-	"mp4": "video/mp4",
-	"m4v": "video/mp4",
-	"webm": "video/webm"
+	'txt':  'text/plain',
+	'html': 'text/html',
+	'hbs': 'text/html',
+	'css':  'text/css',
+	'jpeg': 'image/jpeg',
+	'jpg':  'image/jpeg',
+	'png':  'image/png',
+	'js':   'application/javascript',
+	'json': 'application/json',
+	'xml':  'application/xml',
+	'svg':  'image/svg+xml',
+	'mp4': 'video/mp4',
+	'm4v': 'video/mp4',
+	'webm': 'video/webm'
 };
 
 //TODO: confirm.start
@@ -108,7 +108,7 @@ function validateWithSelenium(req, res, path, url) {
 		.withCapabilities(webdriver.Capabilities.chrome())
 		.build();
 	console.log('TEST: validateWithSelenium: build');
-	driver.manage().timeouts().setScriptTimeout(100000);
+	driver.manage().timeouts().setScriptTimeout(100000);//TODO: confirm
 	console.log('TEST: validateWithSelenium: timeout');
 
 	//TODO: support full load or wait???
@@ -171,7 +171,7 @@ function getScreenshotData(req, res, path, STYLEV) {
  * functions - database
  * */
 
-function dbHandler(req, res, path, store, location) {
+function dbHandler(req, res, path, store) {
 
 	var json = JSON.parse(store);
 
@@ -189,13 +189,13 @@ function dbHandler(req, res, path, store, location) {
 		//uuid = mongodb.Binary(uuid, mongodb.Binary.SUBTYPE_UUID);
 
 		uuid = nodeUUID.v4();
-		res.writeHead(200, {
-			'Set-Cookie': setCookie('_sv', uuid)
-		});
+		res.setHeader({'Set-Cookie': setCookie('_sv', uuid)});
 	} else {
-		res.writeHead(200);
 		uuid = parsedCookieObj._sv;
 	}
+
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.end(store);
 
 	return function(err, db) {
 
@@ -268,6 +268,9 @@ function requestHandler(req, res){
 	var path = parsedURL.pathname;
 	var requestMethod = req.method;
 
+	//Allow all access
+	res.setHeader('Access-Control-Allow-Origin', '*');
+
 	switch(requestMethod) {
 		case 'POST':
 			serveData(req, res, path);
@@ -277,7 +280,7 @@ function requestHandler(req, res){
 			break;
 		default:
 			res.writeHead(200, {'Content-Type': 'text/plain'});
-			res.end(requestMethod + ' request is not suppoted.');
+			res.end(requestMethod + ' request is not supported.');
 			break;
 	}
 }
@@ -295,20 +298,10 @@ function serveData(req, res, path) {
 
 			case '/saveJSON':
 				saveJSON(store);
-				res.writeHead(200, {
-					"Content-Type": "application/json",
-					"Access-Control-Allow-Origin": "*"
-				});
-				res.end(store);
 				break;
 
 			case '/sendLog':
 				MongoClient.connect(dburl, dbHandler(req, res, path, store));
-				res.writeHead(200, {
-					"Content-Type": "application/json",
-					"Access-Control-Allow-Origin": "*"
-				});
-				res.end(store);
 				break;
 
 			case '/result':
@@ -317,7 +310,8 @@ function serveData(req, res, path) {
 				break;
 
 			default:
-				res.end(store);
+				res.writeHead(200, {'Content-Type': 'text/plain'});
+				res.end(requestMethod + ' request is not supported.');
 				break;
 		}
 	});
@@ -407,7 +401,7 @@ function sendVideo(req, res, path, extension) {
 				"Content-Range": "bytes " + start + "-" + end + "/" + total,
 				"Accept-Ranges": "bytes",
 				"Content-Length": chunksize,
-				"Content-Type": mimeTypes[extension]
+				'Content-Type': mimeTypes[extension]
 			}
 		);
 
@@ -427,8 +421,7 @@ function sendClientIP(req, res, path) {
 	var variable = parsedQueryString['var'];
 	var clientIp = requestIp.getClientIp(req);
 
-	res.setHeader("Content-Type", "text/plain");
-	res.setHeader("Access-Control-Allow-Origin", "*");
+	//jsonp
 	res.writeHead(200, {'Content-Type': mimeTypes['js']});
 	res.end('var ' + variable + ' = \'' + clientIp + '\';');
 
@@ -456,10 +449,7 @@ function convertSize(value) {
 function sendParsedFile(req, res, path, data) {
 	fs.readFile('./page' + path + '.hbs', 'utf-8', function(error, source){
 		if(!error) {
-			res.writeHead(200, {
-				'Content-Type': 'text/html',
-				"Access-Control-Allow-Origin": "*"
-			});
+			res.writeHead(200, {'Content-Type': 'text/html'});
 			var context = data;
 			var template = handlebars.compile(source);
 			var html = template(context);
@@ -605,9 +595,11 @@ function sendDirectoryIndex(req, res, path, files) {
 
 function saveJSON(store) {
 
-	fs.writeFile("./extension/data/rules.json", store, function(err) {
+	fs.writeFile('./extension/data/rules.json', store, function(err) {
 
 		assert.equal(null, err, 'Failed! JSON file has not written...');
 		console.log('JSON file written successfully!');
 	});
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.end(store);
 }
