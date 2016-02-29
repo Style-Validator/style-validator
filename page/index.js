@@ -48,34 +48,10 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	},
 	
 	submit: function(data) {
-		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-
-		var xhr = new XMLHttpRequest();
-
 		//TODO: change url
-		//var apiURI = 'https://style-validator.herokuapp.com/result';
-		var apiURI = 'http://localhost:8001/result';
-
-		var method = 'POST';
-		var data4send = JSON.stringify(data);
-
-		xhr.open(method, apiURI, true);
-		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		xhr.addEventListener('load', function () {
-			if (xhr.status === 200) {
-				//console.log('success');
-			} else {
-				that.throwError();
-			}
-
-		});
-		xhr.addEventListener('error', that.throwError);
-
-		if (xhr.readyState == 4) {
-			return;
-		}
-
-		xhr.send(data4send);
+		var apiURI = '//style-validator.herokuapp.com/result?url=' + data.url;
+		//var apiURI = 'http://localhost:8001/result?url=' + data.url;
+		location.href = apiURI;
 	},
 
 	throwError: function(error) {

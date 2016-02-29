@@ -159,7 +159,7 @@ STYLEV.caller = (function() {
 		return 'JavaScript Bookmarklet';
 	}
 	if(STYLEV.isExternalScript) {
-		return 'External Script';
+		return 'Embedded Script';
 	}
 }());
 

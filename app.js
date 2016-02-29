@@ -101,7 +101,7 @@ function callbackAfterServerListening() {
  * functions - selenium
  * */
 var driver;
-function validateWithSelenium(req, res, path, url) {
+function validateWithSelenium(req, res, path, targetURL) {
 	console.log('TEST: validateWithSelenium: start');
 	driver = new webdriver.Builder()
 		.usingServer('http://127.0.0.1:4444/wd/hub')
@@ -112,7 +112,7 @@ function validateWithSelenium(req, res, path, url) {
 	console.log('TEST: validateWithSelenium: timeout');
 
 	//TODO: support full load or wait???
-	driver.get(url)
+	driver.get(targetURL)
 		.then(executeStyleValidator)
 		.then(getResultOfStyleValidator(req, res, path));
 }
@@ -305,8 +305,8 @@ function serveData(req, res, path) {
 				break;
 
 			case '/result':
-				var url = JSON.parse(store).url;
-				validateWithSelenium(req, res, path, url);
+				var targetURL = JSON.parse(store).url;
+				validateWithSelenium(req, res, path, targetURL);
 				break;
 
 			default:
@@ -324,59 +324,64 @@ function serveFiles(req, res, path) {
 	//override
 	path = ('./' + path).replace('//', '/');
 
-	if(path === './getMyIP.js') {
-		return sendClientIP(req, res, path);
-	}
-
-	//TODO: remove
-	//Deny if hostname is style-validator.herokuapp.com
-	//Because, this app has already hosted with style-validator.herokuapp.com
-	//if(req.headers.host === 'style-validator.herokuapp.com') {
-	//	return sendNotFound(req, res, path);
-	//}
-
 	//video
 	if(/^mp4|m4v|webm/.test(extension)) {
 		return sendVideo(req, res, path, extension);
 	}
 
-	fs.stat(path, function(err, stats){
+	switch(path) {
 
-		if(err){
+		case './getMyIP.js':
+			return sendClientIP(req, res, path);
+			break;
 
-			return sendNotFound(req, res, path);
+		case './result':
+			var targetURL = querystring.parse(url.parse(req.url).query).url;
+			return validateWithSelenium(req, res, path, targetURL);
+			break;
 
-		} else {
+		default:
 
-			//Directory
-			if(stats.isDirectory()) {
-				//if last char is not '/', then redirect with '/'
-				if(path.charAt(path.length-1) !== '/') {
-					return sendRedirect(req, res, path + '/');
-				}
+			fs.stat(path, function(err, stats){
 
-				fs.stat(path + 'index.html', function(err2, stats2) {
-					if(err2) {
-						fs.stat(path + 'index.hbs', function(err3, stats3) {
-							if(err3) {
-								return sendDirectory(req, res, path);
+				if(err){
+
+					return sendNotFound(req, res, path);
+
+				} else {
+
+					//Directory
+					if(stats.isDirectory()) {
+						//if last char is not '/', then redirect with '/'
+						if(path.charAt(path.length-1) !== '/') {
+							return sendRedirect(req, res, path + '/');
+						}
+
+						fs.stat(path + 'index.html', function(err2, stats2) {
+							if(err2) {
+								fs.stat(path + 'index.hbs', function(err3, stats3) {
+									if(err3) {
+										return sendDirectory(req, res, path);
+									} else {
+										return sendFile(req, res, path + '/index.html');
+									}
+								});
 							} else {
 								return sendFile(req, res, path + '/index.html');
 							}
 						});
+
+						//Not directory
 					} else {
-						return sendFile(req, res, path + '/index.html');
+
+						return sendFile(req, res, path);
 					}
-				});
 
-			//Not directory
-			} else {
+				}
+			});
 
-				return sendFile(req, res, path);
-			}
-
-		}
-	});
+			break;
+	}
 }
 
 function sendVideo(req, res, path, extension) {
@@ -447,8 +452,10 @@ function convertSize(value) {
 }
 
 function sendParsedFile(req, res, path, data) {
-	fs.readFile('./page' + path + '.hbs', 'utf-8', function(error, source){
+	fs.readFile('./page' + path.slice(1) + '.hbs', 'utf-8', function(error, source){
+		console.log('hogehoge')
 		if(!error) {
+			console.log('no error')
 			res.writeHead(200, {'Content-Type': 'text/html'});
 			var context = data;
 			var template = handlebars.compile(source);
@@ -456,6 +463,7 @@ function sendParsedFile(req, res, path, data) {
 			res.end(html);
 
 		} else {
+			console.log('error')
 			sendNotFound(req, res, path);
 		}
 	});
