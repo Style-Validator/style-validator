@@ -76,22 +76,7 @@
 <div class="wrapper">
 	<common-header></common-header>
 	<main class="main">
-		<figure class="result cf">
-			<figcaption class="result-body">
-				<table class="result-table">
-					<tr>
-						<th>Total: </th><td>{{count.total}}</td>
-					</tr>
-					<tr>
-						<th>Error: </th><td>{{count.error}}</td>
-					</tr>
-					<tr>
-						<th>Warning: </th><td>{{count.warning}}</td>
-					</tr>
-				</table>
-			</figcaption>
-			<div class="result-screenshot"><img src="{{screenshot}}" alt="Screenshot" class="screenshot-image" /></div>
-		</figure>
+		<validation-result></validation-result>
 		<common-footer></common-footer>
 	</main>
 </div>

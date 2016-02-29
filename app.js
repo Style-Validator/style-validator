@@ -102,15 +102,27 @@ function callbackAfterServerListening() {
  * */
 var driver;
 function validateWithSelenium(req, res, path, targetURL) {
-	driver = new webdriver.Builder()
-		.usingServer('http://127.0.0.1:4444/wd/hub')
-		//.withCapabilities(webdriver.Capabilities.chrome())
-		.withCapabilities({
+
+	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
+	var capabilities;
+
+	if(isHeroku) {
+		capabilities = {
 			'browserName': 'chrome',
 			'chromeOptions': {
 				'binary': '/app/.apt/opt/google/chrome/chrome'
 			}
-		})
+		};
+	} else {
+		capabilities = {
+			'browserName': 'chrome'
+		}
+	}
+
+	driver = new webdriver.Builder()
+		.usingServer('http://127.0.0.1:4444/wd/hub')
+		//.withCapabilities(webdriver.Capabilities.chrome())
+		.withCapabilities(capabilities)
 		.build();
 	driver.manage().timeouts().setScriptTimeout(1000000);//TODO: confirm
 	console.log('TEST: validateWithSelenium: timeout');

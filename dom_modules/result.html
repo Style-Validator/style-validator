@@ -1,0 +1,37 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<dom-module id="validation-result">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+		<figure class="result cf">
+			<figcaption class="result-body">
+				<table class="result-table">
+					<tr>
+						<th>Total: </th><td>{{count.total}}</td>
+					</tr>
+					<tr>
+						<th>Error: </th><td>{{count.error}}</td>
+					</tr>
+					<tr>
+						<th>Warning: </th><td>{{count.warning}}</td>
+					</tr>
+				</table>
+			</figcaption>
+			<div class="result-screenshot"><img src="{{screenshot}}" alt="Screenshot" class="screenshot-image" /></div>
+		</figure>
+	</template>
+	<script>
+		Polymer({
+			is: "validation-result",
+			ready: function() {
+				this.screenshot = '/img/bookmarkbar.png';
+				this.count.total = 10;
+				this.count.error = 5;
+				this.count.warning = 5;
+			}
+		});
+	</script>
+</dom-module>
