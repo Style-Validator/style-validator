@@ -127,16 +127,24 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
+	console.log('|||||||||||| build');
 	driver = new webdriver.Builder()
 		.usingServer('http://127.0.0.1:4444/wd/hub')
 		.withCapabilities(getCapabilities(req))
 		.build();
+
 	driver.manage().timeouts().setScriptTimeout(1000000/* millisecond */);//TODO: confirm
 
+	console.log('|||||||||||| get');
 	//TODO: support full load or wait???
 	driver.get(targetURL)
-		.then(executeStyleValidator)
-		.then(getResultOfStyleValidator(req, res, path));
+		.then(function() {
+			console.log('|||||||||||| quit');
+
+			driver.quit();
+		});
+		//.then(executeStyleValidator)
+		//.then(getResultOfStyleValidator(req, res, path));
 }
 
 function executeStyleValidator() {
