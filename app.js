@@ -105,7 +105,13 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('TEST: validateWithSelenium: start');
 	driver = new webdriver.Builder()
 		.usingServer('http://127.0.0.1:4444/wd/hub')
-		.withCapabilities(webdriver.Capabilities.chrome())
+		//.withCapabilities(webdriver.Capabilities.chrome())
+		.withCapabilities({
+			'browserName': 'chrome',
+			'chromeOptions': {
+				'binary': '/app/.apt/opt/google/chrome/chrome'
+			}
+		})
 		.build();
 	console.log('TEST: validateWithSelenium: build');
 	driver.manage().timeouts().setScriptTimeout(100000);//TODO: confirm
