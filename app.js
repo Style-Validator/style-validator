@@ -118,7 +118,7 @@ function getCapabilities(req) {
 
 	} else {
 		capabilities = {
-			'browserName': 'chrome'
+			'browserName': 'phantomjs'
 		}
 	}
 
