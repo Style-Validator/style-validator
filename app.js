@@ -140,6 +140,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 }
 
 function executeStyleValidator() {
+	console.log('executeStyleValidator');
 	return driver.executeAsyncScript(
 		"console.log('hoge');" +
 		"var callback = arguments[arguments.length - 1];" +
