@@ -68,7 +68,6 @@
 			ready: function() {
 
 				//TODO: if no querystring redirect or put link into body
-
 				var resultContent = document.querySelector('#result-content');
 				var loadingSpinner = document.querySelector('#loading-spinner');
 				var url = '/page/result.hbs' + location.search;
@@ -84,10 +83,9 @@
 					console.info('Opened stream!');
 				}, false);
 
-				source.addEventListener('error', function(error) {
+				source.addEventListener('error', function(event) {
 					source.close();
-					console.log(error);
-					throw new Error(error);
+					throw new Error('Event Source is failed');
 				}, false);
 			}
 		});

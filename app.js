@@ -164,7 +164,6 @@ function getScreenshotData(req, res, path, STYLEV) {
 	return function(data, err) {
 		return new Promise(function(resolve, reject) {
 			if(!err) {
-				console.log(STYLEV);
 				var SV = STYLEV.VALIDATOR;
 				var dataObj = {
 					total: SV.logObjArray.length,

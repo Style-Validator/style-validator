@@ -587,20 +587,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 				that.removeIframe4getDefaultStyles();
 	
-				that.send2PhantomJS();
-	
-				//TODO: remove?
-				if(window.callPhantom || window._phantom) {
-					return;
-				}
-	
 				//TODO: confirm
 				//if(that.isSameWithPreviousData()) {
 				//	return false;
 				//}
 	
 				that.showConsole();
-				that.sendLog();
 				that.setParametersOfConsole();
 				that.bindEvents2Element();
 	
@@ -608,10 +600,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				if(typeof callback === 'function') {
 					callback();
 				}
-	
-				//GAタグを挿入
+
+				that.sendLog();
 				that.send2GA();
-	
+
 				console.info('Style Validator: Validated and Console has been displayed');
 	
 				//バリデータによるDOM変更が全て完了してから監視開始
@@ -1172,15 +1164,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 		showErrorMsg: function(e) {
 			throw new Error('Request is failed!');
-		},
-	
-		send2PhantomJS: function() {
-			if (typeof window.callPhantom === 'function') {
-				var status = window.callPhantom({
-					command: 'exit',
-					reason:  'User Request.'
-				});
-			}
 		},
 	
 		initializeValidation: function() {
