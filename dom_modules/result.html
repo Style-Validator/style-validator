@@ -68,14 +68,14 @@
 			ready: function() {
 
 				var resultContent = document.querySelector('#result-content');
-				var loading-spinner = document.querySelector('#loading-spinner');
+				var loadingSpinner = document.querySelector('#loading-spinner');
 
 				var url = '/page/result.hbs' + location.search;
 				var xhr = new XMLHttpRequest();
 				xhr.open('GET', url, true);
 				xhr.onload = function () {
 					if (xhr.status === 200) {
-						loading-spinner.parentElement.removeChild(loading-spinner);
+						loadingSpinner.parentElement.removeChild(loadingSpinner);
 						resultContent.innerHTML = xhr.responseText;
 					} else {
 						throw new Error(xhr.statusText);
