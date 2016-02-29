@@ -74,8 +74,8 @@
 				var xhr = new XMLHttpRequest();
 				xhr.open('GET', url, true);
 				xhr.onload = function () {
+					loadingSpinner.parentElement.removeChild(loadingSpinner);
 					if (xhr.status === 200) {
-						loadingSpinner.parentElement.removeChild(loadingSpinner);
 						resultContent.innerHTML = xhr.responseText;
 					} else {
 						throw new Error(xhr.statusText);
