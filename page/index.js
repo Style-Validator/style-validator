@@ -48,9 +48,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	},
 	
 	submit: function(data) {
-		//TODO: change url
-		var apiURI = '//style-validator.herokuapp.com/page/result.html?url=' + data.url;
-		//var apiURI = 'http://localhost:8001/page/result.html?url=' + data.url;
+		var apiURI = '/page/result.html?url=' + data.url;
 		location.href = apiURI;
 	},
 

@@ -101,8 +101,7 @@ function callbackAfterServerListening() {
  * functions - selenium
  * */
 var driver;
-function validateWithSelenium(req, res, path, targetURL) {
-
+function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
 	var capabilities;
 
@@ -119,12 +118,16 @@ function validateWithSelenium(req, res, path, targetURL) {
 		}
 	}
 
+	return capabilities;
+}
+function validateWithSelenium(req, res, path, targetURL) {
+
+	var capabilities = getCapabilities(req);
 	driver = new webdriver.Builder()
 		.usingServer('http://127.0.0.1:4444/wd/hub')
-		//.withCapabilities(webdriver.Capabilities.chrome())
 		.withCapabilities(capabilities)
 		.build();
-	driver.manage().timeouts().setScriptTimeout(1000000);//TODO: confirm
+	driver.manage().timeouts().setScriptTimeout(1000000/* millisecond */);//TODO: confirm
 	console.log('TEST: validateWithSelenium: timeout');
 
 	//TODO: support full load or wait???
@@ -167,11 +170,9 @@ function getScreenshotData(req, res, path, STYLEV) {
 			if(!err) {
 				var SV = STYLEV.VALIDATOR;
 				var dataObj = {
-					count: {
-						total: SV.logObjArray.length,
-						error: SV.errorNum,
-						warning: SV.warningNum
-					},
+					total: SV.logObjArray.length,
+					error: SV.errorNum,
+					warning: SV.warningNum,
 					screenshot: 'data:image/png;base64,' + data
 				};
 				sendParsedFile(req, res, path, dataObj);
@@ -319,11 +320,11 @@ function serveData(req, res, path) {
 			case '/sendLog':
 				MongoClient.connect(dburl, dbHandler(req, res, path, store));
 				break;
-
-			case '/result':
-				var targetURL = JSON.parse(store).url;
-				validateWithSelenium(req, res, path, targetURL);
-				break;
+			//
+			//case '/result':
+			//	var targetURL = JSON.parse(store).url;
+			//	validateWithSelenium(req, res, path, targetURL);
+			//	break;
 
 			default:
 				res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -351,7 +352,7 @@ function serveFiles(req, res, path) {
 			return sendClientIP(req, res, path);
 			break;
 
-		case './result':
+		case './page/result.hbs':
 			var targetURL = querystring.parse(url.parse(req.url).query).url;
 			return validateWithSelenium(req, res, path, targetURL);
 			break;
@@ -468,8 +469,9 @@ function convertSize(value) {
 }
 
 function sendParsedFile(req, res, path, data) {
-	fs.readFile('./page' + path.slice(1) + '.hbs', 'utf-8', function(error, source){
-		console.log('hogehoge')
+	console.log(path);
+	fs.readFile(path, 'utf-8', function(error, source){
+		console.log('sendParsedFile')
 		if(!error) {
 			console.log('no error')
 			res.writeHead(200, {'Content-Type': 'text/html'});
