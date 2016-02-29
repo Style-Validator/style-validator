@@ -189,7 +189,7 @@ function dbHandler(req, res, path, store) {
 		//uuid = mongodb.Binary(uuid, mongodb.Binary.SUBTYPE_UUID);
 
 		uuid = nodeUUID.v4();
-		res.setHeader({'Set-Cookie': setCookie('_sv', uuid)});
+		res.setHeader('Set-Cookie', setCookie('_sv', uuid));
 	} else {
 		uuid = parsedCookieObj._sv;
 	}
