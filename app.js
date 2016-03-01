@@ -11,7 +11,7 @@ var url = require('url');
 var path = require('path');
 var querystring = require('querystring');
 var assert = require('assert');
-var events = require('events')
+var events = require('events');
 
 /*
  * app modules
@@ -109,30 +109,21 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	console.log('|||||||||||| build');
-	//driver = new webdriver.Builder()
-	//	.usingServer('http://127.0.0.1:4444/wd/hub')
-	//	.withCapabilities(getCapabilities(req))
-	//	.build();
-	driver = new phantomjs.Driver();
+	driver = new webdriver.Builder()
+		.usingServer('http://127.0.0.1:4444/wd/hub')
+		.withCapabilities(getCapabilities(req))
+		.build();
 
 	driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
-	console.log('|||||||||||| get');
 	//TODO: support full load or wait???
 	driver.get(targetURL)
-		//.then(function() {
-		//	console.log('|||||||||||| quit');
-		//
-		//	driver.quit();
-		//});
 		.then(executeStyleValidator)
 		.then(getResultOfStyleValidator(req, res, path));
 }
 function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
 	var capabilities;
-
 	if(isHeroku) {
 		capabilities = {
 			'browserName': 'chrome',
@@ -140,17 +131,11 @@ function getCapabilities(req) {
 				'binary': '/app/.apt/opt/google/chrome/chrome'
 			}
 		};
-
 	} else {
-		//capabilities = webdriver.Capabilities.phantomjs();
 		capabilities = {
-			'browserName': 'phantomjs',
-			'javascriptEnabled': true
+			'browserName': 'chrome'
 		};
-
-		//console.log(capabilities);
 	}
-
 	return capabilities;
 }
 function executeStyleValidator() {
@@ -158,35 +143,32 @@ function executeStyleValidator() {
 	return driver.executeAsyncScript(
 		"var callback = arguments[arguments.length - 1];" +
 
-		"var wc = document.createElement('script');" +
-		"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
-
-		"var es6 = document.createElement('script');" +
-		"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
+		//"var wc = document.createElement('script');" +
+		//"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
+		//
+		//"var es6 = document.createElement('script');" +
+		//"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
 
 		"var sv = document.createElement('script');" +
 		"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
 
-		"wc.addEventListener('load', function() {" +
-		"document.head.appendChild(es6);" +
-		"});" +
-
-		"es6.addEventListener('load', function() {" +
-			"document.head.appendChild(sv);" +
-		"});" +
+		//"wc.addEventListener('load', function() {" +
+		//"document.head.appendChild(es6);" +
+		//"});" +
+		//
+		//"es6.addEventListener('load', function() {" +
+		//	"document.head.appendChild(sv);" +
+		//"});" +
 
 		"sv.addEventListener('load', function() {" +
 			"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
 		"});" +
 
-		"document.head.appendChild(wc);"
+		"document.head.appendChild(sv);"
 	);
 }
 function getResultOfStyleValidator(req, res, path) {
-	console.log('getResultOfStyleValidator');
 	return function(STYLEV) {
-		console.log(STYLEV);
-		console.log('getResultOfStyleValidator b');
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
@@ -196,11 +178,8 @@ function getResultOfStyleValidator(req, res, path) {
 }
 
 function getScreenshotData(req, res, path, STYLEV) {
-	console.log('getScreenshotData b');
 	return function(data, err) {
-		console.log('getScreenshotData c');
 		return new Promise(function(resolve, reject) {
-			console.log('getScreenshotData d');
 			if(!err) {
 				var SV = STYLEV.VALIDATOR;
 				var dataObj = {
