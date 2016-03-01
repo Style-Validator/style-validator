@@ -213,6 +213,8 @@ STYLEV.isPassedURLFilters = (function() {
 	return isPassedURLFilters;
 }());
 
+STYLEV.isPhantomJS = /PhantomJS/.test(window.navigator.userAgent);
+
 //Main object of Validator
 STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
@@ -586,17 +588,20 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				STYLEV.METHODS.each(that.allElem, that.validateByElement);
 	
 				that.removeIframe4getDefaultStyles();
-	
+
+
 				//TODO: confirm
 				//if(that.isSameWithPreviousData()) {
 				//	return false;
 				//}
-	
-				that.showConsole();
-				that.setParametersOfConsole();
-				that.bindEvents2Element();
-	
-				//バリデート完了時のcallbackが存在し関数だった場合実行
+
+				if (!STYLEV.isPhantomJS) {
+					that.showConsole();
+					that.setParametersOfConsole();
+					that.bindEvents2Element();
+					that.moManager.connect();
+				}
+
 				if(typeof callback === 'function') {
 					callback();
 				}
@@ -605,10 +610,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.send2GA();
 
 				console.info('Style Validator: Validated and Console has been displayed');
-	
-				//バリデータによるDOM変更が全て完了してから監視開始
-				that.moManager.connect();
-	
+
 				STYLEV.isValidated = true;
 	
 				if(STYLEV.isChromeExtension) {

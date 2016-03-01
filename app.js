@@ -21,6 +21,7 @@ var mongodb = require('mongodb');
 var requestIp = require('request-ip');
 var nodeUUID = require('node-uuid');
 var webdriver = require('selenium-webdriver');
+var phantomjs = require('selenium-webdriver/phantomjs');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 
@@ -104,35 +105,16 @@ function callbackAfterServerListening() {
  * functions - selenium
  * */
 var driver;
-function getCapabilities(req) {
-	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
-	var capabilities;
-
-	if(isHeroku) {
-		capabilities = {
-			'browserName': 'chrome',
-			'chromeOptions': {
-				'binary': '/app/.apt/opt/google/chrome/chrome'
-			}
-		};
-
-	} else {
-		capabilities = {
-			'browserName': 'phantomjs'
-		}
-	}
-
-	return capabilities;
-}
 function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
 	console.log('|||||||||||| build');
-	driver = new webdriver.Builder()
-		.usingServer('http://127.0.0.1:4444/wd/hub')
-		.withCapabilities(getCapabilities(req))
-		.build();
+	//driver = new webdriver.Builder()
+	//	.usingServer('http://127.0.0.1:4444/wd/hub')
+	//	.withCapabilities(getCapabilities(req))
+	//	.build();
+	driver = new phantomjs.Driver();
 
 	driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
@@ -147,11 +129,37 @@ function validateWithSelenium(req, res, path, targetURL) {
 		.then(executeStyleValidator)
 		.then(getResultOfStyleValidator(req, res, path));
 }
+function getCapabilities(req) {
+	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
+	var capabilities;
 
+	if(isHeroku) {
+		capabilities = {
+			'browserName': 'chrome',
+			'chromeOptions': {
+				'binary': '/app/.apt/opt/google/chrome/chrome'
+			}
+		};
+
+	} else {
+		//capabilities = webdriver.Capabilities.phantomjs();
+		capabilities = {
+			'browserName': 'phantomjs',
+			'javascriptEnabled': true
+		};
+
+		//console.log(capabilities);
+	}
+
+	return capabilities;
+}
 function executeStyleValidator() {
 	console.log('executeStyleValidator');
 	return driver.executeAsyncScript(
 		"var callback = arguments[arguments.length - 1];" +
+
+		"var wc = document.createElement('script');" +
+		"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
 
 		"var es6 = document.createElement('script');" +
 		"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
@@ -159,15 +167,19 @@ function executeStyleValidator() {
 		"var sv = document.createElement('script');" +
 		"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
 
-		"sv.addEventListener('load', function() {" +
-			"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+		"wc.addEventListener('load', function() {" +
+		"document.head.appendChild(es6);" +
 		"});" +
 
 		"es6.addEventListener('load', function() {" +
 			"document.head.appendChild(sv);" +
 		"});" +
 
-		"document.head.appendChild(es6);"
+		"sv.addEventListener('load', function() {" +
+			"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+		"});" +
+
+		"document.head.appendChild(wc);"
 	);
 }
 function getResultOfStyleValidator(req, res, path) {
