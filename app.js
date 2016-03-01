@@ -139,30 +139,42 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('|||||||||||| get');
 	//TODO: support full load or wait???
 	driver.get(targetURL)
-		.then(function() {
-			console.log('|||||||||||| quit');
-
-			driver.quit();
-		});
-		//.then(executeStyleValidator)
-		//.then(getResultOfStyleValidator(req, res, path));
+		//.then(function() {
+		//	console.log('|||||||||||| quit');
+		//
+		//	driver.quit();
+		//});
+		.then(executeStyleValidator)
+		.then(getResultOfStyleValidator(req, res, path));
 }
 
 function executeStyleValidator() {
 	console.log('executeStyleValidator');
 	return driver.executeAsyncScript(
-		"console.log('hoge');" +
 		"var callback = arguments[arguments.length - 1];" +
-		"var script = document.createElement('script');" +
-		"script.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
-		"script.addEventListener('load', function() {" +
+
+		"var es6 = document.createElement('script');" +
+		"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
+		"es6.addEventListener('load', function() {" +
+
+		"var sv = document.createElement('script');" +
+		"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+		"sv.addEventListener('load', function() {" +
+
 		"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+
 		"});" +
-		"document.head.appendChild(script);"
+		"document.head.appendChild(sv);" +
+
+		"});" +
+
+		"document.head.appendChild(es6);"
 	);
 }
 function getResultOfStyleValidator(req, res, path) {
+	console.log('getResultOfStyleValidator');
 	return function(STYLEV) {
+		console.log('getResultOfStyleValidator b');
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
@@ -172,8 +184,11 @@ function getResultOfStyleValidator(req, res, path) {
 }
 
 function getScreenshotData(req, res, path, STYLEV) {
+	console.log('getScreenshotData b');
 	return function(data, err) {
+		console.log('getScreenshotData c');
 		return new Promise(function(resolve, reject) {
+			console.log('getScreenshotData d');
 			if(!err) {
 				var SV = STYLEV.VALIDATOR;
 				var dataObj = {

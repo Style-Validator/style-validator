@@ -24,6 +24,6 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "es6-promise": "~3.1.2"
+    "es6-promise": "^3.1.2"
   }
 }
