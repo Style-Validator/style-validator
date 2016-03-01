@@ -134,7 +134,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 		.withCapabilities(getCapabilities(req))
 		.build();
 
-	driver.manage().timeouts().setScriptTimeout(1000000/* millisecond */);//TODO: confirm
+	driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
 	console.log('|||||||||||| get');
 	//TODO: support full load or wait???
@@ -155,17 +155,16 @@ function executeStyleValidator() {
 
 		"var es6 = document.createElement('script');" +
 		"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
-		"es6.addEventListener('load', function() {" +
 
 		"var sv = document.createElement('script');" +
 		"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+
 		"sv.addEventListener('load', function() {" +
-
-		"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
-
+			"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
 		"});" +
-		"document.head.appendChild(sv);" +
 
+		"es6.addEventListener('load', function() {" +
+			"document.head.appendChild(sv);" +
 		"});" +
 
 		"document.head.appendChild(es6);"
@@ -174,6 +173,7 @@ function executeStyleValidator() {
 function getResultOfStyleValidator(req, res, path) {
 	console.log('getResultOfStyleValidator');
 	return function(STYLEV) {
+		console.log(STYLEV);
 		console.log('getResultOfStyleValidator b');
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
