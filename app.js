@@ -24,6 +24,16 @@ var webdriver = require('selenium-webdriver');
 var phantomjs = require('selenium-webdriver/phantomjs');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
+var nodemailer = require('nodemailer');
+
+// create reusable transporter object using the default SMTP transport
+var transporter = nodemailer.createTransport("SMTP",{
+	service: "Gmail",
+	auth: {
+		user: "igari.takeharu@gmail.com",
+		pass: "musahsi634@@@"
+	}
+});
 
 /*
  * variables
@@ -84,6 +94,26 @@ selenium.install(function() {
 	selenium.start(function() {
 		console.log('Selenium is running.');
 		server.listen(port, callbackAfterServerListening);
+	});
+});
+
+process.on('uncaughtException', function (err) {
+	console.log('Caught exception: ' + err);
+
+	// setup e-mail data with unicode symbols
+	var mailOptions = {
+		from: 'igari.takeharu@gmail.com', // sender address
+		to: 'alert.igari.takeharu@gmail.com', // list of receivers
+		subject: 'Caught exception: ' + err, // Subject line
+		text: 'https://dashboard.heroku.com/apps/style-validator/logs'
+	};
+
+	// send mail with defined transport object
+	transporter.sendMail(mailOptions, function(error, info){
+		if(error){
+			return console.log(error);
+		}
+		console.log('Message sent: ' + info.response);
 	});
 });
 

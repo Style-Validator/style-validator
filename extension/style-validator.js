@@ -9,9 +9,12 @@
 
 'use strict';
 
+//TODO: change to es5/6
+
 //Create Namespace
 var STYLEV = STYLEV || {};
 
+//TODO: export to module
 //General Methods
 STYLEV.METHODS = {
 
@@ -213,8 +216,6 @@ STYLEV.isPassedURLFilters = (function() {
 	return isPassedURLFilters;
 }());
 
-STYLEV.isPhantomJS = /PhantomJS/.test(window.navigator.userAgent);
-
 //Main object of Validator
 STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
@@ -222,7 +223,6 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 	
 			try {
-	
 				that.startTime = new Date();
 	
 				if(STYLEV.isFirstExecution) {
@@ -589,18 +589,16 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 				that.removeIframe4getDefaultStyles();
 
-
 				//TODO: confirm
 				//if(that.isSameWithPreviousData()) {
 				//	return false;
 				//}
 
-				if (!STYLEV.isPhantomJS) {
-					that.showConsole();
-					that.setParametersOfConsole();
-					that.bindEvents2Element();
-					that.moManager.connect();
-				}
+				//TODO: cancel below section when headless browser testing
+				that.showConsole();
+				that.setParametersOfConsole();
+				that.bindEvents2Element();
+				that.moManager.connect();
 
 				if(typeof callback === 'function') {
 					callback();
