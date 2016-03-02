@@ -333,12 +333,11 @@ function requestHandler(req, res){
 
 	parsedURL = url.parse(req.url);
 	var path = parsedURL.pathname;
-	var requestMethod = req.method;
 
 	//Allow all access
 	res.setHeader('Access-Control-Allow-Origin', '*');
 
-	switch(requestMethod) {
+	switch(req.method) {
 		case 'POST':
 			serveData(req, res, path);
 			break;
@@ -347,7 +346,7 @@ function requestHandler(req, res){
 			break;
 		default:
 			res.writeHead(200, {'Content-Type': 'text/plain'});
-			res.end(requestMethod + ' request is not supported.');
+			res.end(req.method + ' request is not supported.');
 			break;
 	}
 }
@@ -367,7 +366,7 @@ function serveData(req, res, path) {
 				saveJSON(store);
 				break;
 
-			case '/sendLog':
+			case '/send2db':
 				MongoClient.connect(dburl, dbHandler(req, res, path, store));
 				break;
 			//
@@ -378,7 +377,7 @@ function serveData(req, res, path) {
 
 			default:
 				res.writeHead(200, {'Content-Type': 'text/plain'});
-				res.end(requestMethod + ' request is not supported.');
+				res.end(req.method + ' request is not supported.');
 				break;
 		}
 	});

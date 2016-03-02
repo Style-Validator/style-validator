@@ -604,7 +604,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					callback();
 				}
 
-				that.sendLog();
+				that.send2db();
 				that.send2GA();
 
 				console.info('Style Validator: Validated and Console has been displayed');
@@ -1111,12 +1111,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					targetClassList.contains('stylev-target-warning');
 		},
 	
-		sendLog: function() {
+		send2db: function() {
 			var that = STYLEV.VALIDATOR;
 	
 			var xhr = new XMLHttpRequest();
-			var apiURI = 'https://style-validator.herokuapp.com/sendLog';
-			//var apiURI = 'http://localhost:8001/sendLog';
+			var apiURI = 'https://style-validator.herokuapp.com/send2db';
+			//var apiURI = 'http://localhost:8001/send2db';
 	
 			var dataObj = {};
 	
