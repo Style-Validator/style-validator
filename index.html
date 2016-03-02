@@ -80,7 +80,7 @@
 			<div class="kv-logo" id="vivus-kv-logo"><!--<img src="/img/style-validator.logo.nopadding.svg" class="kv-logo-image"/>--></div>
 			<figcaption class="kv-caption">
 				<div class="kv-header">
-					<h2 class="kv-heading">Validation <span>in the Browser</span></h2>
+					<h2 class="kv-heading">CSS Validation <span>in the Browser</span></h2>
 				</div>
 				<div class="kv-body">
 					<p class="kv-body-p">
@@ -98,6 +98,13 @@
 							</form>
 						</div>
 					</section>
+					<script>
+						//TODO: remove
+						var test = document.querySelector('.section-validate');
+						if(location.host === 'localhost:8001') {
+							test.hidden = false;
+						}
+					</script>
 
 					<ul class="kv-buttons-list">
 						<li>
