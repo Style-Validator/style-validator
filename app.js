@@ -26,15 +26,6 @@ var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 
-// create reusable transporter object using the default SMTP transport
-var transporter = nodemailer.createTransport("SMTP",{
-	service: "Gmail",
-	auth: {
-		user: "igari.takeharu@gmail.com",
-		pass: "musahsi634@@@"
-	}
-});
-
 /*
  * variables
  * */
@@ -46,6 +37,16 @@ var dbname = 'sv';
 var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
 
 var emitter = new events.EventEmitter();
+
+var transporter = nodemailer.createTransport({
+	host: 'smtp.gmail.com',
+	port: 465,
+	secure: true, // use SSL
+	auth: {
+		user: 'igari.takeharu@gmail.com',
+		pass: 'ryamxambmmnxekbf'
+	}
+});
 
 var mimeTypes = {
 	'txt':  'text/plain',
@@ -102,9 +103,9 @@ process.on('uncaughtException', function (err) {
 
 	// setup e-mail data with unicode symbols
 	var mailOptions = {
-		from: 'igari.takeharu@gmail.com', // sender address
-		to: 'alert.igari.takeharu@gmail.com', // list of receivers
-		subject: 'Caught exception: ' + err, // Subject line
+		from: 'igari.takeharu@gmail.com',
+		to: 'alert.igari.takeharu@gmail.com',
+		subject: 'Caught exception: ' + err,
 		text: 'https://dashboard.heroku.com/apps/style-validator/logs'
 	};
 
