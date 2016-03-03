@@ -162,6 +162,7 @@ function getCapabilities(req) {
 				'binary': '/app/.apt/opt/google/chrome/chrome'
 			}
 		};
+
 	} else {
 		capabilities = {
 			'browserName': 'chrome'
