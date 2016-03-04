@@ -1939,12 +1939,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 		showPerfectMessage: function() {
 			var that = STYLEV.VALIDATOR;
-	
-			that.congratulationsMessage = document.createElement('li');
-			that.congratulationsMessage.classList.add('stylev-console-perfect');
-			that.congratulationsMessage.textContent = that.settings.CONGRATULATION_MESSAGE_TEXT;
-			that.docFrag.appendChild(that.congratulationsMessage);
-	
+			that.consoleBody.classList.add('stylev-console-perfect');
 		},
 	
 		createConsoleMessage: function(outputObj) {
@@ -2042,6 +2037,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			that.isMouseDownConsoleHeader = true;
 			that.consoleStartPosY = event.pageY;
+			that.consoleWrapperDynamicHeight = parseInt(that.consoleWrapper.offsetHeight, 10);
+
 		},
 	
 		moveConsoleHeader: function(event) {
@@ -2050,7 +2047,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			if(that.isMouseDownConsoleHeader) {
 				that.consoleCurrentPosY = event.pageY;
 				that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
-				that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', '');
+				that.consoleWrapper.style.setProperty('min-height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', '');
 				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
 	
 				if(that.consoleWrapper.offsetHeight === 30) {
@@ -2224,7 +2221,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			that.consoleMinimizeButton.classList.add('is-hidden');
 			that.consoleNormalizeButton.classList.remove('is-hidden');
-			that.consoleWrapper.style.setProperty('height', that.consoleHeader.offsetHeight + 'px', '');
+			that.consoleWrapper.style.setProperty('min-height', that.consoleHeader.offsetHeight + 'px', '');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.consoleToggleState = 'minimum';
 		},
@@ -2233,7 +2230,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			that.consoleMinimizeButton.classList.remove('is-hidden');
 			that.consoleNormalizeButton.classList.add('is-hidden');
-			that.consoleWrapper.style.setProperty('height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
+			that.consoleWrapper.style.setProperty('min-height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.consoleToggleState = 'normal';
 		},
