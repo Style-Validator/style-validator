@@ -202,7 +202,7 @@ STYLEV.mutationOvserberID = STYLEV.mutationOvserberID || 0;
 STYLEV.consoleWrapperDynamicHeight = STYLEV.consoleWrapperDynamicHeight || 0;
 STYLEV.consoleScrollTop = STYLEV.consoleScrollTop || 0;
 STYLEV.selectedConsoleLine = STYLEV.selectedConsoleLine || null;
-STYLEV.scaleMode = STYLEV.scaleMode || 'normal';
+STYLEV.consoleToggleState = STYLEV.consoleToggleState || 'normal';
 
 //TODO: implement
 STYLEV.isPassedURLFilters = (function() {
@@ -292,10 +292,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				ICON_DISCONNECTED_PATH:		that.RESOURCE_ROOT + 'iconmonstr-link-5-icon.svg',
 				ICON_LOGO_PATH:				that.RESOURCE_ROOT + 'style-validator.logo.black.svg',
 	
-				CONNECTED_2_DEVTOOLS_MESSAGE:		'Connected to DevTools',
-				DISCONNECTED_2_DEVTOOLS_MESSAGE:	'Disconnected to DevTools',
-				CONNECTED_2_DEVTOOLS_CLASS:			'stylev-console-mode-devtools-connected',
-				DISCONNECTED_2_DEVTOOLS_CLASS:		'stylev-console-mode-devtools-disconnected'
+				CONSOLE_CONNECTED_MESSAGE:		'Connected to DevTools',
+				CONSOLE_DISCONNECTED_MESSAGE:	'Disconnected to DevTools',
+				CONSOLE_CONNECTED_CLASS:		'stylev-console-connected',
+				CONSOLE_DISCONNECTED_CLASS:		'stylev-console-disconnected'
 			};
 	
 			//Pathes
@@ -305,7 +305,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			];
 	
 			that.JS_PATHES = [
-				that.RESOURCE_ROOT + 'specificity.js'
+				that.RESOURCE_ROOT + 'specificity.js',
+				that.RESOURCE_ROOT + 'webcomponents.min.js'
 			];
 	
 			that.DATA_PATHES = [
@@ -1123,12 +1124,16 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			dataObj.uuid = '';
 			dataObj.caller = STYLEV.caller;
 			dataObj.exeMode = STYLEV.exeMode;
+			dataObj.isDevtoolsConnected = STYLEV.isDevtoolsConnected;
 			dataObj.version = STYLEV.version;//TODO: Bookmarkletのために、menifest.jsonから取得するか検討
 			dataObj.url = location.href;
 			dataObj.date = new Date();
 			dataObj.ua = navigator.userAgent;
 			dataObj.timeMS = new Date() - that.startTime;
-			dataObj.matchedMediaTexts = that.matchedMediaTextsArray;
+			dataObj.mediaQueries = {};
+			STYLEV.METHODS.each(that.allMediaTextsArray, function(mediaText) {
+				dataObj.mediaQueries[mediaText] = that.matchedMediaTextsArray.indexOf(mediaText) > -1;
+			});
 			dataObj.count = {};
 			dataObj.count.total = that.logObjArray.length;
 			dataObj.count.error = that.errorNum;
@@ -1705,7 +1710,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleHeading = document.createElement('h1');
 			that.consoleHeadingLogo = document.createElement('a');
 			that.consoleHeadingLogoImage = document.createElement('img');
-			that.consoleMode = document.createElement('p');
+			that.consoleConnection = document.createElement('p');
 			that.consoleButtons = document.createElement('div');
 			that.consoleRefreshButton = document.createElement('a');
 			that.consoleRefreshButtonImage = document.createElement('img');
@@ -1741,7 +1746,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleHeadingLogo.target = '_blank';
 			that.consoleHeadingLogoImage.classList.add('stylev-console-heading-logo-image');
 			that.consoleHeadingLogoImage.src = that.settings.ICON_LOGO_PATH;
-			that.consoleMode.classList.add('stylev-console-mode');
+			that.consoleConnection.classList.add('stylev-console-connection');
 			that.consoleButtons.classList.add('stylev-console-buttons');
 			that.consoleRefreshButton.href = 'javascript: void(0);';
 			that.consoleRefreshButton.classList.add('stylev-console-refresh-button');
@@ -1807,7 +1812,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleHeader.appendChild(that.consoleHeading);
 			that.consoleHeader.appendChild(that.consoleCounter);
 			that.consoleHeader.appendChild(that.consoleMediaQueries);
-			that.consoleHeader.appendChild(that.consoleMode);
+			that.consoleHeader.appendChild(that.consoleConnection);
 			that.consoleHeader.appendChild(that.consoleButtons);
 			that.consoleWrapperShadowRoot.appendChild(that.consoleHeader);
 			that.consoleWrapperShadowRoot.appendChild(that.consoleBody);
@@ -1852,22 +1857,28 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			});
 		},
 	
-		showConnectionStatus: function() {
+		switchConnection: function() {
 			var that = STYLEV.VALIDATOR;
 	
 			chrome.runtime.sendMessage({
-				name: 'switchMode'
+				name: 'switchConnection'
 			}, function(message) {
+
+				//Save state of connection of console
+				STYLEV.isDevtoolsConnected = message.isDevtoolsConnected;
 	
-				if(message.isConnected2Devtools !== undefined) {
+				if(message.isDevtoolsConnected !== undefined) {
 	
 					var consoleModeImage = document.createElement('img');
-					var consoleModeText = document.createTextNode(message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_MESSAGE : that.settings.DISCONNECTED_2_DEVTOOLS_MESSAGE);
-					consoleModeImage.classList.add('stylev-console-mode-image');
-					consoleModeImage.src = message.isConnected2Devtools ? that.settings.ICON_CONNECTED_PATH : that.settings.ICON_DISCONNECTED_PATH;
-					that.consoleMode.appendChild(consoleModeImage);
-					that.consoleMode.appendChild(consoleModeText);
-					that.consoleMode.classList.add(message.isConnected2Devtools ? that.settings.CONNECTED_2_DEVTOOLS_CLASS : that.settings.DISCONNECTED_2_DEVTOOLS_CLASS);
+					var consoleModeText = document.createTextNode(message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_MESSAGE : that.settings.CONSOLE_DISCONNECTED_MESSAGE);
+					consoleModeImage.classList.add('stylev-console-connection-image');
+					consoleModeImage.src = message.isDevtoolsConnected ? that.settings.ICON_CONNECTED_PATH : that.settings.ICON_DISCONNECTED_PATH;
+					that.consoleConnection.appendChild(consoleModeImage);
+					that.consoleConnection.appendChild(consoleModeText);
+					that.consoleConnection.classList.add(message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_CLASS : that.settings.CONSOLE_DISCONNECTED_CLASS);
+				} else {
+					
+					//TODO: if fixed to support toggle
 				}
 			});
 		},
@@ -1878,7 +1889,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			if(STYLEV.isChromeExtension) {
 				that.showBadgeText();
-				that.showConnectionStatus();
+				that.switchConnection();
 			}
 		},
 	
@@ -2198,14 +2209,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 		toggleConsole: function(event) {
 			var that = STYLEV.VALIDATOR;
-			var scaleMode = STYLEV.scaleMode;
+			var consoleToggleState = STYLEV.consoleToggleState;
 	
 			if(event && event.type) {
-				scaleMode === 'normal' && that.minimizeConsole();
-				scaleMode === 'minimum' && that.normalizeConsole();
+				consoleToggleState === 'normal' && that.minimizeConsole();
+				consoleToggleState === 'minimum' && that.normalizeConsole();
 			} else {
-				scaleMode === 'normal' && that.normalizeConsole();
-				scaleMode === 'minimum' && that.minimizeConsole();
+				consoleToggleState === 'normal' && that.normalizeConsole();
+				consoleToggleState === 'minimum' && that.minimizeConsole();
 			}
 		},
 	
@@ -2215,7 +2226,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButton.classList.remove('is-hidden');
 			that.consoleWrapper.style.setProperty('height', that.consoleHeader.offsetHeight + 'px', '');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
-			STYLEV.scaleMode = 'minimum';
+			STYLEV.consoleToggleState = 'minimum';
 		},
 	
 		normalizeConsole: function() {
@@ -2224,7 +2235,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButton.classList.add('is-hidden');
 			that.consoleWrapper.style.setProperty('height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
-			STYLEV.scaleMode = 'normal';
+			STYLEV.consoleToggleState = 'normal';
 		},
 	
 		//TODO: refactor name etc...

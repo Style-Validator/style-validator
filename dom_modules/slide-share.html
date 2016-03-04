@@ -10,12 +10,7 @@
 	</template>
 	<script>
 		var ownerDocument = document.currentScript.ownerDocument;
-
-		ownerDocument.addEventListener('DOMContentLoaded', function() {
-
-			var getMyIPScript = ownerDocument.querySelector('#get-my-ip-script');
-			getMyIPScript.addEventListener('load', showSlideshare);
-		});
+		ownerDocument.addEventListener('DOMContentLoaded', showSlideshare);
 
 		function showSlideshare() {
 
@@ -24,9 +19,7 @@
 					hostname.indexOf('stylev') === 0 ||
 					hostname.indexOf('127.0.0.1') === 0 ||
 					hostname.indexOf('localhost') === 0 ||
-					myip === '119.82.200.16'||
-					myip.indexOf('119.104.') === 0 ||
-					myip === '106.137.76.190' ||
+					localStorage.getItem('isLocal') === 'yes' ||
 					false;
 
 			if(!isLocal) {
@@ -35,6 +28,6 @@
 		}
 
 	</script>
-	<script src="//style-validator.herokuapp.com/getMyIP.js?var=myip" async defer id="get-my-ip-script"></script>
+	<!--<script src="//style-validator.herokuapp.com/getMyIP.js?var=myip" async defer id="get-my-ip-script"></script>-->
 
 </dom-module>

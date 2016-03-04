@@ -231,7 +231,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 								if(isValidated[tabId]) {
 
 									//Modify text of indicator
-									chrome.tabs.sendMessage(tabId, {isConnected2Devtools: true});
+									chrome.tabs.sendMessage(tabId, {isDevtoolsConnected: true});
 
 									//Execute from devtools page
 									connections[tabId].postMessage({name: 'executeWithInspect'});
@@ -278,7 +278,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 								});
 
 								//Modify text of indicator
-								chrome.tabs.sendMessage(tabId, {isConnected2Devtools: false});
+								chrome.tabs.sendMessage(tabId, {isDevtoolsConnected: false});
 							}
 						}
 					});
@@ -363,9 +363,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 			isValidated[tabId] = message.isValidated;
 		}
 
-		if(message.name === 'switchMode') {
+		if(message.name === 'switchConnection') {
 
-			sendResponse({isConnected2Devtools: !!isDevtoolsOpened[tabId]});
+			sendResponse({isDevtoolsConnected: !!isDevtoolsOpened[tabId]});
 		}
 	}
 

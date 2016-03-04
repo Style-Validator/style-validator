@@ -31,7 +31,8 @@
     "open": "0.0.5",
     "request-ip": "^1.1.4",
     "selenium-standalone": "^5.0.0",
-    "selenium-webdriver": "^2.52.0"
+    "selenium-webdriver": "^2.52.0",
+    "xvfb": "^0.2.3"
   },
   "devDependencies": {
     "browser-sync": "^2.9.11",

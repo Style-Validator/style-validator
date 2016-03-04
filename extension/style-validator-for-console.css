@@ -70,7 +70,7 @@
 	height: 20px;
 	margin: auto;
 }
-:host .stylev-console-mode {
+:host .stylev-console-connection {
 	padding-left: 6px;
 	padding-right: 10px;
 	background-position: 5px center;
@@ -80,23 +80,23 @@
 	line-height: 1.1;
 	flex-shrink: 0;
 }
-:host .stylev-console-mode:empty {
+:host .stylev-console-connection:empty {
 	display: none;
 }
-:host .stylev-console-mode-image {
+:host .stylev-console-connection-image {
 	width: 18px;
 	height: 18px;
 	vertical-align: -18%;
 	margin-right: 5px;
 }
-:host .stylev-console-mode-devtools-connected {
-	background-color: green;
+:host .stylev-console-connected {
+	background-color: #008000;
 }
-:host .stylev-console-mode-devtools-disconnected {
+:host .stylev-console-disconnected {
 	background-color: #FF0000;
 }
 @media (max-width: 640px) {
-	:host .stylev-console-mode {
+	:host .stylev-console-connection {
 		position: relative;
 		width: 30px;
 		color: transparent;
@@ -106,7 +106,7 @@
 		padding: 0;
 		background-position: center center;
 	}
-	:host .stylev-console-mode-image {
+	:host .stylev-console-connection-image {
 		position: absolute;
 		top: 0;
 		right: 0;

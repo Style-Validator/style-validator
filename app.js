@@ -12,6 +12,8 @@ var path = require('path');
 var querystring = require('querystring');
 var assert = require('assert');
 var events = require('events');
+var Xvfb = require('xvfb');
+var xvfb = new Xvfb();
 
 /*
  * app modules
@@ -140,17 +142,20 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	driver = new webdriver.Builder()
-		.usingServer('http://127.0.0.1:4444/wd/hub')
-		.withCapabilities(getCapabilities(req))
-		.build();
+	xvfb.start(function(err, xvfbProcess) {
 
-	driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
+		driver = new webdriver.Builder()
+			.usingServer('http://127.0.0.1:4444/wd/hub')
+			.withCapabilities(getCapabilities(req))
+			.build();
 
-	//TODO: support full load or wait???
-	driver.get(targetURL)
-		.then(executeStyleValidator)
-		.then(getResultOfStyleValidator(req, res, path));
+		driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
+
+		//TODO: support full load or wait???
+		driver.get(targetURL)
+			.then(executeStyleValidator)
+			.then(getResultOfStyleValidator(req, res, path));
+	});
 }
 function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
@@ -204,6 +209,7 @@ function getResultOfStyleValidator(req, res, path) {
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
 				driver.quit();
+				xvfb.stop();
 			});
 	};
 }
@@ -265,6 +271,11 @@ function dbHandler(req, res, path, store) {
 	res.end(store);
 
 	return function(err, db) {
+
+		//If my laptop, do nothing
+		if(uuid === '214ec21c-ad66-489a-8c08-ce644e4aed5e') {
+			return;
+		}
 
 		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
 		console.log("Connected correctly to MongoDB");
