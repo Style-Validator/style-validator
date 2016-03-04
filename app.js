@@ -254,7 +254,6 @@ function dbHandler(req, res, path, store) {
 	var clientIP =  getClientIP(req, res, path);
 
 	if(isNoCookie) {
-
 		//Converting ObjectID to UUID
 		//var ObjectID = mongodb.ObjectID;
 		//uuid = new ObjectID();
