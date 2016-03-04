@@ -247,6 +247,7 @@ function getScreenshotData(req, res, path, STYLEV) {
 function dbHandler(req, res, path, store) {
 
 	var json = JSON.parse(store);
+
 	var parsedCookieObj = cookieParse(req.headers.cookie);
 	var isNoCookie = parsedCookieObj._sv === undefined || parsedCookieObj._sv === 'undefined';
 	var uuid;
