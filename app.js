@@ -13,7 +13,6 @@ var querystring = require('querystring');
 var assert = require('assert');
 var events = require('events');
 var Xvfb = require('xvfb');
-var xvfb = new Xvfb();
 
 /*
  * app modules
@@ -142,20 +141,20 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	xvfb.start(function(err, xvfbProcess) {
+	var xvfb = new Xvfb();
+	xvfb.startSync();
 
-		driver = new webdriver.Builder()
-			.usingServer('http://127.0.0.1:4444/wd/hub')
-			.withCapabilities(getCapabilities(req))
-			.build();
+	driver = new webdriver.Builder()
+		.usingServer('http://127.0.0.1:4444/wd/hub')
+		.withCapabilities(getCapabilities(req))
+		.build();
 
-		driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
+	driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
-		//TODO: support full load or wait???
-		driver.get(targetURL)
-			.then(executeStyleValidator)
-			.then(getResultOfStyleValidator(req, res, path));
-	});
+	//TODO: support full load or wait???
+	driver.get(targetURL)
+		.then(executeStyleValidator)
+		.then(getResultOfStyleValidator(req, res, path, xvfb));
 }
 function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
@@ -203,13 +202,13 @@ function executeStyleValidator() {
 		"document.head.appendChild(sv);"
 	);
 }
-function getResultOfStyleValidator(req, res, path) {
+function getResultOfStyleValidator(req, res, path, xvfb) {
 	return function(STYLEV) {
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
 				driver.quit();
-				xvfb.stop();
+				xvfb.stopSync();
 			});
 	};
 }
