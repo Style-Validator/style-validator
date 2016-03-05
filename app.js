@@ -138,6 +138,9 @@ function callbackAfterServerListening() {
  * functions - selenium
  * */
 var driver;
+var options = {
+	display: {width: 1024, height: 980} // depth defaults to 16
+};
 function validateWithSelenium(req, res, path, targetURL) {
 	console.log('validateWithSelenium');
 
@@ -146,7 +149,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('headless will starting');
 	console.log(headless);
 
-	headless(200, function(err, childProcess, servernum) {
+	headless(options, 200, function(err, childProcess, servernum) {
 		console.log('headless: start');
 
 		if(err) {
