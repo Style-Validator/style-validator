@@ -1,1 +1,1 @@
-x11-xkb-utils xvfb x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic libxfont1 xvfb
+libxss1 x11-xkb-utils xvfb x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic libxfont1 xvfb
