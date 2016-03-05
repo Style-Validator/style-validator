@@ -155,7 +155,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 		//TODO: support full load or wait???
 		driver.get(targetURL)
 			.then(executeStyleValidator)
-			.then(getResultOfStyleValidator(req, res, path, xvfb));
+			.then(getResultOfStyleValidator(req, res, path));
 	});
 }
 function getCapabilities(req) {
@@ -204,13 +204,12 @@ function executeStyleValidator() {
 		"document.head.appendChild(sv);"
 	);
 }
-function getResultOfStyleValidator(req, res, path, xvfb) {
+function getResultOfStyleValidator(req, res, path) {
 	return function(STYLEV) {
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
 				driver.quit();
-				xvfb.stopSync();
 			});
 	};
 }
