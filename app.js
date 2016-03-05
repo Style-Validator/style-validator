@@ -138,10 +138,12 @@ function callbackAfterServerListening() {
  * */
 var driver;
 function validateWithSelenium(req, res, path, targetURL) {
+	console.log('validateWithSelenium');
 
 	setUpSSE(req, res, path);
 
 	headless(function(err, childProcess, servernum) {
+		console.log('headless');
 
 		if(err) {
 			console.error(err);
@@ -474,6 +476,8 @@ function serveFiles(req, res, path) {
 }
 
 function setUpSSE(req, res, path) {
+	console.log('setUpSSE');
+
 	res.writeHead(200, {
 		'Content-Type': 'text/event-stream',
 		'Cache-Control': 'no-cache',
