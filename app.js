@@ -100,13 +100,13 @@ selenium.install(function() {
 });
 
 process.on('uncaughtException', function (err) {
-	console.log('Caught exception: ' + err);
+	console.log(err);
 
 	// setup e-mail data with unicode symbols
 	var mailOptions = {
 		from: 'igari.takeharu@gmail.com',
 		to: 'alert.igari.takeharu@gmail.com',
-		subject: 'Caught exception: ' + err,
+		subject: err,
 		text: 'https://dashboard.heroku.com/apps/style-validator/logs'
 	};
 
@@ -166,7 +166,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 		}
 		console.log('browser is running');
 
-		driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
+		driver.manage().timeouts().	setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
 		//TODO: support full load or wait???
 		driver.get(targetURL)
