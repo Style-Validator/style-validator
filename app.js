@@ -150,11 +150,15 @@ function validateWithSelenium(req, res, path, targetURL) {
 			console.log('Xvfb pid', childProcess.pid);
 		}
 
-		driver = new webdriver.Builder()
-			.usingServer('http://127.0.0.1:4444/wd/hub')
-			.withCapabilities(getCapabilities(req))
-			.build();
-		console.log('browser is running')
+		try {
+			driver = new webdriver.Builder()
+				.usingServer('http://127.0.0.1:4444/wd/hub')
+				.withCapabilities(getCapabilities(req))
+				.build();
+		} catch(e) {
+			console.error(e);
+		}
+		console.log('browser is running');
 
 		driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
