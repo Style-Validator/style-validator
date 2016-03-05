@@ -148,10 +148,10 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	//console.log('headless will starting');
+	console.log('headless will starting');
 	//console.log(headless);
 
-	headless(options, 200, function(err, childProcess, servernum) {
+	headless(options, 100, function(err, childProcess, servernum) {
 		console.log('headless: start');
 
 		if(err) {

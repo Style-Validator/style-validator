@@ -74,6 +74,11 @@
 				var url = '/page/result.hbs' + location.search;
 				var source = new EventSource(url);
 
+				setTimeout(function() {
+					source.close();
+					throw new Error('Stream is timeout!');
+				}, 10 * 60 * 1000);
+
 				source.addEventListener('message', function(event) {
 					source.close();
 					loadingSpinner.parentElement.removeChild(loadingSpinner);
