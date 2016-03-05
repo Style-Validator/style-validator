@@ -523,7 +523,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		insertJS4Bookmarklet: function() {
 			var that = STYLEV.VALIDATOR;
 	
-				if(STYLEV.isBookmarklet) {
+				if(!STYLEV.isChromeExtension) {
 	
 					var promiseArray = [];
 					var docFlag = document.createDocumentFragment();
@@ -1520,8 +1520,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			if(STYLEV.isChromeExtension) {
 				STYLEV.CHROME_EXTENSION.execute();
-			}
-			if(STYLEV.isBookmarklet) {
+			} else {
 				that.execute();
 			}
 		},
@@ -1557,7 +1556,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			var that = STYLEV.VALIDATOR;
 	
-			if(STYLEV.isBookmarklet) {
+			if(!STYLEV.isChromeExtension) {
 	
 				var docFrag = document.createDocumentFragment();
 				that.linkTags = [];
@@ -1907,11 +1906,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleList.addEventListener('scroll', function(event) {
 				STYLEV.consoleScrollTop = event.currentTarget.scrollTop;
 			});
-	
+
+			//TODO: remove?
 			//最後にフォーカスしていた要素に対して、インスペクト
-			if(typeof STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI === 'function') {
-				STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI();
-			}
+			//if(typeof STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI === 'function') {
+			//	STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI();
+			//}
 	
 			//選択した行があった場合、選択した行と現在のリストを比べて、同一のものに選択状態のclassを付与
 			if(STYLEV.selectedConsoleLine) {
@@ -2189,7 +2189,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.moManager.disconnect();
 			}
 	
-			if(STYLEV.isBookmarklet && isViaCloseButton) {
+			if(!STYLEV.isChromeExtension && isViaCloseButton) {
 				that.removeStyleSheet();
 			}
 	
@@ -2862,19 +2862,16 @@ if(STYLEV.isChromeExtension){
 
 if(STYLEV.isPassedURLFilters && STYLEV.isAutoMode) {
 
-	if(STYLEV.isBookmarklet) {
+	if(STYLEV.isLoaded) {
 
-		if(STYLEV.isLoaded) {
+		console.groupEnd();
+		console.group('Style Validator: Executed by ' + STYLEV.caller + '.');
+		STYLEV.VALIDATOR.execute();
 
-			console.groupEnd();
-			console.group('Style Validator: Executed by Bookmarklet.');
-			STYLEV.VALIDATOR.execute();
+	} else if(STYLEV.isReloaded) {
 
-		} else if(STYLEV.isReloaded) {
-
-			console.groupEnd();
-			console.group('Style Validator: Executed by Bookmarklet (Replay)');
-			STYLEV.VALIDATOR.execute();
-		}
+		console.groupEnd();
+		console.group('Style Validator: Executed by ' + STYLEV.caller + '(Replay).');
+		STYLEV.VALIDATOR.execute();
 	}
 }

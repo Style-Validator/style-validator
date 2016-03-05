@@ -21,11 +21,11 @@ var mongodb = require('mongodb');
 var requestIp = require('request-ip');
 var nodeUUID = require('node-uuid');
 //var webdriver = require('selenium-webdriver');
-var webdriverio = require('webdriverio');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
-var headless = require('headless');
+//var headless = require('headless');
+var webdriverio = require('webdriverio');
 
 /*
  * variables
@@ -146,18 +146,18 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	console.log('headless will starting');
-	console.log(headless);
+	//console.log('headless will starting');
+	//console.log(headless);
 
 	//headless(options, 200, function(err, childProcess, servernum) {
-		console.log('headless: start');
+	//	console.log('headless: start');
 
-		if(err) {
-			console.error(err);
-		} else {
-			console.log('Xvfb running on server number', servernum);
-			console.log('Xvfb pid', childProcess.pid);
-		}
+		//if(err) {
+		//	console.error(err);
+		//} else {
+		//	console.log('Xvfb running on server number', servernum);
+		//	console.log('Xvfb pid', childProcess.pid);
+		//}
 
 		//try {
 		//	driver = new webdriver.Builder()
@@ -167,7 +167,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 		//} catch(e) {
 		//	console.error(e);
 		//}
-		console.log('browser is running');
+		//console.log('browser is running');
 
 		//driver.manage().timeouts().	setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
@@ -177,16 +177,54 @@ function validateWithSelenium(req, res, path, targetURL) {
 		//	.then(getResultOfStyleValidator(req, res, path));
 		//
 
-		webdriverio
-			.remote({desiredCapabilities: getCapabilities(req)})
+		driver = webdriverio
+			.remote({
+				host: '127.0.0.1',
+				port: '4444',
+				path: '/wd/hub',
+				desiredCapabilities: getCapabilities(req)
+			})
 			.init()
-			//.url(targetURL)
+			.url(targetURL)
+			//.timeoutsAsyncScript(100000)
+			.executeAsync(
+				"var callback = arguments[arguments.length - 1];" +
+
+					//"var wc = document.createElement('script');" +
+					//"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
+					//
+					//"var es6 = document.createElement('script');" +
+					//"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
+
+				"var sv = document.createElement('script');" +
+				"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+
+					//"wc.addEventListener('load', function() {" +
+					//"document.head.appendChild(es6);" +
+					//"});" +
+					//
+					//"es6.addEventListener('load', function() {" +
+					//	"document.head.appendChild(sv);" +
+					//"});" +
+
+				"sv.addEventListener('load', function() {" +
+				"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+				"});" +
+
+				"document.head.appendChild(sv);"
+			)
+			.then(function(tt) {
+				//console.log(tt.value);
+				emitter.emit('data', tt.value);
+
+			})
 			//.then(executeStyleValidator)
 			//.then(getResultOfStyleValidator(req, res, path))
-			.url('http://www.google.com')
-			.title(function(err, res) {
-				console.log('Title was: ' + res.value);
-			})
+			//.url(targetURL)
+			//.then(function() {
+			//	console.log('aaaaa');
+			//	emitter.emit('data', 'hogehogehogehoge');
+			//})
 			.end();
 	//});
 }
@@ -195,6 +233,7 @@ function getCapabilities(req) {
 	var capabilities;
 	if(isHeroku) {
 		capabilities = {
+
 			'browserName': 'chrome',
 			'chromeOptions': {
 				'binary': '/app/.apt/opt/google/chrome/chrome'
@@ -209,7 +248,8 @@ function getCapabilities(req) {
 }
 function executeStyleValidator() {
 	console.log('executeStyleValidator');
-	return driver.executeAsyncScript(
+	return driver.executeAsync(
+
 		"var callback = arguments[arguments.length - 1];" +
 
 		//"var wc = document.createElement('script');" +
@@ -240,17 +280,20 @@ function getResultOfStyleValidator(req, res, path) {
 	console.log('getResultOfStyleValidator');
 	return function(STYLEV) {
 		console.log('getResultOfStyleValidator2');
-		driver.takeScreenshot()
+		driver.screenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
 				console.log('quit');
-				driver.quit();
+				//driver.quit();
 			});
 	};
 }
 
 function getScreenshotData(req, res, path, STYLEV) {
 	return function(data, err) {
+
+		console.log(data, err);
+
 		return new Promise(function(resolve, reject) {
 			if(!err) {
 				var SV = STYLEV.VALIDATOR;
