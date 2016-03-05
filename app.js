@@ -165,7 +165,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 		//TODO: support full load or wait???
 		driver.get(targetURL)
 			.then(executeStyleValidator)
-			.then(getResultOfStyleValidator(req, res, path));
+			.tnpmhen(getResultOfStyleValidator(req, res, path));
 	});
 }
 function getCapabilities(req) {
@@ -173,6 +173,7 @@ function getCapabilities(req) {
 	var capabilities;
 	if(isHeroku) {
 		capabilities = {
+			'platform': "Linux",
 			'browserName': 'chrome',
 			'chromeOptions': {
 				'binary': '/app/.apt/opt/google/chrome/chrome'
