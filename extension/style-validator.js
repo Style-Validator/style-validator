@@ -587,7 +587,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 				//Check all elements in the document
 				STYLEV.METHODS.each(that.allElem, that.validateByElement);
-	
+
 				that.removeIframe4getDefaultStyles();
 
 				//TODO: confirm
@@ -1643,8 +1643,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				elem.classList.remove('stylev-target-error');
 				elem.classList.remove('stylev-target-warning');
 				elem.classList.remove('stylev-target-selected');
-				elem.removeEventListener('click', STYLEV.CHROME_DEVTOOLS.inspectViaTargets);
 				elem.removeEventListener('click', that.markElementViaTargets);
+				if(STYLEV.isChromeExtension) {
+					elem.removeEventListener('click', STYLEV.CHROME_DEVTOOLS.inspectViaTargets);
+				}
 			});
 	
 			if(that.html !== undefined) {
@@ -1909,9 +1911,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//TODO: remove?
 			//最後にフォーカスしていた要素に対して、インスペクト
-			//if(typeof STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI === 'function') {
-			//	STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI();
-			//}
+			if(STYLEV.isChromeExtension && typeof STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI === 'function') {
+				STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI();
+			}
 	
 			//選択した行があった場合、選択した行と現在のリストを比べて、同一のものに選択状態のclassを付与
 			if(STYLEV.selectedConsoleLine) {
@@ -2731,6 +2733,8 @@ STYLEV.SMOOTH_SCROLL = {
 //TODO: remove?
 //STYLEV.VALIDATOR.getAllCSSProperties();
 
+//TODO: implement STYLEV.isPassedURLFilters
+
 if(STYLEV.isChromeExtension){
 
 	STYLEV.CHROME_EXTENSION = {
@@ -2818,20 +2822,6 @@ if(STYLEV.isChromeExtension){
 		}
 	};
 
-	chrome.runtime.sendMessage({
-		name: 'requestVersion'
-	}, function(message) {
-		STYLEV.version = message.version;
-	});
-
-	STYLEV.VALIDATOR.RESOURCE_ROOT = chrome.runtime.getURL('');
-
-	STYLEV.VALIDATOR.updateOptions().then(function() {
-		if(STYLEV.options.ENABLE_AUTO_EXECUTION) {
-			STYLEV.CHROME_EXTENSION.execute();
-		}
-	});
-
 	chrome.storage.onChanged.addListener(function(changes, namespace) {
 		if(namespace === 'sync') {
 			if(changes.options) {
@@ -2858,9 +2848,40 @@ if(STYLEV.isChromeExtension){
 			}
 		}
 	});
+
+	chrome.runtime.sendMessage({
+		name: 'requestVersion'
+	}, function(message) {
+		STYLEV.version = message.version;
+	});
+
+	STYLEV.VALIDATOR.RESOURCE_ROOT = chrome.runtime.getURL('');
+
+	STYLEV.VALIDATOR.updateOptions().then(function() {
+		if(STYLEV.options.ENABLE_AUTO_EXECUTION) {
+			STYLEV.CHROME_EXTENSION.execute();
+		}
+	});
+
 }
 
-if(STYLEV.isPassedURLFilters && STYLEV.isAutoMode) {
+if(STYLEV.isBookmarklet) {
+
+	if(STYLEV.isLoaded) {
+
+		console.groupEnd();
+		console.group('Style Validator: Executed by ' + STYLEV.caller + '.');
+		STYLEV.VALIDATOR.execute();
+
+	} else if(STYLEV.isReloaded) {
+
+		console.groupEnd();
+		console.group('Style Validator: Executed by ' + STYLEV.caller + '(Replay).');
+		STYLEV.VALIDATOR.execute();
+	}
+}
+
+if(STYLEV.isExternalScript && STYLEV.isAutoMode) {
 
 	if(STYLEV.isLoaded) {
 
