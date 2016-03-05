@@ -149,7 +149,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('headless will starting');
 	console.log(headless);
 
-	headless(options, 200, function(err, childProcess, servernum) {
+	//headless(options, 200, function(err, childProcess, servernum) {
 		console.log('headless: start');
 
 		if(err) {
@@ -188,7 +188,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 				console.log('Title was: ' + res.value);
 			})
 			.end();
-	});
+	//});
 }
 function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
