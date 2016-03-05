@@ -249,7 +249,7 @@ function getCapabilities(req) {
 
 			'browserName': 'chrome',
 			'chromeOptions': {
-				'binary': '/app/.apt/opt/google/chrome/chrome'
+				'binary': '/app/.apt/opt/google/chrome'
 			}
 		};
 	} else {
