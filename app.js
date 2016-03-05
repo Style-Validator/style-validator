@@ -24,7 +24,7 @@ var nodeUUID = require('node-uuid');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
-//var headless = require('headless');
+var headless = require('headless');
 var webdriverio = require('webdriverio');
 
 /*
@@ -151,34 +151,17 @@ function validateWithSelenium(req, res, path, targetURL) {
 	//console.log('headless will starting');
 	//console.log(headless);
 
-	//headless(options, 200, function(err, childProcess, servernum) {
-	//	console.log('headless: start');
+	headless(options, 200, function(err, childProcess, servernum) {
+		console.log('headless: start');
 
-		//if(err) {
-		//	console.error(err);
-		//} else {
-		//	console.log('Xvfb running on server number', servernum);
-		//	console.log('Xvfb pid', childProcess.pid);
-		//}
-
-		//try {
-		//	driver = new webdriver.Builder()
-		//		.usingServer('http://127.0.0.1:4444/wd/hub')
-		//		.withCapabilities(getCapabilities(req))
-		//		.build();
-		//} catch(e) {
-		//	console.error(e);
-		//}
-		//console.log('browser is running');
-
-		//driver.manage().timeouts().	setScriptTimeout(100000/* millisecond */);//TODO: confirm
+		if(err) {
+			console.error(err);
+		} else {
+			console.log('Xvfb running on server number', servernum);
+			console.log('Xvfb pid', childProcess.pid);
+		}
 
 		//TODO: support full load or wait???
-		//driver.get(targetURL)
-		//	.then(executeStyleValidator)
-		//	.then(getResultOfStyleValidator(req, res, path));
-		//
-
 		driver = webdriverio
 			.remote({
 				host: '127.0.0.1',
@@ -256,7 +239,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 				});
 			})
 			.end();
-	//});
+	});
 }
 function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
