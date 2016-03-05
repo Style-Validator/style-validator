@@ -75,7 +75,6 @@
 				var source = new EventSource(url);
 
 				source.addEventListener('message', function(event) {
-					console.log(event.data);
 					source.close();
 					loadingSpinner.parentElement.removeChild(loadingSpinner);
 					resultContent.innerHTML = event.data;
