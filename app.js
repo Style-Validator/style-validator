@@ -143,7 +143,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 	setUpSSE(req, res, path);
 
 	headless(function(err, childProcess, servernum) {
-		console.log('headless');
+		console.log('headless: start');
 
 		if(err) {
 			console.error(err);
@@ -175,7 +175,6 @@ function getCapabilities(req) {
 	var capabilities;
 	if(isHeroku) {
 		capabilities = {
-			'platform': "Linux",
 			'browserName': 'chrome',
 			'chromeOptions': {
 				'binary': '/app/.apt/opt/google/chrome/chrome'
@@ -218,10 +217,13 @@ function executeStyleValidator() {
 	);
 }
 function getResultOfStyleValidator(req, res, path) {
+	console.log('getResultOfStyleValidator');
 	return function(STYLEV) {
+		console.log('getResultOfStyleValidator2');
 		driver.takeScreenshot()
 			.then(getScreenshotData(req, res, path, STYLEV))
 			.then(function() {
+				console.log('quit');
 				driver.quit();
 			});
 	};
@@ -476,7 +478,7 @@ function serveFiles(req, res, path) {
 }
 
 function setUpSSE(req, res, path) {
-	console.log('setUpSSE');
+	console.log('setUpSSE: start');
 
 	res.writeHead(200, {
 		'Content-Type': 'text/event-stream',
@@ -486,10 +488,12 @@ function setUpSSE(req, res, path) {
 
 	// Avoiding 55s timeout
 	var timer = setInterval(function() {
+		console.log('setUpSSE: send empty comment');
 		res.write(':\n\n');
 	}, 50000);
 
 	// Avoiding first 30s timeout
+	console.log('send empty first comment');
 	res.write(':\n\n');
 
 	emitter.on('data', function(data) {
@@ -497,6 +501,7 @@ function setUpSSE(req, res, path) {
 	});
 
 	req.on('close', function() {
+		console.log('setUpSSE: closed');
 		clearTimeout(timer);
 	});
 }
