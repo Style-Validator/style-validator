@@ -165,7 +165,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 		//TODO: support full load or wait???
 		driver.get(targetURL)
 			.then(executeStyleValidator)
-			.tnpmhen(getResultOfStyleValidator(req, res, path));
+			.then(getResultOfStyleValidator(req, res, path));
 	});
 }
 function getCapabilities(req) {
