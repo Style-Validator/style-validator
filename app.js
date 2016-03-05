@@ -12,7 +12,7 @@ var path = require('path');
 var querystring = require('querystring');
 var assert = require('assert');
 var events = require('events');
-var Xvfb = require('xvfb');
+var headless = require('headless');
 
 /*
  * app modules
@@ -141,20 +141,22 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	var xvfb = new Xvfb();
-	xvfb.startSync();
+	headless(function(err, childProcess, servernum) {
 
-	driver = new webdriver.Builder()
-		.usingServer('http://127.0.0.1:4444/wd/hub')
-		.withCapabilities(getCapabilities(req))
-		.build();
+		assert.equal(null, err, 'Unable to start headless.');
 
-	driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
+		driver = new webdriver.Builder()
+			.usingServer('http://127.0.0.1:4444/wd/hub')
+			.withCapabilities(getCapabilities(req))
+			.build();
 
-	//TODO: support full load or wait???
-	driver.get(targetURL)
-		.then(executeStyleValidator)
-		.then(getResultOfStyleValidator(req, res, path, xvfb));
+		driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
+
+		//TODO: support full load or wait???
+		driver.get(targetURL)
+			.then(executeStyleValidator)
+			.then(getResultOfStyleValidator(req, res, path, xvfb));
+	});
 }
 function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';

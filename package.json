@@ -24,6 +24,7 @@
     "del": "^2.0.1",
     "devtools-detect": "^2.0.0",
     "handlebars": "^4.0.5",
+    "headless": "^1.0.0",
     "kerberos": "0.0.17",
     "mongodb": "^2.1.4",
     "node-uuid": "^1.4.7",
@@ -31,8 +32,7 @@
     "open": "0.0.5",
     "request-ip": "^1.1.4",
     "selenium-standalone": "^5.0.0",
-    "selenium-webdriver": "^2.52.0",
-    "xvfb": "^0.2.3"
+    "selenium-webdriver": "^2.52.0"
   },
   "devDependencies": {
     "browser-sync": "^2.9.11",
