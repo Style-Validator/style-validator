@@ -1,1 +1,1 @@
-libxss1 x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic libxfont1
+libxss1 libappindicator1 libindicator7 xvfb unzip google-chrome-stable

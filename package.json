@@ -18,6 +18,7 @@
     "url": "https://github.com/Style-Validator/Style-Validator.git"
   },
   "dependencies": {
+    "chromedriver": "^2.21.2",
     "console-stamp": "^0.2.0",
     "cookie": "^0.2.3",
     "del": "^2.0.1",
