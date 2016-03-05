@@ -12,7 +12,6 @@ var path = require('path');
 var querystring = require('querystring');
 var assert = require('assert');
 var events = require('events');
-var headless = require('headless');
 
 /*
  * app modules
@@ -26,6 +25,7 @@ var phantomjs = require('selenium-webdriver/phantomjs');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
+var headless = require('headless');
 
 /*
  * variables
@@ -143,12 +143,18 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	headless(function(err, childProcess, servernum) {
 
-		assert.equal(null, err, 'Unable to start headless.');
+		if(err) {
+			console.error(err);
+		} else {
+			console.log('Xvfb running on server number', servernum);
+			console.log('Xvfb pid', childProcess.pid);
+		}
 
 		driver = new webdriver.Builder()
 			.usingServer('http://127.0.0.1:4444/wd/hub')
 			.withCapabilities(getCapabilities(req))
 			.build();
+		console.log('browser is running')
 
 		driver.manage().timeouts().setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
@@ -276,7 +282,7 @@ function dbHandler(req, res, path, store) {
 			return;
 		}
 
-		assert.equal(null, err, 'Unable to connect to the MongoDB server.');
+		assert.equal(null, err, err);
 		console.log("Connected correctly to MongoDB");
 
 		json.uuid = uuid;
@@ -286,7 +292,7 @@ function dbHandler(req, res, path, store) {
 
 		log.insert(json, {}, function(err, records) {
 
-			assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+			assert.equal(null, err, err);
 			console.log('Inserted log data completely to Database');
 
 			user.update({uuid: uuid}, {
@@ -305,7 +311,7 @@ function dbHandler(req, res, path, store) {
 				{upsert: true},
 				function(err, records) {
 
-					assert.equal(null, err, 'Unable to insert to the MongoDB server.');
+					assert.equal(null, err, err);
 					console.log('Updated user data completely to Database');
 					db.close();
 				});
@@ -702,7 +708,7 @@ function saveJSON(store) {
 
 	fs.writeFile('./extension/data/rules.json', store, function(err) {
 
-		assert.equal(null, err, 'Failed! JSON file has not written...');
+		assert.equal(null, err, err);
 		console.log('JSON file written successfully!');
 	});
 	res.writeHead(200, {'Content-Type': 'application/json'});
