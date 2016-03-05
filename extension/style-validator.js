@@ -2833,7 +2833,7 @@ if(STYLEV.isChromeExtension){
 					document.documentElement.classList.remove('stylev-animation');
 				}
 
-				//Override TODO: confirm and implement
+				//Override TODO: confirm and implement for remove updateoption method
 				//STYLEV.options = {
 				//
 				//	ENABLE_MUTATION_OBSERVER: changes.options.newValue.enabledMutationObserver,
