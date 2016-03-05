@@ -137,12 +137,14 @@ function callbackAfterServerListening() {
 /*
  * functions - selenium
  * */
-var driver;
 var options = {
 	display: {width: 1024, height: 980} // depth defaults to 16
 };
 function validateWithSelenium(req, res, path, targetURL) {
 	console.log('validateWithSelenium');
+
+	var driver;
+	var STYLEV;
 
 	setUpSSE(req, res, path);
 
@@ -187,13 +189,72 @@ function validateWithSelenium(req, res, path, targetURL) {
 			.init()
 			.url(targetURL)
 			.timeoutsAsyncScript(100000)
-			//.then(executeStyleValidator)
-			//.then(getResultOfStyleValidator(req, res, path))
-			//.url(targetURL)
-			//.then(function() {
-			//	console.log('aaaaa');
-			//	emitter.emit('data', 'hogehogehogehoge');
-			//})
+			.executeAsync(
+
+				"var callback = arguments[arguments.length - 1];" +
+
+				//"var wc = document.createElement('script');" +
+				//"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
+				//
+				//"var es6 = document.createElement('script');" +
+				//"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
+
+				"var sv = document.createElement('script');" +
+				"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+
+				//"wc.addEventListener('load', function() {" +
+				//"document.head.appendChild(es6);" +
+				//"});" +
+				//
+				//"es6.addEventListener('load', function() {" +
+				//	"document.head.appendChild(sv);" +
+				//"});" +
+
+				"sv.addEventListener('load', function() {" +
+					"console.groupEnd();" +
+					"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
+					"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+				"});" +
+
+				"document.head.appendChild(sv);"
+			)
+			.then(function(passedDataObj) {
+				STYLEV = passedDataObj.value;
+			})
+			.screenshot()
+			.then(function(passedDataObj) {
+				//
+				//for(var a in passedDataObj) {
+				//	if(a !== 'value')
+				//		console.log(passedDataObj[a]);
+				//}
+
+				var SV = STYLEV.VALIDATOR;
+
+				var dataObj = {
+					total: SV.logObjArray.length,
+					error: SV.errorNum,
+					warning: SV.warningNum,
+					screenshot: 'data:image/png;base64,' + passedDataObj.value
+				};
+				//var dataObj = {
+				//	total: 10,
+				//	error: 5,
+				//	warning: 5,
+				//	screenshot: 'hoge.jpg'
+				//};
+				return dataObj;
+			})
+			.then(function(dataObj) {
+				fs.readFile(path, 'utf-8', function(error, source){
+					if(!error) {
+						var context = dataObj;
+						var template = handlebars.compile(source);
+						var html = template(context);
+						emitter.emit('data', html);
+					}
+				});
+			})
 			.end();
 	//});
 }
@@ -214,79 +275,6 @@ function getCapabilities(req) {
 		};
 	}
 	return capabilities;
-}
-function executeStyleValidator() {
-	console.log('executeStyleValidator');
-	return driver.executeAsync(
-
-		"var callback = arguments[arguments.length - 1];" +
-
-		//"var wc = document.createElement('script');" +
-		//"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
-		//
-		//"var es6 = document.createElement('script');" +
-		//"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
-
-		"var sv = document.createElement('script');" +
-		"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
-
-		//"wc.addEventListener('load', function() {" +
-		//"document.head.appendChild(es6);" +
-		//"});" +
-		//
-		//"es6.addEventListener('load', function() {" +
-		//	"document.head.appendChild(sv);" +
-		//"});" +
-
-		"sv.addEventListener('load', function() {" +
-			"console.groupEnd();" +
-			"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
-			"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
-		"});" +
-
-		"document.head.appendChild(sv);"
-	);
-}
-function getResultOfStyleValidator(req, res, path) {
-	console.log('getResultOfStyleValidator');
-	return function(STYLEV) {
-		console.log('getResultOfStyleValidator2');
-		driver.screenshot()
-			.then(getScreenshotData(req, res, path, STYLEV))
-			.then(function() {
-				console.log('quit');
-				//driver.quit();
-			});
-	};
-}
-
-function getScreenshotData(req, res, path, STYLEV) {
-	return function(data, err) {
-
-		console.log(data, err);
-
-		return new Promise(function(resolve, reject) {
-			if(!err) {
-				var SV = STYLEV.VALIDATOR;
-				var dataObj = {
-					total: SV.logObjArray.length,
-					error: SV.errorNum,
-					warning: SV.warningNum,
-					screenshot: 'data:image/png;base64,' + data
-				};
-				//var dataObj = {
-				//	total: 10,
-				//	error: 5,
-				//	warning: 5,
-				//	screenshot: 'hoge.jpg'
-				//};
-				sendParsedFile(req, res, path, dataObj);
-				resolve();
-			} else {
-				reject(sendServerError.bind(null, req, res, err));
-			}
-		});
-	}
 }
 
 /*
@@ -605,19 +593,6 @@ function convertSize(value) {
 	if(value > 1000000) return ((value*0.000001) | 0) + 'M';
 	if(value > 10000) return ((value*0.001) | 0) + 'K';
 	return '' + value;
-}
-
-function sendParsedFile(req, res, path, data) {
-	fs.readFile(path, 'utf-8', function(error, source){
-		if(!error) {
-			var context = data;
-			var template = handlebars.compile(source);
-			var html = template(context);
-			emitter.emit('data', html);
-		} else {
-			sendNotFound(req, res, path);
-		}
-	});
 }
 
 function sendFile(req, res, path) {
