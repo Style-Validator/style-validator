@@ -20,8 +20,8 @@ var events = require('events');
 var mongodb = require('mongodb');
 var requestIp = require('request-ip');
 var nodeUUID = require('node-uuid');
-var webdriver = require('selenium-webdriver');
-var phantomjs = require('selenium-webdriver/phantomjs');
+//var webdriver = require('selenium-webdriver');
+var webdriverio = require('webdriverio');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
@@ -159,22 +159,35 @@ function validateWithSelenium(req, res, path, targetURL) {
 			console.log('Xvfb pid', childProcess.pid);
 		}
 
-		try {
-			driver = new webdriver.Builder()
-				.usingServer('http://127.0.0.1:4444/wd/hub')
-				.withCapabilities(getCapabilities(req))
-				.build();
-		} catch(e) {
-			console.error(e);
-		}
+		//try {
+		//	driver = new webdriver.Builder()
+		//		.usingServer('http://127.0.0.1:4444/wd/hub')
+		//		.withCapabilities(getCapabilities(req))
+		//		.build();
+		//} catch(e) {
+		//	console.error(e);
+		//}
 		console.log('browser is running');
 
-		driver.manage().timeouts().	setScriptTimeout(100000/* millisecond */);//TODO: confirm
+		//driver.manage().timeouts().	setScriptTimeout(100000/* millisecond */);//TODO: confirm
 
 		//TODO: support full load or wait???
-		driver.get(targetURL)
-			.then(executeStyleValidator)
-			.then(getResultOfStyleValidator(req, res, path));
+		//driver.get(targetURL)
+		//	.then(executeStyleValidator)
+		//	.then(getResultOfStyleValidator(req, res, path));
+		//
+
+		webdriverio
+			.remote({desiredCapabilities: getCapabilities(req)})
+			.init()
+			//.url(targetURL)
+			//.then(executeStyleValidator)
+			//.then(getResultOfStyleValidator(req, res, path))
+			.url('http://www.google.com')
+			.title(function(err, res) {
+				console.log('Title was: ' + res.value);
+			})
+			.end();
 	});
 }
 function getCapabilities(req) {
