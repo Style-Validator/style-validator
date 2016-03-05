@@ -116,6 +116,7 @@ process.on('uncaughtException', function (err) {
 			return console.log(error);
 		}
 		console.log('Message sent: ' + info.response);
+		process.exit(1);
 	});
 });
 
