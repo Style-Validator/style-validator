@@ -24,7 +24,6 @@ var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 var webdriverio = require('webdriverio');
-var Xvfb = require('xvfb');
 
 /*
  * variables
@@ -150,6 +149,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('headless will starting');
 	//console.log(headless);
 
+	var Xvfb = require('xvfb');
 	var xvfb = new Xvfb();
 	xvfb.startSync();
 
