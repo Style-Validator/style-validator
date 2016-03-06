@@ -25,7 +25,7 @@ var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 var webdriverio = require('webdriverio');
 var launcher = require('launcher');
-
+var Xvfb = require('xvfb');
 
 /*
  * variables
@@ -151,6 +151,9 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('headless will starting');
 	//console.log(headless);
 
+	var xvfb = new Xvfb();
+	xvfb.startSync();
+
 	launcher(function (err, launch) {
 
 		console.log('# available browsers:');
@@ -174,6 +177,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 			.url(targetURL)
 			.then(function() {
 				emitter.emit('data', 'done!');
+				xvfb.stopSync();
 			})
 
 			//.timeoutsAsyncScript(100000)
