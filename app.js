@@ -151,8 +151,8 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('headless will starting');
 	//console.log(headless);
 
-	var xvfb = new Xvfb();
-	xvfb.startSync();
+	//var xvfb = new Xvfb();
+	//xvfb.startSync();
 
 	launcher(function (err, launch) {
 
@@ -177,7 +177,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 			.url(targetURL)
 			.then(function() {
 				emitter.emit('data', 'done!');
-				xvfb.stopSync();
+				//xvfb.stopSync();
 			})
 
 			//.timeoutsAsyncScript(100000)
