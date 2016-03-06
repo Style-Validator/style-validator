@@ -18,6 +18,7 @@
     "url": "https://github.com/Style-Validator/Style-Validator.git"
   },
   "dependencies": {
+    "browser-launcher": "^1.0.0",
     "browser-launcher2": "^0.4.6",
     "console-stamp": "^0.2.0",
     "cookie": "^0.2.3",
