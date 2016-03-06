@@ -171,73 +171,71 @@ function validateWithSelenium(req, res, path, targetURL) {
 			})
 			.init()
 			.url(targetURL)
-			.timeoutsAsyncScript(100000)
-			.executeAsync(
-
-				"var callback = arguments[arguments.length - 1];" +
-
-				//"var wc = document.createElement('script');" +
-				//"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
-				//
-				//"var es6 = document.createElement('script');" +
-				//"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
-
-				"var sv = document.createElement('script');" +
-				"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
-
-				//"wc.addEventListener('load', function() {" +
-				//"document.head.appendChild(es6);" +
-				//"});" +
-				//
-				//"es6.addEventListener('load', function() {" +
-				//	"document.head.appendChild(sv);" +
-				//"});" +
-
-				"sv.addEventListener('load', function() {" +
-					"console.groupEnd();" +
-					"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
-					"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
-				"});" +
-
-				"document.head.appendChild(sv);"
-			)
-			.then(function(passedDataObj) {
-				STYLEV = passedDataObj.value;
+			.then(function() {
+				emitter.emit('data', 'done!');
 			})
-			.screenshot()
-			.then(function(passedDataObj) {
-				//
-				//for(var a in passedDataObj) {
-				//	if(a !== 'value')
-				//		console.log(passedDataObj[a]);
-				//}
 
-				var SV = STYLEV.VALIDATOR;
-
-				var dataObj = {
-					total: SV.logObjArray.length,
-					error: SV.errorNum,
-					warning: SV.warningNum,
-					screenshot: 'data:image/png;base64,' + passedDataObj.value
-				};
-				//var dataObj = {
-				//	total: 10,
-				//	error: 5,
-				//	warning: 5,
-				//	screenshot: 'hoge.jpg'
-				//};
-				return dataObj;
-			})
-			.then(function(dataObj) {
-				fs.readFile(path, 'utf-8', function(error, source){
-					if(!error) {
-						var context = dataObj;
-						var template = handlebars.compile(source);
-						var html = template(context);
-						emitter.emit('data', html);
-					}
-				});
-			})
+			//.timeoutsAsyncScript(100000)
+			//.executeAsync(
+			//
+			//	"var callback = arguments[arguments.length - 1];" +
+			//
+			//	//"var wc = document.createElement('script');" +
+			//	//"wc.src = '//style-validator.herokuapp.com/bower_components/webcomponentsjs/webcomponents.min.js';" +
+			//	//
+			//	//"var es6 = document.createElement('script');" +
+			//	//"es6.src = '//style-validator.herokuapp.com/bower_components/es6-promise/es6-promise.min.js';" +
+			//
+			//	"var sv = document.createElement('script');" +
+			//	"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+			//
+			//	//"wc.addEventListener('load', function() {" +
+			//	//"document.head.appendChild(es6);" +
+			//	//"});" +
+			//	//
+			//	//"es6.addEventListener('load', function() {" +
+			//	//	"document.head.appendChild(sv);" +
+			//	//"});" +
+			//
+			//	"sv.addEventListener('load', function() {" +
+			//		"console.groupEnd();" +
+			//		"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
+			//		"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+			//	"});" +
+			//
+			//	"document.head.appendChild(sv);"
+			//)
+			//.then(function(passedDataObj) {
+			//	STYLEV = passedDataObj.value;
+			//})
+			//.screenshot()
+			//.then(function(passedDataObj) {
+			//	//
+			//	//for(var a in passedDataObj) {
+			//	//	if(a !== 'value')
+			//	//		console.log(passedDataObj[a]);
+			//	//}
+			//
+			//	var SV = STYLEV.VALIDATOR;
+			//
+			//	var dataObj = {
+			//		total: SV.logObjArray.length,
+			//		error: SV.errorNum,
+			//		warning: SV.warningNum,
+			//		screenshot: 'data:image/png;base64,' + passedDataObj.value
+			//	};
+			//	return dataObj;
+			//})
+			//.then(function(dataObj) {
+			//	fs.readFile(path, 'utf-8', function(error, source){
+			//		if(!error) {
+			//			var context = dataObj;
+			//			var template = handlebars.compile(source);
+			//			var html = template(context);
+			//			emitter.emit('data', html);
+			//		}
+			//	});
+			//})
 			.end();
 	});
 }
@@ -249,7 +247,7 @@ function getCapabilities(req) {
 
 			'browserName': 'chrome',
 			'chromeOptions': {
-				'binary': '/app/.apt/opt/google/chrome'
+				'binary': '/app/.apt/opt/google/chrome/google-chrome'
 			}
 		};
 	} else {

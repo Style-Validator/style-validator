@@ -75,6 +75,8 @@
 				var source = new EventSource(url);
 
 				setTimeout(function() {
+					loadingSpinner.parentElement.removeChild(loadingSpinner);
+					resultContent.innerHTML = message;
 					source.close();
 					throw new Error('Stream is timeout!');
 				}, 10 * 60 * 1000);
