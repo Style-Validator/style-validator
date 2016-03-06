@@ -24,7 +24,6 @@ var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 var webdriverio = require('webdriverio');
-var launcher = require('launcher');
 var Xvfb = require('xvfb');
 
 /*
