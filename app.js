@@ -151,10 +151,10 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('headless will starting');
 	//console.log(headless);
 
-	//var xvfb = new Xvfb();
-	//xvfb.startSync();
+	var xvfb = new Xvfb();
+	xvfb.startSync();
 
-	launcher(function (err, launch) {
+	//launcher(function (err, launch) {
 
 		console.log('# available browsers:');
 		console.dir(launch.browsers);
@@ -177,7 +177,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 			.url(targetURL)
 			.then(function() {
 				emitter.emit('data', 'done!');
-				//xvfb.stopSync();
+				xvfb.stopSync();
 			})
 
 			//.timeoutsAsyncScript(100000)
@@ -242,7 +242,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 			//	});
 			//})
 			.end();
-	});
+	//});
 }
 function getCapabilities(req) {
 	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
