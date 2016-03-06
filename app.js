@@ -20,12 +20,12 @@ var events = require('events');
 var mongodb = require('mongodb');
 var requestIp = require('request-ip');
 var nodeUUID = require('node-uuid');
-//var webdriver = require('selenium-webdriver');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
-var headless = require('headless');
 var webdriverio = require('webdriverio');
+var launcher = require('launcher');
+
 
 /*
  * variables
@@ -151,15 +151,16 @@ function validateWithSelenium(req, res, path, targetURL) {
 	console.log('headless will starting');
 	//console.log(headless);
 
-	headless(options, 100, function(err, childProcess, servernum) {
-		console.log('headless: start');
+	launcher(function (err, launch) {
 
-		if(err) {
-			console.error(err);
-		} else {
-			console.log('Xvfb running on server number', servernum);
-			console.log('Xvfb pid', childProcess.pid);
-		}
+		console.log('# available browsers:');
+		console.dir(launch.browsers);
+		//if(err) {
+		//	console.error(err);
+		//} else {
+		//	console.log('Xvfb running on server number', servernum);
+		//	console.log('Xvfb pid', childProcess.pid);
+		//}
 
 		//TODO: support full load or wait???
 		driver = webdriverio
@@ -496,7 +497,7 @@ function setUpSSE(req, res, path) {
 	}, 50000);
 
 	// Avoiding first 30s timeout
-	console.log('send empty first comment');
+	console.log('setUpSSE: send empty first comment');
 	res.write(':\n\n');
 
 	emitter.on('data', function(data) {
