@@ -156,8 +156,8 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	//launcher(function (err, launch) {
 
-		console.log('# available browsers:');
-		console.dir(launch.browsers);
+		//console.log('# available browsers:');
+		//console.dir(launch.browsers);
 		//if(err) {
 		//	console.error(err);
 		//} else {
