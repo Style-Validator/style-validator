@@ -75,10 +75,11 @@
 				var source = new EventSource(url);
 
 				setTimeout(function() {
-					loadingSpinner.parentElement.removeChild(loadingSpinner);
-					resultContent.innerHTML = message;
 					source.close();
-					throw new Error('Stream is timeout!');
+					loadingSpinner.parentElement.removeChild(loadingSpinner);
+					var message = 'Stream is timeout!';
+					resultContent.innerHTML = message;
+					throw new Error(message);
 				}, 10 * 60 * 1000);
 
 				source.addEventListener('message', function(event) {
@@ -93,8 +94,8 @@
 
 				source.addEventListener('error', function(event) {
 					source.close();
-					var message = 'Event Source is failed';
 					loadingSpinner.parentElement.removeChild(loadingSpinner);
+					var message = 'Event Source is failed';
 					resultContent.innerHTML = message;
 					throw new Error(message);
 				}, false);
