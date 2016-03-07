@@ -17,7 +17,12 @@ selenium.install(function() {
 					host: '127.0.0.1',
 					port: '4444',
 					path: '/wd/hub',
-					desiredCapabilities: getCapabilities(req)
+					desiredCapabilities: {
+						'browserName': 'chrome',
+						'chromeOptions': {
+							'binary': '/app/.apt/opt/google/chrome/google-chrome'
+						}
+					}
 				})
 				.init()
 				.url(targetURL)
