@@ -25,7 +25,7 @@ selenium.install(function() {
 					}
 				})
 				.init()
-				.url(targetURL)
+				.url('http://style-validator.herokuapp.com/')
 				.then(function() {
 					console.log('quit');
 				})
