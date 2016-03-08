@@ -21,7 +21,7 @@ selenium.install(function() {
 						desiredCapabilities: {
 							'browserName': 'chrome',
 							'chromeOptions': {
-								'binary': '/app/.apt/opt/google/chrome/google-chrome'
+								'binary': '/app/.apt/opt/google/chrome/chrome'
 							}
 						}
 					})
