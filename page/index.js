@@ -20,6 +20,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	setParameter: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
+		that.html = document.documentElement;
 		that.wrapper = document.querySelector('.wrapper');
 		that.main = document.querySelector('.main');
 		that.header = document.querySelector('.header');
@@ -32,7 +33,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
 		window.addEventListener('resize', that.adjustWrapperPosition);
-		window.addEventListener('scroll', that.addShadow2header);
+		window.addEventListener('scroll', that.fixHeaderOnScroll);
 		that.submitForm.addEventListener('submit', that.submitValidation);
 	},
 
@@ -60,7 +61,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	startAnimation: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
-		setTimeout(that.startFadeIn, 100);
+		//setTimeout(that.startFadeIn, 100);
 		setTimeout(that.adjustWrapperPosition, 0);
 	},
 
@@ -75,13 +76,13 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		}, 0);
 	},
 
-	addShadow2header: function() {
+	fixHeaderOnScroll: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 		var isNotDefaultPosY = window.scrollY > 0;
 		if(isNotDefaultPosY) {
-			that.header.classList.add('header-with-shadow');
+			that.html.classList.add('is-fixed-header');
 		} else {
-			that.header.classList.remove('header-with-shadow');
+			that.html.classList.remove('is-fixed-header');
 		}
 	},
 

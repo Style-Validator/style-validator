@@ -6,19 +6,31 @@
 	margin-left: auto;
 	padding: 4%;
 }
-
 .wrapper {
 	margin: 0 auto;
-	padding-top: 0;
-	transition: padding-top 1s ease;
+	/*padding-top: 100%;*/
+	/*transition: padding-top 1s ease;*/
+}
+
+html:not(.is-fixed-header) .wrapper {
+	padding-top: 0 !important;
+}
+.is-fixed-header .header {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	-webkit-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
 }
 
 .main {
-	opacity: 0;
-	transition: opacity 1.5s ease;
+	/*opacity: 0;*/
+	/*transition: opacity 1.5s ease;*/
 }
 .main.fadeIn {
-	opacity: 1;
+	/*opacity: 1;*/
 }
 
 .installation {
