@@ -307,7 +307,10 @@ function dbHandler(req, res, path, store) {
 							clientIP: clientIP
 						}
 					},
-					$set: {currentVersion: json.version}
+					$set: {
+						currentVersion: json.version,
+						lastDate: json.date
+					}
 				},
 				{upsert: true},
 				function(err, records) {
