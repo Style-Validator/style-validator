@@ -30,7 +30,7 @@ var Xvfb = require('xvfb');
  * variables
  * */
 var server = http.createServer();
-var port = process.env.PORT || 8001;
+var port = process.env.PORT || 8080;
 
 var MongoClient = mongodb.MongoClient;
 var dbname = 'sv';
