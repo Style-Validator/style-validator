@@ -1,1 +1,1 @@
-libxss1 libxfont1 libxkbfile1 x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic xserver-xorg-core
+libxss1 libxfont1 libxkbfile1 x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic xserver-xorg-core libgl1-mesa-dri
