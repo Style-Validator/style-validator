@@ -30,7 +30,7 @@ var Xvfb = require('xvfb');
  * variables
  * */
 var server = http.createServer();
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8000;
 
 var MongoClient = mongodb.MongoClient;
 var dbname = 'sv';
@@ -147,8 +147,8 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	var xvfb = new Xvfb();
-	xvfb.startSync();
+	//var xvfb = new Xvfb();
+	//xvfb.startSync();
 
 	//TODO: support full load or wait???
 	webdriverio
@@ -223,7 +223,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 					var template = handlebars.compile(source);
 					var html = template(context);
 					emitter.emit('data', html);
-					xvfb.stopSync();
+					//xvfb.stopSync();
 				}
 			});
 		})

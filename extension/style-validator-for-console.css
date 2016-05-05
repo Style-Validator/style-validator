@@ -38,6 +38,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
+	max-height: 40%;
 }
 :host .stylev-console-header {
 	display: flex;
@@ -178,7 +179,7 @@
 }
 :host .stylev-console-refresh-count {
 	position: absolute;
-	top: 1px;
+	top: 2px;
 	right: 0;
 	bottom: 0;
 	left: 0;

@@ -252,7 +252,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		setParameters: function() {
 	
 			var that = STYLEV.VALIDATOR;
-	
+
 			//Elements
 			that.html = document.documentElement;
 			that.head = that.html.querySelector('head');
@@ -2306,17 +2306,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			}
 		},
 	
-		//TODO: support muliple mediaquery
 		mediaQueryEventHandler: function(event) {
 			var that = STYLEV.VALIDATOR;
 			try {
 				if(STYLEV.isValidated) {
 	
-					//TODO: display console header
 					console.info('Style Validator: Media Query has been changed ' + (event.matches ? 'to' : 'from') + ' ' + event.media);
-	
-					that.getStyleSheets()
-						.then(that.setExecutionTimer);
+					that.setExecutionTimer();
 				}
 			} catch(error) {
 				that.throwError(error);
