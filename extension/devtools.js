@@ -12,10 +12,11 @@ var port;
 var isValidated = false;
 
 var executionString =
+	"STYLEV.inspect = inspect;" +
+	"STYLEV.$0 = $0;" +
 	"var bindInspect = function(){" +
 		"STYLEV.CHROME_DEVTOOLS.execute(function(targetElem) {" +
-//			"inspect(targetElem || $0);" +chrome
-			"inspect(targetElem);" +
+			"STYLEV.inspect(targetElem || STYLEV.$0);" +
 		"});" +
 	"};" +
 	"STYLEV.VALIDATOR.updateOptions().then(function() {" +

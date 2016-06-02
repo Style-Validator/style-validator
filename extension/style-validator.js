@@ -240,7 +240,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				} else {
 	
 					that.getRulesData()
-						.then(that.validate.bind(null, callback));
+						.then(function() {
+							return that.validate(callback);
+						});
 				}
 	
 			} catch(error) {
@@ -383,7 +385,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		throwError: function(error) {
 			var that = STYLEV.VALIDATOR;
 			that.send2GA(error);
-			throw new Error(error);
+			that.consoleError(error);
+			//throw new Error(error);
 		},
 	
 		setRuleDataViaChromeStorage: function (rulesData, dataArrayViaAJAX, resolve) {
@@ -1893,10 +1896,17 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.switchConnection();
 			}
 		},
+
+		consoleError: function(message) {
+			var that = STYLEV.VALIDATOR;
+			if(console && typeof console.error === 'function') {
+				console.error(message);
+			}
+		},
 	
 		//前回開いた状態を復元する
 		restorePreviousCondition: function() {
-	
+
 			var that = STYLEV.VALIDATOR;
 	
 			//前回のスクロール値まで移動　それがなければ、0がはいる
@@ -1911,8 +1921,17 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//TODO: remove?
 			//最後にフォーカスしていた要素に対して、インスペクト
-			if(STYLEV.isChromeExtension && typeof STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI === 'function') {
-				STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI();
+			if(STYLEV.isChromeExtension) {
+
+				if(STYLEV.selectedConsoleLine) {
+					var stylevConsoleListAnchor = STYLEV.selectedConsoleLine.querySelector('stylev-console-list-stylevid');
+					var previousFocusedElement = document.querySelector('[data-stylevid="' + stylevConsoleListAnchor.dataset.stylevconsoleid + '"]');
+					try {
+						STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI(previousFocusedElement);
+					} catch(error) {
+						that.throwError(error);
+					}
+				}
 			}
 	
 			//選択した行があった場合、選択した行と現在のリストを比べて、同一のものに選択状態のclassを付与
