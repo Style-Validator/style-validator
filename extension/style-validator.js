@@ -648,14 +648,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					queryString += ')';
 				}
 			}
-	
+
 			that.scriptTagGA = document.createElement('script');
 			that.scriptTagGA.src = that.settings.GA_PATH + (queryString ? '?' + encodeURIComponent(queryString) : '');
 			that.scriptTagGA.async = "async";
 			that.scriptTagGA.id = 'stylev-ga';
 			that.scriptTagGA.classList.add('stylev-ignore');
-	
-			that.head.appendChild(that.scriptTagGA);
+
+			that.addGA();
 		},
 
 		removeGA: function() {
@@ -664,6 +664,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.scriptTagGA.parentElement.removeChild(that.scriptTagGA);
 				that.scriptTagGA = undefined;
 			}
+		},
+
+		addGA: function() {
+			var that = STYLEV.VALIDATOR;
+			that.head.appendChild(that.scriptTagGA);
 		},
 	
 		isRegularTag: function (tagName) {
@@ -1924,9 +1929,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			if(STYLEV.isChromeExtension) {
 
 				if(STYLEV.selectedConsoleLine) {
-					var stylevConsoleListAnchor = STYLEV.selectedConsoleLine.querySelector('stylev-console-list-stylevid');
+					var stylevConsoleListAnchor = STYLEV.selectedConsoleLine.querySelector('.stylev-console-list-stylevid');
 					var previousFocusedElement = document.querySelector('[data-stylevid="' + stylevConsoleListAnchor.dataset.stylevconsoleid + '"]');
 					try {
+						STYLEV.selectedConsoleLine.classList.add('stylev-trigger-selected');
 						STYLEV.CHROME_DEVTOOLS.inspectOfConsoleAPI(previousFocusedElement);
 					} catch(error) {
 						that.throwError(error);

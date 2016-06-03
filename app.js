@@ -24,7 +24,7 @@ var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 var webdriverio = require('webdriverio');
-var Xvfb = require('xvfb');
+//var Xvfb = require('xvfb');
 
 /*
  * variables
@@ -90,13 +90,15 @@ require("console-stamp")(console, {
 //set handler
 server.on('request', requestHandler);
 
-selenium.install(function() {
-	console.log('Selenium is installed.');
-	selenium.start(function() {
-		console.log('Selenium is running.');
-		server.listen(port, callbackAfterServerListening);
-	});
-});
+//selenium.install(function() {
+//	console.log('Selenium is installed.');
+//	selenium.start(function() {
+//		console.log('Selenium is running.');
+//		server.listen(port, callbackAfterServerListening);
+//	});
+//});
+
+server.listen(port, callbackAfterServerListening);
 
 process.on('uncaughtException', function (err) {
 	console.log(err);
