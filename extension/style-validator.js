@@ -1125,7 +1125,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			var xhr = new XMLHttpRequest();
 			var apiURI = 'https://style-validator.herokuapp.com/send2db';
-			//var apiURI = 'http://localhost:8001/send2db';
+			//var apiURI = 'http://localhost:8001/send2DB';
 	
 			var dataObj = {};
 	
@@ -1138,10 +1138,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			dataObj.date = new Date();
 			dataObj.ua = navigator.userAgent;
 			dataObj.timeMS = new Date() - that.startTime;
-			dataObj.mediaQueries = {};
-			STYLEV.METHODS.each(that.allMediaTextsArray, function(mediaText) {
-				dataObj.mediaQueries[mediaText] = that.matchedMediaTextsArray.indexOf(mediaText) > -1;
-			});
+			dataObj.allMediaQueries = that.allMediaTextsArray;
+			dataObj.matchedMediaQueries = that.matchedMediaTextsArray;
 			dataObj.count = {};
 			dataObj.count.total = that.logObjArray.length;
 			dataObj.count.error = that.errorNum;
@@ -1150,9 +1148,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//TODO: remove?
 			STYLEV.logData = dataObj;
-	
+
 			var data4send = JSON.stringify(dataObj, null, '\t');
-	
+
 			xhr.open('POST', apiURI, true);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.addEventListener('load', function () {
