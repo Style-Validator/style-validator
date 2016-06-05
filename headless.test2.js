@@ -12,28 +12,24 @@ selenium.install(function() {
 			console.log('Xvfb pid', childProcess.pid);
 			console.log('err should be null', err);
 
-			try {
-				var driver = webdriverio
-					.remote({
-						host: '127.0.0.1',
-						port: '4444',
-						path: '/wd/hub',
-						desiredCapabilities: {
-							'browserName': 'chrome',
-							'chromeOptions': {
-								'binary': '/usr/bin/google-chrome'
-							}
+			var driver = webdriverio
+				.remote({
+					host: '127.0.0.1',
+					port: '4444',
+					path: '/wd/hub',
+					desiredCapabilities: {
+						'browserName': 'chrome',
+						'chromeOptions': {
+							'binary': '/usr/bin/google-chrome'
 						}
-					})
-					.init()
-					.url('https://style-validator.herokuapp.com/')
-					.then(function() {
-						console.log('quit');
-					})
-					.end();
-			} catch(e) {
-				console.log(e);
-			}
+					}
+				})
+				.init()
+				.url('https://style-validator.herokuapp.com/')
+				.then(function() {
+					console.log('quit');
+				})
+				.end();
 		});
 	});
 });
