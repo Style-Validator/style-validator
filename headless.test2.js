@@ -12,13 +12,13 @@ selenium.install(function() {
 			console.log('Xvfb pid', childProcess.pid);
 			console.log('err should be null', err);
 
-			var driver = webdriverio
+			webdriverio
 				.remote({
 					host: '127.0.0.1',
 					port: '4444',
 					path: '/wd/hub',
 					desiredCapabilities: {
-						'browserName': 'chrome',
+						'browserName': 'google-chrome',
 						'chromeOptions': {
 							'binary': '/usr/bin/google-chrome'
 						}
@@ -30,6 +30,9 @@ selenium.install(function() {
 					console.log('quit');
 				})
 				.end();
+
+			console.log('passed');
+
 		});
 	});
 });
