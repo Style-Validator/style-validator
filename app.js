@@ -203,21 +203,32 @@ function validateWithSelenium(req, res, path, targetURL) {
 		.end();
 }
 function getCapabilities(req) {
-	var isHeroku = req.headers.host === 'style-validator.herokuapp.com';
-	var capabilities;
-	if(isHeroku) {
-		capabilities = {
 
-			'browserName': 'chrome',
-			'chromeOptions': {
-				'binary': '/app/.apt/opt/google/chrome/chrome'
-			}
-		};
-	} else {
-		capabilities = {
-			'browserName': 'chrome'
-		};
+	var capabilities;
+	switch(req.headers.host) {
+		case 'style-validator.herokuapp.com':
+			capabilities = {
+				'browserName': 'chrome',
+				'chromeOptions': {
+					'binary': '/app/.apt/opt/google/chrome/chrome'
+				}
+			};
+			break;
+		case '52.69.10.28':
+			capabilities = {
+				'browserName': 'chrome',
+				'chromeOptions': {
+					'binary': '/usr/bin/google-chrome'//AWS
+				}
+			};
+			break;
+		default:
+			capabilities = {
+				'browserName': 'chrome'
+			};
+			break;
 	}
+
 	return capabilities;
 }
 
