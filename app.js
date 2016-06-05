@@ -24,7 +24,7 @@ var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 var webdriverio = require('webdriverio');
-//var Xvfb = require('xvfb');
+var Xvfb = require('xvfb');
 
 /*
  * variables
@@ -147,8 +147,8 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	//var xvfb = new Xvfb();
-	//xvfb.startSync();
+	var xvfb = new Xvfb();
+	xvfb.startSync();
 
 	//TODO: support full load or wait???
 	webdriverio
@@ -196,7 +196,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 					var template = handlebars.compile(source);
 					var html = template(context);
 					emitter.emit('data', html);
-					//xvfb.stopSync();
+					xvfb.stopSync();
 				}
 			});
 		})
