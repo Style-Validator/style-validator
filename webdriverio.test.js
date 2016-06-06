@@ -15,9 +15,6 @@ console.log('options')
 webdriverio
 	.remote(options)
 	.init()
-	.then(function() {
-		console.log('init')
-	})
 	.url('http://www.google.com')
 	.getTitle().then(function(title) {
 		console.log('Title was: ' + title);
