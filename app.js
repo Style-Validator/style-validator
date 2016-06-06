@@ -23,6 +23,7 @@ var nodeUUID = require('node-uuid');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
+var webdriverio = require('webdriverio');
 var Xvfb = require('xvfb');
 
 /*
@@ -155,64 +156,59 @@ function validateWithSelenium(req, res, path, targetURL) {
 	setUpSSE(req, res, path);
 
 	var xvfb = new Xvfb();
-	xvfb.start(function() {
+	xvfb.startSync();
 
-		var webdriverio = require('webdriverio');
+	//TODO: support full load or wait???
+	webdriverio
+		.remote({
+			host: '127.0.0.1',
+			port: '4444',
+			path: '/wd/hub',
+			desiredCapabilities: getCapabilities(req)
+		})
+		.init()
+		.url(targetURL)
+		.timeoutsAsyncScript(100000)
+		.executeAsync(
 
-		//TODO: support full load or wait???
-		webdriverio
-			.remote({
-				host: '127.0.0.1',
-				port: '4444',
-				path: '/wd/hub',
-				desiredCapabilities: getCapabilities(req)
-			})
-			.init()
-			.then(xvfb.stop)
-			.end();
-			//.url(targetURL)
-			//.timeoutsAsyncScript(100000)
-			//.executeAsync(
-			//
-			//	"var callback = arguments[arguments.length - 1];" +
-			//	"var sv = document.createElement('script');" +
-			//	"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
-			//	"sv.addEventListener('load', function() {" +
-			//	"console.groupEnd();" +
-			//	"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
-			//	"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
-			//	"});" +
-			//
-			//	"document.head.appendChild(sv);"
-			//)
-			//.then(function(passedDataObj) {
-			//	STYLEV = passedDataObj.value;
-			//})
-			//.screenshot()
-			//.then(function(passedDataObj) {
-			//	var SV = STYLEV.VALIDATOR;
-			//
-			//	var dataObj = {
-			//		total: SV.logObjArray.length,
-			//		error: SV.errorNum,
-			//		warning: SV.warningNum,
-			//		screenshot: 'data:image/png;base64,' + passedDataObj.value
-			//	};
-			//	return dataObj;
-			//})
-			//.then(function(dataObj) {
-			//	fs.readFile(path, 'utf-8', function(error, source){
-			//		if(!error) {
-			//			var context = dataObj;
-			//			var template = handlebars.compile(source);
-			//			var html = template(context);
-			//			emitter.emit('data', html);
-			//			xvfb.stop();
-			//		}
-			//	});
-			//})
-			//.end();
-	});
+			"var callback = arguments[arguments.length - 1];" +
+			"var sv = document.createElement('script');" +
+			"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+			"sv.addEventListener('load', function() {" +
+				"console.groupEnd();" +
+				"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
+				"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+			"});" +
+
+			"document.head.appendChild(sv);"
+		)
+		.then(function(passedDataObj) {
+			STYLEV = passedDataObj.value;
+		})
+		.screenshot()
+		.then(function(passedDataObj) {
+			var SV = STYLEV.VALIDATOR;
+
+			var dataObj = {
+				total: SV.logObjArray.length,
+				error: SV.errorNum,
+				warning: SV.warningNum,
+				screenshot: 'data:image/png;base64,' + passedDataObj.value
+			};
+			return dataObj;
+		})
+		.then(function(dataObj) {
+			fs.readFile(path, 'utf-8', function(error, source){
+				if(!error) {
+					var context = dataObj;
+					var template = handlebars.compile(source);
+					var html = template(context);
+					emitter.emit('data', html);
+					xvfb.stopSync();
+				}
+			});
+		})
+		.end();
 }
 function getCapabilities(req) {
 
@@ -228,7 +224,7 @@ function getCapabilities(req) {
 			break;
 		case '52.69.10.28':
 			capabilities = {
-				'browserName': 'chrome',
+				'browserName': 'google-chrome',
 				'chromeOptions': {
 					'binary': '/usr/bin/google-chrome'//AWS
 				}
