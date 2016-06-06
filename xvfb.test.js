@@ -1,8 +1,12 @@
 var Xvfb = require('xvfb');
 var xvfb = new Xvfb();
-xvfb.start(function(err, xvfbProcess) {
-	console.log(xvfbProcess);
-	xvfb.stop(function(err) {
-		console.error(err);
-	});
-});
+xvfb.startSync();
+
+console.log('started');
+
+// code that uses the virtual frame buffer here
+
+xvfb.stopSync();
+// the Xvfb is stopped
+
+console.log('stopped');

@@ -20,7 +20,17 @@ selenium.install(function() {
 					desiredCapabilities: {
 						'browserName': 'google-chrome',
 						'chromeOptions': {
-							'binary': '/usr/bin/google-chrome'
+							'binary': '/usr/bin/google-chrome',
+							"args": [
+								"window-size=1366,768",
+								"no-proxy-server",
+								"no-default-browser-check",
+								"no-first-run",
+								"disable-boot-animation",
+								"disable-default-apps",
+								"disable-extensions",
+								"disable-translate"
+							]
 						}
 					}
 				})
