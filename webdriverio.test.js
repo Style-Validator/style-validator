@@ -1,7 +1,7 @@
-var Xvfb = require('xvfb');
-var xvfb = new Xvfb();
-xvfb.startSync();
-console.log('start')
+//var Xvfb = require('xvfb');
+//var xvfb = new Xvfb();
+//xvfb.startSync();
+//console.log('start')
 
 var webdriverio = require('webdriverio');
 console.log('webdriverio')
@@ -22,6 +22,6 @@ webdriverio
 	.getTitle().then(function(title) {
 		console.log('Title was: ' + title);
 		console.log('stop')
-		xvfb.stopSync();
+		//xvfb.stopSync();
 	})
 	.end();
