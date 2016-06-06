@@ -23,7 +23,6 @@ var nodeUUID = require('node-uuid');
 var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
-var webdriverio = require('webdriverio');
 var Xvfb = require('xvfb');
 
 /*
@@ -157,6 +156,8 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	var xvfb = new Xvfb();
 	xvfb.start(function() {
+
+		var webdriverio = require('webdriverio');
 
 		//TODO: support full load or wait???
 		webdriverio
