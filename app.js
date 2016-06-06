@@ -167,48 +167,50 @@ function validateWithSelenium(req, res, path, targetURL) {
 				desiredCapabilities: getCapabilities(req)
 			})
 			.init()
-			.url(targetURL)
-			.timeoutsAsyncScript(100000)
-			.executeAsync(
-
-				"var callback = arguments[arguments.length - 1];" +
-				"var sv = document.createElement('script');" +
-				"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
-				"sv.addEventListener('load', function() {" +
-				"console.groupEnd();" +
-				"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
-				"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
-				"});" +
-
-				"document.head.appendChild(sv);"
-			)
-			.then(function(passedDataObj) {
-				STYLEV = passedDataObj.value;
-			})
-			.screenshot()
-			.then(function(passedDataObj) {
-				var SV = STYLEV.VALIDATOR;
-
-				var dataObj = {
-					total: SV.logObjArray.length,
-					error: SV.errorNum,
-					warning: SV.warningNum,
-					screenshot: 'data:image/png;base64,' + passedDataObj.value
-				};
-				return dataObj;
-			})
-			.then(function(dataObj) {
-				fs.readFile(path, 'utf-8', function(error, source){
-					if(!error) {
-						var context = dataObj;
-						var template = handlebars.compile(source);
-						var html = template(context);
-						emitter.emit('data', html);
-						xvfb.stop();
-					}
-				});
-			})
+			.then(xvfb.stop)
 			.end();
+			//.url(targetURL)
+			//.timeoutsAsyncScript(100000)
+			//.executeAsync(
+			//
+			//	"var callback = arguments[arguments.length - 1];" +
+			//	"var sv = document.createElement('script');" +
+			//	"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+			//	"sv.addEventListener('load', function() {" +
+			//	"console.groupEnd();" +
+			//	"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
+			//	"STYLEV.VALIDATOR.execute(function() {callback(STYLEV);});" +
+			//	"});" +
+			//
+			//	"document.head.appendChild(sv);"
+			//)
+			//.then(function(passedDataObj) {
+			//	STYLEV = passedDataObj.value;
+			//})
+			//.screenshot()
+			//.then(function(passedDataObj) {
+			//	var SV = STYLEV.VALIDATOR;
+			//
+			//	var dataObj = {
+			//		total: SV.logObjArray.length,
+			//		error: SV.errorNum,
+			//		warning: SV.warningNum,
+			//		screenshot: 'data:image/png;base64,' + passedDataObj.value
+			//	};
+			//	return dataObj;
+			//})
+			//.then(function(dataObj) {
+			//	fs.readFile(path, 'utf-8', function(error, source){
+			//		if(!error) {
+			//			var context = dataObj;
+			//			var template = handlebars.compile(source);
+			//			var html = template(context);
+			//			emitter.emit('data', html);
+			//			xvfb.stop();
+			//		}
+			//	});
+			//})
+			//.end();
 	});
 }
 function getCapabilities(req) {
