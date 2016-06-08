@@ -24,7 +24,7 @@ var selenium = require('selenium-standalone');
 var handlebars = require('handlebars');
 var nodemailer = require('nodemailer');
 var webdriverio = require('webdriverio');
-var Xvfb = require('xvfb');
+//var Xvfb = require('xvfb');
 
 /*
  * variables
@@ -90,21 +90,7 @@ require("console-stamp")(console, {
 //set handler
 server.on('request', requestHandler);
 
-selenium.install({
-	drivers: {
-		chrome: {
-			version: '2.9',
-			arch: process.arch,
-			baseURL: 'https://chromedriver.storage.googleapis.com'
-		}
-	}
-}, function() {
-	console.log('Selenium is installed.');
-	selenium.start(function() {
-		console.log('Selenium is running.');
-		server.listen(port, callbackAfterServerListening);
-	});
-});
+server.listen(port, callbackAfterServerListening);
 
 process.on('uncaughtException', function (err) {
 	console.log(err);
@@ -155,8 +141,8 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 	setUpSSE(req, res, path);
 
-	var xvfb = new Xvfb();
-	xvfb.startSync();
+	//var xvfb = new Xvfb();
+	//xvfb.startSync();
 
 	//TODO: support full load or wait???
 	webdriverio
@@ -204,7 +190,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 					var template = handlebars.compile(source);
 					var html = template(context);
 					emitter.emit('data', html);
-					xvfb.stopSync();
+					//xvfb.stopSync();
 				}
 			});
 		})
