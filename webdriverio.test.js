@@ -1,5 +1,11 @@
 var webdriverio = require('webdriverio');
-var options = { desiredCapabilities: { browserName: 'chrome' } };
+var options = { desiredCapabilities: {
+	browserName: 'chrome',
+	chromeOptions: {
+		'binary': '/app/.apt/opt/google/chrome/chrome'
+	}
+
+} };
 var client = webdriverio.remote(options);
 
 client
