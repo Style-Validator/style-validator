@@ -210,7 +210,7 @@ function getCapabilities(req) {
 			break;
 		case '52.69.10.28':
 			capabilities = {
-				'browserName': 'google-chrome',
+				'browserName': 'chrome',
 				'chromeOptions': {
 					'binary': '/usr/bin/google-chrome'//AWS
 				}
