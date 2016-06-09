@@ -1,9 +1,12 @@
 var Xvfb = require('xvfb');
 var selenium = require('selenium-standalone');
-var xvfb = new Xvfb();
+var xvfb = new Xvfb({
+	'_xvfb_args': '-screen 0, 1366x768x24'
+});
+
 xvfb.startSync();
 
-selenium.install({
+var options = {
 	version: '2.53.0',
 	baseURL: 'https://selenium-release.storage.googleapis.com',
 	drivers: {
@@ -13,10 +16,12 @@ selenium.install({
 			baseURL: 'https://chromedriver.storage.googleapis.com'
 		}
 	}
-}, function() {
+};
+
+selenium.install(options, function() {
 	console.log('Selenium is installed.');
 
-	selenium.start(function() {
+	selenium.start(options, function() {
 
 		console.log('Selenium is running.');
 
