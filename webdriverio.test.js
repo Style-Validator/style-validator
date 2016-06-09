@@ -1,11 +1,20 @@
 var Xvfb = require('xvfb');
 var selenium = require('selenium-standalone');
+var xvfb = new Xvfb();
+xvfb.startSync();
 
-selenium.start(function() {
+selenium.start({
+	drivers: {
+		chrome: {
+			// check for more recent versions of chrome driver here:
+			// https://chromedriver.storage.googleapis.com/index.html
+			version: '2.22',
+			arch: process.arch,
+			baseURL: 'https://chromedriver.storage.googleapis.com'
+		}
+	}
+}, function() {
 	console.log('Selenium is running.');
-
-	var xvfb = new Xvfb();
-	xvfb.startSync();
 
 	var webdriverio = require('webdriverio');
 	var options = { desiredCapabilities: {
