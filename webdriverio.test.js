@@ -1,5 +1,6 @@
 var Xvfb = require('xvfb');
-Xvfb.startSync();
+var xvfb = new Xvfb();
+xvfb.startSync();
 
 var selenium = require('selenium-standalone');
 
