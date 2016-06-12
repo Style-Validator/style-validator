@@ -28,7 +28,6 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-console.log(process.env.IS_HEROKU);
 var isHeroku = process.env.IS_HEROKU === 'yes';
 var isLinux = process.platform === 'linux';
 var isAWS = !isHeroku && isLinux;
@@ -427,8 +426,10 @@ function serveFiles(req, res, path) {
 
 	//Redirect
 	if(req.headers.host === 'style-validator.herokuapp.com') {
-		var contentType = mimeTypes[extension];
-		sendRedirect(req, res, 'http://style-validator.io' + path, contentType);
+		res.writeHead(301, {
+			'Location': 'http://style-validator.io' + path
+		});
+		res.end();
 	}
 
 	//override
