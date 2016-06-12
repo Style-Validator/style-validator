@@ -3,7 +3,7 @@ A part of introduction for `Risky Style`
 
 # Static Risky Style
 
-If you want to view them all, see the [rules page](https://style-validator.herokuapp.com/extension/options.html)
+If you want to view them all, see the [rules page](http://style-validator.io/extension/options.html)
 
 ## No parent table-cell
 

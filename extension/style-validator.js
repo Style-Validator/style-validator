@@ -2,7 +2,7 @@
  Style Validator
 
  Description": Style Validator is CSS Validator that can detect `Risky Style` that might break layout after JavaScript or CSS Media Queries.
- URL: https://style-validator.herokuapp.com/
+ URL: http://style-validator.io/
  Author: Igari Takeharu
  License: MIT License
  */
@@ -263,7 +263,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			//Padding with Border bottom that is equal with console height.
 			that.htmlDefaultBorderBottomWidth = that.html.style.borderBottomWidth === '' ? null : that.html.style.borderBottomWidth;
 	
-			that.RESOURCE_ROOT = that.RESOURCE_ROOT || 'https://style-validator.herokuapp.com/extension/';
+			that.RESOURCE_ROOT = that.RESOURCE_ROOT || 'http://style-validator.io/extension/';
 	
 			//Initialize Observing Flag
 			that.isObserving = false;
@@ -1750,7 +1750,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleHeader.classList.add('stylev-console-header');
 			that.consoleHeading.classList.add('stylev-console-heading');
 			that.consoleHeadingLogo.classList.add('stylev-console-heading-logo');
-			that.consoleHeadingLogo.href = 'https://style-validator.herokuapp.com/';
+			that.consoleHeadingLogo.href = 'http://style-validator.io/';
 			that.consoleHeadingLogo.target = '_blank';
 			that.consoleHeadingLogoImage.classList.add('stylev-console-heading-logo-image');
 			that.consoleHeadingLogoImage.src = that.settings.ICON_LOGO_PATH;
@@ -1994,7 +1994,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				ruleID.addEventListener('click', that.jump2RulePage('#rule-' + outputObj.ruleID));
 			} else {
 				//ruleID.href = 'http://localhost:8001/extension/options.html#rule-' + outputObj.ruleID;//TODO: change url
-				ruleID.href = 'https://style-validator.herokuapp.com/extension/options.html#rule-' + outputObj.ruleID;//TODO: change url
+				ruleID.href = 'http://style-validator.io/extension/options.html#rule-' + outputObj.ruleID;//TODO: change url
 			}
 			ruleID.classList.add('stylev-console-list-ruleid');
 	
