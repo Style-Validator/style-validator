@@ -28,7 +28,12 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-var server = http.createServer();
+var options = process.platform === 'linux' ? {
+	key: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
+	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
+} : {};
+var server = http.createServer(options);
 var port = process.env.PORT || 8000;
 
 var MongoClient = mongodb.MongoClient;
@@ -164,13 +169,9 @@ function callbackAfterServerListening() {
 /*
  * functions - selenium
  * */
-var options = {
-	display: {width: 1024, height: 980} // depth defaults to 16
-};
 function validateWithSelenium(req, res, path, targetURL) {
 	console.log('validateWithSelenium');
 
-	var driver;
 	var STYLEV;
 
 	setUpSSE(req, res, path);
@@ -190,7 +191,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 			"var callback = arguments[arguments.length - 1];" +
 			"var sv = document.createElement('script');" +
-			"sv.src = 'http://style-validator.io/extension/style-validator.js?mode=manual';" +
+			"sv.src = '//style-validator.io/extension/style-validator.js?mode=manual';" +
 			"sv.addEventListener('load', function() {" +
 				"console.groupEnd();" +
 				"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +

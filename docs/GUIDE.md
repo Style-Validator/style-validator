@@ -150,3 +150,37 @@ https://lambda-linux.io/blog/2015/01/28/announcing-firefox-browser-support-for-a
 # Daemon
 https://blog.vandenbrand.org/2014/11/05/install-selenium-headless-on-debian-wheezy-optionally-with-ansible/
 
+
+# Pass PATH for system wide
+/etc/profile
+にnodebrewのパスを通す
+
+
+# SSL Certificate
+https://gist.github.com/davestevens/c9e437afbb41c1d5c3ab
+
+
+```sh
+./certbot-auto certonly --webroot --webroot-path /home/ec2-user/app/style-validator/ -d style-validator.io
+```
+
+/etc/letsencrypt/live/style-validator.io/fullchain.pem
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at
+   /etc/letsencrypt/live/style-validator.io/fullchain.pem. Your cert
+   will expire on 2016-09-10. To obtain a new or tweaked version of
+   this certificate in the future, simply run certbot-auto again. To
+   non-interactively renew *all* of your certificates, run
+   "certbot-auto renew"
+ - If you lose your account credentials, you can recover through
+   e-mails sent to igari.takeharu@gmail.com.
+ - Your account credentials have been saved in your Certbot
+   configuration directory at /etc/letsencrypt. You should make a
+   secure backup of this folder now. This configuration directory will
+   also contain certificates and private keys obtained by Certbot so
+   making regular backups of this folder is ideal.
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
