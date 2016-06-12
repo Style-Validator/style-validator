@@ -34,7 +34,8 @@ if(process.platform === 'linux') {
 		cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
 		ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
 	};
-	var server = https.createServer(options);
+	//var server = https.createServer(options);
+	var server = http.createServer();
 } else {
 	var server = http.createServer();
 }
