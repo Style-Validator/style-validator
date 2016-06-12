@@ -89,58 +89,41 @@ require("console-stamp")(console, {
 //set handler
 server.on('request', requestHandler);
 
-selenium.install({
-	version: '2.53.0',
-	baseURL: 'https://selenium-release.storage.googleapis.com',
-	drivers: {
-		chrome: {
-			version: '2.22',
-			arch: process.arch,
-			baseURL: 'https://chromedriver.storage.googleapis.com'
-		}
-	},
-	logger: function(message) {
-		console.log(message);
-	},
-	progressCb: function(totalLength, progressLength, chunkLength) {
-		console.log('totalLength: ' + totalLength);
-		console.log('progressLength: ' + progressLength);
-		console.log('chunkLength: ' + chunkLength);
-	}
-}, function(err) {
-	console.log('Selenium is installed.');
-	if(err) {
-		console.error(err);
-	}
-	selenium.start({
-		version: '2.53.0',
-		baseURL: 'https://selenium-release.storage.googleapis.com',
-		drivers: {
-			chrome: {
-				version: '2.22',
-				arch: process.arch,
-				baseURL: 'https://chromedriver.storage.googleapis.com'
+//listen server
+switch(process.platform) {
+	case 'darwin':
+		selenium.install({
+			logger: function(message) {
+				console.log(message);
 			}
-		},
-		logger: function(message) {
-			console.log(message);
-		},
-		progressCb: function(totalLength, progressLength, chunkLength) {
-			console.log('totalLength: ' + totalLength);
-			console.log('progressLength: ' + progressLength);
-			console.log('chunkLength: ' + chunkLength);
-		}
-	}, function(err, child) {
-		console.log('Selenium is running.');
-		if(err) {
-			console.error(err);
-		}
-		child.stderr.on('data', function(data){
-			console.log(data.toString());
+		}, function(err) {
+			console.log('Selenium is installed.');
+			if(err) {
+				console.error(err);
+			}
+			selenium.start({
+				logger: function(message) {
+					console.log(message);
+				}
+			}, function(err, child) {
+				console.log('Selenium is running.');
+				if(err) {
+					console.error(err);
+				}
+				child.stderr.on('data', function(data){
+					console.log(data.toString());
+				});
+				server.listen(port, callbackAfterServerListening);
+			});
 		});
+
+		break;
+	case 'linux':
 		server.listen(port, callbackAfterServerListening);
-	});
-});
+		break;
+	default:
+		break;
+}
 
 process.on('uncaughtException', function (err) {
 	console.log(err);
@@ -252,14 +235,14 @@ function getCapabilities(req) {
 				}
 			};
 			break;
-		//case 'style-validator.io':
-		//	capabilities = {
-		//		'browserName': 'chrome',
-		//		'chromeOptions': {
-		//			'binary': '/usr/bin/google-chrome'//AWS
-		//		}
-		//	};
-		//	break;
+		case 'style-validator.io':
+			capabilities = {
+				'browserName': 'chrome',
+				'chromeOptions': {
+					'binary': '/usr/bin/google-chrome'//AWS
+				}
+			};
+			break;
 		default:
 			capabilities = {
 				'browserName': 'chrome'
