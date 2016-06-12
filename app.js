@@ -32,7 +32,7 @@ console.log(process.env.SV_ENV);
 var isHeroku = process.env.SV_ENV === 'heroku';
 var isAWS = process.env.SV_ENV === 'amazonLinux';
 var sslOptions = isAWS && {
-	key: fs.readFileSync('.../letsencrypt/live/style-validator.io/privkey.pem'),
+	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
 	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
 	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
 };
