@@ -33,7 +33,11 @@ var options = process.platform === 'linux' ? {
 	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
 	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
 } : {};
-var server = http.createServer(options);
+var server = http.createServer({
+	key: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
+	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
+});
 var port = process.env.PORT || 8000;
 
 var MongoClient = mongodb.MongoClient;
