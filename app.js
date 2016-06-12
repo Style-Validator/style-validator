@@ -168,7 +168,7 @@ function callbackAfterServerListening() {
 	var host = ipAddress ===  '::' ? 'localhost' : ipAddress;
 	var port = serverAddress.port;
 
-	console.log('Server is running at ' + (port === '8080' ? 'http' : 'https') + '://%s:%s', host, port);
+	console.log('Server is running at ' + (port === 8080 ? 'http' : 'https') + '://%s:%s', host, port);
 }
 
 /*
