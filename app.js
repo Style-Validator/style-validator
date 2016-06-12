@@ -5,7 +5,7 @@
  * */
 
 var http = require('http');
-//var https = require('https');
+var https = require('https');
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
@@ -28,13 +28,16 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-//var options = process.platform === 'linux' ? {
-//	key: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/privkey.pem'),
-//	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
-//	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
-//} : {};
-var http = http.createServer();
-//var https = https.createServer(options);
+if(process.platform === 'linux') {
+	var options = {
+		key: fs.readFileSync('~/letsencrypt/live/style-validator.io/privkey.pem'),
+		cert: fs.readFileSync('~/letsencrypt/live/style-validator.io/cert.pem'),
+		ca: fs.readFileSync('~/letsencrypt/live/style-validator.io/chain.pem')
+	};
+	var server = https.createServer(options);
+} else {
+	var server = http.createServer();
+}
 var port = process.env.PORT || 8000;
 
 var MongoClient = mongodb.MongoClient;
@@ -93,8 +96,7 @@ require("console-stamp")(console, {
 });
 
 //set handler
-http.on('request', requestHandler);
-//https.on('request', requestHandler);
+server.on('request', requestHandler);
 
 //listen server
 switch(process.platform) {
@@ -120,19 +122,16 @@ switch(process.platform) {
 				child.stderr.on('data', function(data){
 					console.log(data.toString());
 				});
-				http.listen(port, callbackAfterServerListening.bind(null, http));
-				https.listen(port, callbackAfterServerListening.bind(null, https));
+				server.listen(port, callbackAfterServerListening);
 			});
 		});
 
 		break;
 	case 'linux'://AWS
-			http.listen(port, callbackAfterServerListening);
-			//https.listen(port, callbackAfterServerListening);
+		server.listen(port, callbackAfterServerListening);
 		break;
 	default:
-		http.listen(port, callbackAfterServerListening);
-		//https.listen(port, callbackAfterServerListening);
+		server.listen(port, callbackAfterServerListening);
 		break;
 }
 
@@ -161,7 +160,7 @@ process.on('uncaughtException', function (err) {
 * functions
 * */
 
-function callbackAfterServerListening(server) {
+function callbackAfterServerListening() {
 
 	var serverAddress = server.address();
 	var ipAddress = serverAddress.address;
