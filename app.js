@@ -89,7 +89,29 @@ require("console-stamp")(console, {
 //set handler
 server.on('request', requestHandler);
 
-server.listen(port, callbackAfterServerListening);
+selenium.install({
+	version: '2.53.0',
+	baseURL: 'https://selenium-release.storage.googleapis.com',
+	drivers: {
+		chrome: {
+			version: '2.22',
+			arch: process.arch,
+			baseURL: 'https://chromedriver.storage.googleapis.com'
+		}
+	},
+	logger: function(message) {
+		console.log(message);
+	},
+	progressCb: function(totalLength, progressLength, chunkLength) {
+
+	}
+}, function() {
+	console.log('Selenium is installed.');
+	selenium.start(function() {
+		console.log('Selenium is running.');
+		server.listen(port, callbackAfterServerListening);
+	});
+});
 
 process.on('uncaughtException', function (err) {
 	console.log(err);
