@@ -114,7 +114,7 @@ selenium.install({
 		javaPath: '/usr/bin/java'
 	}, function(err, child) {
 		console.log('Selenium is running.');
-		console.dir(child);
+		console.dir(err);
 		child.stderr.on('data', function(data){
 			console.log(data.toString());
 		});
