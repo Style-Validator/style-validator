@@ -114,10 +114,11 @@ selenium.install({
 		javaPath: '/usr/bin/java'
 	}, function(err, child) {
 		console.log('Selenium is running.');
-		server.listen(port, callbackAfterServerListening);
+		console.dir(child);
 		child.stderr.on('data', function(data){
 			console.log(data.toString());
 		});
+		server.listen(port, callbackAfterServerListening);
 	});
 });
 
