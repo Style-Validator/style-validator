@@ -585,9 +585,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			try {
 				console.info('Style Validator: Validator is starting...');
-	
+
 				that.initializeValidation();
-	
+
 				//Check all elements in the document
 				STYLEV.METHODS.each(that.allElem, that.validateByElement);
 
@@ -1187,13 +1187,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			if(STYLEV.isValidated) {
 				that.destroy();
 			}
-	
+
 			//getting all elements
 			that.allElem = document.querySelectorAll('*:not(.stylev-ignore)');
 	
 			//Inserting StyleSheet when Validator has been executed from Bookmarklet
 			that.insertCSS4Bookmarklet();
-	
+
 			//initialize array of validation result
 			that.logObjArray = [];
 			that.outputObjArray = [];
@@ -1217,7 +1217,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.clearExecutionTimer();
 				that.resetRefreshButton();
 			}
-	
+
 			//Get default style of each tags
 			that.insertIframe4getDefaultStyles();
 			that.getStyleAttrs(that.iframeDocument);
@@ -1624,13 +1624,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.iframeBody = that.iframeDocument.querySelector('body');
 	
 			var docFrag = document.createDocumentFragment();
-	
+
 			STYLEV.METHODS.each(that.tagsAllData, function(tagName, i) {
 				docFrag.appendChild(document.createElement(tagName));
 			});
-	
+
+			//TODO: fix for firefox
 			that.iframeBody.appendChild(docFrag);
-	
+
 		},
 	
 		removeIframe4getDefaultStyles: function() {
