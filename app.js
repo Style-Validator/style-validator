@@ -163,13 +163,12 @@ process.on('uncaughtException', function (err) {
 
 function callbackAfterServerListening() {
 
-	console.dir(this)
 	var serverAddress = this.address();
 	var ipAddress = serverAddress.address;
 	var host = ipAddress ===  '::' ? 'localhost' : ipAddress;
 	var port = serverAddress.port;
 
-	console.log("Server is running at http://%s:%s", host, port);
+	console.log("Server is running at " + (serverAddress === '8080' ? 'http' : 'https') + "://%s:%s", host, port);
 }
 
 /*
