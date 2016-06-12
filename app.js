@@ -107,14 +107,17 @@ selenium.install({
 		console.log('progressLength: ' + progressLength);
 		console.log('chunkLength: ' + chunkLength);
 	}
-}, function() {
+}, function(err) {
 	console.log('Selenium is installed.');
 	selenium.start({
 		seleniumArgs: [],
 		javaPath: '/usr/bin/java'
-	}, function() {
+	}, function(err, child) {
 		console.log('Selenium is running.');
 		server.listen(port, callbackAfterServerListening);
+		child.stderr.on('data', function(data){
+			console.log(data.toString());
+		});
 	});
 });
 
