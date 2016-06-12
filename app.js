@@ -28,11 +28,11 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-var options = process.platform === 'linux' ? {
-	key: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
-	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
-} : {};
+//var options = process.platform === 'linux' ? {
+//	key: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/privkey.pem'),
+//	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
+//	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
+//} : {};
 var http = http.createServer();
 //var https = https.createServer(options);
 var port = process.env.PORT || 8000;
