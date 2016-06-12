@@ -28,6 +28,7 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
+console.log(process.env.IS_HEROKU);
 var isHeroku = process.env.IS_HEROKU === 'yes';
 var isLinux = process.platform === 'linux';
 var isAWS = !isHeroku && isLinux;
