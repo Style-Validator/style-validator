@@ -35,7 +35,7 @@ var sslOptions = process.platform === 'linux' ? {
 } : {};
 var server = http.createServer();
 var secureServer = https.createServer(sslOptions);
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || 8080;
 var securePort = 8443;
 
 var MongoClient = mongodb.MongoClient;

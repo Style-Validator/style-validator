@@ -66,7 +66,8 @@ LC_CTYPE=en_US.UTF-8
 
 ## 8000portを80portへ向ける
 ```sh
-sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8000
+sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 8443
 ```
 
 ## デーモン化のためforeverをインストール
