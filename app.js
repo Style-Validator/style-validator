@@ -103,7 +103,9 @@ selenium.install({
 		console.log(message);
 	},
 	progressCb: function(totalLength, progressLength, chunkLength) {
-
+		console.log('totalLength: ' + totalLength);
+		console.log('progressLength: ' + progressLength);
+		console.log('chunkLength: ' + chunkLength);
 	}
 }, function() {
 	console.log('Selenium is installed.');
@@ -223,7 +225,7 @@ function getCapabilities(req) {
 				}
 			};
 			break;
-		case '52.69.10.28':
+		case 'style-validator.io':
 			capabilities = {
 				'browserName': 'chrome',
 				'chromeOptions': {
