@@ -109,7 +109,10 @@ selenium.install({
 	}
 }, function() {
 	console.log('Selenium is installed.');
-	selenium.start(function() {
+	selenium.start({
+		seleniumArgs: [],
+		javaPath: '/usr/bin/java'
+	}, function() {
 		console.log('Selenium is running.');
 		server.listen(port, callbackAfterServerListening);
 	});
