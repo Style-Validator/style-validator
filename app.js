@@ -28,14 +28,16 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-console.log(process)
-var sslOptions = process.platform === 'linux' ? {
+var isHeroku = process.env.IS_HEROKU === 'yes';
+var isLinux = process.platform === 'linux';
+var isAWS = !isHeroku && isLinux;
+var sslOptions = {
 	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
 	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
 	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
-} : {};
+};
 var server = http.createServer();
-var secureServer = https.createServer(sslOptions);
+var secureServer = isAWS && https.createServer(sslOptions);
 var port = process.env.PORT || 8080;
 var securePort = 8443;
 
@@ -96,7 +98,7 @@ require("console-stamp")(console, {
 
 //set handler
 server.on('request', requestHandler);
-secureServer.on('request', requestHandler);
+isAWS && secureServer.on('request', requestHandler);
 
 //listen server
 switch(process.platform) {
@@ -123,18 +125,18 @@ switch(process.platform) {
 					console.log(data.toString());
 				});
 				server.listen(port, callbackAfterServerListening);
-				secureServer.listen(securePort, callbackAfterServerListening);
+				isAWS && secureServer.listen(securePort, callbackAfterServerListening);
 			});
 		});
 
 		break;
 	case 'linux'://AWS
 		server.listen(port, callbackAfterServerListening);
-		secureServer.listen(securePort, callbackAfterServerListening);
+		isAWS && secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 	default:
 		server.listen(port, callbackAfterServerListening);
-		secureServer.listen(securePort, callbackAfterServerListening);
+		isAWS && secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 }
 
