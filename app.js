@@ -425,10 +425,8 @@ function serveFiles(req, res, path) {
 
 	//Redirect
 	if(req.headers.host === 'style-validator.herokuapp.com') {
-		res.writeHead(301, {
-			'Location': 'http://style-validator.io' + path
-		});
-		res.end();
+		var contentType = mimeTypes[extension];
+		return sendRedirect(req, res, 'http://style-validator.io' + path, contentType);
 	}
 
 	//override
