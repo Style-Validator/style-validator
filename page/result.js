@@ -30,23 +30,6 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		window.addEventListener('resize', that.adjustWrapperPosition);
 		window.addEventListener('scroll', that.fixHeaderOnScroll);
 	},
-
-	submitValidation: function(event) {
-		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-		event.preventDefault();
-
-		var data = {
-			url: that.submitInput.value
-		};
-
-		that.submit(data);
-	},
-
-	submit: function(data) {
-		var apiURI = '/page/result.html?url=' + data.url;
-		location.href = apiURI;
-	},
-
 	throwError: function(error) {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 		throw new Error(error || 'Connection failed.');

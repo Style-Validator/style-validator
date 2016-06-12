@@ -49,7 +49,14 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	},
 	
 	submit: function(data) {
-		var apiURI = '/page/result.html?url=' + data.url;
+		var targetURL;
+		if(data.url.indexOf('http') === 0) {
+			targetURL = data.url;
+		} else {
+			targetURL = 'http://' + data.url;
+		}
+
+		var apiURI = '/page/result.html?url=' + targetURL;
 		location.href = apiURI;
 	},
 
