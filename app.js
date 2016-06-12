@@ -109,12 +109,32 @@ selenium.install({
 	}
 }, function(err) {
 	console.log('Selenium is installed.');
+	if(err) {
+		console.error(err);
+	}
 	selenium.start({
-		seleniumArgs: [],
-		javaPath: '/usr/bin/java'
+		version: '2.53.0',
+		baseURL: 'https://selenium-release.storage.googleapis.com',
+		drivers: {
+			chrome: {
+				version: '2.22',
+				arch: process.arch,
+				baseURL: 'https://chromedriver.storage.googleapis.com'
+			}
+		},
+		logger: function(message) {
+			console.log(message);
+		},
+		progressCb: function(totalLength, progressLength, chunkLength) {
+			console.log('totalLength: ' + totalLength);
+			console.log('progressLength: ' + progressLength);
+			console.log('chunkLength: ' + chunkLength);
+		}
 	}, function(err, child) {
 		console.log('Selenium is running.');
-		console.dir(err);
+		if(err) {
+			console.error(err);
+		}
 		child.stderr.on('data', function(data){
 			console.log(data.toString());
 		});
