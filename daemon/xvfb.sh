@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# chkconfig: 345 95 50
+# description: Starts xvfb on display 99
 
 XVFB=/usr/bin/Xvfb
 XVFBARGS=":99 -screen 0, 1366x768x24 -nolisten tcp"
