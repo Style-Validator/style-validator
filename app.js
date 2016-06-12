@@ -28,6 +28,7 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
+console.log(process)
 var sslOptions = process.platform === 'linux' ? {
 	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
 	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
