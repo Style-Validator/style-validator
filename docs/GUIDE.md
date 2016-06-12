@@ -185,3 +185,9 @@ IMPORTANT NOTES:
 
    Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
    Donating to EFF:                    https://eff.org/donate-le
+
+
+
+
+404 Not Found: ./cgi/common.cgi
+404 Not Found: ./stssys.htm
