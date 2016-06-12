@@ -1,6 +1,8 @@
 #!/bin/bash
 # chkconfig: 345 96 49
 # description: Starts xvfb on display 99
+# processname: selenium standalone
+#
 # Note that this script requires you to have
 # an X window running on Display :99
 # This can be done by running: /usr/bin/Xvfb :99 -ac -screen 0 1024x768x8 &
