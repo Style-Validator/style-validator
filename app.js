@@ -155,7 +155,7 @@ function validateWithSelenium(req, res, path, targetURL) {
 
 			"var callback = arguments[arguments.length - 1];" +
 			"var sv = document.createElement('script');" +
-			"sv.src = '//style-validator.herokuapp.com/extension/style-validator.js?mode=manual';" +
+			"sv.src = '//style-validator.io/extension/style-validator.js?mode=manual';" +
 			"sv.addEventListener('load', function() {" +
 				"console.groupEnd();" +
 				"console.group('Style Validator: Executed by ' + STYLEV.caller + '.');" +
@@ -170,14 +170,12 @@ function validateWithSelenium(req, res, path, targetURL) {
 		.screenshot()
 		.then(function(passedDataObj) {
 			var SV = STYLEV.VALIDATOR;
-
-			var dataObj = {
+			return {
 				total: SV.logObjArray.length,
 				error: SV.errorNum,
 				warning: SV.warningNum,
 				screenshot: 'data:image/png;base64,' + passedDataObj.value
 			};
-			return dataObj;
 		})
 		.then(function(dataObj) {
 			fs.readFile(path, 'utf-8', function(error, source){
