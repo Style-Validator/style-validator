@@ -32,7 +32,7 @@ console.log(process.env.IS_HEROKU);
 var isHeroku = process.env.IS_HEROKU === 'yes';
 var isLinux = process.platform === 'linux';
 var isAWS = !isHeroku && isLinux;
-var sslOptions = {
+var sslOptions = isAWS && {
 	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
 	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
 	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
