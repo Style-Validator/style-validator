@@ -28,6 +28,7 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
+console.log(process.env.SV_ENV);
 var isHeroku = process.env.SV_ENV === 'heroku';
 var isAWS = process.env.SV_ENV === 'amazonLinux';
 var sslOptions = isAWS && {
