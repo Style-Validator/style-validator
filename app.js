@@ -91,7 +91,7 @@ server.on('request', requestHandler);
 
 //listen server
 switch(process.platform) {
-	case 'darwin':
+	case 'darwin'://Mac
 		selenium.install({
 			logger: function(message) {
 				console.log(message);
@@ -118,10 +118,11 @@ switch(process.platform) {
 		});
 
 		break;
-	case 'linux':
+	case 'linux'://AWS
 		server.listen(port, callbackAfterServerListening);
 		break;
 	default:
+		server.listen(port, callbackAfterServerListening);
 		break;
 }
 
@@ -235,11 +236,11 @@ function getCapabilities(req) {
 				}
 			};
 			break;
-		case 'style-validator.io':
+		case 'style-validator.io'://AWS
 			capabilities = {
 				'browserName': 'chrome',
 				'chromeOptions': {
-					'binary': '/usr/bin/google-chrome'//AWS
+					'binary': '/usr/bin/google-chrome'
 				}
 			};
 			break;
@@ -413,6 +414,12 @@ function serveFiles(req, res, path) {
 
 	var extension = path.split('.').pop();
 
+	//Redirect
+	if(req.headers.host === 'style-validator.herokuapp.com') {
+		var contentType = mimeTypes[extension];
+		sendRedirect(req, res, 'http://style-validator.io' + path, contentType);
+	}
+
 	//override
 	path = ('./' + path).replace('//', '/');
 
@@ -583,9 +590,9 @@ function sendFile(req, res, path) {
 	fileStream.pipe(res);
 }
 
-function sendRedirect(req, res, path) {
+function sendRedirect(req, res, path, contentType) {
 	res.writeHead(301, {
-		'Content-Type': 'text/html',
+		'Content-Type': contentType || 'text/html',
 		'Location': path
 	});
 	res.end();
