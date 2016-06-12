@@ -28,18 +28,15 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-if(process.platform === 'linux') {
-	var options = {
-		key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
-		cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
-		ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
-	};
-	//var server = https.createServer(options);
-	var server = http.createServer();
-} else {
-	var server = http.createServer();
-}
+var sslOptions = process.platform === 'linux' ? {
+	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
+	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
+	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
+} : {};
+var server = http.createServer();
+var secureServer = https.createServer(sslOptions);
 var port = process.env.PORT || 8000;
+var securePort = 8443;
 
 var MongoClient = mongodb.MongoClient;
 var dbname = 'sv';
@@ -124,15 +121,18 @@ switch(process.platform) {
 					console.log(data.toString());
 				});
 				server.listen(port, callbackAfterServerListening);
+				secureServer.listen(securePort, callbackAfterServerListening);
 			});
 		});
 
 		break;
 	case 'linux'://AWS
 		server.listen(port, callbackAfterServerListening);
+		secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 	default:
 		server.listen(port, callbackAfterServerListening);
+		secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 }
 
@@ -163,7 +163,8 @@ process.on('uncaughtException', function (err) {
 
 function callbackAfterServerListening() {
 
-	var serverAddress = server.address();
+	console.log('address!!!!!!' + this)
+	var serverAddress = this.address();
 	var ipAddress = serverAddress.address;
 	var host = ipAddress ===  '::' ? 'localhost' : ipAddress;
 	var port = serverAddress.port;
