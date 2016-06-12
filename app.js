@@ -163,7 +163,7 @@ process.on('uncaughtException', function (err) {
 
 function callbackAfterServerListening() {
 
-	console.log('address!!!!!!' + this)
+	console.dir(this)
 	var serverAddress = this.address();
 	var ipAddress = serverAddress.address;
 	var host = ipAddress ===  '::' ? 'localhost' : ipAddress;
