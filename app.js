@@ -5,7 +5,7 @@
  * */
 
 var http = require('http');
-var https = require('https');
+//var https = require('https');
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
@@ -33,11 +33,8 @@ var options = process.platform === 'linux' ? {
 	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
 	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
 } : {};
-var server = http.createServer({
-	key: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
-	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
-});
+var http = http.createServer();
+//var https = https.createServer(options);
 var port = process.env.PORT || 8000;
 
 var MongoClient = mongodb.MongoClient;
@@ -96,7 +93,8 @@ require("console-stamp")(console, {
 });
 
 //set handler
-server.on('request', requestHandler);
+http.on('request', requestHandler);
+//https.on('request', requestHandler);
 
 //listen server
 switch(process.platform) {
@@ -122,16 +120,19 @@ switch(process.platform) {
 				child.stderr.on('data', function(data){
 					console.log(data.toString());
 				});
-				server.listen(port, callbackAfterServerListening);
+				http.listen(port, callbackAfterServerListening.bind(null, http));
+				https.listen(port, callbackAfterServerListening.bind(null, https));
 			});
 		});
 
 		break;
 	case 'linux'://AWS
-		server.listen(port, callbackAfterServerListening);
+			http.listen(port, callbackAfterServerListening);
+			//https.listen(port, callbackAfterServerListening);
 		break;
 	default:
-		server.listen(port, callbackAfterServerListening);
+		http.listen(port, callbackAfterServerListening);
+		//https.listen(port, callbackAfterServerListening);
 		break;
 }
 
@@ -160,7 +161,7 @@ process.on('uncaughtException', function (err) {
 * functions
 * */
 
-function callbackAfterServerListening() {
+function callbackAfterServerListening(server) {
 
 	var serverAddress = server.address();
 	var ipAddress = serverAddress.address;
