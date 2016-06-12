@@ -33,8 +33,8 @@ var sslOptions = process.platform === 'linux' ? {
 	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
 	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
 } : {};
-var server = http.createServer();
-var secureServer = https.createServer(sslOptions);
+var server = http.createServer(callbackAfterServerListening);
+var secureServer = https.createServer(sslOptions, callbackAfterServerListening);
 var port = process.env.PORT || 8080;
 var securePort = 8443;
 
@@ -120,19 +120,19 @@ switch(process.platform) {
 				child.stderr.on('data', function(data){
 					console.log(data.toString());
 				});
-				server.listen(port, callbackAfterServerListening);
-				secureServer.listen(securePort, callbackAfterServerListening);
+				server.listen(port);
+				secureServer.listen(securePort);
 			});
 		});
 
 		break;
 	case 'linux'://AWS
-		server.listen(port, callbackAfterServerListening);
-		secureServer.listen(securePort, callbackAfterServerListening);
+		server.listen(port);
+		secureServer.listen(securePort);
 		break;
 	default:
-		server.listen(port, callbackAfterServerListening);
-		secureServer.listen(securePort, callbackAfterServerListening);
+		server.listen(port);
+		secureServer.listen(securePort);
 		break;
 }
 
