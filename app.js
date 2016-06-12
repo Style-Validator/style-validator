@@ -252,14 +252,14 @@ function getCapabilities(req) {
 				}
 			};
 			break;
-		case 'style-validator.io':
-			capabilities = {
-				'browserName': 'chrome',
-				'chromeOptions': {
-					'binary': '/usr/bin/google-chrome'//AWS
-				}
-			};
-			break;
+		//case 'style-validator.io':
+		//	capabilities = {
+		//		'browserName': 'chrome',
+		//		'chromeOptions': {
+		//			'binary': '/usr/bin/google-chrome'//AWS
+		//		}
+		//	};
+		//	break;
 		default:
 			capabilities = {
 				'browserName': 'chrome'
