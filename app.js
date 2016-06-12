@@ -95,6 +95,7 @@ require("console-stamp")(console, {
 
 //set handler
 server.on('request', requestHandler);
+secureServer.on('request', requestHandler);
 
 //listen server
 switch(process.platform) {
