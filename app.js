@@ -28,9 +28,8 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-var isHeroku = process.env.IS_HEROKU === 'yes';
-var isLinux = process.platform === 'linux';
-var isAWS = !isHeroku && isLinux;
+var isHeroku = process.env.SV_ENV === 'heroku';
+var isAWS = process.env.SV_ENV === 'amazonLinux';
 var sslOptions = isAWS && {
 	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
 	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
