@@ -34,7 +34,7 @@ var sslOptions = process.platform === 'linux' ? {
 	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
 } : {};
 var server = http.createServer();
-var secureServer = https.createServer(sslOptions, callbackAfterServerListening);
+var secureServer = https.createServer(sslOptions);
 var port = process.env.PORT || 8080;
 var securePort = 8443;
 
@@ -121,18 +121,18 @@ switch(process.platform) {
 					console.log(data.toString());
 				});
 				server.listen(port, callbackAfterServerListening);
-				secureServer.listen(securePort);
+				secureServer.listen(securePort, callbackAfterServerListening);
 			});
 		});
 
 		break;
 	case 'linux'://AWS
 		server.listen(port, callbackAfterServerListening);
-		secureServer.listen(securePort);
+		secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 	default:
 		server.listen(port, callbackAfterServerListening);
-		secureServer.listen(securePort);
+		secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 }
 
