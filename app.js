@@ -30,9 +30,9 @@ var webdriverio = require('webdriverio');
  * */
 if(process.platform === 'linux') {
 	var options = {
-		key: fs.readFileSync('~/letsencrypt/live/style-validator.io/privkey.pem'),
-		cert: fs.readFileSync('~/letsencrypt/live/style-validator.io/cert.pem'),
-		ca: fs.readFileSync('~/letsencrypt/live/style-validator.io/chain.pem')
+		key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
+		cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
+		ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
 	};
 	var server = https.createServer(options);
 } else {
