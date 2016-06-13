@@ -102,6 +102,7 @@
 	height: auto;
 }
 .kv-buttons-wrapper {
+	flex: 1 1 auto;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -207,9 +208,17 @@ hr {
 	color: #359C62 !important;
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
+.section-validate-header {
+	display: flex;
+	justify-content: space-between;
+	flex-flow: row wrap;
+}
 .section-validate-heading {
 	font-weight: normal;
 	text-align: left;
+}
+.section-validate-header + .section-validate-body {
+	margin-top: 5px;
 }
 .section-validate-form {
 	display: flex;
