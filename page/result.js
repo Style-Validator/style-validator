@@ -30,15 +30,10 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		window.addEventListener('resize', that.adjustWrapperPosition);
 		window.addEventListener('scroll', that.fixHeaderOnScroll);
 	},
-	throwError: function(error) {
-		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-		throw new Error(error || 'Connection failed.');
-	},
 
 	startAnimation: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
-		//setTimeout(that.startFadeIn, 100);
 		setTimeout(that.adjustWrapperPosition, 0);
 	},
 
@@ -61,13 +56,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		} else {
 			that.html.classList.remove('is-fixed-header');
 		}
-	},
-
-	startFadeIn: function () {
-		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-
-		that.main.classList.add('fadeIn');
-	},
+	}
 
 };
 

@@ -86,6 +86,7 @@
 					source.close();
 					loadingSpinner.parentElement.removeChild(loadingSpinner);
 					resultContent.innerHTML = event.data;
+					ga('send', 'event', 'validation', 'load', 'result');
 				}, false);
 
 				source.addEventListener('open', function(event) {
