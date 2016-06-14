@@ -28,16 +28,15 @@ var webdriverio = require('webdriverio');
 /*
  * variables
  * */
-console.log(process.env.SV_ENV);
 var isHeroku = process.env.SV_ENV === 'heroku';
-var isAWS = process.env.SV_ENV === 'amazonLinux';
-var sslOptions = isAWS && {
+var isAmazonLinux = process.env.SV_ENV === 'amazonLinux';
+var sslOptions = isAmazonLinux && {
 	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
 	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
 	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
 };
 var server = http.createServer();
-var secureServer = isAWS && https.createServer(sslOptions);
+var secureServer = isAmazonLinux && https.createServer(sslOptions);
 var port = process.env.PORT || 8080;
 var securePort = 8443;
 
@@ -98,11 +97,18 @@ require("console-stamp")(console, {
 
 //set handler
 server.on('request', requestHandler);
-isAWS && secureServer.on('request', requestHandler);
+isAmazonLinux && secureServer.on('request', requestHandler);
 
 //listen server
-switch(process.platform) {
-	case 'darwin'://Mac
+switch(process.env.SV_ENV) {
+
+	case 'amazonLinux':
+		server.listen(port, callbackAfterServerListening);
+		secureServer.listen(securePort, callbackAfterServerListening);
+		break;
+
+	default:
+
 		selenium.install({
 			logger: function(message) {
 				console.log(message);
@@ -125,18 +131,8 @@ switch(process.platform) {
 					console.log(data.toString());
 				});
 				server.listen(port, callbackAfterServerListening);
-				isAWS && secureServer.listen(securePort, callbackAfterServerListening);
 			});
 		});
-
-		break;
-	case 'linux'://AWS
-		server.listen(port, callbackAfterServerListening);
-		isAWS && secureServer.listen(securePort, callbackAfterServerListening);
-		break;
-	default:
-		server.listen(port, callbackAfterServerListening);
-		isAWS && secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 }
 

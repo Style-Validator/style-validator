@@ -12,17 +12,15 @@ var gulpWebserver = require('gulp-webserver');
 
 //generate bookmark
 gulp.task('generate', function () {
-
 	var header = new Buffer('javascript:');
-
-	gulp.src('extension/style-validator.js')
+	gulp.src('src/bookmarklet/style-validator.js')
 		.pipe(gulpJshint())
 		.pipe(gulpUglify())
 		.pipe(map(function (file, cb) {
 			file.contents = buffer.Buffer.concat([header, file.contents]);
 			cb(null, file);
 		}))
-		.pipe(gulp.dest('bookmarklet'));
+		.pipe(gulp.dest('dest/bookmarklet'));
 });
 
 gulp.task('clean', del.bind(null, 'bookmarklet'));

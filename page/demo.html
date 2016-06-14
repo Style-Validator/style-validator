@@ -243,7 +243,7 @@
 
 		//ブックマークレットのJSをhrefに挿入
 		$.ajax({
-			url: '/bookmarklet/style-validator.js',
+			url: '/dest/bookmarklet/style-validator.js',
 			dataType: 'text',
 			success: function(data) {
 				$('#bookmarklet').attr('href', data);

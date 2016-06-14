@@ -222,3 +222,7 @@ http://makisuke.seesaa.net/article/6066867.html
 http://onlineconsultant.jp/pukiwiki/?node.js%20node.js%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%82%92forever%E3%81%A7%E3%83%87%E3%83%BC%E3%83%A2%E3%83%B3%E5%8C%96%E3%81%99%E3%82%8B
 
 /home/ec2-user/.nodebrew/current/bin/node /home/ec2-user/.nodebrew/current/bin/forever start -p /var/run/forever --pidfile /var/run/sv.pid -l /var/log/sv.log -a /home/ec2-user/app/style-validator/app.js
+
+
+# Pass Env Path
+export SV_ENV=amazonLinux

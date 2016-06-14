@@ -111,9 +111,8 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 
 	getBookmarklet: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
-
 		$.ajax({
-			url: '/bookmarklet/style-validator.js',
+			url: $('#bookmarklet').attr('href'),
 			dataType: 'text',
 			success: that.setBookmarklet
 		});
