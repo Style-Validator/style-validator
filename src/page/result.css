@@ -7,7 +7,7 @@
 }
 .result-screenshot {
 	flex: 1 0 70%;
-	padding: 10% 0%;
+	padding: 10% 0;
 	background: url(/img/macbook-pro-retina.png) no-repeat center center;
 	background-size: 116% auto;
 	text-align: center;

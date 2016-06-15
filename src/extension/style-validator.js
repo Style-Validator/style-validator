@@ -1416,7 +1416,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 						//Initialization
 						STYLEV.sameElemCount = 0;
-						console.info('Style Validator: Ignored the following element\n' + openTag)
+						console.info('Style Validator: Ignored the following element\n' + openTag);
 	
 						//Ingore Target
 						ignoreTargetsArray.push(target);

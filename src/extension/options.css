@@ -473,13 +473,13 @@ body {
 	text-indent: 0 !important;
 }
 .rule-box-edit-button {
-	background-image: url(./iconmonstr-edit-8-icon.svg);
+	background-image: url(iconmonstr-edit-8-icon.svg);
 }
 .rule-box-delete-button {
-	background-image: url(./iconmonstr-x-mark-3-icon.svg);
+	background-image: url(iconmonstr-x-mark-3-icon.svg);
 }
 .edit-mode .rule-box-edit-button {
-	background-image: url(./iconmonstr-save-5-icon.svg);
+	background-image: url(iconmonstr-save-5-icon.svg);
 	background-size: 20px auto;
 	opacity: 1;
 	transform: scale(1);
@@ -927,7 +927,7 @@ body {
 	border-width: 2px;
 }
 .css-meta-list-reason {
-	background: url(./iconmonstr-help-6-icon.svg) no-repeat left 0;
+	background: url(iconmonstr-help-6-icon.svg) no-repeat left 0;
 	background-size: 18px auto;
 	flex: 1 0 100% !important;
 }
@@ -955,7 +955,7 @@ body {
 	white-space: pre-wrap;
 }
 .css-meta-list-reference-url {
-	background: url(./iconmonstr-link-icon-gray.svg) no-repeat left 0.1em;
+	background: url(iconmonstr-link-icon-gray.svg) no-repeat left 0.1em;
 	background-size: 16px auto;
 	flex: 1 0 100% !important;
 }

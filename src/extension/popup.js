@@ -51,7 +51,7 @@ STYLEV.popup = {
 
 				if(checkbox) {
 
-					target.checked = !!(localStorage.getItem(id) === 'true');
+					target.checked = localStorage.getItem(id) === 'true';
 				}
 				if(textbox) {
 

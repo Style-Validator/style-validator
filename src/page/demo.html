@@ -233,7 +233,7 @@
 <var>var</var>
 <video>
 	<source src="">
-	<track src=""></track>
+	<track src="">
 </video>
 <wbr>
 
@@ -243,7 +243,7 @@
 
 		//ブックマークレットのJSをhrefに挿入
 		$.ajax({
-			url: '/dest/bookmarklet/style-validator.js',
+			url: '/bookmarklet/style-validator.js',
 			dataType: 'text',
 			success: function(data) {
 				$('#bookmarklet').attr('href', data);

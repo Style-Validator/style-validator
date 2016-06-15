@@ -16,7 +16,6 @@ var events = require('events');
 /*
  * app modules
  * */
-
 var mongodb = require('mongodb');
 var requestIp = require('request-ip');
 var nodeUUID = require('node-uuid');
@@ -30,13 +29,12 @@ var webdriverio = require('webdriverio');
  * */
 var isHeroku = process.env.SV_ENV === 'heroku';
 var isAmazonLinux = process.env.SV_ENV === 'amazonLinux';
-var sslOptions = isAmazonLinux && {
-	key: fs.readFileSync('../../letsencrypt/live/style-validator.io/privkey.pem'),
-	cert: fs.readFileSync('../../letsencrypt/live/style-validator.io/cert.pem'),
-	ca: fs.readFileSync('../../letsencrypt/live/style-validator.io/chain.pem')
-};
 var server = http.createServer();
-var secureServer = isAmazonLinux && https.createServer(sslOptions);
+var secureServer = isAmazonLinux && https.createServer({
+	key: fs.readFileSync('../../../letsencrypt/live/style-validator.io/privkey.pem'),
+	cert: fs.readFileSync('../../../letsencrypt/live/style-validator.io/cert.pem'),
+	ca: fs.readFileSync('../../../letsencrypt/live/style-validator.io/chain.pem')
+});
 var port = process.env.PORT || 8080;
 var securePort = 8443;
 
@@ -684,7 +682,7 @@ function sendDirectoryIndex(req, res, path, files) {
 	res.write('<h1>Index of ' + escapeHtml(path) + '</h1>\n');
 	res.write('<hr><pre>\n');
 
-	res.write('<a href="../">../</a>\n');
+	res.write('<a href="../../">../</a>\n');
 
 
 	files.forEach(function(file, idx) {
