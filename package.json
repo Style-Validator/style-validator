@@ -21,6 +21,8 @@
     "console-stamp": "^0.2.0",
     "del": "^2.0.1",
     "devtools-detect": "^2.0.0",
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.1",
     "handlebars": "^4.0.5",
     "headless": "^1.0.0",
     "kerberos": "0.0.17",
