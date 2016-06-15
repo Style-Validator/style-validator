@@ -49,8 +49,8 @@
     "map-stream": "^0.1.0"
   },
   "scripts": {
-    "start": "git pull origin master && cd dest && forever start app.js;",
-    "restart": "git pull origin master && cd dest && forever restart app.js;",
+    "start": "git pull origin master && gulp build && cd dest && forever start app.js;",
+    "restart": "git pull origin master && gulp build && cd dest && forever restart app.js;",
     "stop": "cd dest && forever stop app.js;"
   },
   "engines": {
