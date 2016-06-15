@@ -1,1 +1,0 @@
-javascript:void !function(e){var t=e.createElement("script");t.src="//style-validator.io/extension/style-validator.js?mode=manual",t.addEventListener("load",function(){console.groupEnd(),console.group("Style Validator: Executed by "+STYLEV.caller+"."),STYLEV.VALIDATOR.execute()}),e.head.appendChild(t)}(document);
