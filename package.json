@@ -18,11 +18,14 @@
     "url": "https://github.com/Style-Validator/Style-Validator.git"
   },
   "dependencies": {
+    "autoprefixer": "^6.3.6",
     "console-stamp": "^0.2.0",
     "del": "^2.0.1",
     "devtools-detect": "^2.0.0",
     "gulp": "^3.9.1",
     "gulp-cli": "^1.2.1",
+    "gulp-postcss": "^6.1.1",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "handlebars": "^4.0.5",
     "headless": "^1.0.0",
