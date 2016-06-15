@@ -18,16 +18,12 @@
     "url": "https://github.com/Style-Validator/Style-Validator.git"
   },
   "dependencies": {
-    "browser-launcher": "^1.0.0",
-    "browser-launcher2": "^0.4.6",
     "console-stamp": "^0.2.0",
-    "cookie": "^0.2.3",
     "del": "^2.0.1",
     "devtools-detect": "^2.0.0",
     "handlebars": "^4.0.5",
     "headless": "^1.0.0",
     "kerberos": "0.0.17",
-    "launcher": "0.0.1",
     "mongodb": "^2.1.4",
     "node-uuid": "^1.4.7",
     "nodemailer": "^2.2.1",
@@ -53,7 +49,8 @@
     "map-stream": "^0.1.0"
   },
   "scripts": {
-    "start": "git pull origin master && cd dest && node app.js;"
+    "start": "git pull origin master && cd dest && forever start app.js; cd ../;",
+    "restart": "git pull origin master && cd dest && forever restart app.js; cd ../;"
   },
   "engines": {
     "node": "5.4.1",
