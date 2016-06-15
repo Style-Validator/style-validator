@@ -226,3 +226,13 @@ http://onlineconsultant.jp/pukiwiki/?node.js%20node.js%E3%82%B9%E3%82%AF%E3%83%A
 
 # Pass Env Path
 export SV_ENV=amazonLinux
+
+
+# fix error in npm i
+yum install gcc-c++
+
+# Install gulp
+```sh
+npm install --global gulp-cli
+npm install --save-dev gulp
+```
