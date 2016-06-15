@@ -20,7 +20,7 @@
   "dependencies": {
     "autoprefixer": "^6.3.6",
     "console-stamp": "^0.2.0",
-    "del": "^2.0.1",
+    "del": "^2.2.0",
     "devtools-detect": "^2.0.0",
     "gulp": "^3.9.1",
     "gulp-cli": "^1.2.1",
@@ -39,7 +39,9 @@
     "selenium-standalone": "^5.0.0",
     "webdriverio": "^4.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "del": "^2.2.0"
+  },
   "scripts": {
     "start": "git pull origin master && gulp build && cd dest && forever start app.js;",
     "restart": "git pull origin master && gulp build && cd dest && forever restart app.js;",
