@@ -1,1 +1,1 @@
-web: web: node node_modules/gulp/bin/gulp build && cd ./dest && node app.js;
+web: cd ./dest && node app.js;
