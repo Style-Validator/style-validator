@@ -1,1 +1,1 @@
-web: gulp build && cd dest && node app.js;
+web: gulp build && cd ./dest && node app.js;
