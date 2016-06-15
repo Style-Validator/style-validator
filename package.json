@@ -21,7 +21,6 @@
     "console-stamp": "^0.2.0",
     "del": "^2.0.1",
     "devtools-detect": "^2.0.0",
-    "forever": "^0.15.2",
     "handlebars": "^4.0.5",
     "headless": "^1.0.0",
     "kerberos": "0.0.17",
@@ -52,7 +51,7 @@
   "scripts": {
     "start": "git pull origin master && cd dest && forever start app.js;",
     "restart": "git pull origin master && cd dest && forever restart app.js;",
-    "stop":  "cd dest && forever stop app.js;"
+    "stop": "cd dest && forever stop app.js;"
   },
   "engines": {
     "node": "5.4.1",
