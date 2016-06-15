@@ -53,7 +53,7 @@
     "map-stream": "^0.1.0"
   },
   "scripts": {
-    "s": "git pull origin master; cd dest; node app.js;"
+    "start": "git pull origin master && cd dest && node app.js;"
   },
   "engines": {
     "node": "5.4.1",
