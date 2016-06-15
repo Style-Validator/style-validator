@@ -26,6 +26,7 @@
     "handlebars": "^4.0.5",
     "headless": "^1.0.0",
     "kerberos": "0.0.17",
+    "map-stream": "^0.1.0",
     "mongodb": "^2.1.4",
     "node-uuid": "^1.4.7",
     "nodemailer": "^2.2.1",

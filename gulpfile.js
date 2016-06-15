@@ -1,5 +1,3 @@
-'use strict';
-
 var buffer = require('buffer');
 var del = require('del');
 var map = require('map-stream');
