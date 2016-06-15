@@ -1,4 +1,4 @@
-(function() {
+(function(document) {
 	var sv = document.createElement('script');
 	sv.src = '//style-validator.io/extension/style-validator.js?mode=manual';
 	sv.addEventListener('load', function() {
@@ -7,4 +7,4 @@
 		STYLEV.VALIDATOR.execute();
 	});
 	document.head.appendChild(sv);
-}())
+}(document));

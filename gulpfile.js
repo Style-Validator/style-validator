@@ -12,7 +12,7 @@ var gulpWebserver = require('gulp-webserver');
 
 //generate bookmark
 gulp.task('generate', function () {
-	var header = new Buffer('javascript:');
+	var header = new Buffer('javascript:void ');
 	gulp.src('src/bookmarklet/style-validator.js')
 		.pipe(gulpJshint())
 		.pipe(gulpUglify())

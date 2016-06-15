@@ -13,7 +13,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		that.startAnimation();
 		that.animateSVG();
 		that.getBookmarklet();
-
+		document.removeEventListener('WebComponentsReady', STYLEV.TOPPAGE.FIRST_ANIMATION.execute);
 		//document.querySelector('input[type="text"]').focus();
 	},
 
@@ -101,6 +101,8 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	
 	animateSVG: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+
+
 
 		new Vivus('vivus-kv-logo', {
 			duration: 200,
