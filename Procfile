@@ -1,1 +1,1 @@
-web: gulp build && npm start;
+web: gulp build && cd dest && node app.js;
