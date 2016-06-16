@@ -1,5 +1,11 @@
 @charset "utf-8";
 
+html,
+body,
+.wrapper {
+	height: 100%;
+}
+
 .content-width {
 	max-width: 1000px;
 	margin-right: auto;
@@ -7,7 +13,14 @@
 	padding: 4%;
 }
 .wrapper {
+	display: flex;
+	flex-flow: column nowrap;
 	margin: 0 auto;
+}
+.main {
+	flex: 1 0 auto;
+	flex-flow: column nowrap;
+	display: flex;
 }
 
 html:not(.is-fixed-header) .wrapper {
