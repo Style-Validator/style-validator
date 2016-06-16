@@ -80,6 +80,14 @@ var dirMonths = 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',');
 var parsedURL;
 var parsedQueryString;
 
+var seleniumOptions = {
+	version: '2.53.0',
+	baseURL: 'https://selenium-release.storage.googleapis.com',
+	logger: function(message) {
+		console.log(message);
+	}
+};
+
 /*
  * execution
  * */
@@ -93,6 +101,7 @@ require("console-stamp")(console, {
 	}
 });
 
+
 //set handler
 server.on('request', requestHandler);
 isAmazonLinux && secureServer.on('request', requestHandler);
@@ -101,37 +110,30 @@ isAmazonLinux && secureServer.on('request', requestHandler);
 switch(process.env.SV_ENV) {
 
 	case 'amazonLinux':
+
 		server.listen(port, callbackAfterServerListening);
 		secureServer.listen(securePort, callbackAfterServerListening);
 		break;
 
 	default:
 
-		selenium.install({
-			logger: function(message) {
-				console.log(message);
-			}
-		}, function(err) {
+		selenium.install(seleniumOptions, function(err) {
 			console.log('Selenium is installed.');
 			if(err) {
 				console.error(err);
 			}
-			selenium.start({
-				logger: function(message) {
-					console.log(message);
-				}
-			}, function(err, child) {
+			selenium.start(seleniumOptions, function(err, child) {
 				console.log('Selenium is running.');
 				if(err) {
 					console.error(err);
 				}
+				//child.kill();
 				child.stderr.on('data', function(data){
 					console.log(data.toString());
 				});
 				server.listen(port, callbackAfterServerListening);
 			});
 		});
-		break;
 }
 
 process.on('uncaughtException', function (err) {
