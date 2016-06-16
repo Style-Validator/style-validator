@@ -345,8 +345,13 @@ STYLEV.RULES = {
 			that.togglePresets(target.value);
 		}
 
+		that.saveSelectedPresetName();
+	},
+
+	saveSelectedPresetName: function() {
+		var that = STYLEV.RULES;
 		//Save Current Presets Name for Reloading Page
-		chrome.storage.local.set({selectedPresetsName: target.value});
+		chrome.storage.local.set({selectedPresetsName: that.presetsSelect.value});
 	},
 
 	deletePresets: function(event) {
@@ -857,6 +862,8 @@ STYLEV.RULES = {
 
 	callbackOnSave: function() {
 		var that = STYLEV.RULES;
+
+		that.saveSelectedPresetName();
 
 		//Reset
 		that.resetSaveButton();

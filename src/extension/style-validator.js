@@ -350,7 +350,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				that.throwError(error);
 			}
 		},
-	
+
+		//TODO: Fix problem that do ajax every time although rule data exist in chrome storage
 		getRulesData: function(dataArrayViaAJAX) {
 			var that = STYLEV.VALIDATOR;
 	
