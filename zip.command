@@ -1,2 +1,3 @@
 rm -rf Style-Validator.zip
-zip -r Style-Validator.zip extension
+cd ./dest
+zip -r ../Style-Validator.zip extension
