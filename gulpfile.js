@@ -13,10 +13,10 @@ gulp.task('autoprefixer', ['copy'], autoprefixer);
 gulp.task('bookmarklet', ['autoprefixer'], bookmarklet);
 gulp.task('build', ['bookmarklet']);
 gulp.task('live', function() {
-	return Promise.resolve()
-		.then(copy.bind(null, '!./src/**/app.js'))
-		.then(autoprefixer)
-		.then(bookmarklet)
+	return copy('!./src/**/app.js').on('end', function() {
+		autoprefixer();
+		bookmarklet();
+	});
 });
 gulp.task('b', bookmarklet);
 gulp.task('watch',function(){

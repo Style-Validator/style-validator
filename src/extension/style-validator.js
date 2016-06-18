@@ -307,6 +307,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			];
 	
 			that.JS_PATHES = [
+				//that.RESOURCE_ROOT + 'webcomponents.min.js',
 				that.RESOURCE_ROOT + 'specificity.js'
 			];
 	
