@@ -43,8 +43,8 @@
     "del": "^2.2.0"
   },
   "scripts": {
-    "start": "git pull origin master && gulp build && cd dest && forever start app.js;",
-    "restart": "git pull origin master && gulp build && cd dest && forever restart app.js;",
+    "start": "pkill -f selenium-standalone && git pull origin master && gulp build && cd dest && forever start app.js;",
+    "restart": "pkill -f selenium-standalone && git pull origin master && gulp build && cd dest && forever restart app.js;",
     "stop": "cd dest && forever stop app.js;",
     "kill": "pkill -f selenium-standalone",
     "postinstall": "gulp build"

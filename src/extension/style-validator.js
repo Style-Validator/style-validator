@@ -307,8 +307,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			];
 	
 			that.JS_PATHES = [
-				that.RESOURCE_ROOT + 'specificity.js',
-				that.RESOURCE_ROOT + 'webcomponents.min.js'
+				that.RESOURCE_ROOT + 'specificity.js'
 			];
 	
 			that.DATA_PATHES = [
@@ -628,7 +627,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		//TODO: move to outside for try-catch wrapping
 		send2GA: function(error) {
 			var that = STYLEV.VALIDATOR;
-	
+
 			that.removeGA();
 	
 			var queryString = '';
@@ -917,7 +916,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					}
 				});
 			}
-	
+
 			//TODO: refactor below
 			//TODO: 0.00001とかの場合を考慮して、parseIntの10進数も考える 修正済み？要確認
 			//Detect NG style and define error or warning
@@ -1181,8 +1180,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		initializeValidation: function() {
 	
 			var that = STYLEV.VALIDATOR;
-	
-			//note: order of following scripts is very important.
+
+			//NOTE: order of following scripts is very important.
 	
 			//remove console if it has already showed.
 			if(STYLEV.isValidated) {
@@ -1191,7 +1190,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 
 			//getting all elements
 			that.allElem = document.querySelectorAll('*:not(.stylev-ignore)');
-	
+
 			//Inserting StyleSheet when Validator has been executed from Bookmarklet
 			that.insertCSS4Bookmarklet();
 
@@ -1209,7 +1208,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.elemIndex = 0;
 	
 			if(!STYLEV.isFirstExecution) {
-	
+
 				//Initialize observation
 				that.initializeVars4Observer();
 				that.showMessageViaObserver();
@@ -1223,7 +1222,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.insertIframe4getDefaultStyles();
 			that.getStyleAttrs(that.iframeDocument);
 			that.getStyleSheets(that.iframeDocument);
-	
+
 			//Add custom property into DOM element to get non-computed style
 			that.getStyleAttrs(document);
 			that.getStyleSheets(document);
@@ -1252,7 +1251,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			var that = STYLEV.VALIDATOR;
 	
-			var targetAttributes = ['style', 'class'];
+			//var targetAttributes = ['style', 'class'];
 	
 			var observationConfig = {
 				childList: true,
@@ -1564,10 +1563,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 	
 			if(!STYLEV.isChromeExtension) {
-	
+
 				var docFrag = document.createDocumentFragment();
 				that.linkTags = [];
-	
+
 				STYLEV.METHODS.each(that.CSS_PATHES, function(path) {
 					if(document.querySelectorAll('link[href="' + path + '"]').length) {
 						return 'continue';
@@ -1578,12 +1577,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 					linkTag.rel = 'stylesheet';
 					linkTag.classList.add('stylev-ignore');
 					linkTag.href = path;
-	
+
 					that.linkTags.push(linkTag);
 					docFrag.appendChild(linkTag);
 				});
-	
-	
+
+
 				/* append */
 				that.head.appendChild(docFrag);
 			}
@@ -1615,7 +1614,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		insertIframe4getDefaultStyles: function() {
 	
 			var that = STYLEV.VALIDATOR;
-	
+
 			that.iframe4test = document.createElement('iframe');
 			that.iframe4test.id = 'stylev-dummy-iframe';
 			that.iframe4test.classList.add('stylev-ignore');
@@ -1624,13 +1623,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.iframeDocument = that.iframeWindow.document;
 			that.iframeBody = that.iframeDocument.querySelector('body');
 	
-			var docFrag = document.createDocumentFragment();
+			var docFrag = that.iframeDocument.createDocumentFragment();
 
 			STYLEV.METHODS.each(that.tagsAllData, function(tagName, i) {
-				docFrag.appendChild(document.createElement(tagName));
+				docFrag.appendChild(that.iframeDocument.createElement(tagName));
 			});
 
-			//TODO: fix for firefox
 			that.iframeBody.appendChild(docFrag);
 
 		},
@@ -2282,6 +2280,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		searchByStyleSheet: function(doc) {
 			var that = STYLEV.VALIDATOR;
 			return function(styleSheet) {
+
+				if(styleSheet.href && styleSheet.href.indexOf('http://style-validator.io') === 0) {
+					return true;
+				}
+
 				try {
 					var cssRules = styleSheet.cssRules;
 	

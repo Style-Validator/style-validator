@@ -225,7 +225,7 @@ hr {
 }
 .section-validate-input[type] {
 	flex: 1 1 auto;
-	font-size: calc(12px + 0.8vw);
+	font-size: calc(10px + 0.8vw);
 	padding: 10px;
 	border: 0;
 	width: 1em;

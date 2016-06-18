@@ -72,7 +72,6 @@
 		"style-validator.logo.black.svg",
 		"style-validator-for-console.css",
 		"specificity.js",
-		"webcomponents.min.js",
 		"google-analytics.js"
 	],
 	"permissions": [

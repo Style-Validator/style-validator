@@ -18,11 +18,11 @@ gulp.task('live', function() {
 		.then(autoprefixer)
 		.then(bookmarklet)
 });
+gulp.task('b', bookmarklet);
 gulp.task('watch',function(){
 	gulp.watch('./src/**/*', ['live']);
 });
-gulp.task('w', ['watch']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['live', 'watch']);
 
 function autoprefixer() {
 	return gulp.src('./src/**/*.css')
@@ -40,7 +40,7 @@ function bookmarklet() {
 			file.contents = buffer.Buffer.concat([header, file.contents]);
 			cb(null, file);
 		}))
-		.pipe(gulp.dest('dest/bookmarklet'));
+		.pipe(gulp.dest('./dest/bookmarklet'));
 }
 
 function copy(exceptionSrc) {
