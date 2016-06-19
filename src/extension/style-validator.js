@@ -262,9 +262,10 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			//Padding with Border bottom that is equal with console height.
 			that.htmlDefaultBorderBottomWidth = that.html.style.borderBottomWidth === '' ? null : that.html.style.borderBottomWidth;
-	
+
 			that.RESOURCE_ROOT = that.RESOURCE_ROOT || '//style-validator.io/extension/';
-	
+			//that.RESOURCE_ROOT = 'http://localhost:8080/extension/';
+
 			//Initialize Observing Flag
 			that.isObserving = false;
 	
@@ -782,7 +783,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			};
 		},
 	
-		testStyles: function(styleObj, elemObj, ruleObj, type) {//TODO: baseStylesText is necessary?
+		testStyles: function(styleObj, elemObj, ruleObj, type) {
 	
 			var that = STYLEV.VALIDATOR;
 	
@@ -795,73 +796,71 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				return 'continue';
 			}
 	
-			//TODO: confirm better way cache
+			//TODO: confirm better way to cache
 			that.getStylePropObj(styleObj);
-	
-			switch(styleObj.isParentElem) {
-	
-				// If has not parent element
-				case false:
-	
-					//TODO: cache
-					elemObj.prop.value = that.getSpecifiedStyle(elemObj.elem, styleObj.property, styleObj.pseudoElem);
-					elemObj.prop.defaultValue = that.getSpecifiedStyle(elemObj.elemDefault, styleObj.property, styleObj.pseudoElem);
-	
-					if(elemObj.elemParent) {
-						elemObj.prop.parentValue = that.getSpecifiedStyle(elemObj.elemParent, styleObj.property, styleObj.pseudoElem);
-					}
-					if(elemObj.elemParentDefault) {
-						elemObj.prop.parentDefaultValue = that.getSpecifiedStyle(elemObj.elemParentDefault, styleObj.property, styleObj.pseudoElem);
-					}
-	
-					break;
-	
-				// If has parent element
-				case true:
-	
-					elemObj.prop.value = that.getSpecifiedStyle(elemObj.elemParent, styleObj.property, styleObj.pseudoElem);
-					elemObj.prop.defaultValue = that.getSpecifiedStyle(elemObj.elemParentDefault, styleObj.property, styleObj.pseudoElem);
-	
-					if(elemObj.elemGrandParent) {
-						elemObj.prop.parentValue = that.getSpecifiedStyle(elemObj.elemGrandParent, styleObj.property, styleObj.pseudoElem);
-					}
-					if(elemObj.elemGrandParentDefault) {
-						elemObj.prop.parentDefaultValue = that.getSpecifiedStyle(elemObj.elemGrandParentDefault, styleObj.property, styleObj.pseudoElem);
-					}
-	
-					//line-height needs special support
-					if(styleObj.prop.isLineHeight) {
-	
-						//Override value to getComputedStyle TODO: fix performance
-						elemObj.prop.value = that.getComputedStyleAndCache(elemObj.elem, styleObj.property, styleObj.pseudoElem);
-						elemObj.prop.parentvalue = that.getComputedStyleAndCache(elemObj.elemParent, styleObj.property, styleObj.pseudoElem);
-	
-						var fontSize = parseFloat(that.getSpecifiedStyle(elemObj.elem, 'font-size'));
-						var parentFontSize = parseFloat(that.getSpecifiedStyle(elemObj.elemParent, 'font-size'));
-						var fontSizeScaleRate = parentFontSize / fontSize;
-						var lineHeightNormalScaleRate = 1.14;//TODO: avoid magic number
-	
-						//Convert keyword to pixel
-						if(elemObj.prop.value === 'normal') {
-							elemObj.prop.value = fontSize * lineHeightNormalScaleRate + 'px';
-						}
-						if(elemObj.prop.parentValue === 'normal') {
-							elemObj.prop.value = parentFontSize * lineHeightNormalScaleRate + 'px';
-						}
-	
-						var parsedTargetElemNGStyleVal = that.controlFloat(elemObj.prop.value, 1);
-						var parsedTargetElemParentNGStyleVal = that.controlFloat(elemObj.prop.value, 1);
-	
-						elemObj.prop.isInheritLineHeight =
-							parsedTargetElemNGStyleVal * fontSizeScaleRate === parsedTargetElemParentNGStyleVal;
-					}
-	
-					break;
-	
-				default:
-	
-					break;
+
+
+			if(styleObj.isParentElem === false) {
+
+				elemObj.prop.value = that.getSpecifiedStyle(elemObj.elem, styleObj.property, styleObj.pseudoElem);
+				elemObj.prop.defaultValue = that.getSpecifiedStyle(elemObj.elemDefault, styleObj.property, styleObj.pseudoElem);
+
+				//Fix bug of firefox
+				if(elemObj.prop.value === '-moz-alt-content') {
+					elemObj.prop.value = 'none';
+				}
+				if(elemObj.prop.defaultValue === '-moz-alt-content') {
+					elemObj.prop.defaultValue = 'none';
+				}
+
+				if(elemObj.elemParent) {
+					elemObj.prop.parentValue = that.getSpecifiedStyle(elemObj.elemParent, styleObj.property, styleObj.pseudoElem);
+				}
+				if(elemObj.elemParentDefault) {
+					elemObj.prop.parentDefaultValue = that.getSpecifiedStyle(elemObj.elemParentDefault, styleObj.property, styleObj.pseudoElem);
+				}
 			}
+
+			if(styleObj.isParentElem === true) {
+
+				elemObj.prop.value = that.getSpecifiedStyle(elemObj.elemParent, styleObj.property, styleObj.pseudoElem);
+				elemObj.prop.defaultValue = that.getSpecifiedStyle(elemObj.elemParentDefault, styleObj.property, styleObj.pseudoElem);
+
+				if(elemObj.elemGrandParent) {
+					elemObj.prop.parentValue = that.getSpecifiedStyle(elemObj.elemGrandParent, styleObj.property, styleObj.pseudoElem);
+				}
+				if(elemObj.elemGrandParentDefault) {
+					elemObj.prop.parentDefaultValue = that.getSpecifiedStyle(elemObj.elemGrandParentDefault, styleObj.property, styleObj.pseudoElem);
+				}
+
+				//line-height needs special support
+				if(styleObj.prop.isLineHeight) {
+
+					//Override value to getComputedStyle TODO: fix performance
+					elemObj.prop.value = that.getComputedStyleAndCache(elemObj.elem, styleObj.property, styleObj.pseudoElem);
+					elemObj.prop.parentvalue = that.getComputedStyleAndCache(elemObj.elemParent, styleObj.property, styleObj.pseudoElem);
+
+					var fontSize = parseFloat(that.getSpecifiedStyle(elemObj.elem, 'font-size'));
+					var parentFontSize = parseFloat(that.getSpecifiedStyle(elemObj.elemParent, 'font-size'));
+					var fontSizeScaleRate = parentFontSize / fontSize;
+					var lineHeightNormalScaleRate = 1.14;//TODO: avoid magic number
+
+					//Convert keyword to pixel
+					if(elemObj.prop.value === 'normal') {
+						elemObj.prop.value = fontSize * lineHeightNormalScaleRate + 'px';
+					}
+					if(elemObj.prop.parentValue === 'normal') {
+						elemObj.prop.value = parentFontSize * lineHeightNormalScaleRate + 'px';
+					}
+
+					var parsedTargetElemNGStyleVal = that.controlFloat(elemObj.prop.value, 1);
+					var parsedTargetElemParentNGStyleVal = that.controlFloat(elemObj.prop.value, 1);
+
+					elemObj.prop.isInheritLineHeight =
+						parsedTargetElemNGStyleVal * fontSizeScaleRate === parsedTargetElemParentNGStyleVal;
+				}
+			}
+
 	
 			that.executeTest(elemObj, ruleObj, styleObj, type);
 		},
@@ -904,7 +903,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var isZero = parseFloat(elemObj.prop.value) === 0;
 			var isDefault = elemObj.prop.value === elemObj.prop.defaultValue;
 			var isInherit = elemObj.prop.value === elemObj.prop.parentValue;
-	
+
 			//TODO: refactor
 			if(!hasRulePropVal) {
 	
@@ -1674,6 +1673,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		insertStyle2ShadowDOM: function() {
 			var that = STYLEV.VALIDATOR;
 			var styleElement = document.createElement('style');
+			styleElement.setAttribute('scoped', 'scoped');
 			styleElement.textContent = that.consoleStyleText;
 			that.consoleWrapperShadowRoot.appendChild(styleElement);
 		},
@@ -1713,7 +1713,12 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.docFrag = document.createDocumentFragment();
 	
 			that.consoleWrapper = document.createElement('div');
-			that.consoleWrapperShadowRoot = that.consoleWrapper.createShadowRoot();
+			if(that.consoleWrapper.createShadowRoot) {
+				that.consoleWrapperShadowRoot = that.consoleWrapper.createShadowRoot();
+			} else {
+				that.consoleWrapperShadowRoot =  that.consoleWrapper;
+			}
+
 			that.consoleHeader = document.createElement('header');
 			that.consoleHeading = document.createElement('h1');
 			that.consoleHeadingLogo = document.createElement('a');
@@ -2282,14 +2287,18 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			return function(styleSheet) {
 
-				if(styleSheet.href && styleSheet.href.indexOf('http://style-validator.io') === 0) {
+				//TODO: fix for other external stylesheets?
+				if(
+					styleSheet.href && styleSheet.href.indexOf('http://style-validator.io') === 0 ||
+					styleSheet.href && styleSheet.href.indexOf('http://localhost:8080') === 0
+				) {
 					return true;
 				}
 
 				try {
 					var cssRules = styleSheet.cssRules;
 	
-					//TODO: remove?
+					//TODO: remove? detect type????
 					if(cssRules === null) {
 						return 'continue';
 					}
@@ -2318,12 +2327,25 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		allMediaTextsArray: [],
 		bindMediaQueryChange: function(cssRule) {
 			var that = STYLEV.VALIDATOR;
+
+			switch(cssRule.type) {
+				case CSSRule.IMPORT_RULE:
+					return 'continue';
+					break;
+				default:
+					break;
+			}
+
 			if(cssRule.media) {
 				var mediaText = cssRule.media.mediaText;
 				var mediaQueryList = matchMedia(mediaText);
 	
 				if(that.allMediaTextsArray.indexOf(mediaText) < 0) {
-					mediaQueryList.addEventListener('change', that.mediaQueryEventHandler);
+					if('addEventListener' in mediaQueryList) {
+						mediaQueryList.addEventListener('change', that.mediaQueryEventHandler);
+					} else {
+						mediaQueryList.addListener(that.mediaQueryEventHandler);
+					}
 					that.allMediaTextsArray.push(mediaText);
 				}
 	
@@ -2615,80 +2637,55 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		getSpecifiedStyle: function(target, property, pseudoElem) {
 			var that = STYLEV.VALIDATOR;
 	
-			var specifiedProperty = target.specifiedStyle && target.specifiedStyle[property];
-			var specifiedPropertyValue = specifiedProperty && specifiedProperty.value;
+			var cachedSpecifiedProperty = target.specifiedStyle && target.specifiedStyle[property];
+			var cachedSpecifiedPropertyValue = cachedSpecifiedProperty && cachedSpecifiedProperty.value;
 	
 			//TODO: get dynamically Default Specified Value
 			switch(property) {
 				case 'width':
-					return specifiedPropertyValue || 'auto';//TODO: default value? computed style?
-					break;
+					return cachedSpecifiedPropertyValue || 'auto';//TODO: default value? computed style?
 				case 'height':
-					return specifiedPropertyValue || 'auto';
-					break;
+					return cachedSpecifiedPropertyValue || 'auto';
 				case 'min-width':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'min-height':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'top':
-					return specifiedPropertyValue || 'auto';
-					break;
+					return cachedSpecifiedPropertyValue || 'auto';
 				case 'right':
-					return specifiedPropertyValue || 'auto';
-					break;
+					return cachedSpecifiedPropertyValue || 'auto';
 				case 'bottom':
-					return specifiedPropertyValue || 'auto';
-					break;
+					return cachedSpecifiedPropertyValue || 'auto';
 				case 'left':
-					return specifiedPropertyValue || 'auto';
-					break;
+					return cachedSpecifiedPropertyValue || 'auto';
 				case 'margin-top':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'margin-right':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'margin-bottom':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'margin-left':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'padding-top':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'padding-right':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'padding-bottom':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'padding-left':
-					return specifiedPropertyValue || '0px';
-					break;
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'background-position':
-					return specifiedPropertyValue || '0% 0%';
-					break;
+					return cachedSpecifiedPropertyValue || '0% 0%';
 				case 'text-indent':
-					return specifiedPropertyValue || '0px';
-					break;
-	
+					return cachedSpecifiedPropertyValue || '0px';
 				case 'line-height':
-					return specifiedPropertyValue || 'normal';
-					break;
+					return cachedSpecifiedPropertyValue || 'normal';
 				case 'font-size':
-					return specifiedPropertyValue || '16px';
-					break;
-	
+					return cachedSpecifiedPropertyValue || '16px';
 				case 'display':
-					return specifiedPropertyValue || that.getComputedStyleAndCache(target, property, pseudoElem);
-					break;
-	
+					return cachedSpecifiedPropertyValue || that.getComputedStyleAndCache(target, property, pseudoElem);
 				default:
 					return that.getComputedStyleAndCache(target, property, pseudoElem);
-					break;
 			}
 		},
 	
