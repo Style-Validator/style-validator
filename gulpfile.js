@@ -7,12 +7,11 @@ var postcss			= require('gulp-postcss');
 var sourcemaps		= require('gulp-sourcemaps');
 var autoprefixer	= require('autoprefixer');
 
-gulp.task('build', function() {
-	return clean().on('end', function() {
-		copy().on('end', function() {
-			autoprefix();
-			bookmarklet();
-		});
+gulp.task('clean', clean);
+gulp.task('build', ['clean'], function() {
+	return copy().on('end', function() {
+		autoprefix();
+		bookmarklet();
 	});
 });
 gulp.task('live', function() {
