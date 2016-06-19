@@ -161,6 +161,9 @@
 	width: 22px !important;
 	height: 22px !important;
 }
+#stylev-console-wrapper .stylev-console-refresh-button img.is-hidden {
+	display: none !important;
+}
 #stylev-console-wrapper .stylev-console-refresh-button-image {
 }
 #stylev-console-wrapper .stylev-console-refresh-button-image-active {
@@ -217,6 +220,10 @@
 #stylev-console-wrapper .stylev-console-normalize-button-image {
 	width: 16px !important;
 	height: 16px !important;
+}
+#stylev-console-wrapper .stylev-console-minimize-button.is-hidden,
+#stylev-console-wrapper .stylev-console-normalize-button.is-hidden {
+	display: none !important;
 }
 #stylev-console-wrapper .stylev-console-body {
 	flex: 1 1 auto !important;
