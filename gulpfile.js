@@ -5,29 +5,31 @@ var gulp			= require('gulp');
 var gulpUglify		= require('gulp-uglify');
 var postcss			= require('gulp-postcss');
 var sourcemaps		= require('gulp-sourcemaps');
-var gulpAutoprefixer= require('autoprefixer');
+var autoprefixer	= require('autoprefixer');
 
-gulp.task('clean', clean);
-gulp.task('copy', ['clean'], copy);
-gulp.task('autoprefixer', ['copy'], autoprefixer);
-gulp.task('bookmarklet', ['autoprefixer'], bookmarklet);
-gulp.task('build', ['bookmarklet']);
+gulp.task('build', function() {
+	return clean.on('end', function() {
+		copy().on('end', function() {
+			autoprefix();
+			bookmarklet();
+		});
+	});
+});
 gulp.task('live', function() {
 	return copy('!./src/**/app.js').on('end', function() {
-		autoprefixer();
+		autoprefix();
 		bookmarklet();
 	});
 });
-gulp.task('b', bookmarklet);
 gulp.task('watch',function(){
 	gulp.watch('./src/**/*', ['live']);
 });
 gulp.task('default', ['live', 'watch']);
 
-function autoprefixer() {
+function autoprefix() {
 	return gulp.src('./src/**/*.css')
 		.pipe(sourcemaps.init())
-		.pipe(postcss([ gulpAutoprefixer({ browsers: ['last 3 versions'] }) ]))
+		.pipe(postcss([ autoprefixer({ browsers: ['last 3 versions'] }) ]))
 		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest('./dest'));
 }
