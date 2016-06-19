@@ -1713,11 +1713,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.docFrag = document.createDocumentFragment();
 	
 			that.consoleWrapper = document.createElement('div');
-			if(that.consoleWrapper.createShadowRoot) {
-				that.consoleWrapperShadowRoot = that.consoleWrapper.createShadowRoot();
-			} else {
+			//if(that.consoleWrapper.createShadowRoot) {
+			//	that.consoleWrapperShadowRoot = that.consoleWrapper.createShadowRoot();
+			//} else {
 				that.consoleWrapperShadowRoot =  that.consoleWrapper;
-			}
+			//}
 
 			that.consoleHeader = document.createElement('header');
 			that.consoleHeading = document.createElement('h1');
