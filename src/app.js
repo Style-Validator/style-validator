@@ -40,7 +40,7 @@ var securePort = 8443;
 
 var MongoClient = mongodb.MongoClient;
 var dbname = 'sv';
-var dburl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/' + dbname;
+var dburl = process.env.MONGODB_URI || 'mongodb://localhost:27017/' + dbname;
 
 var emitter = new events.EventEmitter();
 
