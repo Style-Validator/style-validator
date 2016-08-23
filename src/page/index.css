@@ -67,62 +67,6 @@
 	font-size: 15px;
 }
 
-.kv-buttons-list {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 6%;
-	margin-left: -10px;
-}
-.kv-buttons-list > li {
-	flex: 1 1 50%;
-	display: flex;
-	padding-left: 10px;
-}
-.kv-buttons-list > li > a {
-	display: flex;
-	padding: 6px 12px;
-	border: 1px solid transparent;
-	text-decoration: none !important;
-	-webkit-transition: 0.2s ease;
-	-moz-transition: 0.2s ease;
-	-ms-transition: 0.2s ease;
-	-o-transition: 0.2s ease;
-	transition: 0.2s ease;
-	background-color: white;
-	color: #359C62 !important;
-	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-	flex: 1 0 100%;
-}
-.kv-buttons-list a:hover {
-	border-color: rgb(49, 194, 92);
-}
-.kv-buttons-list a > img {
-	margin-top: 10px;
-	max-width: 100%;
-	height: auto;
-}
-.kv-buttons-wrapper {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-.kv-buttons-wrapper > * {
-	flex: 1 0 auto;
-}
-.kv-buttons-heading {
-	margin-bottom: 5px;
-	font-weight: normal;
-	text-align: left;
-}
-.kv-buttons-image-wrapper img {
-	max-width: 100%;
-	width: 100%;
-	height: auto;
-}
-.kv-buttons-caption {
-
-}
 .note-list > li + li {
 	margin-top: 10px;
 }
@@ -134,46 +78,6 @@ hr {
 .main-body {
 	padding-right: 30px;
 	box-sizing: border-box;
-}
-.browser-support {
-	display: flex;
-	justify-content: flex-end;
-	flex-wrap: wrap;
-}
-.browser-support > li.disabled {
-	filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
-	filter: gray;
-	filter: grayscale(100%);
-	-webkit-filter: grayscale(1);
-	-webkit-filter: grayscale(100%);
-}
-.browser-support > li {
-	/* float: right; */
-}
-.browser-support > li + li {
-	padding-left: 5px;
-}
-.browser-support > li img {
-	width: 20px;
-	height: auto;
-}
-.buttons-section {
-	flex-basis: 380px;
-}
-.buttons-section + .buttons-section {
-	margin-left: 2%;
-}
-.buttons-section-heading {
-	margin-top: 0;
-	font-size: 18px;
-	font-weight: normal;
-	text-align: center;
-	margin-bottom: 10px;
-}
-#bookmarklet:after {
-	content: 'Bookmark this link.';
-	display: none;
-	color: #7C7D80 !important;
 }
 .section {
 }
@@ -345,7 +249,7 @@ hr {
 		opacity: 0.1;
 		right: 0;
 		left: 0;
-		margin-top: -5%;
+		top: 15%;
 	}
 	.kv-caption {
 		padding-left: 0;

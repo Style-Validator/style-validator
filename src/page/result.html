@@ -78,10 +78,55 @@
 <div class="wrapper">
 	<common-header></common-header>
 	<main class="main">
-		<validation-result></validation-result>
+		<div class="result-wrapper">
+			<validation-result></validation-result>
+			<section class="result-kv-buttons">
+				<header class="result-kv-buttons-header">
+					<h2 class="result-kv-buttons-heading">This result page is under development, so try the Apps for production!</h2>
+				</header>
+				<ul class="kv-buttons-list">
+					<li>
+						<a href="https://chrome.google.com/webstore/detail/style-validator/aaeahhnjkelemfcdmkcpaggdhfaffeod" target="_blank" onclick="ga('send', 'event', 'button', 'click', 'Chrome Web Store Link');">
+							<figure class="kv-buttons-wrapper">
+								<h3 class="kv-buttons-heading">Chrome Extension</h3>
+								<div class="kv-buttons-image-wrapper">
+									<img src="/img/chromeWebStore.png">
+								</div>
+								<figcaption class="kv-buttons-caption">
+									<ul class="browser-support">
+										<li><img src="/img/chrome_128x128.png"></li>
+									</ul>
+								</figcaption>
+							</figure>
+						</a>
+					</li>
+					<li>
+						<a id="bookmarklet" href="/bookmarklet/style-validator.js" onclick="ga('send', 'event', 'button', 'click', 'JavaScript Bookmarklet');">
+							<figure class="kv-buttons-wrapper">
+								<h3 class="kv-buttons-heading">JavaScript Bookmarklet</h3>
+								<div class="kv-buttons-image-wrapper">
+									<img src="/img/bookmarkbar.png" width="206">
+								</div>
+								<figcaption class="kv-buttons-caption">
+									<ul class="browser-support">
+										<li><img src="/img/chrome_128x128.png"></li>
+										<li><img src="/img/opera_128x128.png"></li>
+										<li class="disabled"><img src="/img/firefox_128x128.png"></li>
+										<li class="disabled"><img src="/img/safari_128x128.png"></li>
+										<li class="disabled"><img src="/img/internet-explorer_128x128.png"></li>
+										<li class="disabled"><img src="/img/edge_128x128.png"></li>
+									</ul>
+								</figcaption>
+							</figure>
+						</a>
+					</li>
+				</ul>
+			</section>
+		</div>
 		<common-footer></common-footer>
 	</main>
 </div>
+<script src="/page/jquery-2.1.4.min.js"></script>
 <script src="/extension/common.js"></script>
 <script src="/page/result.js"></script>
 <common-jsonld></common-jsonld>
