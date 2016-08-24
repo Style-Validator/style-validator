@@ -82,12 +82,18 @@ hr {
 .section {
 }
 .section-header {
-	margin-bottom: 2%;
+	text-align: center;
+	/*margin-bottom: 2%;*/
+}
+.section-header + * {
+	margin-top: 4%;
 }
 .section-heading {
 	font-size: calc(2vw + 16px);
-	text-align: center;
 	font-weight: normal;
+}
+.section-description {
+	font-size: calc(1vw + 2px);
 }
 .section-body {
 	text-align: center;
@@ -103,10 +109,6 @@ hr {
 	padding: 6px 12px;
 	border: 1px solid transparent;
 	text-decoration: none !important;
-	-webkit-transition: 0.2s ease;
-	-moz-transition: 0.2s ease;
-	-ms-transition: 0.2s ease;
-	-o-transition: 0.2s ease;
 	transition: 0.2s ease;
 	background-color: white;
 	color: #359C62 !important;
@@ -232,6 +234,26 @@ hr {
 }
 .section-feature-js img {
 	width: 70% !important;
+}
+.section-rules {
+	background: #ffdac7;
+}
+.section-rules-steps {
+	counter-reset: section-rules-index;
+}
+.section-rules-steps > dt {
+	font-size: 1.5rem;
+}
+.section-rules-steps > dt:before {
+	counter-increment: section-rules-index;
+	content: counter(section-rules-index) '.';
+	margin-right: 0.5em;
+}
+.section-rules-steps > dt + dd {
+	margin-top: 2%;
+}
+.section-rules-steps > dd + dt {
+	margin-top: 4%;
 }
 
 @media (max-width: 640px) {
