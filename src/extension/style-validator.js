@@ -2,7 +2,7 @@
  Style Validator
 
  Description": A CSS Validator that can validate after modified by JavaScript or CSS Media Queries.
- URL: http://style-validator.io/
+ URL: https://style-validator.io/
  Author: Igari Takeharu
  License: MIT License
  */
