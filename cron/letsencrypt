@@ -1,0 +1,2 @@
+/home/ec2-user/certbot/certbot-auto renew --force-renew
+forever restart /home/ec2-user/app/style-validator/dest/app.js

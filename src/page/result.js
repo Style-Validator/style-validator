@@ -11,6 +11,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		that.setParameter();
 		that.bindEvents();
 		that.startAnimation();
+		that.getBookmarklet();
 
 		//document.querySelector('input[type="text"]').focus();
 	},
@@ -56,8 +57,21 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		} else {
 			that.html.classList.remove('is-fixed-header');
 		}
-	}
+	},
 
+	getBookmarklet: function() {
+		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+		$.ajax({
+			url: $('#bookmarklet').attr('href'),
+			dataType: 'text',
+			success: that.setBookmarklet
+		});
+	},
+
+	setBookmarklet: function(data) {
+		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
+		$('#bookmarklet').attr('href', data);
+	}
 };
 
 document.addEventListener('WebComponentsReady', STYLEV.TOPPAGE.FIRST_ANIMATION.execute);

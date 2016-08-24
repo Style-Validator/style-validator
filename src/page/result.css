@@ -1,13 +1,21 @@
 @charset "utf-8";
 
+.result-wrapper {
+	flex: 1 0 auto;
+	display: flex;
+	flex-flow: column nowrap;
+	padding-bottom: 5%;
+}
+
 .result {
 	display: flex;
 	flex-wrap: wrap;
-	padding-bottom: 5%;
+	/*padding-bottom: 5%;*/
 }
 .result-screenshot {
+	position: relative;
 	flex: 1 0 70%;
-	padding: 10% 0;
+	padding: 30% 0;
 	background: url(/img/macbook-pro-retina.png) no-repeat center center;
 	background-size: 116% auto;
 	text-align: center;
@@ -15,13 +23,25 @@
 	align-items: center;
 	justify-content: center;
 }
-.screenshot-image {
+.result-screenshot-display {
+	position: absolute;
+	top: 15%;
+	right: 15%;
+	bottom: 15%;
+	/* left: 0; */
 	width: 70%;
 	height: auto;
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 	margin-top: -3.5%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.screenshot-image {
+	width: 100%;
+	height: auto;
 }
 .result-body {
+	display: none !important;/*TODO: refactor!*/
 	padding: 4%;
 	flex: 1 0 auto;
 }
@@ -38,4 +58,20 @@
 
 .result-table td {
 	font-size: 26px;
+}
+* + .result-kv-buttons {
+	margin-top: 5%;
+}
+.result-kv-buttons {
+	padding: 1.5rem 1rem 1.5rem;
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 50rem;
+	border-top: 1px solid #768a7e;
+}
+.result-kv-buttons-header {
+
+}
+.result-kv-buttons-heading {
+	font-size: calc(1rem + 1vw);
 }
