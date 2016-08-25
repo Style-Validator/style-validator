@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Style-Validator",
-	"version": "0.6.1",
+	"version": "0.6.1.1",
 	"description": "A CSS Validator that can validate after modified by JavaScript or CSS Media Queries.",
 	"icons": {
 		"16": "./style-validator.logo_16x16.png",
