@@ -91,6 +91,9 @@
 	vertical-align: -18% !important;
 	margin-right: 5px !important;
 }
+#stylev-console-wrapper .stylev-console-connection-image:only-child {
+	margin-right: -4px !important;
+}
 #stylev-console-wrapper .stylev-console-connected {
 	background-color: #008000 !important;
 }
@@ -286,6 +289,40 @@
 	background-color: #FFEFEF !important;
 	color: #FF0000 !important;
 }
+#stylev-console-wrapper .stylev-console-edit-rules-button {
+	padding-right: 0.5em !important;
+	padding-left: 0.5em !important;
+	display: flex !important;
+	flex-flow: row nowrap !important;
+	align-items: center !important;
+	flex: 0 0 9.5em !important;
+	white-space: nowrap !important;
+	border-left: 1px solid #cccccc !important;
+	background: #8c8c8c !important;
+	color: white !important;
+	cursor: pointer !important;
+	transition: 0.2s ease !important;
+	line-height: 1.2 !important;
+}
+#stylev-console-wrapper .stylev-console-edit-rules-button:hover {
+	background: #626a65 !important;
+}
+#stylev-console-wrapper .stylev-console-edit-rules-button:before {
+	content: '' !important;
+	flex: 0 0 20px !important;
+	height: 100%;
+	background: url(/img/iconmonstr-edit-8-icon-white.svg) no-repeat center center !important;
+	background-size: auto 16px !important;
+	margin-right: 0.25em;
+}
+#stylev-console-wrapper .stylev-console-counter {
+	padding-right: 1rem;
+	padding-left: 1rem;
+}
+#stylev-console-wrapper .stylev-console-counter > dd + dd {
+	margin-left: 1em !important;
+}
+#stylev-console-wrapper .stylev-console-counter-error:before,
 #stylev-console-wrapper .stylev-console-list > li.stylev-trigger-error > a:before {
 	content: '×' !important;
 	display: inline-block !important;
@@ -303,6 +340,7 @@
 	background-color: #FFFBE5 !important;
 	color: #444444 !important;
 }
+#stylev-console-wrapper .stylev-console-counter-warning:before,
 #stylev-console-wrapper .stylev-console-list > li.stylev-trigger-warning > a:before {
 	content: '!' !important;
 	display: inline-block !important;
