@@ -300,7 +300,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				CONSOLE_CONNECTED_CLASS:		'stylev-console-connected',
 				CONSOLE_DISCONNECTED_CLASS:		'stylev-console-disconnected',
 
-				CONSOLE_EDIT_RULES: 'Edit Rules'
+				CONSOLE_EDIT_RULES: 'Edit Rules',
+				CONSOLE_EDIT_RULES_IMAGE_PATH: that.RESOURCE_ROOT + 'iconmonstr-edit-8-icon-white.svg'
 			};
 	
 			//Pathes
@@ -1735,6 +1736,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			// that.consoleCounterTotal = document.createElement('dd');
 
 			that.consoleEditRulesButton = document.createElement('a');
+			that.consoleEditRulesButtonText = document.createTextNode(that.settings.CONSOLE_EDIT_RULES);
+			that.consoleEditRulesButtonImage = document.createElement('img');
 
 			that.consoleCounterError = document.createElement('dd');
 			that.consoleCounterWarning = document.createElement('dd');
@@ -1783,9 +1786,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleCounterWarning.classList.add('stylev-console-counter-warning');
 
 			that.consoleEditRulesButton.classList.add('stylev-console-edit-rules-button');
-			that.consoleEditRulesButton.textContent = that.settings.CONSOLE_EDIT_RULES;
 			that.consoleEditRulesButton.href = 'javascript: void(0);';
 			that.consoleEditRulesButton.addEventListener('click', that.jump2RulePage(''));
+
+			that.consoleEditRulesButtonImage.classList.add('stylev-console-edit-rules-button-image');
+			that.consoleEditRulesButtonImage.src = that.settings.CONSOLE_EDIT_RULES_IMAGE_PATH;
 
 			that.consoleMediaQueries.classList.add('stylev-console-mediaqueries');
 			that.consoleMediaQueriesImage.classList.add('stylev-console-mediaqueries-image');
@@ -1845,12 +1850,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleCounter.appendChild(that.consoleCounterError);
 			that.consoleCounter.appendChild(that.consoleCounterWarning);
 
+			that.consoleEditRulesButton.appendChild(that.consoleEditRulesButtonImage);
+			that.consoleEditRulesButton.appendChild(that.consoleEditRulesButtonText);
+
 			that.consoleHeader.appendChild(that.consoleHeading);
 			that.consoleHeader.appendChild(that.consoleCounter);
 			that.consoleHeader.appendChild(that.consoleMediaQueries);
 			that.consoleHeader.appendChild(that.consoleConnection);
 			that.consoleHeader.appendChild(that.consoleButtons);
-
 			that.consoleHeader.appendChild(that.consoleEditRulesButton);
 
 			that.consoleWrapperShadowRoot.appendChild(that.consoleHeader);

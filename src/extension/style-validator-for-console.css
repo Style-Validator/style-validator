@@ -298,22 +298,18 @@
 	flex: 0 0 9.5em !important;
 	white-space: nowrap !important;
 	border-left: 1px solid #cccccc !important;
-	background: #8c8c8c !important;
+	background: #626a65 !important;
 	color: white !important;
 	cursor: pointer !important;
 	transition: 0.2s ease !important;
 	line-height: 1.2 !important;
 }
 #stylev-console-wrapper .stylev-console-edit-rules-button:hover {
-	background: #626a65 !important;
+	background: #4d534f !important;
 }
-#stylev-console-wrapper .stylev-console-edit-rules-button:before {
-	content: '' !important;
-	flex: 0 0 20px !important;
-	height: 100%;
-	background: url(/img/iconmonstr-edit-8-icon-white.svg) no-repeat center center !important;
-	background-size: auto 16px !important;
-	margin-right: 0.25em;
+#stylev-console-wrapper .stylev-console-edit-rules-button-image {
+	width: 16px !important;
+	margin-right: 0.25em !important;
 }
 #stylev-console-wrapper .stylev-console-counter {
 	padding-right: 1rem;
