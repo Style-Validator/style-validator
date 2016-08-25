@@ -81,6 +81,7 @@
 	color: white !important;
 	line-height: 1.1 !important;
 	flex-shrink: 0 !important;
+	margin-left: auto !important;
 }
 #stylev-console-wrapper .stylev-console-connection:empty {
 	display: none !important;
@@ -122,15 +123,16 @@
 }
 
 #stylev-console-wrapper .stylev-console-counter {
-	flex-grow: 1 !important;
+	/*flex-grow: 1 !important;*/
 	padding-right: 10px !important;
 	line-height: 1.2 !important;
 }
 #stylev-console-wrapper .stylev-console-mediaqueries {
-	padding: 3px 6px !important;
-	background-color: #f9f9f9 !important;
+	padding: 3px 1em !important;
+	background-color: #f5f5f5 !important;
 }
 #stylev-console-wrapper .stylev-console-mediaqueries-image {
+	display: none !important;
 	width: 18px !important;
 	height: auto !important;
 	margin-right: 4px !important;
@@ -142,7 +144,7 @@
 	margin-right: 0 !important;
 }
 #stylev-console-wrapper .stylev-console-buttons {
-	margin-left: auto !important;
+	/*margin-left: auto !important;*/
 }
 #stylev-console-wrapper .stylev-console-buttons > a {
 	display: flex !important;

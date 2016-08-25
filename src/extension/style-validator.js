@@ -1691,11 +1691,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			that.setParameters4Console();
 			that.createConsoleElements();
-			that.setAttrOfConsoleElements();
+			that.setAttr2ConsoleElements();
 			that.insertStyle2ShadowDOM();
 			that.showConsoleMessages();
 			that.bindEvents2Console();
-			that.generateConsoleCounterText();
+			that.setTexts2ConsoleElements();
 			that.appendConsoleElements();
 			that.doAfterShowingConsole();
 		},
@@ -1754,7 +1754,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButtonImage = document.createElement('img');
 		},
 	
-		setAttrOfConsoleElements: function() {
+		setAttr2ConsoleElements: function() {
 			var that = STYLEV.VALIDATOR;
 	
 			that.consoleWrapper.id = that.settings.CONSOLE_WRAPPER_ID;
@@ -1813,14 +1813,18 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
 		},
 	
-		generateConsoleCounterText: function() {
+		setTexts2ConsoleElements: function() {
 			var that = STYLEV.VALIDATOR;
 	
 			that.consoleHeadingText = document.createTextNode(that.settings.CONSOLE_HEADING_TEXT);
 			// that.consoleCounterTotal.textContent = that.outputObjArray.length;
 			that.consoleCounterError.textContent = that.errorNum;
 			that.consoleCounterWarning.textContent = that.warningNum;
-			that.consoleMediaQueriesText.textContent = that.matchedMediaTextsArray.join(', ');
+			if(that.matchedMediaTextsArray.length) {
+				that.consoleMediaQueriesText.textContent = that.matchedMediaTextsArray.join(', ');
+			} else {
+				that.consoleMediaQueriesText.textContent = 'No Media Queries';
+			}
 		},
 	
 		appendConsoleElements: function() {
