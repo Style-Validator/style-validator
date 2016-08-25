@@ -290,14 +290,14 @@
 	color: #FF0000 !important;
 }
 #stylev-console-wrapper .stylev-console-edit-rules-button {
-	padding-right: 0.5em !important;
-	padding-left: 0.5em !important;
+	/*padding-right: 0.5em !important;*/
+	/*padding-left: 0.5em !important;*/
+	justify-content: center !important;/*TODO: refactor! */
 	display: flex !important;
 	flex-flow: row nowrap !important;
 	align-items: center !important;
 	flex: 0 0 9.5em !important;
 	white-space: nowrap !important;
-	border-left: 1px solid #cccccc !important;
 	background: #626a65 !important;
 	color: white !important;
 	cursor: pointer !important;
@@ -312,8 +312,9 @@
 	margin-right: 0.25em !important;
 }
 #stylev-console-wrapper .stylev-console-counter {
-	padding-right: 1rem;
-	padding-left: 1rem;
+	border-left: 1px solid #CCCCCC !important;
+	padding-right: 0.5rem !important;
+	padding-left: 0.5rem !important;
 }
 #stylev-console-wrapper .stylev-console-counter > dd + dd {
 	margin-left: 1em !important;
