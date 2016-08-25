@@ -230,6 +230,13 @@
 #stylev-console-wrapper .stylev-console-normalize-button.is-hidden {
 	display: none !important;
 }
+
+/* TODO: remove some timing */
+#stylev-console-wrapper .stylev-console-minimize-button,
+#stylev-console-wrapper .stylev-console-normalize-button {
+	display: none !important;
+}
+
 #stylev-console-wrapper .stylev-console-body {
 	flex: 1 1 auto !important;
 	overflow-y: auto !important;

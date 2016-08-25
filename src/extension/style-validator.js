@@ -1920,11 +1920,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				if(message.isDevtoolsConnected !== undefined) {
 	
 					var consoleModeImage = document.createElement('img');
-					var consoleModeText = document.createTextNode(message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_MESSAGE : that.settings.CONSOLE_DISCONNECTED_MESSAGE);
+					var consoleModeText = message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_MESSAGE : that.settings.CONSOLE_DISCONNECTED_MESSAGE;
+					var consoleModeTextNode = document.createTextNode(consoleModeText);
 					consoleModeImage.classList.add('stylev-console-connection-image');
 					consoleModeImage.src = message.isDevtoolsConnected ? that.settings.ICON_CONNECTED_PATH : that.settings.ICON_DISCONNECTED_PATH;
 					that.consoleConnection.appendChild(consoleModeImage);
-					// that.consoleConnection.appendChild(consoleModeText);
+					that.consoleConnection.setAttribute('title', consoleModeText);
+					// that.consoleConnection.appendChild(consoleModeTextNode);
 					that.consoleConnection.classList.add(message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_CLASS : that.settings.CONSOLE_DISCONNECTED_CLASS);
 				} else {
 					
