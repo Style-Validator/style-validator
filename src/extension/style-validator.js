@@ -1846,9 +1846,9 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleCloseButton.appendChild(that.consoleCloseButtonImage);
 	
 			that.consoleButtons.appendChild(that.consoleRefreshButton);
-			that.consoleButtons.appendChild(that.consoleMinimizeButton);
-			that.consoleButtons.appendChild(that.consoleNormalizeButton);
-			that.consoleButtons.appendChild(that.consoleCloseButton);
+			// that.consoleButtons.appendChild(that.consoleMinimizeButton);
+			// that.consoleButtons.appendChild(that.consoleNormalizeButton);
+			// that.consoleButtons.appendChild(that.consoleCloseButton);
 
 			// that.consoleCounter.appendChild(that.consoleCounterTotal);
 			that.consoleCounter.appendChild(that.consoleCounterError);
@@ -1860,8 +1860,8 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleHeader.appendChild(that.consoleHeading);
 			that.consoleHeader.appendChild(that.consoleCounter);
 			that.consoleHeader.appendChild(that.consoleMediaQueries);
-			that.consoleHeader.appendChild(that.consoleConnection);
 			that.consoleHeader.appendChild(that.consoleButtons);
+			that.consoleHeader.appendChild(that.consoleConnection);
 			that.consoleHeader.appendChild(that.consoleEditRulesButton);
 
 			that.consoleWrapperShadowRoot.appendChild(that.consoleHeader);
@@ -2117,7 +2117,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			if(that.isMouseDownConsoleHeader) {
 				that.consoleCurrentPosY = event.pageY;
 				that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
-				that.consoleWrapper.style.setProperty('min-height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', '');
+				that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', 'important');
 				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
 	
 				if(that.consoleWrapper.offsetHeight === 30) {
@@ -2291,7 +2291,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			that.consoleMinimizeButton.classList.add('is-hidden');
 			that.consoleNormalizeButton.classList.remove('is-hidden');
-			that.consoleWrapper.style.setProperty('min-height', that.consoleHeader.offsetHeight + 'px', '');
+			that.consoleWrapper.style.setProperty('height', that.consoleHeader.offsetHeight + 'px', 'important');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.consoleToggleState = 'minimum';
 		},
@@ -2300,7 +2300,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			that.consoleMinimizeButton.classList.remove('is-hidden');
 			that.consoleNormalizeButton.classList.add('is-hidden');
-			that.consoleWrapper.style.setProperty('min-height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
+			that.consoleWrapper.style.setProperty('height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', 'important');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.consoleToggleState = 'normal';
 		},
