@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Style-Validator",
-	"version": "0.6.0",
+	"version": "0.6.1.4",
 	"description": "A CSS Validator that can validate after modified by JavaScript or CSS Media Queries.",
 	"icons": {
 		"16": "./style-validator.logo_16x16.png",
@@ -69,6 +69,7 @@
 		"iconmonstr-link-4-icon.svg",
 		"iconmonstr-link-5-icon.svg",
 		"iconmonstr-responsive.svg",
+		"iconmonstr-edit-8-icon-white.svg",
 		"style-validator.logo.black.svg",
 		"style-validator-for-console.css",
 		"specificity.js",

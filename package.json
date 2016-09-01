@@ -11,7 +11,7 @@
   "contributors": [
     "Igari Takeharu"
   ],
-  "version": "0.6.0",
+  "version": "0.6.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -48,7 +48,8 @@
     "restart": "cd dest && forever stop app.js && cd .. && git pull origin master && gulp build && cd dest && forever restart app.js;",
     "stop": "cd dest && forever stop app.js;",
     "kill": "pkill -f selenium-standalone",
-    "postinstall": "gulp build"
+    "postinstall": "gulp build",
+    "build": "gulp build && sh ./make.zip.4.release.chrome.extension.sh"
   },
   "engines": {
     "node": "5.4.1",

@@ -4,6 +4,8 @@
 #stylev-console-wrapper * {
 	margin: 0 !important;
 	padding: 0 !important;
+	font-size: inherit !important;
+	font-family: inherit !important;
 }
 
 #stylev-console-wrapper *,
@@ -13,8 +15,8 @@
 }
 
 #stylev-console-wrapper > * {
-	font-size: 11px !important;
 	font-family: Menlo, monospace, sans-serif !important;
+	font-size: 11px !important;
 	text-align: left !important;
 	text-indent: 0 !important;
 	line-height: 1.7 !important;
@@ -35,7 +37,7 @@
 }
 #stylev-console-wrapper .stylev-console-header {
 	display: flex !important;
-	flex-wrap: wrap !important;
+	flex-wrap: nowrap !important;
 	overflow: hidden !important;
 	justify-content: space-between !important;
 	align-items: center !important;
@@ -74,13 +76,14 @@
 }
 #stylev-console-wrapper .stylev-console-connection {
 	padding-left: 6px !important;
-	padding-right: 10px !important;
+	padding-right: 6px !important;
 	background-position: 5px center !important;
 	background-repeat: no-repeat !important;
 	background-size: 20px auto !important;
 	color: white !important;
 	line-height: 1.1 !important;
 	flex-shrink: 0 !important;
+	margin-left: auto !important;
 }
 #stylev-console-wrapper .stylev-console-connection:empty {
 	display: none !important;
@@ -89,7 +92,7 @@
 	width: 18px !important;
 	height: 18px !important;
 	vertical-align: -18% !important;
-	margin-right: 5px !important;
+	margin: auto !important;
 }
 #stylev-console-wrapper .stylev-console-connected {
 	background-color: #008000 !important;
@@ -114,32 +117,42 @@
 		right: 0 !important;
 		bottom: 0 !important;
 		left: 0 !important;
-		margin: auto !important;
+		/*margin: auto !important;*/
 	}
 }
 
 #stylev-console-wrapper .stylev-console-counter {
-	flex-grow: 1 !important;
+	/*flex-grow: 1 !important;*/
 	padding-right: 10px !important;
 	line-height: 1.2 !important;
 }
 #stylev-console-wrapper .stylev-console-mediaqueries {
-	padding: 3px 6px !important;
-	background-color: #f9f9f9 !important;
+	padding: 0 1em !important;
+	background-color: #f5f5f5 !important;
+	flex: 1 1 auto !important;
+	width: 0 !important;
+	overflow-x: auto !important;
+	overflow-y: hidden !important;
+	display: flex !important;
+	flex-flow: row nowrap !important;
+	align-items: center !important;
+	white-space: nowrap !important;
 }
 #stylev-console-wrapper .stylev-console-mediaqueries-image {
-	width: 18px !important;
+	width: 16px !important;
 	height: auto !important;
-	margin-right: 4px !important;
+	margin-right: 0.5em !important;
+	flex: 0 0 auto !important;
 }
 #stylev-console-wrapper .stylev-console-mediaqueries-text {
 	line-height: 1.4 !important;
+	flex: 1 1 auto !important;
 }
 #stylev-console-wrapper .stylev-console-mediaqueries-image:only-child {
 	margin-right: 0 !important;
 }
 #stylev-console-wrapper .stylev-console-buttons {
-	margin-left: auto !important;
+	/*margin-left: auto !important;*/
 }
 #stylev-console-wrapper .stylev-console-buttons > a {
 	display: flex !important;
@@ -225,6 +238,7 @@
 #stylev-console-wrapper .stylev-console-normalize-button.is-hidden {
 	display: none !important;
 }
+
 #stylev-console-wrapper .stylev-console-body {
 	flex: 1 1 auto !important;
 	overflow-y: auto !important;
@@ -286,6 +300,35 @@
 	background-color: #FFEFEF !important;
 	color: #FF0000 !important;
 }
+#stylev-console-wrapper .stylev-console-edit-rules-button {
+	justify-content: center !important;/*TODO: refactor! */
+	display: flex !important;
+	flex-flow: row nowrap !important;
+	align-items: center !important;
+	flex: 0 0 9.5em !important;
+	white-space: nowrap !important;
+	background: #626a65 !important;
+	color: white !important;
+	cursor: pointer !important;
+	transition: 0.2s ease !important;
+	line-height: 1.2 !important;
+}
+#stylev-console-wrapper .stylev-console-edit-rules-button:hover {
+	background: #4d534f !important;
+}
+#stylev-console-wrapper .stylev-console-edit-rules-button-image {
+	width: 16px !important;
+	margin-right: 0.25em !important;
+}
+#stylev-console-wrapper .stylev-console-counter {
+	border-left: 1px solid #CCCCCC !important;
+	padding-right: 0.5rem !important;
+	padding-left: 0.5rem !important;
+}
+#stylev-console-wrapper .stylev-console-counter > dd + dd {
+	margin-left: 1em !important;
+}
+#stylev-console-wrapper .stylev-console-counter-error:before,
 #stylev-console-wrapper .stylev-console-list > li.stylev-trigger-error > a:before {
 	content: '×' !important;
 	display: inline-block !important;
@@ -303,6 +346,7 @@
 	background-color: #FFFBE5 !important;
 	color: #444444 !important;
 }
+#stylev-console-wrapper .stylev-console-counter-warning:before,
 #stylev-console-wrapper .stylev-console-list > li.stylev-trigger-warning > a:before {
 	content: '!' !important;
 	display: inline-block !important;

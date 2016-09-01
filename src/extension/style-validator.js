@@ -294,11 +294,14 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				ICON_CONNECTED_PATH:		that.RESOURCE_ROOT + 'iconmonstr-link-4-icon.svg',
 				ICON_DISCONNECTED_PATH:		that.RESOURCE_ROOT + 'iconmonstr-link-5-icon.svg',
 				ICON_LOGO_PATH:				that.RESOURCE_ROOT + 'style-validator.logo.black.svg',
-	
+
 				CONSOLE_CONNECTED_MESSAGE:		'Connected to DevTools',
 				CONSOLE_DISCONNECTED_MESSAGE:	'Disconnected to DevTools',
 				CONSOLE_CONNECTED_CLASS:		'stylev-console-connected',
-				CONSOLE_DISCONNECTED_CLASS:		'stylev-console-disconnected'
+				CONSOLE_DISCONNECTED_CLASS:		'stylev-console-disconnected',
+
+				CONSOLE_EDIT_RULES: 'Edit Rules',
+				CONSOLE_EDIT_RULES_IMAGE_PATH: that.RESOURCE_ROOT + 'iconmonstr-edit-8-icon-white.svg'
 			};
 	
 			//Pathes
@@ -1688,11 +1691,11 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 	
 			that.setParameters4Console();
 			that.createConsoleElements();
-			that.setAttrOfConsoleElements();
+			that.setAttr2ConsoleElements();
 			that.insertStyle2ShadowDOM();
 			that.showConsoleMessages();
 			that.bindEvents2Console();
-			that.generateConsoleCounterText();
+			that.setTexts2ConsoleElements();
 			that.appendConsoleElements();
 			that.doAfterShowingConsole();
 		},
@@ -1729,7 +1732,15 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleRefreshButtonImage = document.createElement('img');
 			that.consoleRefreshButtonImageActive = document.createElement('img');
 			that.consoleRefreshCount = document.createElement('output');
-			that.consoleCounter = document.createElement('div');
+			that.consoleCounter = document.createElement('dl');
+			// that.consoleCounterTotal = document.createElement('dd');
+
+			that.consoleEditRulesButton = document.createElement('a');
+			that.consoleEditRulesButtonText = document.createTextNode(that.settings.CONSOLE_EDIT_RULES);
+			that.consoleEditRulesButtonImage = document.createElement('img');
+
+			that.consoleCounterError = document.createElement('dd');
+			that.consoleCounterWarning = document.createElement('dd');
 			that.consoleMediaQueries = document.createElement('div');
 			that.consoleMediaQueriesImage = document.createElement('img');
 			that.consoleMediaQueriesText = document.createElement('span');
@@ -1743,7 +1754,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButtonImage = document.createElement('img');
 		},
 	
-		setAttrOfConsoleElements: function() {
+		setAttr2ConsoleElements: function() {
 			var that = STYLEV.VALIDATOR;
 	
 			that.consoleWrapper.id = that.settings.CONSOLE_WRAPPER_ID;
@@ -1770,6 +1781,17 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleRefreshButtonImageActive.src = that.settings.ICON_REFRESH_ACTIVE_PATH;
 			that.consoleRefreshCount.classList.add('stylev-console-refresh-count');
 			that.consoleCounter.classList.add('stylev-console-counter');
+			// that.consoleCounterTotal.classList.add('stylev-console-counter-total');
+			that.consoleCounterError.classList.add('stylev-console-counter-error');
+			that.consoleCounterWarning.classList.add('stylev-console-counter-warning');
+
+			that.consoleEditRulesButton.classList.add('stylev-console-edit-rules-button');
+			that.consoleEditRulesButton.href = 'javascript: void(0);';
+			that.consoleEditRulesButton.addEventListener('click', that.jump2RulePage(''));
+
+			that.consoleEditRulesButtonImage.classList.add('stylev-console-edit-rules-button-image');
+			that.consoleEditRulesButtonImage.src = that.settings.CONSOLE_EDIT_RULES_IMAGE_PATH;
+
 			that.consoleMediaQueries.classList.add('stylev-console-mediaqueries');
 			that.consoleMediaQueriesImage.classList.add('stylev-console-mediaqueries-image');
 			that.consoleMediaQueriesImage.src = that.settings.ICON_RESPONSIVE_PATH;
@@ -1791,12 +1813,18 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleNormalizeButtonImage.src = that.settings.ICON_NORMALIZE_PATH;
 		},
 	
-		generateConsoleCounterText: function() {
+		setTexts2ConsoleElements: function() {
 			var that = STYLEV.VALIDATOR;
 	
 			that.consoleHeadingText = document.createTextNode(that.settings.CONSOLE_HEADING_TEXT);
-			that.consoleCounter.textContent = 'Total: ' + that.outputObjArray.length + ' / Error: ' + that.errorNum + ' / Warning: ' + that.warningNum;
-			that.consoleMediaQueriesText.textContent = that.matchedMediaTextsArray.join(', ');
+			// that.consoleCounterTotal.textContent = that.outputObjArray.length;
+			that.consoleCounterError.textContent = that.errorNum;
+			that.consoleCounterWarning.textContent = that.warningNum;
+			if(that.matchedMediaTextsArray.length) {
+				that.consoleMediaQueriesText.textContent = that.matchedMediaTextsArray.join(', ');
+			} else {
+				that.consoleMediaQueriesText.textContent = 'No Media Queries';
+			}
 		},
 	
 		appendConsoleElements: function() {
@@ -1818,15 +1846,24 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			that.consoleCloseButton.appendChild(that.consoleCloseButtonImage);
 	
 			that.consoleButtons.appendChild(that.consoleRefreshButton);
-			that.consoleButtons.appendChild(that.consoleMinimizeButton);
-			that.consoleButtons.appendChild(that.consoleNormalizeButton);
-			that.consoleButtons.appendChild(that.consoleCloseButton);
-	
+			// that.consoleButtons.appendChild(that.consoleMinimizeButton);
+			// that.consoleButtons.appendChild(that.consoleNormalizeButton);
+			// that.consoleButtons.appendChild(that.consoleCloseButton);
+
+			// that.consoleCounter.appendChild(that.consoleCounterTotal);
+			that.consoleCounter.appendChild(that.consoleCounterError);
+			that.consoleCounter.appendChild(that.consoleCounterWarning);
+
+			that.consoleEditRulesButton.appendChild(that.consoleEditRulesButtonImage);
+			that.consoleEditRulesButton.appendChild(that.consoleEditRulesButtonText);
+
 			that.consoleHeader.appendChild(that.consoleHeading);
 			that.consoleHeader.appendChild(that.consoleCounter);
 			that.consoleHeader.appendChild(that.consoleMediaQueries);
-			that.consoleHeader.appendChild(that.consoleConnection);
 			that.consoleHeader.appendChild(that.consoleButtons);
+			that.consoleHeader.appendChild(that.consoleConnection);
+			that.consoleHeader.appendChild(that.consoleEditRulesButton);
+
 			that.consoleWrapperShadowRoot.appendChild(that.consoleHeader);
 			that.consoleWrapperShadowRoot.appendChild(that.consoleBody);
 			that.consoleList.appendChild(that.docFrag);
@@ -1883,11 +1920,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 				if(message.isDevtoolsConnected !== undefined) {
 	
 					var consoleModeImage = document.createElement('img');
-					var consoleModeText = document.createTextNode(message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_MESSAGE : that.settings.CONSOLE_DISCONNECTED_MESSAGE);
+					var consoleModeText = message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_MESSAGE : that.settings.CONSOLE_DISCONNECTED_MESSAGE;
+					var consoleModeTextNode = document.createTextNode(consoleModeText);
 					consoleModeImage.classList.add('stylev-console-connection-image');
 					consoleModeImage.src = message.isDevtoolsConnected ? that.settings.ICON_CONNECTED_PATH : that.settings.ICON_DISCONNECTED_PATH;
 					that.consoleConnection.appendChild(consoleModeImage);
-					that.consoleConnection.appendChild(consoleModeText);
+					that.consoleConnection.setAttribute('title', consoleModeText);
+					// that.consoleConnection.appendChild(consoleModeTextNode);
 					that.consoleConnection.classList.add(message.isDevtoolsConnected ? that.settings.CONSOLE_CONNECTED_CLASS : that.settings.CONSOLE_DISCONNECTED_CLASS);
 				} else {
 					
@@ -2078,7 +2117,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			if(that.isMouseDownConsoleHeader) {
 				that.consoleCurrentPosY = event.pageY;
 				that.consoleDiffPosY = that.consoleStartPosY - that.consoleCurrentPosY;
-				that.consoleWrapper.style.setProperty('min-height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', '');
+				that.consoleWrapper.style.setProperty('height', (that.consoleWrapperDynamicHeight + that.consoleDiffPosY) + 'px', 'important');
 				event.currentTarget.style.setProperty('border-bottom-width', that.consoleWrapperDynamicHeight + that.consoleDiffPosY + 'px', 'important');
 	
 				if(that.consoleWrapper.offsetHeight === 30) {
@@ -2252,7 +2291,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			that.consoleMinimizeButton.classList.add('is-hidden');
 			that.consoleNormalizeButton.classList.remove('is-hidden');
-			that.consoleWrapper.style.setProperty('min-height', that.consoleHeader.offsetHeight + 'px', '');
+			that.consoleWrapper.style.setProperty('height', that.consoleHeader.offsetHeight + 'px', 'important');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.consoleToggleState = 'minimum';
 		},
@@ -2261,7 +2300,7 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 			var that = STYLEV.VALIDATOR;
 			that.consoleMinimizeButton.classList.remove('is-hidden');
 			that.consoleNormalizeButton.classList.add('is-hidden');
-			that.consoleWrapper.style.setProperty('min-height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', '');
+			that.consoleWrapper.style.setProperty('height', STYLEV.consoleWrapperDynamicHeight || that.settings.CONSOLE_WRAPPER_DEFAULT_HEIGHT + 'px', 'important');
 			that.consoleWrapperDynamicHeight = that.consoleWrapper.offsetHeight;
 			STYLEV.consoleToggleState = 'normal';
 		},
