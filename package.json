@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "Style-Validator",
   "description": "A CSS Validator that can validate after modified by JavaScript or CSS Media Queries.",
   "keywords": [
@@ -44,16 +45,16 @@
     "del": "^2.2.0"
   },
   "scripts": {
-    "start": "git pull origin master && gulp build && cd dest && forever start app.js;",
-    "restart": "cd dest && forever stop app.js && cd .. && git pull origin master && gulp build && cd dest && forever restart app.js;",
+    "start": "git pull origin master && gulp build && cd dest && forever start app.js",
+    "restart": "cd dest && forever stop app.js && cd .. && git pull origin master && gulp build && cd dest && forever restart app.js",
     "stop": "cd dest && forever stop app.js;",
     "kill": "pkill -f selenium-standalone",
     "postinstall": "gulp build",
     "build": "gulp build && sh ./make.zip.4.release.chrome.extension.sh"
   },
   "engines": {
-    "node": "5.4.1",
-    "npm": "3.3.12"
+    "node": "6.4.0",
+    "npm": "3.10.3"
   },
   "homepage": "http://style-validator.io"
 }

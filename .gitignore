@@ -13,3 +13,4 @@ docs
 dest
 dump-dir
 *.iml
+npm-debug.log

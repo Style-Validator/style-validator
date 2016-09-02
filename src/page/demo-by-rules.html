@@ -25,7 +25,7 @@
 	<meta name="format-detection" content="telephone=no, email=no, address=no">
 
 	<!-- ***** data ***** -->
-	<title>Demo | Style Validator</title>
+	<title>Simple Demo | Style Validator</title>
 	<meta name="description" content="A CSS Validator that can check the combination of styles and elements after browser rendering.">
 	<meta name="keywords" content="Style,Validator,CSS, Stylesheet, Inspector, Devtools, Chrome, Extension, Addon">
 
@@ -51,8 +51,42 @@
 	<meta name="msapplication-TileImage" content="/img/ms-style-validator.logo.png">
 	<meta name="theme-color" content="#52B050">
 
-	<!-- ***** styles ***** -->
-	<link rel="stylesheet" href="/page/demo2.css">
+	<style>
+		p {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			padding: 60px;
+			font-size: 20px;
+		}
+		h2 {
+			font-size: inherit;
+		}
+		textarea {
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			border: 0;
+			outline: 0;
+			background-color: transparent;
+			width: 90%;
+			height: 100px;
+			font-size: 18px;
+		}
+		button {
+			font-size: inherit;
+		}
+		h1 {
+			float: left;
+		}
+		ol {
+			overflow: hidden;
+		}
+		header {
+			overflow: hidden;
+		}
+	</style>
 
 	<!-- ***** imports ***** -->
 	<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
@@ -74,28 +108,41 @@
 	</script>
 </head>
 <body>
+<div class="wrapper">
+	<header class="header">
+		<h1>Rules</h1>
+	</header>
+	<main>
+		<ul id="rules-list"></ul>
+	</main>
+	<footer>
 
-<span>span with style of CSS Rule with no-important(non-replaced inline element)</span>
-<span>span with style of CSS Rule with important(non-replaced inline element)</span>
-<span style="width: 2000px !important;">span with style of style attribute with important(non-replaced inline element)</span>
-<span style="width: 1000px;">span with style of style attribute with no-important(non-replaced inline element)</span>
-<span style="width: 1000px;">span with style of style attribute with no-important(non-replaced inline element)</span>
+	</footer>
+</div>
+<script src="/page/jquery-2.1.4.min.js"></script>
+<script src="/page/handlebars.min.js"></script>
+<script>
+	$(function () {
+		var getData = $.ajax({
+			url: '../extension/data/rules.json'
+		});
+		var getTemplate = $.ajax({
+			url: './demo-simple.hbs'
+		});
 
-<p>p css rule</p>
-<p style="width: 30px;margin-left: auto;">p style attribute</p>
-
-<div class="a">div</div>
-<div class="b">div</div>
-<div class="c">div</div>
-<div style="width: auto;">div</div>
-<div style="width: 100%;">div</div>
-<img src="" alt="img(replaced inline empty element)" />
-<input type="text" value="input(replaced inline empty element)" />
-<canvas>canvas</canvas>
-
-<div></div>
-
-<common-footer></common-footer>
+		Promise.all([
+			getData,
+			getTemplate
+		])
+		.then(function (dataArray) {
+			var data = dataArray[0];
+			var html = dataArray[1];
+			var template = Handlebars.compile(html);
+			var compiledHTML = template(data);
+			$('#rules-list').html(compiledHTML);
+		});
+	});
+</script>
 <common-jsonld></common-jsonld>
 </body>
 </html>
