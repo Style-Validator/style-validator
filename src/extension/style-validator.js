@@ -2201,10 +2201,13 @@ STYLEV.VALIDATOR = STYLEV.VALIDATOR || {
 		},
 		//TODO: Try to unite with method of markElementViaConsole
 		markElementViaTargets: function(event) {
-	
-			event.stopPropagation();
-			event.preventDefault();
-	
+
+			var isPressedShiftKey = event.shiftKey;
+			if(isPressedShiftKey) {
+				event.stopPropagation();
+				event.preventDefault();
+			}
+
 			var that = STYLEV.VALIDATOR;
 	
 			//監視を中断
