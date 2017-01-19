@@ -9,7 +9,6 @@ zip.command
 .idea
 Thumbs.db
 videos
-docs
 dest
 dump-dir
 *.iml
