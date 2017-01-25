@@ -59,3 +59,8 @@ If you need, check it out the document for developer.
 ## Contributing Validation Rules
 
 You can request from `options page of extension` or [edit page of web](https://style-validator.io/extension/options.html)
+
+## Supported by
+
+- ![Browser Stack Logo](https://style-validator.io/img/browserstack-logo.svg) is a awesome cloud testing service what uses real browsers and devices. 
+
