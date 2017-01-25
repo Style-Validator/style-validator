@@ -46,9 +46,15 @@
   },
   "scripts": {
     "start": "git pull origin master && gulp build && cd dest && forever start app.js",
-    "restart": "cd dest && forever stop app.js && cd .. && git pull origin master && gulp build && cd dest && forever restart app.js",
-    "stop": "cd dest && forever stop app.js;",
-    "kill": "pkill -f selenium-standalone",
+    "restart": "npm stop && npm start",
+    "stop": "cd dest && forever stop app.js",
+    "xvfb:start": "/etc/rc.d/init.d/xvfb start",
+    "xvfb:restart": "/etc/rc.d/init.d/xvfb restart",
+    "xvfb:stop": "/etc/rc.d/init.d/xvfb stop",
+    "selenium:start": "/etc/rc.d/init.d/selenium start",
+    "selenium:restart": "/etc/rc.d/init.d/selenium restart",
+    "selenium:stop": "/etc/rc.d/init.d/selenium stop",
+    "selenium:kill": "/etc/rc.d/init.d/selenium kill",
     "postinstall": "gulp build",
     "build": "gulp build && sh ./make.zip.4.release.chrome.extension.sh"
   },
