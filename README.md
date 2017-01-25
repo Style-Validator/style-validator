@@ -62,5 +62,6 @@ You can request from `options page of extension` or [edit page of web](https://s
 
 ## Supported by
 
-- <img src="https://style-validator.io/img/browserstack-logo.svg" width="200" height="43"> is a awesome cloud testing service what uses real browsers and devices. 
+<img src="https://style-validator.io/img/browserstack-logo.svg" width="200" height="43">
+BrowserStack is a awesome cloud testing service what uses real browsers and devices. 
 
