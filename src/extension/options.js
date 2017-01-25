@@ -1,7 +1,7 @@
 /*!
  Style Validator
 
- Description": A Next CSS Validator that can check the combination of styles and elements after browser rendering.
+ Description": A Next CSS Validator that checks combination of styles and elements.
  URL: https://style-validator.io/
  Author: Igari Takeharu
  License: MIT License
