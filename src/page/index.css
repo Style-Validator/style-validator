@@ -255,6 +255,13 @@ hr {
 .section-rules-steps > dd + dt {
 	margin-top: 4%;
 }
+.section-loadmap .section-body {
+	text-align: left;
+	font-size: 1.2rem;
+}
+.section-loadmap ol > li + li {
+	margin-top: 1rem;
+}
 
 @media (max-width: 640px) {
 
