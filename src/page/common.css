@@ -23,9 +23,10 @@ body,
 	display: flex;
 }
 
-html:not(.is-fixed-header) .wrapper {
+/*html:not(.is-fixed-header) .wrapper {
 	padding-top: 0 !important;
-}
+}*/
+/*
 .is-fixed-header .header {
 	position: fixed;
 	top: 0;
@@ -35,6 +36,7 @@ html:not(.is-fixed-header) .wrapper {
 	-moz-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
 	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
 }
+*/
 
 .kv-buttons-list {
 	display: flex;

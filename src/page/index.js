@@ -10,7 +10,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 		that.setParameter();
 		that.bindEvents();
-		that.startAnimation();
+		// that.startAnimation();
 		that.animateSVG();
 		that.getBookmarklet();
 		document.removeEventListener('WebComponentsReady', STYLEV.TOPPAGE.FIRST_ANIMATION.execute);
@@ -32,7 +32,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	bindEvents: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
-		window.addEventListener('resize', that.adjustWrapperPosition);
+		// window.addEventListener('resize', that.adjustWrapperPosition);
 		window.addEventListener('scroll', that.fixHeaderOnScroll);
 		that.submitForm.addEventListener('submit', that.submitValidation);
 	},
@@ -69,7 +69,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
 		//setTimeout(that.startFadeIn, 100);
-		setTimeout(that.adjustWrapperPosition, 0);
+		// setTimeout(that.adjustWrapperPosition, 0);
 	},
 
 	adjustWrapperPosition: function() {

@@ -10,7 +10,7 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 		that.setParameter();
 		that.bindEvents();
-		that.startAnimation();
+		// that.startAnimation();
 		that.getBookmarklet();
 
 		//document.querySelector('input[type="text"]').focus();
@@ -28,8 +28,8 @@ STYLEV.TOPPAGE.FIRST_ANIMATION = {
 	bindEvents: function() {
 		var that = STYLEV.TOPPAGE.FIRST_ANIMATION;
 
-		window.addEventListener('resize', that.adjustWrapperPosition);
-		window.addEventListener('scroll', that.fixHeaderOnScroll);
+		// window.addEventListener('resize', that.adjustWrapperPosition);
+		// window.addEventListener('scroll', that.fixHeaderOnScroll);
 	},
 
 	startAnimation: function() {
