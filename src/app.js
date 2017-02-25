@@ -32,7 +32,7 @@ var isAmazonLinux = process.env.SV_ENV === 'amazonLinux';
 var server = http.createServer();
 var secureServer = isAmazonLinux && https.createServer({
 	key: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/cert.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/fullchain.pem'),
 	ca: fs.readFileSync('/etc/letsencrypt/live/style-validator.io/chain.pem')
 });
 var port = process.env.PORT || 8080;
