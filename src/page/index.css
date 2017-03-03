@@ -236,7 +236,11 @@ hr {
 	width: 70% !important;
 }
 .section-rules {
-	background: #ffdae5;
+	background: white;
+}
+.section-video img,
+.section-rules img {
+	box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.2);
 }
 .section-rules-steps {
 	counter-reset: section-rules-index;
